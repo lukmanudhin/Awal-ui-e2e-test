@@ -1,0 +1,9 @@
+export const PROJECT_MODES        = ['Normal', 'Urgent'] as const;
+export const SIGNAGE_TYPES        = ['indoor', 'outdoor'] as const;
+export const TIME_PURPOSES        = ['Promotional', 'Long term'] as const;
+export const SUPPLIED_BY          = ['Awal Plastics', 'Customer'] as const;
+export const PROJECT_REQ_TYPES    = ['Supply Only', 'Installation Only', 'Supply & Installation'] as const;
+export const EQUIPMENT_LIST       = ['Boom Lift', 'Cradle', 'Crane', 'Scaffolding'] as const;
+export const PERMISSIONS          = ['Yes', 'No'] as const;
+export const CURRENCIES           = ['BHD', 'GBP', 'SAR', 'AED', 'INR'] as const;
+export const SUPPLY_TYPES         = ['Local', 'Export'] as const;

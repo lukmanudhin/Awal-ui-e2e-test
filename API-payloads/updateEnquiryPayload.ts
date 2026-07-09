@@ -1,0 +1,52 @@
+
+import { RandomDataGenerator } from '../utils/randomDataGenerator';
+export const updateEnquiryPayload = (enquiryId: string) => ({
+    "extId": `${enquiryId}`,
+    "sourceType": "salesenquiry",
+    "pricingDate": "2026-04-27T13:00:00.000Z",
+    "requestedDeliveryDate": "2026-04-27T13:00:00.000Z",
+    "customerName": `${RandomDataGenerator.getFirstName()} ${RandomDataGenerator.getLastName()}`,
+    "projectName": "Sales Enquiry Test",
+    "projectMode": 1,
+    "paymentTermsId": 144,
+    "currencyId": 83,
+    "supplyTypeId": 371,
+    "manufacturingUnit": "Awal Plastics Bahrain",
+    "signageType": 1,
+    "timePurpose": 2,
+    "designSuppliedBy": 1,
+    "materialSuppliedBy": 2,
+    "size": "5*5",
+    "materialThickness": "54",
+    "colorFinish": "red",
+    "projectRequirement": 1,
+    "equipmentRequirement": [366, 2],
+    "equipmentProvidedBy": "iron",
+    "wallFinishDetails": "glass",
+    "products": [361, 359],
+    "permissionRequired": true,
+    "powerSupply": "yes",
+    "addresses": [
+      {
+        "addressTypeId": 1,
+        "extId": `${enquiryId}`,
+        "flatVilla": "flat 23",
+        "building": "building 23",
+        "block": "block 23",
+        "road": "road 2",
+        "area": "area 2",
+        "telephoneNumber": `${RandomDataGenerator.getPhoneNumber()}`,
+        "telephoneNumber2": `${RandomDataGenerator.getPhoneNumber()}`,
+        "mobile": `${RandomDataGenerator.getPhoneNumber()}`,
+        "mobile2": `${RandomDataGenerator.getPhoneNumber()}`,
+        "fax": "2",
+        "email": `${RandomDataGenerator.getEmail()}`,
+        "email2": `${RandomDataGenerator.getEmail()}`,
+        "website": "https://demo-test.in/sales",
+        "pobox": "2",
+        "city": 255,
+        "state": 139,
+        "country": 184
+      }
+    ]
+  });

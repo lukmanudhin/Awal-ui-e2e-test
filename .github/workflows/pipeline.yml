@@ -1,0 +1,118 @@
+name: Playwright Tests
+
+on:
+  push:
+    branches: [ main, master, fix/*, feat/*, hotfix/*, chore/*, bugfix/*, release/* ]
+  pull_request:
+    branches: [ main, master ]
+  schedule:
+    # Runs Monday-Friday at 8:00 AM, 12:00 PM, and 5:00 PM IST.
+    # GitHub Actions cron uses UTC, so these are 3:30 AM, 7:30 AM, and 12:30 PM UTC.
+    - cron: '30 2,6,11 * * 1-5'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write   # needed for the gh-pages publish step below
+
+concurrency:
+  group: allure-gh-pages
+  cancel-in-progress: false
+
+jobs:
+  test:
+    timeout-minutes: 120
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: lts/*
+          cache: npm
+
+      # allure-commandline (already in your devDependencies) needs a JVM to run.
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Run Playwright tests
+        id: run_tests
+        continue-on-error: true
+        run: npx playwright test
+
+      # Guarantee this exists even if 0 tests ran or the run crashed early,
+      # so the Allure generate step never fails on a missing directory.
+      - name: Ensure allure-results folder exists
+        if: ${{ !cancelled() }}
+        run: mkdir -p allure-results
+
+      # Pull previous Allure history so the report shows pass/fail trend graphs
+      # across runs, not just the current one. Safe to fail on first-ever run
+      # (gh-pages branch won't exist yet).
+      - name: Checkout gh-pages for Allure history
+        if: ${{ !cancelled() }}
+        continue-on-error: true
+        uses: actions/checkout@v5
+        with:
+          ref: gh-pages
+          path: gh-pages
+
+      - name: Copy Allure history into results (for trend graphs)
+        if: ${{ !cancelled() }}
+        continue-on-error: true
+        run: |
+          if [ -d "gh-pages/history" ]; then
+            mkdir -p allure-results/history
+            cp -r gh-pages/history/* allure-results/history/
+          fi
+
+      - name: Generate Allure report
+        if: ${{ !cancelled() }}
+        run: npx allure generate allure-results --clean -o allure-report
+
+      - name: Upload Allure HTML report artifact
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-report
+          path: allure-report/
+          retention-days: 30
+          if-no-files-found: warn
+
+      # Publishes to GitHub Pages so you get a persistent, directly-viewable
+      # link instead of downloading+unzipping an artifact (Allure's static
+      # HTML needs to be served, it won't work opened via file://).
+      # One-time setup required: repo Settings -> Pages -> Source: "Deploy
+      # from a branch" -> Branch: gh-pages. Only runs on main/master pushes.
+      - name: Publish Allure report to GitHub Pages
+        if: ${{ !cancelled() && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') }}
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: allure-report
+          force_orphan: true          # rewrite gh-pages fresh each deploy: avoids
+                                       # fast-forward push races and stops old
+                                       # runs' large attachments piling up forever
+
+      - name: Write Allure report link to job summary
+        if: ${{ !cancelled() }}
+        run: |
+          echo "## Allure Report" >> "$GITHUB_STEP_SUMMARY"
+          if [ "${{ github.ref }}" = "refs/heads/main" ] || [ "${{ github.ref }}" = "refs/heads/master" ]; then
+            echo "Live report: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "This branch does not publish to GitHub Pages. Download the **allure-report** artifact above, then run \`npx allure open allure-report\` locally to view it." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      # continue-on-error above means the job would otherwise show green
+      # even when tests fail. Fail it for real here, after reports are saved.
+      - name: Fail job if tests failed
+        if: steps.run_tests.outcome == 'failure'
+        run: exit 1

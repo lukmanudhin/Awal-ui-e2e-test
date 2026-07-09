@@ -1,0 +1,36 @@
+{
+  "name": "awal-ui-e2e-test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "allure:generate": "allure generate allure-results --clean -o allure-report",
+    "allure:open": "allure open allure-report",
+    "report": "npm run allure:generate && npm run allure:open",
+    "test": "playwright test && npm run allure:generate && npm run allure:open",
+    "test:headed": "playwright test --headed && npm run allure:generate && npm run allure:open",
+    "test:spec": "playwright test %SPEC% && npm run allure:generate && npm run allure:open",
+    "test:spec:headed": "playwright test --headed %SPEC% && npm run allure:generate && npm run allure:open",
+    "test:ui": "playwright test --ui",
+    "test:debug": "playwright test --debug",
+    "clean": "rm -rf allure-results allure-report playwright-report || echo 'Cleanup complete'",
+    "test:sales": "playwright test tests/UI/sales tests/API/salesEnquiryAPITest.spec.ts && npm run allure:generate && npm run allure:open",
+    "test:sales:headed": "playwright test tests/UI/sales tests/API/salesEnquiryAPITest.spec.ts --headed && npm run allure:generate && npm run allure:open",
+    "test:procurement": "playwright test tests/UI/procurement && npm run allure:generate && npm run allure:open",
+    "test:procurement:headed": "playwright test tests/UI/procurement --headed && npm run allure:generate && npm run allure:open"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@faker-js/faker": "^10.4.0",
+    "@playwright/test": "^1.59.1",
+    "@types/node": "^25.6.0",
+    "allure-commandline": "^2.38.1",
+    "allure-playwright": "^3.10.2"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2"
+  }
+}
