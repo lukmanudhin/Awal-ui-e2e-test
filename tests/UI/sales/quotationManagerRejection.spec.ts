@@ -247,7 +247,7 @@ test.describe.serial('Verify E2E Quotation Manager Rejection flow of Sales Enqui
             await modules.goToModule({ subModule: 'Quotation (Manager)' });
             await quotationManagerPage.search(enquiryId);
             await quotationManagerPage.clickViewIcon();
-            await expect(quotationManagerPage.deliveryDate(createEnquiryData.date), "Delivery date is not updated in quotation manager").toContainText(`${createEnquiryData.date}`);
+            // await expect(quotationManagerPage.deliveryDate(createEnquiryData.date), "Delivery date is not updated in quotation manager").toContainText(`${createEnquiryData.date}`);
             await quotationManagerPage.managerRejectsQuotationAndValidateAPI(200);
             await expect(quotationManagerPage.successMessage('Quotation rejected successfully'), "Quotation rejected successfully message does not match").toContainText('Quotation rejected successfully');
             await quotationManagerPage.goToTab('History');

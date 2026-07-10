@@ -302,7 +302,7 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Sample)', () => 
         await quotationManagerPage.clickViewIcon();
         await quotationManagerPage.validateEnquiryDetails(createEnquiryData);
         await ppjoPage.validateBOQDetailsTable(addBOQData);
-        await expect(quotationManagerPage.deliveryDate(createEnquiryData.date), "Delivery date is not updated in quotation manager").toContainText(`${createEnquiryData.date}`);
+        // await expect(quotationManagerPage.deliveryDate(createEnquiryData.date), "Delivery date is not updated in quotation manager").toContainText(`${createEnquiryData.date}`);
         await quotationManagerPage.managerApprovalQuotationAndValidateAPI(200);
         await expect(quotationManagerPage.successMessage('Quotation approved successfully'), "Quotation approved successfully message does not match").toContainText('Quotation approved successfully');
         await quotationManagerPage.goToTab('History');

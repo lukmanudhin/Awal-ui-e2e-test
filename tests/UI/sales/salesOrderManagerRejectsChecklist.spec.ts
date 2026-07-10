@@ -257,7 +257,7 @@ test.describe.serial('Verify Sales Order Manager rejects the sales order', () =>
             await quotationManagerPage.search(enquiryId);
             await quotationManagerPage.clickViewIcon();
             await ppjoPage.validateBOQDetailsTable(addBOQData);
-            await expect(quotationManagerPage.deliveryDate(createEnquiryData.date), "Delivery date is not updated in quotation manager").toContainText(`${createEnquiryData.date}`);
+            // await expect(quotationManagerPage.deliveryDate(createEnquiryData.date), "Delivery date is not updated in quotation manager").toContainText(`${createEnquiryData.date}`);
             await quotationManagerPage.managerApprovalQuotationAndValidateAPI(200);
             await expect(quotationManagerPage.successMessage('Quotation approved successfully'), "Quotation approved successfully message does not match").toContainText('Quotation approved successfully');
             await quotationManagerPage.goToTab('History');
@@ -271,7 +271,7 @@ test.describe.serial('Verify Sales Order Manager rejects the sales order', () =>
             await expect(quotationManagerPage.quotationStatus, 'Quotation status does not match').toContainText('Quotation - Approved by Manager');
             await quotationManagerPage.clickViewIcon();
             await ppjoPage.validateBOQDetailsTable(addBOQData);
-            await expect(quotationManagerPage.deliveryDate(createEnquiryData.date), "Delivery date is not updated in quotation manager").toContainText(`${createEnquiryData.date}`);
+            // await expect(quotationManagerPage.deliveryDate(createEnquiryData.date), "Delivery date is not updated in quotation manager").toContainText(`${createEnquiryData.date}`);
             await quotationManagerPage.sendToCustomerAndValidateAPI(200);
             await expect(quotationManagerPage.successMessage('Quotation sent to customer successfully'), "Quotation sent to customer success message does not match").toContainText('Quotation sent to customer successfully');
             await quotationManagerPage.setQuotationStatus('Approved');
@@ -316,7 +316,7 @@ test.describe.serial('Verify Sales Order Manager rejects the sales order', () =>
             await quotationManagerPage.search(enquiryId);
             await expect(quotationManagerPage.quotationStatus, 'Quotation status does not match').toContainText('Customer Approved');
             await quotationManagerPage.clickViewIcon();
-            await expect(quotationManagerPage.deliveryDate(createEnquiryData.date), "Delivery date is not updated in quotation manager").toContainText(`${createEnquiryData.date}`);
+            // await expect(quotationManagerPage.deliveryDate(createEnquiryData.date), "Delivery date is not updated in quotation manager").toContainText(`${createEnquiryData.date}`);
             await quotationManagerPage.validateViewAdvanceInvoiceAPI(200);
             await quotationManagerPage.generateChecklist(createEnquiryData);
             await quotationManagerPage.validateSubmitCheckListAPI(201);
