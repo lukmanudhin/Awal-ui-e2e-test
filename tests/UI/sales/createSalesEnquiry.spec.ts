@@ -8,7 +8,7 @@ test.describe('Create Sales Enquiry', () => {
     test.setTimeout(100000);
     test.beforeEach('Login', async ({ page, loginPage, homePage, salesEnquiryPage }) => {
         createEnquiryData = getCreateEnquiryData();
-        test.step('Login', async () => {
+        await test.step('Login', async () => {
             await loginPage.launchAwalWebsite();
             await loginPage.login(`${ENV.EMAIL_ID}`, `${ENV.PASSWORD}`);
             await expect(page, "Login failed").toHaveURL(`${ENV.BASE_URL}/home`);
