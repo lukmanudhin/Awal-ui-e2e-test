@@ -7,7 +7,7 @@ on:
     branches: [ main, master ]
   schedule:
     # Runs Monday-Friday at 8:00 AM, 12:00 PM, and 5:00 PM IST.
-    # GitHub Actions cron uses UTC, so these are 2:30 AM, 6:30 AM, and 11:30 AM UTC.
+    # GitHub Actions cron uses UTC, so these are 3:30 AM, 7:30 AM, and 12:30 PM UTC.
     - cron: '30 2,6,11 * * 1-5'
   workflow_dispatch: {}
 
