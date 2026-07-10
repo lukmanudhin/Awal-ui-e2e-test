@@ -6,9 +6,9 @@ on:
   pull_request:
     branches: [ main, master ]
   schedule:
-    # Runs Monday-Friday at 8:00 AM, 12:00 PM, and 5:00 PM IST.
+    # Runs Monday-Friday at 9:00 AM, 1:00 PM, and 6:00 PM IST.
     # GitHub Actions cron uses UTC, so these are 3:30 AM, 7:30 AM, and 12:30 PM UTC.
-    - cron: '30 2,6,11 * * 1-5'
+    - cron: '30 3,7,12 * * 1-5'
   workflow_dispatch: {}
 
 permissions:
@@ -47,11 +47,30 @@ jobs:
         continue-on-error: true
         run: npx playwright test
 
-      # Guarantee this exists even if 0 tests ran or the run crashed early,
-      # so the Allure generate step never fails on a missing directory.
-      - name: Ensure allure-results folder exists
+      # Guarantee these folders exist even if 0 tests ran or the run crashed
+      # early, so later steps never fail on a missing directory.
+      - name: Ensure report folders exist
         if: ${{ !cancelled() }}
-        run: mkdir -p allure-results
+        run: |
+          mkdir -p playwright-report allure-results
+
+      - name: Upload Playwright HTML report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
+          if-no-files-found: warn
+
+      - name: Upload raw Allure results
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results
+          path: allure-results/
+          retention-days: 30
+          if-no-files-found: warn
 
       # Pull previous Allure history so the report shows pass/fail trend graphs
       # across runs, not just the current one. Safe to fail on first-ever run
