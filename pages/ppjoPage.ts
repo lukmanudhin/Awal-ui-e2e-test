@@ -217,7 +217,7 @@ export class PPJOPage extends BasePage {
     }
     @step()
     async validateBOQDetailsTable(boqData: BOQData) {
-        await this.page.waitForTimeout(500);
+        await this.page.waitForTimeout(2000);
         const boqDetails = await this.page.locator('(//tr)[2]').innerText();
         expect(boqDetails, `BOQ details table does not contain description: ${boqData.description}`).toContain(boqData.description);
         expect(boqDetails, `BOQ details table does not contain size: ${boqData.size}`).toContain(boqData.size);
