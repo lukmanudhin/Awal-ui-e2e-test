@@ -39,6 +39,7 @@ export type SalesEnquiryData = {
   paymentTerms: string;
   currency: string;
   supplyType: string;
+  socialMedia: string;
 };
 
 export const getCreateEnquiryData = (): SalesEnquiryData => ({
@@ -80,7 +81,8 @@ export const getCreateEnquiryData = (): SalesEnquiryData => ({
   date: RandomDataGenerator.getCurrentDay(),
   paymentTerms: '100 % Advance Full Payment',
   currency: `${RandomDataGenerator.getCurrency()}`,
-  supplyType: `${RandomDataGenerator.getSupplyType()}`
+  supplyType: `${RandomDataGenerator.getSupplyType()}`, 
+  socialMedia: `${RandomDataGenerator.getSocialMedia()}`,
 });
 
 export const editEnquiryData: SalesEnquiryData = {
@@ -122,5 +124,6 @@ export const editEnquiryData: SalesEnquiryData = {
   date: RandomDataGenerator.getCurrentDay(),
   paymentTerms: '100 % Advance Full Payment',
   currency: `${RandomDataGenerator.getCurrency()}`,
-  supplyType: `${RandomDataGenerator.getSupplyType()}`
+  supplyType: `${RandomDataGenerator.getSupplyType()}`, 
+  socialMedia: `${RandomDataGenerator.getSocialMedia()}`,
 };

@@ -50,6 +50,9 @@ export class SalesEnquiryPage extends BasePage {
     public readonly enquiryStatus: Locator;
     public readonly enquiryId: Locator;
     private readonly internalRequestBtn: Locator;
+    private readonly enquiryBtn;
+    public socialMediaStatus: Locator;
+    public readonly socialMediaImage: (name: string) => Locator;
 
     // Dynamic locators
     private readonly countryOption: (name: string) => Locator;
@@ -114,7 +117,9 @@ export class SalesEnquiryPage extends BasePage {
         this.editSalesEnquiryTitle = this.page.locator('//span[normalize-space()="Edit Sales Enquiry"]');
         this.updatePricingCalenderBtn = this.page.locator('//button[contains(@aria-label,"Choose date, selected")]').last();
         this.requestEstimationButton = this.page.getByRole('button', { name: 'Request Estimation' });
-        this.internalRequestBtn = this.page.getByRole('button', { name: 'Internal Request' })
+        this.internalRequestBtn = this.page.getByRole('button', { name: 'Internal Request' });
+        this.enquiryBtn = this.page.getByRole('button', { name: 'Enquiry' });
+        this.socialMediaStatus = this.page.locator('//td[@data-app-table-col="4"]//span');
 
         // Dynamic locators initialization
         this.projectModeRadio = (name: string) => this.page.locator('label').filter({ hasText: `${name}` }).first();
@@ -137,12 +142,25 @@ export class SalesEnquiryPage extends BasePage {
         this.viewEnquiryTitle = this.page.getByRole('heading');
         this.enquiryStatus = this.page.locator('//td[@data-app-table-col="3"]//span').first();
         this.enquiryId = this.page.locator(`//td[@data-app-table-col="0"]//div`).first();
+        this.socialMediaImage = (name: string) => this.page.getByRole('img', { name: `${name}` });
     }
     @step()
     async enterCustomerName(data: SalesEnquiryData) {
         await this.page.waitForTimeout(1000);
         await this.customerNameTextBox.fill(data.customerName, { timeout: 5000, force: true });
         await expect(this.customerNameTextBox, "Customer Name value mismatch while creating sales enquiry").toHaveValue(data.customerName);
+    }
+    @step()
+    async enterSocialMedia(socialMedia: string){
+        await this.selectOptionFromDropdown('Social Media*', socialMedia)
+    }
+
+    @step()
+    async clickEnquiryButton(){
+        await expect(this.enquiryBtn, "Create Enquiry button is not visible").toBeVisible();
+        await this.enquiryBtn.click();
+        await this.page.waitForLoadState('domcontentloaded');
+        await this.page.waitForTimeout(1000);
     }
     @step()
     async createSalesEnquiry(data: SalesEnquiryData) {

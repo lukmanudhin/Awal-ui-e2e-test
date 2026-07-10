@@ -1,5 +1,5 @@
 import { faker } from "@faker-js/faker";
-import { PROJECT_MODES, SIGNAGE_TYPES, TIME_PURPOSES, SUPPLIED_BY, SUPPLY_TYPES, PROJECT_REQ_TYPES, EQUIPMENT_LIST, PERMISSIONS, CURRENCIES } from "../testData/salesEnquiryDataFactory";
+import { SOCIAL_MEDIA, PROJECT_MODES, SIGNAGE_TYPES, TIME_PURPOSES, SUPPLIED_BY, SUPPLY_TYPES, PROJECT_REQ_TYPES, EQUIPMENT_LIST, PERMISSIONS, CURRENCIES } from "../testData/salesEnquiryDataFactory";
 
 type ProjectMode = typeof PROJECT_MODES[number];
 type SignageType = typeof SIGNAGE_TYPES[number];
@@ -10,6 +10,7 @@ type Equipment = typeof EQUIPMENT_LIST[number];
 type Permission = typeof PERMISSIONS[number];
 type Currency = typeof CURRENCIES[number];
 type SupplyType = typeof SUPPLY_TYPES[number];
+type SocialMedia = typeof SOCIAL_MEDIA[number];
 
 
 export class RandomDataGenerator {
@@ -68,6 +69,10 @@ export class RandomDataGenerator {
 
     static getSupplyType(): SupplyType {
         return this.pickFrom(SUPPLY_TYPES);
+    }
+
+    static getSocialMedia(): SocialMedia {
+        return this.pickFrom(SOCIAL_MEDIA);
     }
 
     static getEquipment(): Equipment {
