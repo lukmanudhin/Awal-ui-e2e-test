@@ -623,7 +623,7 @@ export class CostEstimationPage extends BasePage {
     }
     @step()
     async enterSampleCost(sampleCost: string) {
-        await this.page.waitForTimeout(500);
+        await this.page.waitForTimeout(2000);
         await this.sampleTxtBx.fill(sampleCost);
         await expect(this.page.locator('//td[@data-app-table-col="31"]'), `Sample cost column value mismatch. Expected: ${sampleCost}.000`).toHaveText(`${sampleCost}.000`);
         await expect(this.page.locator('(//td)[63]'), `Sample cost summary value mismatch. Expected: ${sampleCost}.000`).toHaveText(`${sampleCost}.000`);
