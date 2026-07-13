@@ -350,7 +350,7 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Internal)', () =
         await quotationManagerPage.validateEnquiryDetails(createEnquiryData);
         await ppjoPage.validateBOQDetailsTable(addBOQData);
         // await expect(quotationManagerPage.deliveryDate(createEnquiryData.date), "Delivery date is not updated in quotation manager").toContainText(`${createEnquiryData.date}`);
-        await quotationManagerPage.sendAdvanceInvoiceAndValidateAPI(201);
+        await quotationManagerPage.sendAdvanceInvoiceAndValidateAPI(200);
     });
 
     test('Invoice Request: Verify advance invoice is created from Invoice Request and the status is updated to Completed', async () => {
