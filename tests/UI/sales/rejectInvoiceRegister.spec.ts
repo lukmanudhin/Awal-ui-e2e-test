@@ -269,7 +269,7 @@ test.describe.serial('Verify Invoice Register is rejected by the Manager', () =>
             await quotationManagerPage.setQuotationStatus('Approved');
             await expect(quotationManagerPage.successMessage('Approval submitted successfully'), "Approval submitted successfully message does not match").toContainText('Approval submitted successfully');
             await expect(quotationManagerPage.customerApprovalTable, "Customer approval attachment is not visible").toHaveCount(2);
-            await quotationManagerPage.sendAdvanceInvoiceAndValidateAPI(200);
+            await quotationManagerPage.sendAdvanceInvoiceAndValidateAPI(201);
         });
 
         await test.step('Invoice Request: Verify advance invoice is created from Invoice Request and the status is updated to Completed', async () => {
