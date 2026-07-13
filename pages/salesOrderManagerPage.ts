@@ -27,6 +27,7 @@ export class SalesOrderManagerPage extends BasePage {
     }
     @step()
     async validateCustomerNameInSalesOrderManager(customerName: string) {
+        await this.page.waitForTimeout(750);
         const customerDetailsText = await this.page.locator('//div[@class="min-w-[180px] flex flex-col"]').first().innerText();
         expect(customerDetailsText).toContain(customerName);
     }
