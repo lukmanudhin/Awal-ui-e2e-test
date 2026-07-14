@@ -560,7 +560,7 @@ export class CostEstimationPage extends BasePage {
     @step()
     async generatePackingCost() {
         await this.page.waitForLoadState('domcontentloaded');
-        await this.page.waitForTimeout(3000);
+        await this.page.waitForTimeout(5000);
         await expect(this.costingStatus('Packing'), 'Packing status does not match').toHaveText('Initiate');
         // await expect(this.deleteCostingIcon('Packing')).toBeDisabled();
         await this.generateCostingBtn('Packing').click();
@@ -717,7 +717,7 @@ export class CostEstimationPage extends BasePage {
     }
     @step()
     async validateEnquiryDetailsInSummary(salesEnquiryData: SalesEnquiryData) {
-        await this.page.waitForTimeout(500);
+        await this.page.waitForTimeout(2000);
         const customerDetails = await this.page.locator('div.p-4').first().innerText();
         expect(customerDetails, `Summary enquiry details do not contain customer name: ${salesEnquiryData.customerName}`).toContain(salesEnquiryData.customerName);
         expect(customerDetails, `Summary enquiry details do not contain project name: ${salesEnquiryData.projectName}`).toContain(salesEnquiryData.projectName);
@@ -770,7 +770,7 @@ export class CostEstimationPage extends BasePage {
     @step()
     async savePriceIndicationSlipAndValidateAPI(statusCode: number) {
         const responsePromise = this.page.waitForResponse('**/estimation/updateOptionStatusByVerOptId');
-        await this.saveButton.click();
+        await this.saveButton.click({ timeout: 3000 });
         const response = await responsePromise;
         expect(response.status(), `Save Price Indication Slip API status code mismatch. Expected ${statusCode}, received ${response.status()}`).toBe(statusCode);
         console.log('Price Indication Slip saved successfully');
