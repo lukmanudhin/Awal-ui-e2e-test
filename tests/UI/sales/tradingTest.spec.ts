@@ -1,7 +1,6 @@
 import { expect } from "@playwright/test";
 import { test } from "../../../fixtures/baseFixtures";
 import { ENV } from "../../../utils/ENV";
-import { getCreateEnquiryData, type SalesEnquiryData } from "../../../testData/salesEnquiryData";
 import { getTradingData, type TradingData } from "../../../testData/tradingData";
 
 test.describe('Create Sales Enquiry', () => {
@@ -23,10 +22,9 @@ test.describe('Create Sales Enquiry', () => {
         });
     });
 
-    test.afterEach('Delete Sales Enquiry', async ({ salesEnquiryPage, page }) => {
-        await salesEnquiryPage.deleteSalesEnquiry(tradingData.customerName);
-        await salesEnquiryPage.validateDeleteSalesEnquiryAPI(200);
-        await expect(salesEnquiryPage.successMessage('Record deleted successfully.'), "Sales enquiry delete success message does not match").toHaveText('Record deleted successfully.');
+    test.afterEach('Delete Sales Enquiry', async ({ tradingPage, page }) => {
+        await tradingPage.deleteTradingAndValidateAPI(200);
+        await expect(tradingPage.successMessage('Record deleted successfully.'), "Sales enquiry delete success message does not match").toHaveText('Record deleted successfully.');
         console.log(`Sales enquiry for ${tradingData.customerName} deleted successfully`);
         await page.close();
     });

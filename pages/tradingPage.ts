@@ -6,6 +6,8 @@ export class TradingPage extends BasePage {
     private readonly email: Locator;
     private readonly password: Locator;
     private readonly signInButton: Locator;
+    private readonly deleteButton: Locator;
+    private readonly deleteConfirmationButton: Locator;
     private readonly attachedDocument: (fileName: string) => Locator;
     constructor(public readonly page: Page) {
         super(page);
@@ -13,6 +15,8 @@ export class TradingPage extends BasePage {
         this.password = this.page.getByRole('textbox', { name: 'Password' });
         this.signInButton = this.page.getByRole('button', { name: 'Sign In' });
         this.attachedDocument = (fileName: string) => this.page.getByText(fileName, { exact: true }).first();
+        this.deleteButton = this.page.locator('//img[contains(@src,"delete.svg")]').first();
+        this.deleteConfirmationButton = this.page.getByRole('button', { name: 'Delete' });
     }
     @step()
     async login(emailId: string, password: string) {
@@ -120,5 +124,16 @@ export class TradingPage extends BasePage {
         expect(response.status(), `Generate Invoice API status code mismatch. Expected ${statusCode}, received ${response.status()}`).toBe(statusCode);
         console.log('Generate Invoice successfully');
         console.log(`Verified Generate Invoice API with status code:`, response.status());
+    }
+
+    @step()
+    async deleteTradingAndValidateAPI(statusCode: number) {
+        await this.deleteButton.click();
+        const responsePromise = this.page.waitForResponse('**/quickLeads/deleteLeadById/**');
+        await this.deleteConfirmationButton.click();
+        const response = await responsePromise;
+        expect(response.status(), `Delete Trading API status code mismatch. Expected ${statusCode}, received ${response.status()}`).toBe(statusCode);
+        console.log('Trading deleted successfully');
+        console.log(`Verified Trading deletion API with status code:`, response.status());
     }
 }
