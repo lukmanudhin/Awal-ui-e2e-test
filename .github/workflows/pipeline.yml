@@ -86,6 +86,20 @@ jobs:
           retention-days: 30
           if-no-files-found: warn
 
+      # GitHub hard-blocks any git push containing a file over 100MB.
+      # Playwright traces (captured on failure) can embed full network
+      # request/response bodies and occasionally blow past that limit,
+      # which then causes the "Publish to GitHub Pages" step below to be
+      # rejected outright (pre-receive hook declined) and nothing deploys.
+      # This strips any such oversized attachment out of the report before
+      # we publish, so the rest of the report (results, screenshots, trend
+      # graphs) still goes live. The link for that one huge trace will 404,
+      # but nothing else breaks.
+      - name: Strip oversized attachments before publishing to Pages
+        if: ${{ !cancelled() }}
+        run: |
+          find allure-report -type f -size +90M -print -delete || true
+
       # Publishes to GitHub Pages so you get a persistent, directly-viewable
       # link instead of downloading+unzipping an artifact (Allure's static
       # HTML needs to be served, it won't work opened via file://).
