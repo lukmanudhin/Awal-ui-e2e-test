@@ -21,6 +21,7 @@ import { ProcurementPage } from "../pages/procurementPage";
 import { GRNEntryPage } from "../pages/grnEntryPage";
 import { PutAwayPage } from "../pages/putAwayPage";
 import { ManufacturingPage } from "../pages/manufacturingPage";
+import { TradingPage } from "../pages/tradingPage";
 
 type baseFixtures = {
   loginPage: LoginPage;
@@ -44,7 +45,8 @@ type baseFixtures = {
   procurementPage: ProcurementPage;
   grnEntryPage: GRNEntryPage;
   putAwayPage: PutAwayPage;
-  manufacturingPage: ManufacturingPage
+  manufacturingPage: ManufacturingPage;
+  tradingPage: TradingPage;
 };
 
 export const test = base.extend<baseFixtures>({
@@ -113,6 +115,9 @@ export const test = base.extend<baseFixtures>({
   },
   manufacturingPage: async ({ page }, use) => {
     await use(new ManufacturingPage(page));
+  },
+  tradingPage: async ({ page }, use) => {
+    await use(new TradingPage(page));
   }
 });
 
