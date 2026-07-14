@@ -51,7 +51,7 @@ export class SalesEnquiryPage extends BasePage {
     public readonly enquiryId: Locator;
     private readonly internalRequestBtn: Locator;
     private readonly enquiryBtn;
-    public socialMediaStatus: Locator;
+    public readonly socialMediaStatus: Locator;
     public readonly socialMediaImage: (name: string) => Locator;
 
     // Dynamic locators
