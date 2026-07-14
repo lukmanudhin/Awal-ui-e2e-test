@@ -560,13 +560,13 @@ export class CostEstimationPage extends BasePage {
     @step()
     async generatePackingCost() {
         await this.page.waitForLoadState('domcontentloaded');
-        await this.page.waitForTimeout(5000);
         await expect(this.costingStatus('Packing'), 'Packing status does not match').toHaveText('Initiate');
         // await expect(this.deleteCostingIcon('Packing')).toBeDisabled();
         await this.generateCostingBtn('Packing').click();
         await expect(this.m3TxtBx, "M3 value should be 0.000 before packing dimensions are entered").toHaveValue('0.000');
         await expect(this.trailerTxtBx, "Trailer value should be 0.000 before packing dimensions are entered").toHaveValue('0.000');
         await expect(this.volumeTxtBx, "Volume value should be 0.000 before packing dimensions are entered").toHaveValue('0.000');
+        await this.page.waitForTimeout(7000);
         await expect
             .poll(async () => {
                 await this.packingLengthTxtBx.fill('3');

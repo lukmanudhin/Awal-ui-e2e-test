@@ -44,6 +44,8 @@ export class SalesOrderManagerPage extends BasePage {
     }
     @step()
     async validateSalesOrderDetails(data: SalesEnquiryData) {
+        await this.page.waitForLoadState('domcontentloaded');
+        await this.page.waitForTimeout(5000);
         const detailsText = await this.page.locator('div.col-span-1').first().innerText();
         expect(detailsText, `Sales order details do not contain customer name: ${data.customerName}`).toContain(data.customerName);
         console.log(`✓ Customer Name displayed in Sales Order Manager: ${data.customerName}`);
