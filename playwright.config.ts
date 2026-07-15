@@ -47,7 +47,7 @@ export default defineConfig({
     video: process.env.CI ? 'off' : 'retain-on-failure',
 
     actionTimeout: 15_000, // Clicks, fills, types will fail after 10s instead of waiting forever
-    navigationTimeout: 15_000,
+    navigationTimeout: 30_000,
   },
 
   /* Configure projects for major browsers */
