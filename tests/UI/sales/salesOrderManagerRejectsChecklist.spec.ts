@@ -52,7 +52,7 @@ test.describe.serial('Verify Sales Order Manager rejects the sales order', () =>
             await ppjoPage.requestAutoCAD();
             await ppjoPage.validatePPJOAPI(201, 'Request AutoCAD');
             await expect(ppjoPage.successMessage('Autocad request submitted successfully'), "Request AutoCAD success message does not match").toContainText('Autocad request submitted successfully');
-            await ppjoPage.requestSiteVisit('EMP00403 - Usman Raj');
+            await ppjoPage.requestSiteVisit('EMP00287 - Neelamegam Subramani');
             await ppjoPage.validatePPJOAPI(201, 'Request Site Visit');
             await expect(ppjoPage.successMessage('Site-visit request submitted successfully'), "Request Site Visit success message does not match").toContainText('Site-visit request submitted successfully');
             await ppjoPage.requestProcurement();
