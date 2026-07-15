@@ -7,4 +7,5 @@ export const EQUIPMENT_LIST       = ['Boom Lift', 'Cradle', 'Crane', 'Scaffoldin
 export const PERMISSIONS          = ['Yes', 'No'] as const;
 export const CURRENCIES           = ['BHD', 'GBP', 'SAR', 'AED', 'INR'] as const;
 export const SUPPLY_TYPES         = ['Local', 'Export'] as const;
-export const SOCIAL_MEDIA         = ['Facebook', 'Insta', 'LinkedIn'] as const;
+export const SOCIAL_MEDIA         = ['Facebook', 'Insta'] as const;
+// export const SOCIAL_MEDIA         = ['Facebook', 'Insta', 'Linked-In'] as const;
