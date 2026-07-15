@@ -147,7 +147,7 @@ export class SalesEnquiryPage extends BasePage {
     @step()
     async enterCustomerName(data: SalesEnquiryData) {
         await this.page.waitForTimeout(1000);
-        await this.customerNameTextBox.fill(data.customerName, { timeout: 10000, force: true });
+        await this.customerNameTextBox.fill(data.customerName, { force: true });
         await expect(this.customerNameTextBox, "Customer Name value mismatch while creating sales enquiry").toHaveValue(data.customerName);
     }
     @step()

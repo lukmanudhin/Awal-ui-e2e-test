@@ -769,8 +769,8 @@ export class CostEstimationPage extends BasePage {
     }
     @step()
     async savePriceIndicationSlipAndValidateAPI(statusCode: number) {
-        const responsePromise = this.page.waitForResponse(response =>(response.url().includes('/estimation/updateOptionStatusByVerOptId') || response.url().includes('/bom/updateConsumableByEstimationDetailId')));
-        await this.saveButton.click();
+        const responsePromise = this.page.waitForResponse('**/estimation/updateOptionStatusByVerOptId');
+        await this.saveButton.click({ timeout: 2000, force: true});
         const response = await responsePromise;
         expect(response.status(), `Save Price Indication Slip API status code mismatch. Expected ${statusCode}, received ${response.status()}`).toBe(statusCode);
         console.log('Price Indication Slip saved successfully');
