@@ -22,6 +22,7 @@ import { GRNEntryPage } from "../pages/grnEntryPage";
 import { PutAwayPage } from "../pages/putAwayPage";
 import { ManufacturingPage } from "../pages/manufacturingPage";
 import { TradingPage } from "../pages/tradingPage";
+import { PipelinePage } from "../pages/pipelinePage"
 
 type baseFixtures = {
   loginPage: LoginPage;
@@ -47,6 +48,7 @@ type baseFixtures = {
   putAwayPage: PutAwayPage;
   manufacturingPage: ManufacturingPage;
   tradingPage: TradingPage;
+  pipelinePage: PipelinePage;
 };
 
 export const test = base.extend<baseFixtures>({
@@ -118,6 +120,9 @@ export const test = base.extend<baseFixtures>({
   },
   tradingPage: async ({ page }, use) => {
     await use(new TradingPage(page));
+  },
+  pipelinePage: async ({ page }, use) => {
+    await use(new PipelinePage(page));
   }
 });
 
