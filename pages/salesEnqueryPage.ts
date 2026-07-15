@@ -119,7 +119,7 @@ export class SalesEnquiryPage extends BasePage {
         this.requestEstimationButton = this.page.getByRole('button', { name: 'Request Estimation' });
         this.internalRequestBtn = this.page.getByRole('button', { name: 'Internal Request' });
         this.enquiryBtn = this.page.getByRole('button', { name: 'Enquiry' });
-        this.socialMediaStatus = this.page.locator('//td[@data-app-table-col="4"]//span');
+        this.socialMediaStatus = this.page.locator('//td[@data-app-table-col="4"]//span').first();
 
         // Dynamic locators initialization
         this.projectModeRadio = (name: string) => this.page.locator('label').filter({ hasText: `${name}` }).first();
