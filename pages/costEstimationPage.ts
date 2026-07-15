@@ -485,9 +485,9 @@ export class CostEstimationPage extends BasePage {
         await this.page.waitForTimeout(500);
         await this.otHours.fill(otHours);
         await this.estimationHours.fill(estimationHours);
+        await this.warrantyValueTxtBx.fill(warrantyValue);
         await this.machineHours.fill(machineHours);
         await this.selectFromDropdown('Warranty Type*', 'Percentage');
-        await this.warrantyValueTxtBx.fill(warrantyValue);
     }
     @step()
     async validateLabourAndCostingAPI(statusCode: number) {
@@ -769,8 +769,8 @@ export class CostEstimationPage extends BasePage {
     }
     @step()
     async savePriceIndicationSlipAndValidateAPI(statusCode: number) {
-        const responsePromise = this.page.waitForResponse('**/estimation/updateOptionStatusByVerOptId');
-        await this.saveButton.click({ timeout: 3000 });
+        const responsePromise = this.page.waitForResponse(response =>(response.url().includes('/estimation/updateOptionStatusByVerOptId') || response.url().includes('/bom/updateConsumableByEstimationDetailId')));
+        await this.saveButton.click();
         const response = await responsePromise;
         expect(response.status(), `Save Price Indication Slip API status code mismatch. Expected ${statusCode}, received ${response.status()}`).toBe(statusCode);
         console.log('Price Indication Slip saved successfully');
