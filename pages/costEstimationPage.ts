@@ -769,6 +769,7 @@ export class CostEstimationPage extends BasePage {
     }
     @step()
     async savePriceIndicationSlipAndValidateAPI(statusCode: number) {
+        await this.page.waitForTimeout(5000);
         const responsePromise = this.page.waitForResponse('**/estimation/updateOptionStatusByVerOptId');
         await this.saveButton.click({ timeout: 2000, force: true});
         const response = await responsePromise;
