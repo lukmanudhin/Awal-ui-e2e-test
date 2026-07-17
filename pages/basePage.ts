@@ -100,9 +100,9 @@ export class BasePage {
     async search(name: string) {
         await this.page.waitForTimeout(500);
         await this.searchBox.fill(name);
-        await this.page.waitForFunction(
-            () => document.querySelectorAll('tr').length <= 2
-        );
+        // await this.page.waitForFunction(
+        //     () => document.querySelectorAll('tr').length <= 2
+        // );
         // await expect.poll(
         //     async () => await this.page.locator('//tr').count(),
         //     {
@@ -124,7 +124,7 @@ export class BasePage {
             {
                 message: `Search result count mismatch. Received ${await this.page.locator('//tr').count() - 1} Results`,
                 timeout: 10000,
-                intervals: [500, 1000, 1500, 2000],
+                intervals: [250, 500, 750, 1000],
             }
         ).toBeLessThanOrEqual(2);
 
@@ -155,8 +155,8 @@ export class BasePage {
         const filePath = path.join(process.cwd(), folderName, fileName);
 
         const uploadTrigger = uploadBtnCount
-        ? this.uploadButton.nth(uploadBtnCount).or(this.browseFileButton)
-        : this.uploadButton.first().or(this.browseFileButton);
+            ? this.uploadButton.nth(uploadBtnCount).or(this.browseFileButton)
+            : this.uploadButton.first().or(this.browseFileButton);
 
         const [fileChooser] = await Promise.all([
             this.page.waitForEvent('filechooser'),
@@ -228,7 +228,7 @@ export class BasePage {
         await this.dropDownMenu(value).click();
     }
 
-    async clickEditIcon(){
+    async clickEditIcon() {
         await this.editIcon.click();
         await this.page.waitForLoadState('domcontentloaded');
     }
