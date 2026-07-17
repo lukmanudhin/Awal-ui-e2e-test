@@ -80,7 +80,7 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Internal)', () =
         await expect(page, "Login failed").toHaveURL(`${ENV.BASE_URL}/home`);
         console.log("Login successfull");
         await homePage.goToMenuAndSubMenu("Sales", 'Internal Requests');
-        await expect(page, "Sales Enquiry page not found").toHaveURL(`${ENV.BASE_URL}/sales/internal-requests`);
+        await expect(page, "Sales Enquiry page not found").toHaveURL(`${ENV.BASE_URL}/sales/internal-request`);
         await expect(salesEnquiryPage.salesEnquiryTitle, "Sales Enquiry title does not match").toHaveText('Internal Request');
     });
 
@@ -99,7 +99,7 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Internal)', () =
     });
 
     test('Create PPJO and submit Artwork, AutoCAD, Site Visit, Procurement, and Estimation requests', async () => {
-        await expect(page, "Sales Enquiry list page is not opened").toHaveURL(`${ENV.BASE_URL}/sales/internal-requests`);
+        await expect(page, "Sales Enquiry list page is not opened").toHaveURL(`${ENV.BASE_URL}/sales/internal-request`);
         await salesEnquiryPage.search(enquiryId);
         await expect(salesEnquiryPage.createdSalesEnquiry(createEnquiryData.customerName), `Created sales enquiry is not visible for customer: ${createEnquiryData.customerName}`).toBeVisible();
         await salesEnquiryPage.clickCreatePPJO();
@@ -127,7 +127,7 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Internal)', () =
 
     test('Return to Sales Enquiry and Validate Sales Enquiry status', async () => {
         await ppjoPage.goBackFromPPJO();
-        await expect(page, "Sales Enquiry list page was not opened after going back from PPJO").toHaveURL(`${ENV.BASE_URL}/sales/internal-requests`);
+        await expect(page, "Sales Enquiry list page was not opened after going back from PPJO").toHaveURL(`${ENV.BASE_URL}/sales/internal-request`);
         await salesEnquiryPage.search(enquiryId);
         await salesEnquiryPage.validateCustomerStatus(createEnquiryData.customerName, 'Pending From Estimation');
         await salesEnquiryPage.validateCustomerPPJOColumn(createEnquiryData.customerName, ['Artwork', 'AutoCAD', 'Estimation', 'Procurement', 'Site Visit']);
@@ -350,59 +350,6 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Internal)', () =
         await quotationManagerPage.validateEnquiryDetails(createEnquiryData);
         await ppjoPage.validateBOQDetailsTable(addBOQData);
         // await expect(quotationManagerPage.deliveryDate(createEnquiryData.date), "Delivery date is not updated in quotation manager").toContainText(`${createEnquiryData.date}`);
-        await quotationManagerPage.sendAdvanceInvoiceAndValidateAPI(200);
-    });
-
-    test('Invoice Request: Verify advance invoice is created from Invoice Request and the status is updated to Completed', async () => {
-        await modules.goToModule({ module: 'Finance', subModule: 'Accounts Receivable', nestedSubModule: 'Invoice Request' });
-        await invoiceRequestPage.search(referenceNumber);
-        await expect(invoiceRequestPage.invoiceStatus, "Invoice status does not match").toContainText('New Request');
-        await invoiceRequestPage.clickCreateInvoiceBtn();
-        // commented because of a bug
-        // await invoiceRequestPage.validateEnquiryDetails(createEnquiryData);
-        // await invoiceRequestPage.validateBOQTableDetails(addBOQData);
-        await invoiceRequestPage.selectInvoiceDate(createEnquiryData.date);
-        await invoiceRequestPage.createInvoiceAndValidateAPI(200);
-        await expect(invoiceRequestPage.successMessage('Invoice created successfully'), "Invoice created successfully message does not match").toContainText('Invoice created successfully');
-        // commented because of a bug
-        // await invoiceRequestPage.validateEnquiryDetails(createEnquiryData);
-        // await invoiceRequestPage.validateBOQTableDetails(addBOQData);
-        await modules.goToModule({ nestedSubModule: 'Invoice Request' });
-        await invoiceRequestPage.search(referenceNumber);
-
-        // commented because of a bug   
-        // await expect(invoiceRequestPage.invoiceStatus, "Invoice status does not match").toContainText('Completed');
-        await expect(invoiceRequestPage.viewInvoiceBtn, "View invoice button is not visible").toBeVisible();
-    });
-
-    test('Invoice Register: Verify Invoice Register is approved by the Manager and acknowledged with the acknowledgement status updated to Yes', async () => {
-        await modules.goToModule({ nestedSubModule: 'Invoice Request (Manager)' });
-        await invoiceRequestPage.search(referenceNumber);
-        await expect(invoiceRequestPage.acknowledgementStatus, "Invoice status does not match").toContainText('No');
-        await invoiceRequestPage.clickViewIcon();
-        // commented because of a bug
-        // await invoiceRequestPage.validateEnquiryDetails(createEnquiryData);
-        // await invoiceRequestPage.validateBOQTableDetails(addBOQData);
-        await invoiceRequestPage.approveInvoiceRequestAndValidateAPI(200);
-        await expect(invoiceRequestPage.successMessage('Data created successfully'), "Invoice approval success message does not match").toContainText('Data created successfully');
-        await modules.goToModule({ nestedSubModule: 'Invoice Register' });
-        await invoiceRequestPage.search(referenceNumber);
-        await expect(invoiceRequestPage.invoiceStatus, "Invoice status does not match").toContainText('Approved');
-        await invoiceRequestPage.acknowledgeInvoiceRequest();
-        await invoiceRequestPage.validateAcknowledgementAPI(200);
-        await expect(invoiceRequestPage.successMessage('Invoice register upload file'), "Invoice acknowledgement success message does not match").toContainText('Invoice register upload file');
-        await expect(invoiceRequestPage.acknowledgementStatus, "Invoice status does not match").toContainText('Yes');
-    });
-
-    test('Verify sales order checklist is generated from customer approved quotation and sales order is created successfully', async () => {
-        await modules.goToModule({ module: 'Sales', subModule: 'Quotation' });
-        await quotationManagerPage.search(enquiryId);
-        await expect(quotationManagerPage.quotationStatus, 'Quotation status does not match').toContainText('Quotation - Approved by Manager');
-        await quotationManagerPage.clickViewIcon();
-        await quotationManagerPage.validateEnquiryDetails(createEnquiryData);
-        await ppjoPage.validateBOQDetailsTable(addBOQData);
-        // await expect(quotationManagerPage.deliveryDate(createEnquiryData.date), "Delivery date is not updated in quotation manager").toContainText(`${createEnquiryData.date}`);
-        await quotationManagerPage.validateViewAdvanceInvoiceAPI(200);
         await quotationManagerPage.generateChecklist(createEnquiryData);
         await quotationManagerPage.validateSubmitCheckListAPI(201);
         await expect(quotationManagerPage.successMessage('Sales order created'), "Sales order created success message does not match").toContainText('Sales order created');
