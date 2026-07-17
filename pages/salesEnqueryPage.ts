@@ -40,7 +40,7 @@ export class SalesEnquiryPage extends BasePage {
     private readonly deleteButton: Locator;
     public readonly salesEnquiryTitle: Locator;
     private readonly deleteConfirmationButton: Locator;
-    private readonly editIcon: Locator;
+    private readonly editIcons: Locator;
     private readonly updatePricingCalenderBtn: Locator;
     public readonly requestEstimationButton: Locator;
     public readonly createSalesEnquiryTitle: Locator;
@@ -77,20 +77,20 @@ export class SalesEnquiryPage extends BasePage {
         this.page = page;
         this.createSalesEnquiryButton = this.page.getByRole('button', { name: 'Sales Enquiry' });
         this.customerNameTextBox = this.page.getByRole('textbox', { name: 'Customer Name*' });
-        this.flatOrVillaTextBox = this.page.getByRole('textbox', { name: 'Flat / Villa' });
+        this.flatOrVillaTextBox = this.page.getByRole('textbox', { name: 'Flat / Villa' }).or(this.page.getByRole('textbox', { name: 'Flat/Villa' }));
         this.buildingTextBox = this.page.getByRole('textbox', { name: 'Building' });
         this.blockTextBox = this.page.getByRole('textbox', { name: 'Block' });
         this.roadTextBox = this.page.getByRole('textbox', { name: 'Road' });
         this.areaTextBox = this.page.getByRole('textbox', { name: 'Area' });
-        this.telephoneNumber1TextBox = this.page.getByRole('spinbutton', { name: 'Telephone Number 1' });
-        this.mobileNumber1TextBox = this.page.getByPlaceholder('Enter Mobile Number 1');
-        this.faxTextBox = this.page.getByRole('spinbutton', { name: 'Fax' });
-        this.telephoneNumber2TextBox = this.page.getByRole('spinbutton', { name: 'Telephone Number 2' });
-        this.mobileNumber2TextBox = this.page.getByPlaceholder('Enter Mobile Number 2');
+        this.telephoneNumber1TextBox = this.page.getByRole('spinbutton', { name: 'Telephone Number 1' }).or(this.page.getByRole('textbox', { name: 'Telephone 1' }));
+        this.mobileNumber1TextBox = this.page.getByPlaceholder('Enter Number').first();
+        this.faxTextBox = this.page.getByRole('spinbutton', { name: 'Fax' }).or(this.page.getByRole('textbox', { name: 'Fax' }));
+        this.telephoneNumber2TextBox = this.page.getByRole('spinbutton', { name: 'Telephone Number 2' }).or(this.page.getByRole('textbox', { name: 'Telephone 2' }));
+        this.mobileNumber2TextBox = this.page.getByPlaceholder('Enter Number').nth(1);
         this.email1 = this.page.getByRole('textbox', { name: 'Email 1' });
         this.email2 = this.page.getByRole('textbox', { name: 'Email 2' });
         this.websiteTextBox = this.page.getByRole('textbox', { name: 'Website' });
-        this.pOBoxTextBox = this.page.getByRole('textbox', { name: 'P.O. Box' });
+        this.pOBoxTextBox = this.page.getByRole('textbox', { name: 'P.O. Box' }).or(this.page.getByRole('textbox', { name: 'PostBox No' }));
         this.countryDropdown = this.page.getByRole('combobox', { name: 'Country' });
         this.stateDropdown = this.page.getByRole('combobox', { name: 'State' });
         this.cityDropdown = this.page.getByRole('combobox', { name: 'City' });
@@ -113,7 +113,7 @@ export class SalesEnquiryPage extends BasePage {
         this.createSalesEnquiryTitle = this.page.locator('//span[normalize-space(text())="Create Sales Enquiry"]');
         this.deleteButton = this.page.locator('//img[contains(@src,"delete.svg")]').first();
         this.deleteConfirmationButton = this.page.getByRole('button', { name: 'Delete' });
-        this.editIcon = this.page.locator('//img[contains(@src,"edit.svg")]').first();
+        this.editIcons = this.page.locator('//img[contains(@src,"edit.svg")]').first();
         this.editSalesEnquiryTitle = this.page.locator('//span[normalize-space()="Edit Sales Enquiry"]');
         this.updatePricingCalenderBtn = this.page.locator('//button[contains(@aria-label,"Choose date, selected")]').last();
         this.requestEstimationButton = this.page.getByRole('button', { name: 'Request Estimation' });
@@ -151,12 +151,12 @@ export class SalesEnquiryPage extends BasePage {
         await expect(this.customerNameTextBox, "Customer Name value mismatch while creating sales enquiry").toHaveValue(data.customerName);
     }
     @step()
-    async enterSocialMedia(socialMedia: string){
+    async enterSocialMedia(socialMedia: string) {
         await this.selectOptionFromDropdown('Social Media*', socialMedia)
     }
 
     @step()
-    async clickEnquiryButton(){
+    async clickEnquiryButton() {
         await expect(this.enquiryBtn, "Create Enquiry button is not visible").toBeVisible();
         await this.enquiryBtn.click();
         await this.page.waitForLoadState('domcontentloaded');
@@ -405,7 +405,7 @@ export class SalesEnquiryPage extends BasePage {
     async editSalesEnquiry(customerName: string) {
         await this.search(customerName);
         await expect(this.createdSalesEnquiry(customerName), `Sales enquiry is not visible before edit for customer: ${customerName}`).toBeVisible();
-        await this.editIcon.click();
+        await this.editIcons.click();
         await this.page.waitForLoadState('domcontentloaded');
     }
     @step()
