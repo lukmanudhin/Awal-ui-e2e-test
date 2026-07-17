@@ -27,7 +27,7 @@ export class CostEstimationPage extends BasePage {
     public readonly boqDetailsTitle: Locator;
     private readonly deleteIcon: Locator;
     private readonly deleteBtn: Locator;
-    private readonly editIcon: Locator;
+    private readonly editIcons: Locator;
     private readonly updateBtn: Locator;
     public readonly addBOMBtn: Locator;
     private readonly warrantyValueTxtBx: Locator;
@@ -137,7 +137,7 @@ export class CostEstimationPage extends BasePage {
         this.boqDetailsTitle = this.page.locator('//div[text()="BOQ Details"]');
         this.deleteIcon = this.page.getByRole('button', { name: 'Delete Icon' }).first();
         this.deleteBtn = this.page.getByRole('button', { name: 'Delete', exact: true });
-        this.editIcon = this.page.getByRole('button', { name: 'Edit Icon' }).first();
+        this.editIcons = this.page.getByRole('button', { name: 'Edit Icon' }).first();
         this.updateBtn = this.page.getByRole('button', { name: 'Update' });
         this.addBOMBtn = this.page.getByRole('button', { name: 'Add BOM Add BOM' });
         this.warrantyValueTxtBx = this.page.getByRole('spinbutton', { name: 'Warranty Value*' });
@@ -432,7 +432,7 @@ export class CostEstimationPage extends BasePage {
     }
     @step()
     async editBOQ(boqData: BOQData) {
-        await this.editIcon.click();
+        await this.editIcons.click();
         await expect(this.banner, "Edit BOQ banner text does not match").toContainText('Edit BOQ');
         await expect(this.finishedProductDropdown, `Finished product value mismatch in edit BOQ. Expected: ${boqData.finishedProduct}`).toHaveValue(boqData.finishedProduct);
         await this.finishedProductDropdown.fill(boqData.finishedProduct);
