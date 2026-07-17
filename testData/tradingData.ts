@@ -24,7 +24,7 @@ export function getTradingData(): TradingData {
     customerName: `${RandomDataGenerator.getFirstName()} ${RandomDataGenerator.getLastName()}`,
     company: 'Colan Infotech',
     city: 'Guangdong',  
-    owner: 'EMP00403 - Usman Raj',
+    owner: 'EMP00287 - Neelamegam Subramani',
     value: '2',
     expectedDate: RandomDataGenerator.getCurrentDay(),
     phone: `${RandomDataGenerator.getPhoneNumber()}`,
