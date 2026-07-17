@@ -66,13 +66,8 @@ export class InvoiceRequestPage extends BasePage {
     }
     @step()
     async selectInvoiceDate(date: number) {
-        await this.invoiceDateIcon.click();
-        const dateCount = await this.dateOption(`${date}`).count();
-        if (dateCount === 1) {
-            await this.dateOption(`${date}`).click();
-        } else {
-            await this.dateOption(`${date}`).nth(1).click();
-        }
+        await this.page.waitForTimeout(500);
+        await this.selectDate(date + 2, 0); 
     }
     @step()
     async createInvoiceAndValidateAPI(statusCode: number) {
