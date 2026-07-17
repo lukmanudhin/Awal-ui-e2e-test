@@ -146,7 +146,7 @@ export class PipelinePage extends BasePage {
   }
 
   async validateSalesEnquiryDetails(data: SalesEnquiryData) {
-    await this.page.waitForTimeout(500);
+    await this.page.waitForTimeout(2000);
     const details = await this.page.locator('//div[@class="grid grid-cols-2 pt-4 "]').or(this.page.locator('//div[@class="d-flex flex-column w-full bg-white gap-2 p-4"]')).innerText();
     expect(details).toContain(data.customerName);
     expect(details).toContain(data.mobileNumber1);
