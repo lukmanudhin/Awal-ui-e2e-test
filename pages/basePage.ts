@@ -23,6 +23,7 @@ export class BasePage {
     private readonly calenderButton: Locator;
     private readonly nextMonthIcon: Locator;
     protected readonly rejectButton: Locator;
+    private readonly editIcon: Locator;
 
     // Dynamic locators
     public successMessage: (name: string) => Locator;
@@ -30,7 +31,7 @@ export class BasePage {
     private readonly modules: (name: string) => Locator;
     private readonly subModules: (name: string) => Locator;
     private readonly nestedSubModules: (name: string) => Locator;
-    private readonly tab: (name: string) => Locator;
+    protected readonly tab: (name: string) => Locator;
     public readonly createdSalesEnquiry: (name: string) => Locator;
     private readonly dropDownField: (name: string) => Locator;
     private readonly dropDownMenu: (name: string) => Locator;
@@ -45,6 +46,7 @@ export class BasePage {
         this.calenderButton = this.page.getByRole('button', { name: 'Choose date' });
         this.nextMonthIcon = this.page.getByRole('button', { name: 'Next month' });
         this.rejectButton = this.page.getByRole('button', { name: 'Reject' });
+        this.editIcon = this.page.locator('//img[contains(@src,"edit")]').first();
 
         // Dynamic locators initialization
         this.successMessage = (name: string): Locator => this.page.getByRole('paragraph').filter({ hasText: name });
@@ -224,5 +226,10 @@ export class BasePage {
         await this.dropDownField(dropdownName).clear();
         await this.dropDownField(dropdownName).fill(value);
         await this.dropDownMenu(value).click();
+    }
+
+    async clickEditIcon(){
+        await this.editIcon.click();
+        await this.page.waitForLoadState('domcontentloaded');
     }
 }
