@@ -83,10 +83,10 @@ export class SalesEnquiryPage extends BasePage {
         this.roadTextBox = this.page.getByRole('textbox', { name: 'Road' });
         this.areaTextBox = this.page.getByRole('textbox', { name: 'Area' });
         this.telephoneNumber1TextBox = this.page.getByRole('spinbutton', { name: 'Telephone Number 1' }).or(this.page.getByRole('textbox', { name: 'Telephone 1' }));
-        this.mobileNumber1TextBox = this.page.getByPlaceholder('Enter Number').first();
+        this.mobileNumber1TextBox = this.page.getByPlaceholder('Enter Mobile Number 1').or(this.page.getByPlaceholder('Enter Number').first());
         this.faxTextBox = this.page.getByRole('spinbutton', { name: 'Fax' }).or(this.page.getByRole('textbox', { name: 'Fax' }));
         this.telephoneNumber2TextBox = this.page.getByRole('spinbutton', { name: 'Telephone Number 2' }).or(this.page.getByRole('textbox', { name: 'Telephone 2' }));
-        this.mobileNumber2TextBox = this.page.getByPlaceholder('Enter Number').nth(1);
+        this.mobileNumber2TextBox = this.page.getByPlaceholder('Enter Mobile Number 2').or(this.page.getByPlaceholder('Enter Number').nth(1));
         this.email1 = this.page.getByRole('textbox', { name: 'Email 1' });
         this.email2 = this.page.getByRole('textbox', { name: 'Email 2' });
         this.websiteTextBox = this.page.getByRole('textbox', { name: 'Website' });
