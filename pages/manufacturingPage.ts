@@ -46,8 +46,8 @@ export class ManufacturingPage extends BasePage {
     async validateMaterialTable(manufacturingData: ManufacturingData) {
         await this.page.waitForTimeout(1000);
         const materialTable = await this.page.locator('(//tr)[2]').innerText();
-        expect(materialTable).toContain(manufacturingData.material);
-        expect(materialTable).toContain(manufacturingData.quantity);
+        expect.soft(materialTable).toContain(manufacturingData.material);
+        expect.soft(materialTable).toContain(manufacturingData.quantity);
     }
     @step()
     async createOrderAndValidateAPI(statusCode: number) {

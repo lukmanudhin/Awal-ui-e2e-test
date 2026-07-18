@@ -141,19 +141,19 @@ export class PipelinePage extends BasePage {
   async validatePipelineTable(pipelineData: PipelineData) {
     await this.page.waitForTimeout(500);
     const materialTable = await this.page.locator('(//tr)[2]').innerText();
-    expect(materialTable).toContain(pipelineData.fileName);
-    expect(materialTable).toContain(pipelineData.fileRemarks);
+    expect.soft(materialTable).toContain(pipelineData.fileName);
+    expect.soft(materialTable).toContain(pipelineData.fileRemarks);
   }
 
   async validateSalesEnquiryDetails(data: SalesEnquiryData) {
     await this.page.waitForTimeout(2000);
     const details = await this.page.locator('//div[@class="grid grid-cols-2 pt-4 "]').or(this.page.locator('//div[@class="d-flex flex-column w-full bg-white gap-2 p-4"]')).innerText();
-    expect(details).toContain(data.customerName);
-    expect(details).toContain(data.mobileNumber1);
-    expect(details).toContain(data.country);
-    expect(details).toContain(data.state);
-    expect(details).toContain(data.city);
-    expect(details).toContain(data.projectName);
+    expect.soft(details).toContain(data.customerName);
+    expect.soft(details).toContain(data.mobileNumber1);
+    expect.soft(details).toContain(data.country);
+    expect.soft(details).toContain(data.state);
+    expect.soft(details).toContain(data.city);
+    expect.soft(details).toContain(data.projectName);
   }
 
   async validateCreatedTaskVisible() {

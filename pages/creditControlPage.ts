@@ -185,34 +185,34 @@ export class CreditControlPage extends BasePage {
     async validateCreditControlDetails(data: CreditControlData) {
         await this.page.waitForTimeout(2000);
         const creditDetails = await this.page.locator('//div[@class="flex-grow p-6"]').innerText();
-        expect(creditDetails).toContain(data.customer);
-        expect(creditDetails).toContain(data.customerAcknowledgementName);
-        expect(creditDetails).toContain(data.crnNo);
-        expect(creditDetails).toContain(data.vatNo);
-        expect(creditDetails).toContain(data.customerIndustry);
-        expect(creditDetails).toContain(data.contactPerson);
-        expect(creditDetails).toContain(data.contactPersonPosition);
-        expect(creditDetails).toContain(data.contactPersonNumber);
-        expect(creditDetails).toContain(data.financeContactName);
-        expect(creditDetails).toContain(data.financeContactPosition);
-        expect(creditDetails).toContain(data.financeContactNumber);
-        expect(creditDetails).toContain(data.founderName);
-        expect(creditDetails).toContain(data.founderPosition);
-        expect(creditDetails).toContain(data.founderNationality);
-        expect(creditDetails).toContain(data.signatoryName);
-        expect(creditDetails).toContain(data.bankName);
-        expect(creditDetails).toContain(data.bankBranch);
-        expect(creditDetails).toContain(data.bankAccountNumber);
-        expect(creditDetails).toContain(data.relationshipManager);
-        expect(creditDetails).toContain(data.bankContactNumber);
-        expect(creditDetails).toContain(data.traderName);
-        expect(creditDetails).toContain(data.tradeContactNumber);
-        expect(creditDetails).toContain(data.tradeContactPerson);
-        expect(creditDetails).toContain(data.facilityEnjoyed);
-        expect(creditDetails).toContain(data.tradeEmail);
-        expect(creditDetails).toContain(data.tradeDays);
-        expect(creditDetails).toContain(data.customerAcknowledgementName);
-        expect(creditDetails).toContain(data.acknowledgementDesignation);
+        expect.soft(creditDetails).toContain(data.customer);
+        expect.soft(creditDetails).toContain(data.customerAcknowledgementName);
+        expect.soft(creditDetails).toContain(data.crnNo);
+        expect.soft(creditDetails).toContain(data.vatNo);
+        expect.soft(creditDetails).toContain(data.customerIndustry);
+        expect.soft(creditDetails).toContain(data.contactPerson);
+        expect.soft(creditDetails).toContain(data.contactPersonPosition);
+        expect.soft(creditDetails).toContain(data.contactPersonNumber);
+        expect.soft(creditDetails).toContain(data.financeContactName);
+        expect.soft(creditDetails).toContain(data.financeContactPosition);
+        expect.soft(creditDetails).toContain(data.financeContactNumber);
+        expect.soft(creditDetails).toContain(data.founderName);
+        expect.soft(creditDetails).toContain(data.founderPosition);
+        expect.soft(creditDetails).toContain(data.founderNationality);
+        expect.soft(creditDetails).toContain(data.signatoryName);
+        expect.soft(creditDetails).toContain(data.bankName);
+        expect.soft(creditDetails).toContain(data.bankBranch);
+        expect.soft(creditDetails).toContain(data.bankAccountNumber);
+        expect.soft(creditDetails).toContain(data.relationshipManager);
+        expect.soft(creditDetails).toContain(data.bankContactNumber);
+        expect.soft(creditDetails).toContain(data.traderName);
+        expect.soft(creditDetails).toContain(data.tradeContactNumber);
+        expect.soft(creditDetails).toContain(data.tradeContactPerson);
+        expect.soft(creditDetails).toContain(data.facilityEnjoyed);
+        expect.soft(creditDetails).toContain(data.tradeEmail);
+        expect.soft(creditDetails).toContain(data.tradeDays);
+        expect.soft(creditDetails).toContain(data.customerAcknowledgementName);
+        expect.soft(creditDetails).toContain(data.acknowledgementDesignation);
     }
     @step()
     async createSalesAssesment(data: SalesAssesmentData) {
@@ -232,12 +232,12 @@ export class CreditControlPage extends BasePage {
         await this.page.waitForLoadState('domcontentloaded');
         await this.page.waitForTimeout(2000);
         const salesAssesmentDetails = await this.page.locator('//div[@class="p-0 undefined"]').innerText();
-        expect(salesAssesmentDetails).toContain(data.creditPeriod);
-        expect(salesAssesmentDetails).toContain(data.paymentTerms);
-        // expect(salesAssesmentDetails).toContain(data.recommendedBy);
-        // expect(salesAssesmentDetails).toContain(data.accountExecutive);
-        // expect(salesAssesmentDetails).toContain(data.salesManager);
-        expect(salesAssesmentDetails).toContain(data.remarks);
+        expect.soft(salesAssesmentDetails).toContain(data.creditPeriod);
+        expect.soft(salesAssesmentDetails).toContain(data.paymentTerms);
+        // expect.soft(salesAssesmentDetails).toContain(data.recommendedBy);
+        // expect.soft(salesAssesmentDetails).toContain(data.accountExecutive);
+        // expect.soft(salesAssesmentDetails).toContain(data.salesManager);
+        expect.soft(salesAssesmentDetails).toContain(data.remarks);
     }
     @step()
     async approveCreditControlAndValidateAPI(statusCode: number) {
@@ -269,14 +269,14 @@ export class CreditControlPage extends BasePage {
     async validateFinanceAssesmentDetails(data: FinanceAssesmentData) {
         await this.page.waitForTimeout(2000);
         const financeAssesmentDetails = await this.page.locator('//div[@class="p-[18px] !pb-0"]').innerText();
-        expect(financeAssesmentDetails).toContain(data.monthOutstanding);
-        expect(financeAssesmentDetails).toContain(data.limitApproved);
-        expect(financeAssesmentDetails).toContain(data.bankReference);
-        expect(financeAssesmentDetails).toContain(data.tradeReference);
-        expect(financeAssesmentDetails).toContain(data.paymentTerms);
-        expect(financeAssesmentDetails).toContain(data.proposedLimit);
-        expect(financeAssesmentDetails).toContain(data.creditPeriod);
-        // expect(financeAssesmentDetails).toContain(data.remarks);
+        expect.soft(financeAssesmentDetails).toContain(data.monthOutstanding);
+        expect.soft(financeAssesmentDetails).toContain(data.limitApproved);
+        expect.soft(financeAssesmentDetails).toContain(data.bankReference);
+        expect.soft(financeAssesmentDetails).toContain(data.tradeReference);
+        expect.soft(financeAssesmentDetails).toContain(data.paymentTerms);
+        expect.soft(financeAssesmentDetails).toContain(data.proposedLimit);
+        expect.soft(financeAssesmentDetails).toContain(data.creditPeriod);
+        // expect.soft(financeAssesmentDetails).toContain(data.remarks);
     }
     @step()
     async approveFinanceAssesmentAndValidateAPI(statusCode: number) {

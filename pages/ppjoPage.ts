@@ -87,11 +87,11 @@ export class PPJOPage extends BasePage {
         await this.page.waitForTimeout(1000);
         await expect(this.ppjoTitle, "PPJO title is not visible").toBeVisible();
         const detailsText = await this.page.locator('//div[@class="grid gap-[1rem] !mb-[2.5rem] text-[14px]"]').innerText();
-        expect(detailsText, "PPJO details do not contain the project name").toContain(data.projectName);
-        expect(detailsText, "PPJO details do not contain the customer name").toContain(data.customerName);
-        expect(detailsText, "PPJO details do not contain the mobile number").toContain(data.mobileNumber1);
-        expect(detailsText, "PPJO details do not contain the email").toContain(data.email1);
-        expect(detailsText, "PPJO details do not contain payment terms").toContain(data.paymentTerms);
+        expect.soft(detailsText, "PPJO details do not contain the project name").toContain(data.projectName);
+        expect.soft(detailsText, "PPJO details do not contain the customer name").toContain(data.customerName);
+        expect.soft(detailsText, "PPJO details do not contain the mobile number").toContain(data.mobileNumber1);
+        expect.soft(detailsText, "PPJO details do not contain the email").toContain(data.email1);
+        expect.soft(detailsText, "PPJO details do not contain payment terms").toContain(data.paymentTerms);
     }
     @step()
     async requestArtwork() {
@@ -174,18 +174,18 @@ export class PPJOPage extends BasePage {
     @step()
     async validatePPJOTableDetails() {
         const ppjoTable = await this.page.locator('.w-full.rounded-\\[6px\\]').innerText();
-        expect(ppjoTable, "PPJO table does not contain Artwork").toContain('Artwork');
-        expect(ppjoTable, "PPJO table does not contain AutoCAD").toContain('AutoCAD');
-        expect(ppjoTable, "PPJO table does not contain Site-Visit").toContain('Site-Visit');
-        expect(ppjoTable, "PPJO table does not contain Estimation").toContain('Estimation');
-        expect(ppjoTable, "PPJO table does not contain Artwork requirement details").toContain('Artwork requirement details');
-        expect(ppjoTable, "PPJO table does not contain AutoCAD requirement details").toContain('AutoCAD requirement details');
-        expect(ppjoTable, "PPJO table does not contain Estimation requirement details").toContain('Estimation requirement details');
-        expect(ppjoTable, "PPJO table does not contain Procurement requirement details").toContain('Procurement requirement details');
-        expect(ppjoTable, "PPJO table does not contain Artwork Quantity").toContain('11');
-        expect(ppjoTable, "PPJO table does not contain AutoCAD Quantity").toContain('12');
-        expect(ppjoTable, "PPJO table does not contain Procurement Quantity").toContain('13');
-        expect(ppjoTable, "PPJO table does not contain Estimation Quantity").toContain('14');
+        expect.soft(ppjoTable, "PPJO table does not contain Artwork").toContain('Artwork');
+        expect.soft(ppjoTable, "PPJO table does not contain AutoCAD").toContain('AutoCAD');
+        expect.soft(ppjoTable, "PPJO table does not contain Site-Visit").toContain('Site-Visit');
+        expect.soft(ppjoTable, "PPJO table does not contain Estimation").toContain('Estimation');
+        expect.soft(ppjoTable, "PPJO table does not contain Artwork requirement details").toContain('Artwork requirement details');
+        expect.soft(ppjoTable, "PPJO table does not contain AutoCAD requirement details").toContain('AutoCAD requirement details');
+        expect.soft(ppjoTable, "PPJO table does not contain Estimation requirement details").toContain('Estimation requirement details');
+        expect.soft(ppjoTable, "PPJO table does not contain Procurement requirement details").toContain('Procurement requirement details');
+        expect.soft(ppjoTable, "PPJO table does not contain Artwork Quantity").toContain('11');
+        expect.soft(ppjoTable, "PPJO table does not contain AutoCAD Quantity").toContain('12');
+        expect.soft(ppjoTable, "PPJO table does not contain Procurement Quantity").toContain('13');
+        expect.soft(ppjoTable, "PPJO table does not contain Estimation Quantity").toContain('14');
     }
 
     private async selectFromDropdown(dropdownName: string, value: string) {
@@ -219,9 +219,9 @@ export class PPJOPage extends BasePage {
     async validateBOQDetailsTable(boqData: BOQData) {
         await this.page.waitForTimeout(2000);
         const boqDetails = await this.page.locator('(//tr)[2]').innerText();
-        expect(boqDetails, `BOQ details table does not contain description: ${boqData.description}`).toContain(boqData.description);
-        expect(boqDetails, `BOQ details table does not contain size: ${boqData.size}`).toContain(boqData.size);
-        expect(boqDetails, `BOQ details table does not contain quantity: ${boqData.quantity}`).toContain(boqData.quantity);
+        expect.soft(boqDetails, `BOQ details table does not contain description: ${boqData.description}`).toContain(boqData.description);
+        expect.soft(boqDetails, `BOQ details table does not contain size: ${boqData.size}`).toContain(boqData.size);
+        expect.soft(boqDetails, `BOQ details table does not contain quantity: ${boqData.quantity}`).toContain(boqData.quantity);
     }
     @step()
     async submitQuotationForApprovalAndValidateAPI(statusCode: number) {
@@ -253,10 +253,10 @@ export class PPJOPage extends BasePage {
         await this.page.waitForLoadState('domcontentloaded');
         await this.page.waitForTimeout(4000);
         const sampleDetails = await this.page.locator('//div[@class="p-[18px] undefined"]').first().innerText();
-        expect(sampleDetails, `Sample details does not contain enquiry id: ${enquiryId}`).toContain(enquiryId);
-        expect(sampleDetails, `Sample details does not contain document name: ${documentName}`).toContain(documentName);
-        expect(sampleDetails, "Sample details does not contain quantity: 1").toContain(quantity);
-        expect(sampleDetails, "Sample details does not contain description: Sample Description").toContain(description);
+        expect.soft(sampleDetails, `Sample details does not contain enquiry id: ${enquiryId}`).toContain(enquiryId);
+        expect.soft(sampleDetails, `Sample details does not contain document name: ${documentName}`).toContain(documentName);
+        expect.soft(sampleDetails, "Sample details does not contain quantity: 1").toContain(quantity);
+        expect.soft(sampleDetails, "Sample details does not contain description: Sample Description").toContain(description);
     }
     @step()
     async requestEstimationAndValidateAPI(statusCode: number) {
@@ -275,40 +275,40 @@ export class PPJOPage extends BasePage {
     async validateRequestSampleDetails(data: SalesEnquiryData) {
         const detailsText = await this.page.locator('//div[@class="col-span-1 mr-8"]').innerText();
         // Validate key details are visible
-        expect(detailsText, `View sales enquiry details do not contain customer name: ${data.customerName}`).toContain(data.customerName);
+        expect.soft(detailsText, `View sales enquiry details do not contain customer name: ${data.customerName}`).toContain(data.customerName);
         console.log(`✓ Customer Name displayed: ${data.customerName}`);
 
         // Validate project name if not empty
-        expect(detailsText, `View sales enquiry details do not contain project name: ${data.projectName}`).toContain(data.projectName);
+        expect.soft(detailsText, `View sales enquiry details do not contain project name: ${data.projectName}`).toContain(data.projectName);
         console.log(`✓ Project Name displayed: ${data.projectName}`);
         // }
 
         // Validate country
-        expect(detailsText, `View sales enquiry details do not contain country: ${data.country}`).toContain(data.country);
+        expect.soft(detailsText, `View sales enquiry details do not contain country: ${data.country}`).toContain(data.country);
         console.log(`✓ Country displayed: ${data.country}`);
 
         // Validate state
-        expect(detailsText, `View sales enquiry details do not contain state: ${data.state}`).toContain(data.state);
+        expect.soft(detailsText, `View sales enquiry details do not contain state: ${data.state}`).toContain(data.state);
         console.log(`✓ State displayed: ${data.state}`);
 
         // Validate city
-        expect(detailsText, `View sales enquiry details do not contain city: ${data.city}`).toContain(data.city);
+        expect.soft(detailsText, `View sales enquiry details do not contain city: ${data.city}`).toContain(data.city);
         console.log(`✓ City displayed: ${data.city}`);
 
 
         // commented because of a bug
         // const currencyName = Utils.getCurrencyName(data.currency);
-        // expect(detailsText, `View sales enquiry details do not contain currency: ${currencyName}`).toContain(currencyName);
+        // expect.soft(detailsText, `View sales enquiry details do not contain currency: ${currencyName}`).toContain(currencyName);
         // console.log(`✓ Currency displayed: ${currencyName}`);
 
         // Validate payment terms
-        // expect(detailsText, `View sales enquiry details do not contain payment terms: ${data.paymentTerms}`).toContain(data.paymentTerms);
+        // expect.soft(detailsText, `View sales enquiry details do not contain payment terms: ${data.paymentTerms}`).toContain(data.paymentTerms);
         // console.log(`✓ Payment Terms displayed: ${data.paymentTerms}`);
 
-        expect(detailsText, `View sales enquiry details do not contain mobile number: ${data.mobileNumber1}`).toContain(data.mobileNumber1);
+        expect.soft(detailsText, `View sales enquiry details do not contain mobile number: ${data.mobileNumber1}`).toContain(data.mobileNumber1);
         console.log(`✓ Mobile Number displayed: ${data.mobileNumber1}`);
 
-        expect(detailsText, `View sales enquiry details do not contain email: ${data.email1}`).toContain(data.email1);
+        expect.soft(detailsText, `View sales enquiry details do not contain email: ${data.email1}`).toContain(data.email1);
         console.log(`✓ Email displayed: ${data.email1}`);
 
         console.log('All validation checks passed for view enquiry details');

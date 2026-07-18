@@ -82,9 +82,9 @@ export class MaterialIndentRequestPage extends BasePage {
         await this.page.waitForLoadState('domcontentloaded');
         await this.page.waitForTimeout(1000);
         const tableRow = await this.page.locator('//tbody/tr').innerText();
-        expect(tableRow).toContain(mirDetails.material);
-        expect(tableRow).toContain(mirDetails.quantity);
-        // expect(tableRow).toContain(mirDetails.remarks);
+        expect.soft(tableRow).toContain(mirDetails.material);
+        expect.soft(tableRow).toContain(mirDetails.quantity);
+        // expect.soft(tableRow).toContain(mirDetails.remarks);
     }
     @step()    
     async submitMaterialIndentRequestAndValidateAPI(statusCode: number) {
@@ -118,9 +118,9 @@ export class MaterialIndentRequestPage extends BasePage {
         const requested = parseInt(requestedQuantity);
         const issued = parseInt(quantity);
         const finalPendingQuantity = requested - issued;
-        expect(await this.pendingQuantity.innerText()).toBe(requestedQuantity);
+        expect.soft(await this.pendingQuantity.innerText()).toBe(requestedQuantity);
         await this.issuingQuantity.fill(quantity);
-        expect(await this.pendingQuantity.innerText()).toBe(`${finalPendingQuantity}`);
+        expect.soft(await this.pendingQuantity.innerText()).toBe(`${finalPendingQuantity}`);
     }
     @step()
     async issueMaterialAndValidateAPI(statusCode: number) {

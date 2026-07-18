@@ -80,8 +80,8 @@ export class TradingPage extends BasePage {
     async validateMaterialTable(tradingData: TradingData) {
         await this.page.waitForTimeout(500);
         const materialTable = await this.page.locator('(//tr)[2]').innerText();
-        expect(materialTable).toContain(tradingData.material);
-        expect(materialTable).toContain(tradingData.quantity);
+        expect.soft(materialTable).toContain(tradingData.material);
+        expect.soft(materialTable).toContain(tradingData.quantity);
     }
 
     async createOrderAndValidateAPI(statusCode: number) {

@@ -29,7 +29,7 @@ export class SalesOrderManagerPage extends BasePage {
     async validateCustomerNameInSalesOrderManager(customerName: string) {
         await this.page.waitForTimeout(3000);
         const customerDetailsText = await this.page.locator('//div[@class="min-w-[180px] flex flex-col"]').first().innerText();
-        expect(customerDetailsText).toContain(customerName);
+        expect.soft(customerDetailsText).toContain(customerName);
     }
     @step()
     async approveSalesOrderCheckListAndValidateAPI(statusCode: number) {
@@ -47,12 +47,12 @@ export class SalesOrderManagerPage extends BasePage {
         await this.page.waitForLoadState('domcontentloaded');
         await this.page.waitForTimeout(5000);
         const detailsText = await this.page.locator('div.col-span-1').first().innerText();
-        expect(detailsText, `Sales order details do not contain customer name: ${data.customerName}`).toContain(data.customerName);
+        expect.soft(detailsText, `Sales order details do not contain customer name: ${data.customerName}`).toContain(data.customerName);
         console.log(`✓ Customer Name displayed in Sales Order Manager: ${data.customerName}`);
-        expect(detailsText, `Sales order details do not contain project name: ${data.projectName}`).toContain(data.projectName);
+        expect.soft(detailsText, `Sales order details do not contain project name: ${data.projectName}`).toContain(data.projectName);
         console.log(`✓ Project Name displayed in Sales Order Manager: ${data.projectName}`);
         // commented because of a bug
-        // expect(detailsText, `Sales order details do not contain email: ${data.email1}`).toContain(data.email1);
+        // expect.soft(detailsText, `Sales order details do not contain email: ${data.email1}`).toContain(data.email1);
         // console.log(`✓ Email displayed in Sales Order Manager: ${data.email1}`);
     }
     @step()
