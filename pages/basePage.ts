@@ -100,18 +100,6 @@ export class BasePage {
     async search(name: string) {
         await this.page.waitForTimeout(500);
         await this.searchBox.fill(name);
-        // await this.page.waitForFunction(
-        //     () => document.querySelectorAll('tr').length <= 2
-        // );
-        // await expect.poll(
-        //     async () => await this.page.locator('//tr').count(),
-        //     {
-        //         message: `Search result count mismatch. Received ${await this.page.locator('//tr').count() - 1} Results`,
-        //         timeout: 10000,
-        //         intervals: [500, 1000, 1500, 2000],
-        //     }
-        // ).toBeLessThanOrEqual(2);
-
         await expect.poll(
             async () => {
                 const count = await this.page.locator('//tr').count();
@@ -124,7 +112,7 @@ export class BasePage {
             {
                 message: `Search result count mismatch. Received ${await this.page.locator('//tr').count() - 1} Results`,
                 timeout: 10000,
-                intervals: [250, 500, 750, 1000],
+                intervals: [1000, 2000, 3000, 4000],
             }
         ).toBeLessThanOrEqual(2);
 
