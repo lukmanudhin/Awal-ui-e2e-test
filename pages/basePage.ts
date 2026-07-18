@@ -112,7 +112,7 @@ export class BasePage {
             {
                 message: `Search result count mismatch. Received ${await this.page.locator('//tr').count() - 1} Results`,
                 timeout: 10000,
-                intervals: [1000, 2000, 3000, 4000],
+                intervals: [2000, 4000, 6000, 8000],
             }
         ).toBeLessThanOrEqual(2);
 
