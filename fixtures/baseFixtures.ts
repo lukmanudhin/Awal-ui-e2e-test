@@ -24,6 +24,8 @@ import { ManufacturingPage } from "../pages/manufacturingPage";
 import { TradingPage } from "../pages/tradingPage";
 import { PipelinePage } from "../pages/pipelinePage";
 import { CreditControlPage } from "../pages/creditControlPage";
+import { SalesReturnPage } from "../pages/salesReturnPage";
+import { SalesReturnAPI } from "../API/salesReturnAPI";
 
 type baseFixtures = {
   loginPage: LoginPage;
@@ -51,6 +53,8 @@ type baseFixtures = {
   tradingPage: TradingPage;
   pipelinePage: PipelinePage;
   creditControlPage: CreditControlPage;
+  salesReturnPage: SalesReturnPage;
+  salesReturnAPI: SalesReturnAPI;
 };
 
 export const test = base.extend<baseFixtures>({
@@ -128,6 +132,12 @@ export const test = base.extend<baseFixtures>({
   },
   creditControlPage: async ({ page }, use) => {
     await use(new CreditControlPage(page));
+  },
+  salesReturnPage: async ({ page }, use) => {
+    await use(new SalesReturnPage(page));
+  },
+  salesReturnAPI: async ({ request }, use) => {
+    await use(new SalesReturnAPI(request));
   },
 });
 
