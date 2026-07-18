@@ -120,16 +120,12 @@ test.describe.serial('Verify Invoice Register is rejected by the Manager', () =>
             await costEstimationPage.goToTab('BOL - Bill of Labour');
             await costEstimationPage.editDesignStudio('5', '6', '7', '3');
             await costEstimationPage.validateLabourAndCostingAPI(200);
-            await expect(costEstimationPage.successMessage('BOL updated successfully'), "BOL updated success message does not match").toContainText('BOL updated successfully');
             await costEstimationPage.editMetalFabrication('4', '3', '2', '1');
             await costEstimationPage.validateLabourAndCostingAPI(200);
-            await expect(costEstimationPage.successMessage('BOL updated successfully'), "BOL updated success message does not match").toContainText('BOL updated successfully');
             await costEstimationPage.editElectrical('5', '6', '7', '3');
             await costEstimationPage.validateLabourAndCostingAPI(200);
-            await expect(costEstimationPage.successMessage('BOL updated successfully'), "BOL updated success message does not match").toContainText('BOL updated successfully');
             await costEstimationPage.editCutting('4', '3', '2', '1');
             await costEstimationPage.validateLabourAndCostingAPI(200);
-            await expect(costEstimationPage.successMessage('BOL updated successfully'), "BOL updated success message does not match").toContainText('BOL updated successfully');
         });
 
         await test.step('Verify BOQ summary is saved successfully with variation', async () => {

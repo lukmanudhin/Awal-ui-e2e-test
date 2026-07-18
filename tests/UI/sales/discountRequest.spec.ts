@@ -128,16 +128,12 @@ test.describe.serial('Verify Discount Request flow of Sales Enquiry (Request Nor
             await costEstimationPage.goToTab('BOL - Bill of Labour');
             await costEstimationPage.editDesignStudio('5', '6', '7', '3');
             await costEstimationPage.validateLabourAndCostingAPI(200);
-            await expect(costEstimationPage.successMessage('BOL updated successfully'), "BOL updated success message does not match").toContainText('BOL updated successfully');
             await costEstimationPage.editMetalFabrication('4', '3', '2', '1');
             await costEstimationPage.validateLabourAndCostingAPI(200);
-            await expect(costEstimationPage.successMessage('BOL updated successfully'), "BOL updated success message does not match").toContainText('BOL updated successfully');
             await costEstimationPage.editElectrical('5', '6', '7', '3');
             await costEstimationPage.validateLabourAndCostingAPI(200);
-            await expect(costEstimationPage.successMessage('BOL updated successfully'), "BOL updated success message does not match").toContainText('BOL updated successfully');
             await costEstimationPage.editCutting('4', '3', '2', '1');
             await costEstimationPage.validateLabourAndCostingAPI(200);
-            await expect(costEstimationPage.successMessage('BOL updated successfully'), "BOL updated success message does not match").toContainText('BOL updated successfully');
         });
 
         await test.step('Verify BOQ summary is saved successfully with variation', async () => {
@@ -323,16 +319,12 @@ test.describe.serial('Verify Discount Request flow of Sales Enquiry (Request Nor
             await costEstimationPage.goToTab('BOL - Bill of Labour');
             await costEstimationPage.editDesignStudio('4', '6', '7', '3');
             await costEstimationPage.validateLabourAndCostingAPI(200);
-            await expect(costEstimationPage.successMessage('BOL updated successfully'), "BOL updated success message does not match").toContainText('BOL updated successfully');
             await costEstimationPage.editMetalFabrication('1', '2', '3', '4');
             await costEstimationPage.validateLabourAndCostingAPI(200);
-            await expect(costEstimationPage.successMessage('BOL updated successfully'), "BOL updated success message does not match").toContainText('BOL updated successfully');
             await costEstimationPage.editElectrical('3', '7', '6', '5');
             await costEstimationPage.validateLabourAndCostingAPI(200);
-            await expect(costEstimationPage.successMessage('BOL updated successfully'), "BOL updated success message does not match").toContainText('BOL updated successfully');
             await costEstimationPage.editCutting('1', '2', '3', '4');
             await costEstimationPage.validateLabourAndCostingAPI(200);
-            await expect(costEstimationPage.successMessage('BOL updated successfully'), "BOL updated success message does not match").toContainText('BOL updated successfully');
         });
 
         await test.step('Verify BOQ summary is saved successfully with variation', async () => {
