@@ -347,45 +347,43 @@ export class SalesEnquiryPage extends BasePage {
     }
     @step()
     async validateViewEnquiryDetails(data: SalesEnquiryData) {
-        await this.page.waitForTimeout(1000);
         // await expect(this.page.getByRole('heading'), "View Enquiry Title is does not contain View Enquiry").toContainText('View Enquiry');
         // Get all the detail labels and values from the view page
         // const detailsText = await this.page.locator('//div[@class="p-0 undefined"]').innerText();
+        await expect(this.page.locator('//div[@class="p-[18px] undefined"]'), `View sales enquiry details do not contain customer name: ${data.customerName}`).toContainText(data.customerName);
         const detailsText = await this.page.locator('//div[@class="p-[18px] undefined"]').innerText();
-        // Validate key details are visible
-        expect.soft(detailsText, `View sales enquiry details do not contain customer name: ${data.customerName}`).toContain(data.customerName);
         console.log(`✓ Customer Name displayed: ${data.customerName}`);
 
         // Validate project name if not empty
-        expect.soft(detailsText, `View sales enquiry details do not contain project name: ${data.projectName}`).toContain(data.projectName);
+        expect(detailsText, `View sales enquiry details do not contain project name: ${data.projectName}`).toContain(data.projectName);
         console.log(`✓ Project Name displayed: ${data.projectName}`);
         // }
 
         // Validate country
-        expect.soft(detailsText, `View sales enquiry details do not contain country: ${data.country}`).toContain(data.country);
+        expect(detailsText, `View sales enquiry details do not contain country: ${data.country}`).toContain(data.country);
         console.log(`✓ Country displayed: ${data.country}`);
 
         // Validate state
-        expect.soft(detailsText, `View sales enquiry details do not contain state: ${data.state}`).toContain(data.state);
+        expect(detailsText, `View sales enquiry details do not contain state: ${data.state}`).toContain(data.state);
         console.log(`✓ State displayed: ${data.state}`);
 
         // Validate city
-        expect.soft(detailsText, `View sales enquiry details do not contain city: ${data.city}`).toContain(data.city);
+        expect(detailsText, `View sales enquiry details do not contain city: ${data.city}`).toContain(data.city);
         console.log(`✓ City displayed: ${data.city}`);
 
 
         // const currencyName = Utils.getCurrencyName(data.currency);
-        // expect.soft(detailsText, `View sales enquiry details do not contain currency: ${currencyName}`).toContain(currencyName);
+        // expect(detailsText, `View sales enquiry details do not contain currency: ${currencyName}`).toContain(currencyName);
         // console.log(`✓ Currency displayed: ${currencyName}`);
 
         // Validate payment terms
-        // expect.soft(detailsText, `View sales enquiry details do not contain payment terms: ${data.paymentTerms}`).toContain(data.paymentTerms);
+        // expect(detailsText, `View sales enquiry details do not contain payment terms: ${data.paymentTerms}`).toContain(data.paymentTerms);
         // console.log(`✓ Payment Terms displayed: ${data.paymentTerms}`);
 
-        expect.soft(detailsText, `View sales enquiry details do not contain mobile number: ${data.mobileNumber1}`).toContain(data.mobileNumber1);
+        expect(detailsText, `View sales enquiry details do not contain mobile number: ${data.mobileNumber1}`).toContain(data.mobileNumber1);
         console.log(`✓ Mobile Number displayed: ${data.mobileNumber1}`);
 
-        expect.soft(detailsText, `View sales enquiry details do not contain email: ${data.email1}`).toContain(data.email1);
+        expect(detailsText, `View sales enquiry details do not contain email: ${data.email1}`).toContain(data.email1);
         console.log(`✓ Email displayed: ${data.email1}`);
 
         console.log('All validation checks passed for view enquiry details');

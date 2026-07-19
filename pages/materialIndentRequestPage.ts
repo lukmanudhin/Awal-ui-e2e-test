@@ -80,11 +80,10 @@ export class MaterialIndentRequestPage extends BasePage {
     @step()
     async validateMaterialInformationTable(mirDetails: CreateMIRData) {
         await this.page.waitForLoadState('domcontentloaded');
-        await this.page.waitForTimeout(1000);
+        await expect(this.page.locator('//tbody/tr')).toContainText(mirDetails.material);
         const tableRow = await this.page.locator('//tbody/tr').innerText();
-        expect.soft(tableRow).toContain(mirDetails.material);
-        expect.soft(tableRow).toContain(mirDetails.quantity);
-        // expect.soft(tableRow).toContain(mirDetails.remarks);
+        expect(tableRow).toContain(mirDetails.quantity);
+        // expect(tableRow).toContain(mirDetails.remarks);
     }
     @step()    
     async submitMaterialIndentRequestAndValidateAPI(statusCode: number) {
@@ -118,9 +117,9 @@ export class MaterialIndentRequestPage extends BasePage {
         const requested = parseInt(requestedQuantity);
         const issued = parseInt(quantity);
         const finalPendingQuantity = requested - issued;
-        expect.soft(await this.pendingQuantity.innerText()).toBe(requestedQuantity);
+        expect(await this.pendingQuantity.innerText()).toBe(requestedQuantity);
         await this.issuingQuantity.fill(quantity);
-        expect.soft(await this.pendingQuantity.innerText()).toBe(`${finalPendingQuantity}`);
+        expect(await this.pendingQuantity.innerText()).toBe(`${finalPendingQuantity}`);
     }
     @step()
     async issueMaterialAndValidateAPI(statusCode: number) {

@@ -27,9 +27,7 @@ export class SalesOrderManagerPage extends BasePage {
     }
     @step()
     async validateCustomerNameInSalesOrderManager(customerName: string) {
-        await this.page.waitForTimeout(3000);
-        const customerDetailsText = await this.page.locator('//div[@class="min-w-[180px] flex flex-col"]').first().innerText();
-        expect.soft(customerDetailsText).toContain(customerName);
+        await expect(this.page.locator('//div[@class="min-w-[180px] flex flex-col"]').first()).toContainText(customerName);
     }
     @step()
     async approveSalesOrderCheckListAndValidateAPI(statusCode: number) {
@@ -45,14 +43,13 @@ export class SalesOrderManagerPage extends BasePage {
     @step()
     async validateSalesOrderDetails(data: SalesEnquiryData) {
         await this.page.waitForLoadState('domcontentloaded');
-        await this.page.waitForTimeout(5000);
+        await expect(this.page.locator('div.col-span-1').first(), `Sales order details do not contain customer name: ${data.customerName}`).toContainText(data.customerName);
         const detailsText = await this.page.locator('div.col-span-1').first().innerText();
-        expect.soft(detailsText, `Sales order details do not contain customer name: ${data.customerName}`).toContain(data.customerName);
         console.log(`✓ Customer Name displayed in Sales Order Manager: ${data.customerName}`);
-        expect.soft(detailsText, `Sales order details do not contain project name: ${data.projectName}`).toContain(data.projectName);
+        expect(detailsText, `Sales order details do not contain project name: ${data.projectName}`).toContain(data.projectName);
         console.log(`✓ Project Name displayed in Sales Order Manager: ${data.projectName}`);
         // commented because of a bug
-        // expect.soft(detailsText, `Sales order details do not contain email: ${data.email1}`).toContain(data.email1);
+        // expect(detailsText, `Sales order details do not contain email: ${data.email1}`).toContain(data.email1);
         // console.log(`✓ Email displayed in Sales Order Manager: ${data.email1}`);
     }
     @step()

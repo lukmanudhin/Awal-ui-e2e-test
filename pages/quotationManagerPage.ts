@@ -73,33 +73,31 @@ export class QuotationManagerPage extends BasePage {
     }
     @step()
     async validateEnquiryDetails(data: SalesEnquiryData) {
-        await this.page.waitForTimeout(1000);
+        await expect(this.page.locator('//div[@class="grid grid-cols-2 mb-3"]/div[1]'), `View sales enquiry details do not contain customer name: ${data.customerName}`).toContainText(data.customerName);
         const detailsText = await this.page.locator('//div[@class="grid grid-cols-2 mb-3"]/div[1]').innerText();
-        // Validate key details are visible
-        expect.soft(detailsText, `View sales enquiry details do not contain customer name: ${data.customerName}`).toContain(data.customerName);
         console.log(`✓ Customer Name displayed: ${data.customerName}`);
 
         // Validate country
-        expect.soft(detailsText, `View sales enquiry details do not contain country: ${data.country}`).toContain(data.country);
+        expect(detailsText, `View sales enquiry details do not contain country: ${data.country}`).toContain(data.country);
         console.log(`✓ Country displayed: ${data.country}`);
 
         // Validate state
-        expect.soft(detailsText, `View sales enquiry details do not contain state: ${data.state}`).toContain(data.state);
+        expect(detailsText, `View sales enquiry details do not contain state: ${data.state}`).toContain(data.state);
         console.log(`✓ State displayed: ${data.state}`);
 
         // Validate city
-        expect.soft(detailsText, `View sales enquiry details do not contain city: ${data.city}`).toContain(data.city);
+        expect(detailsText, `View sales enquiry details do not contain city: ${data.city}`).toContain(data.city);
         console.log(`✓ City displayed: ${data.city}`);
 
 
         // const currencyName = Utils.getCurrencyName(data.currency);
-        // expect.soft(detailsText, `View sales enquiry details do not contain currency: ${data.currency}`).toContain(data.currency);
+        // expect(detailsText, `View sales enquiry details do not contain currency: ${data.currency}`).toContain(data.currency);
         // console.log(`✓ Currency displayed: ${data.currency}`);
 
-        expect.soft(detailsText, `View sales enquiry details do not contain mobile number: ${data.mobileNumber1}`).toContain(data.mobileNumber1);
+        expect(detailsText, `View sales enquiry details do not contain mobile number: ${data.mobileNumber1}`).toContain(data.mobileNumber1);
         console.log(`✓ Mobile Number displayed: ${data.mobileNumber1}`);
 
-        expect.soft(detailsText, `View sales enquiry details do not contain email: ${data.email1}`).toContain(data.email1);
+        expect(detailsText, `View sales enquiry details do not contain email: ${data.email1}`).toContain(data.email1);
         console.log(`✓ Email displayed: ${data.email1}`);
 
         console.log('All validation checks passed for view enquiry details');
@@ -341,8 +339,8 @@ export class QuotationManagerPage extends BasePage {
     @step()
     async validateVersion2AndOption1Visible(version: string, option: string) {
         const innerText = await this.page.locator('//div[@class="border-l-2 border-[#D9D9D9] pl-8"]').innerText();
-        expect.soft(innerText).toContain(version);
-        expect.soft(innerText).toContain(option);
+        expect(innerText).toContain(version);
+        expect(innerText).toContain(option);
     }
     @step()
     async enterChangeRequestDetails() {

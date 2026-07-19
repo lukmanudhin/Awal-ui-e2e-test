@@ -231,69 +231,65 @@ export class CostEstimationPage extends BasePage {
     @step()
     async validateEstimationDetailsTable() {
         await this.page.waitForLoadState('domcontentloaded');
-        await this.page.waitForTimeout(5000);
+        await expect(this.page.locator('.w-full.rounded-\\[6px\\]').or(this.page.locator('//div[contains(@class,"w-full rounded")]')), "PPJO table does not contain Artwork").toContainText('Artwork');
         const ppjoTable = await this.page.locator('.w-full.rounded-\\[6px\\]').or(this.page.locator('//div[contains(@class,"w-full rounded")]')).innerText();
-        expect.soft(ppjoTable, "PPJO table does not contain Artwork").toContain('Artwork');
-        expect.soft(ppjoTable, "PPJO table does not contain AutoCAD").toContain('AutoCAD');
-        expect.soft(ppjoTable, "PPJO table does not contain Site-Visit").toContain('Site-Visit');
-        expect.soft(ppjoTable, "PPJO table does not contain Estimation").toContain('Estimation');
-        expect.soft(ppjoTable, "PPJO table does not contain Artwork Quantity").toContain('11');
-        expect.soft(ppjoTable, "PPJO table does not contain AutoCAD Quantity").toContain('12');
-        expect.soft(ppjoTable, "PPJO table does not contain Procurement Quantity").toContain('13');
-        expect.soft(ppjoTable, "PPJO table does not contain Estimation Quantity").toContain('14');
+        expect(ppjoTable, "PPJO table does not contain AutoCAD").toContain('AutoCAD');
+        expect(ppjoTable, "PPJO table does not contain Site-Visit").toContain('Site-Visit');
+        expect(ppjoTable, "PPJO table does not contain Estimation").toContain('Estimation');
+        expect(ppjoTable, "PPJO table does not contain Artwork Quantity").toContain('11');
+        expect(ppjoTable, "PPJO table does not contain AutoCAD Quantity").toContain('12');
+        expect(ppjoTable, "PPJO table does not contain Procurement Quantity").toContain('13');
+        expect(ppjoTable, "PPJO table does not contain Estimation Quantity").toContain('14');
     }
     @step()
     async validateCustomerDetails(data: SalesEnquiryData, enquiryId: string) {
-        await this.page.waitForTimeout(2000);
+        await expect(this.page.locator('.p-4').first(), `View cost estimation details do not contain enquiry id: ${enquiryId}`).toContainText(enquiryId);
         const detailsText = await this.page.locator('.p-4').first().innerText();
-
-        expect.soft(detailsText, `View cost estimation details do not contain enquiry id: ${enquiryId}`).toContain(enquiryId);
         console.log(`✓ Customer Name displayed: ${enquiryId}`);
 
         // Validate key details are visible
-        expect.soft(detailsText, `View cost estimation details do not contain customer name: ${data.customerName}`).toContain(data.customerName);
+        expect(detailsText, `View cost estimation details do not contain customer name: ${data.customerName}`).toContain(data.customerName);
         console.log(`✓ Customer Name displayed: ${data.customerName}`);
 
         // Validate project name if not empty
-        expect.soft(detailsText, `View cost estimation details do not contain project name: ${data.projectName}`).toContain(data.projectName);
+        expect(detailsText, `View cost estimation details do not contain project name: ${data.projectName}`).toContain(data.projectName);
         console.log(`✓ Project Name displayed: ${data.projectName}`);
         // }
 
         // Validate country
-        expect.soft(detailsText, `View cost estimation details do not contain country: ${data.country}`).toContain(data.country);
+        expect(detailsText, `View cost estimation details do not contain country: ${data.country}`).toContain(data.country);
         console.log(`✓ Country displayed: ${data.country}`);
 
         // Validate state
-        expect.soft(detailsText, `View cost estimation details do not contain state: ${data.state}`).toContain(data.state);
+        expect(detailsText, `View cost estimation details do not contain state: ${data.state}`).toContain(data.state);
         console.log(`✓ State displayed: ${data.state}`);
 
         // Validate city
-        expect.soft(detailsText, `View cost estimation details do not contain city: ${data.city}`).toContain(data.city);
+        expect(detailsText, `View cost estimation details do not contain city: ${data.city}`).toContain(data.city);
         console.log(`✓ City displayed: ${data.city}`);
 
         // const currencyName = Utils.getCurrencyName(data.currency);
-        // expect.soft(detailsText, `View cost estimation details do not contain currency: ${currencyName}`).toContain(currencyName);
+        // expect(detailsText, `View cost estimation details do not contain currency: ${currencyName}`).toContain(currencyName);
         // console.log(`✓ Currency displayed: ${currencyName}`);
 
         // Validate payment terms
-        expect.soft(detailsText, `View cost estimation details do not contain payment terms: ${data.paymentTerms}`).toContain(data.paymentTerms);
+        expect(detailsText, `View cost estimation details do not contain payment terms: ${data.paymentTerms}`).toContain(data.paymentTerms);
         console.log(`✓ Payment Terms displayed: ${data.paymentTerms}`);
 
-        expect.soft(detailsText, `View cost estimation details do not contain mobile number: ${data.mobileNumber1}`).toContain(data.mobileNumber1);
+        expect(detailsText, `View cost estimation details do not contain mobile number: ${data.mobileNumber1}`).toContain(data.mobileNumber1);
         console.log(`✓ Mobile Number displayed: ${data.mobileNumber1}`);
 
-        expect.soft(detailsText, `View cost estimation details do not contain email: ${data.email1}`).toContain(data.email1);
+        expect(detailsText, `View cost estimation details do not contain email: ${data.email1}`).toContain(data.email1);
         console.log(`✓ Email displayed: ${data.email1}`);
 
         console.log('All validation checks passed for view cost estimation details');
     }
     @step()
     private async validateViewAttachDetails(documentName: string, quantity: string, description: string) {
-        await this.page.waitForTimeout(1000);
+        await expect(this.page.locator('(//main)[2]'), `Attachment details do not contain document name: ${documentName}`).toContainText(documentName);
         const detailText = await this.page.locator('(//main)[2]').innerText();
-        expect.soft(detailText, `Attachment details do not contain document name: ${documentName}`).toContain(documentName);
         expect(this.page.getByRole('spinbutton', { name: 'Quantity' }), `Attachment quantity value mismatch. Expected: ${quantity}`).toHaveValue(quantity);
-        expect.soft(detailText, `Attachment details do not contain description: ${description}`).toContain(description);
+        expect(detailText, `Attachment details do not contain description: ${description}`).toContain(description);
     }
     @step()
     async clickViewButton(count: number) {
@@ -389,15 +385,14 @@ export class CostEstimationPage extends BasePage {
     }
     @step()
     async validateBOQDetailsTable(boqData: BOQData) {
-        await this.page.waitForTimeout(1000);
+        await expect(this.page.locator('(//tr)[2]'), `BOQ details table does not contain finished product: ${boqData.finishedProduct}`).toContainText(boqData.finishedProduct);
         const boqDetails = await this.page.locator('(//tr)[2]').innerText();
-        expect.soft(boqDetails, `BOQ details table does not contain finished product: ${boqData.finishedProduct}`).toContain(boqData.finishedProduct);
-        expect.soft(boqDetails, `BOQ details table does not contain sign code: ${boqData.signCode}`).toContain(boqData.signCode);
-        expect.soft(boqDetails, `BOQ details table does not contain sign type: ${boqData.signType}`).toContain(boqData.signType);
-        expect.soft(boqDetails, `BOQ details table does not contain sign name: ${boqData.signName}`).toContain(boqData.signName);
-        expect.soft(boqDetails, `BOQ details table does not contain description: ${boqData.description}`).toContain(boqData.description);
-        expect.soft(boqDetails, `BOQ details table does not contain size: ${boqData.size}`).toContain(boqData.size);
-        expect.soft(boqDetails, `BOQ details table does not contain quantity: ${boqData.quantity}`).toContain(boqData.quantity);
+        expect(boqDetails, `BOQ details table does not contain sign code: ${boqData.signCode}`).toContain(boqData.signCode);
+        expect(boqDetails, `BOQ details table does not contain sign type: ${boqData.signType}`).toContain(boqData.signType);
+        expect(boqDetails, `BOQ details table does not contain sign name: ${boqData.signName}`).toContain(boqData.signName);
+        expect(boqDetails, `BOQ details table does not contain description: ${boqData.description}`).toContain(boqData.description);
+        expect(boqDetails, `BOQ details table does not contain size: ${boqData.size}`).toContain(boqData.size);
+        expect(boqDetails, `BOQ details table does not contain quantity: ${boqData.quantity}`).toContain(boqData.quantity);
     }
     @step()
     async clickGenerateCostEstimationAndValidateBOQ_API(statusCode: number) {
@@ -409,13 +404,12 @@ export class CostEstimationPage extends BasePage {
     }
     @step()
     async validateBOQDetails(boqData: BOQData) {
-        await this.page.waitForTimeout(500);
+        await expect(this.page.locator('div.grid-cols-2'), `BOQ details do not contain sign code: ${boqData.signCode}`).toContainText(boqData.signCode);
         const boqDetails = await this.page.locator('div.grid-cols-2').innerText();
-        expect.soft(boqDetails, `BOQ details do not contain sign code: ${boqData.signCode}`).toContain(boqData.signCode);
-        expect.soft(boqDetails, `BOQ details do not contain sign type: ${boqData.signType}`).toContain(boqData.signType);
-        expect.soft(boqDetails, `BOQ details do not contain quantity: ${boqData.quantity}`).toContain(boqData.quantity);
-        expect.soft(boqDetails, `BOQ details do not contain description: ${boqData.description}`).toContain(boqData.description);
-        expect.soft(boqDetails, `BOQ details do not contain size: ${boqData.size}`).toContain(boqData.size);
+        expect(boqDetails, `BOQ details do not contain sign type: ${boqData.signType}`).toContain(boqData.signType);
+        expect(boqDetails, `BOQ details do not contain quantity: ${boqData.quantity}`).toContain(boqData.quantity);
+        expect(boqDetails, `BOQ details do not contain description: ${boqData.description}`).toContain(boqData.description);
+        expect(boqDetails, `BOQ details do not contain size: ${boqData.size}`).toContain(boqData.size);
     }
     @step()
     async clickDeleteIcon() {
@@ -614,14 +608,13 @@ export class CostEstimationPage extends BasePage {
     }
     @step()
     async validateBOQdetailsInCostDistribution(boqData: BOQData) {
-        await this.page.waitForTimeout(2000);
+        await expect(this.page.locator('(//tr)[3]'), `Cost distribution BOQ details do not contain sign code: ${boqData.signCode}`).toContainText(boqData.signCode);
         const boqDetails = await this.page.locator('(//tr)[3]').innerText();
-        expect.soft(boqDetails, `Cost distribution BOQ details do not contain sign code: ${boqData.signCode}`).toContain(boqData.signCode);
-        expect.soft(boqDetails, `Cost distribution BOQ details do not contain sign type: ${boqData.signType}`).toContain(boqData.signType);
-        expect.soft(boqDetails, `Cost distribution BOQ details do not contain sign name: ${boqData.signName}`).toContain(boqData.signName);
-        expect.soft(boqDetails, `Cost distribution BOQ details do not contain description: ${boqData.description}`).toContain(boqData.description);
-        expect.soft(boqDetails, `Cost distribution BOQ details do not contain size: ${boqData.size}`).toContain(boqData.size);
-        expect.soft(boqDetails, `Cost distribution BOQ details do not contain quantity: ${boqData.quantity}`).toContain(boqData.quantity);
+        expect(boqDetails, `Cost distribution BOQ details do not contain sign type: ${boqData.signType}`).toContain(boqData.signType);
+        expect(boqDetails, `Cost distribution BOQ details do not contain sign name: ${boqData.signName}`).toContain(boqData.signName);
+        expect(boqDetails, `Cost distribution BOQ details do not contain description: ${boqData.description}`).toContain(boqData.description);
+        expect(boqDetails, `Cost distribution BOQ details do not contain size: ${boqData.size}`).toContain(boqData.size);
+        expect(boqDetails, `Cost distribution BOQ details do not contain quantity: ${boqData.quantity}`).toContain(boqData.quantity);
     }
     @step()
     async enterSampleCost(sampleCost: string) {
@@ -698,14 +691,13 @@ export class CostEstimationPage extends BasePage {
     }
     @step()
     async validateBOLTable(department: string, totalHours: string, hourlyRate: string, machineHours: string, otHours: string, estimationHours: string) {
-        await this.page.waitForTimeout(500);
+        await expect(this.page.locator('(//tr)[2]'), `BOL table does not contain department: ${department}`).toContainText(department);
         const bolDetails = await this.page.locator('(//tr)[2]').innerText();
         await expect(this.machineHoursTxtBx, `Machine hours value mismatch in BOL table. Expected: ${machineHours}`).toHaveValue(machineHours);
         await expect(this.otHoursTxtBx, `OT hours value mismatch in BOL table. Expected: ${otHours}`).toHaveValue(otHours);
         await expect(this.estimationHoursTxtBx, `Estimation hours value mismatch in BOL table. Expected: ${estimationHours}`).toHaveValue(estimationHours);
-        expect.soft(bolDetails, `BOL table does not contain department: ${department}`).toContain(department);
-        expect.soft(bolDetails, `BOL table does not contain total hours: ${totalHours}`).toContain(totalHours);
-        expect.soft(bolDetails, `BOL table does not contain hourly rate: ${hourlyRate}`).toContain(hourlyRate);
+        expect(bolDetails, `BOL table does not contain total hours: ${totalHours}`).toContain(totalHours);
+        expect(bolDetails, `BOL table does not contain hourly rate: ${hourlyRate}`).toContain(hourlyRate);
     }
     @step()
     async getTotalLabourCost() {
@@ -715,27 +707,25 @@ export class CostEstimationPage extends BasePage {
     @step()
     async enterSummaryVariation(variation: string) {
         await this.variationTxtBx.fill(variation);
-        expect.soft(await this.summaryVariationCell.innerText(), 'Variation cell is not updated').toBe(`VARIATION (${variation}%)`);
+        expect(await this.summaryVariationCell.innerText(), 'Variation cell is not updated').toBe(`VARIATION (${variation}%)`);
     }
     @step()
     async validateEnquiryDetailsInSummary(salesEnquiryData: SalesEnquiryData) {
-        await this.page.waitForTimeout(2000);
+        await expect(this.page.locator('div.p-4').first(), `Summary enquiry details do not contain customer name: ${salesEnquiryData.customerName}`).toContainText(salesEnquiryData.customerName);
         const customerDetails = await this.page.locator('div.p-4').first().innerText();
-        expect.soft(customerDetails, `Summary enquiry details do not contain customer name: ${salesEnquiryData.customerName}`).toContain(salesEnquiryData.customerName);
-        expect.soft(customerDetails, `Summary enquiry details do not contain project name: ${salesEnquiryData.projectName}`).toContain(salesEnquiryData.projectName);
-        // expect.soft(customerDetails, `Summary enquiry details do not contain currency: ${Utils.getCurrencyName(salesEnquiryData.currency)}`).toContain(Utils.getCurrencyName(salesEnquiryData.currency));
+        expect(customerDetails, `Summary enquiry details do not contain project name: ${salesEnquiryData.projectName}`).toContain(salesEnquiryData.projectName);
+        // expect(customerDetails, `Summary enquiry details do not contain currency: ${Utils.getCurrencyName(salesEnquiryData.currency)}`).toContain(Utils.getCurrencyName(salesEnquiryData.currency));
         if ((await this.page.locator('div.p-4').first().innerText()).includes(salesEnquiryData.supplyType)) {
-            expect.soft(customerDetails, `Summary enquiry details do not contain supply type: ${salesEnquiryData.supplyType}`).toContain(salesEnquiryData.supplyType);
+            expect(customerDetails, `Summary enquiry details do not contain supply type: ${salesEnquiryData.supplyType}`).toContain(salesEnquiryData.supplyType);
         }
     }
     @step()
     async validateEnquiryDetailsInSummaryTable(BOQDetails: BOQData) {
-        await this.page.waitForTimeout(500);
+        await expect(this.page.locator('//tbody/tr').first(), `Summary table does not contain sign code: ${BOQDetails.signCode}`).toContainText(BOQDetails.signCode);
         const SummaryTable = await this.page.locator('//tbody/tr').first().innerText();
-        expect.soft(SummaryTable, `Summary table does not contain sign code: ${BOQDetails.signCode}`).toContain(BOQDetails.signCode);
-        expect.soft(SummaryTable, `Summary table does not contain sign name: ${BOQDetails.signName}`).toContain(BOQDetails.signName);
-        expect.soft(SummaryTable, `Summary table does not contain quantity: ${BOQDetails.quantity}`).toContain(BOQDetails.quantity);
-        expect.soft(SummaryTable, `Summary table does not contain description: ${BOQDetails.description}`).toContain(BOQDetails.description);
+        expect(SummaryTable, `Summary table does not contain sign name: ${BOQDetails.signName}`).toContain(BOQDetails.signName);
+        expect(SummaryTable, `Summary table does not contain quantity: ${BOQDetails.quantity}`).toContain(BOQDetails.quantity);
+        expect(SummaryTable, `Summary table does not contain description: ${BOQDetails.description}`).toContain(BOQDetails.description);
     }
     @step()
     async editSummary(salesEnquiryData: SalesEnquiryData, vat: string, withHold: string, discount: string) {
@@ -807,10 +797,9 @@ export class CostEstimationPage extends BasePage {
     }
     @step()
     async validateSampleDetailsTable() {
-        await this.page.waitForTimeout(2000);
+        await expect(this.page.locator('//div[contains(@class,"w-full rounded")]'), "PPJO table does not contain Artwork").toContainText('Sample');
         const ppjoTable = await this.page.locator('//div[contains(@class,"w-full rounded")]').innerText();
-        expect.soft(ppjoTable, "PPJO table does not contain Artwork").toContain('Sample');
-        expect.soft(ppjoTable, "PPJO table does not contain AutoCAD").toContain('17');
+        expect(ppjoTable, "PPJO table does not contain AutoCAD").toContain('17');
     }
     @step()
     async addBOL(estimationHours: string, machineHours: string, otHours: string, warrantyValue: string) {
@@ -835,11 +824,10 @@ export class CostEstimationPage extends BasePage {
     }
     @step()
     async validateRequestTableVisible(title: string, requestType: string) {
-        await this.page.waitForTimeout(500);
+        await expect(this.page.locator('(//div[@class="mt-4 bg-white p-4 rounded-md"])[2]')).toContainText(title);
         const boqDetails = await this.page.locator('(//div[@class="mt-4 bg-white p-4 rounded-md"])[2]').innerText();
-        expect.soft(boqDetails).toContain(title);
-        expect.soft(boqDetails).toContain(requestType);
-        expect.soft(boqDetails).toContain('View Attachment');
+        expect(boqDetails).toContain(requestType);
+        expect(boqDetails).toContain('View Attachment');
     }
     @step()
     async validateViewDiscountAttachments(documentName: string, reason: string) {
@@ -848,9 +836,9 @@ export class CostEstimationPage extends BasePage {
         await this.viewAttachmentsButton.click();
         await this.page.waitForTimeout(500);
         await expect(this.ppjoBanner('Attachments'), "Attachments banner not found").toBeVisible();
+        await expect(this.page.locator('(//main)[2]'), `Attachment details do not contain document name: ${documentName}`).toContainText(documentName);
         const detailText = await this.page.locator('(//main)[2]').innerText();
-        expect.soft(detailText, `Attachment details do not contain document name: ${documentName}`).toContain(documentName);
-        // expect.soft(detailText, `Attachment details do not contain reason: ${reason}`).toContain(reason);
+        // expect(detailText, `Attachment details do not contain reason: ${reason}`).toContain(reason);
         await this.closeButton.click();
     }
 }

@@ -48,21 +48,20 @@ export class InvoiceRequestPage extends BasePage {
     }
     @step()
     async validateEnquiryDetails(data: SalesEnquiryData) {
-        await this.page.waitForTimeout(3000);
+        await expect(this.page.locator('(//div[@class="bg-[#f2f2f2] p-4 space-y-2 text-[14px] text-[#231F20] rounded-md border border-[E5E7EA]"])[1]').or(this.page.locator('//div[@class="space-y-6"]')), `Invoice request details do not contain customer name: ${data.customerName}`).toContainText(data.customerName);
         const detailsText = await this.page.locator('(//div[@class="bg-[#f2f2f2] p-4 space-y-2 text-[14px] text-[#231F20] rounded-md border border-[E5E7EA]"])[1]').or(this.page.locator('//div[@class="space-y-6"]')).innerText();
-        expect.soft(detailsText, `Invoice request details do not contain customer name: ${data.customerName}`).toContain(data.customerName);
         console.log(`✓ Customer Name displayed in Invoice Request: ${data.customerName}`);
-        // expect.soft(detailsText, `Invoice request details do not contain country: ${data.building}`).toContain(data.building);
+        // expect(detailsText, `Invoice request details do not contain country: ${data.building}`).toContain(data.building);
         // console.log(`✓ Building displayed in Invoice Request: ${data.building}`);
-        expect.soft(detailsText, `Invoice request details do not contain state: ${data.road}`).toContain(data.road);
+        expect(detailsText, `Invoice request details do not contain state: ${data.road}`).toContain(data.road);
         console.log(`✓ Road displayed in Invoice Request: ${data.road}`);
     }
     @step()
     async validateBOQTableDetails(boqData: BOQData) {
         const boqText = await this.page.locator('//tr[@class="border border-[#ece9e9] p-[3px] h-[40px] text-[14px] font-[400] text-[#231F20]"]').first().innerText();
-        // expect.soft(boqText, 'BOQ table does not contain product name').toContain(boqData.signName);
-        expect.soft(boqText, 'BOQ table does not contain quantity').toContain(boqData.quantity);
-        expect.soft(boqText, 'BOQ table does not contain description').toContain(boqData.description);
+        // expect(boqText, 'BOQ table does not contain product name').toContain(boqData.signName);
+        expect(boqText, 'BOQ table does not contain quantity').toContain(boqData.quantity);
+        expect(boqText, 'BOQ table does not contain description').toContain(boqData.description);
     }
     @step()
     async selectInvoiceDate(date: number) {
