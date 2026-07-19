@@ -64,7 +64,6 @@ test.describe.serial('Verify E2E Quotation Rejection flow of Sales Enquiry (Requ
         await test.step('Cleanup: delete created Sales Enquiry', async () => {
             await modules.goToModule({ module: 'Sales', subModule: 'Sales Enquiry' });
             await salesEnquiryPage.search(createEnquiryData.customerName);
-            await salesEnquiryPage.deleteSalesEnquiry(createEnquiryData.customerName);
             await salesEnquiryPage.validateDeleteSalesEnquiryAPI(200);
             await expect(salesEnquiryPage.successMessage('Record deleted successfully.'), "Sales enquiry delete success message does not match").toHaveText('Record deleted successfully.');
             console.log(`Sales enquiry for ${createEnquiryData.customerName} deleted successfully`);

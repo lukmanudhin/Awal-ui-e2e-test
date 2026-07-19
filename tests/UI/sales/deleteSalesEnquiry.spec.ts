@@ -28,7 +28,7 @@ test.describe('Delete Sales Enquiry', () => {
     });
 
     test('Verify sales enquiry is deleted successfully', async ({ salesEnquiryPage }) => {
-        await salesEnquiryPage.deleteSalesEnquiry(createEnquiryData.customerName);
+        await salesEnquiryPage.search(createEnquiryData.customerName);
         await salesEnquiryPage.validateDeleteSalesEnquiryAPI(200);
         await expect(salesEnquiryPage.successMessage('Record deleted successfully.'), "Sales enquiry delete success message does not match").toHaveText('Record deleted successfully.');
         console.log(`Sales enquiry for ${createEnquiryData.customerName} deleted successfully`);

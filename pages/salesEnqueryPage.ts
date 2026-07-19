@@ -318,16 +318,8 @@ export class SalesEnquiryPage extends BasePage {
         return extId;
     }
     @step()
-    async deleteSalesEnquiry(customerName: string) {
-        await this.searchBox.fill(customerName);
-        await this.page.waitForFunction(
-            () => document.querySelectorAll('tr').length <= 2
-        );
-        expect(await this.page.locator('tr').count(), `Search result count mismatch. Received ${await this.page.locator('//tr').count() - 1} Results`).toBeLessThanOrEqual(2);
-        await this.deleteButton.click();
-    }
-    @step()
     async validateDeleteSalesEnquiryAPI(statusCode: number) {
+        await this.deleteButton.click();
         const responsePromise = this.page.waitForResponse('**/salesEnquiry/delete/**');
         await this.deleteConfirmationButton.click();
         const response = await responsePromise;
