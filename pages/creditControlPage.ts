@@ -183,6 +183,8 @@ export class CreditControlPage extends BasePage {
     }
     @step()
     async validateCreditControlDetails(data: CreditControlData) {
+        await this.page.waitForLoadState('domcontentloaded');
+        await this.page.waitForTimeout(1000);
         await expect(this.page.locator('//div[@class="flex-grow p-6"]')).toContainText(data.customer);
         const creditDetails = await this.page.locator('//div[@class="flex-grow p-6"]').innerText();
         expect(creditDetails).toContain(data.customerAcknowledgementName);

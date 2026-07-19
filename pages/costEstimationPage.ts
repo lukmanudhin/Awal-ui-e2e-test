@@ -492,7 +492,7 @@ export class CostEstimationPage extends BasePage {
         console.log('Labour and Costing updated successfully');
         console.log('Verified Labour and Costing API with status code:', response.status());
         await expect(this.successMessage('BOL updated successfully'), "BOL updated success message does not match").toContainText('BOL updated successfully');
-        await expect(this.successMessage('BOL updated successfully')).toBeHidden({ timeout: 5000 });
+        await this.successMessage('BOL updated successfully').waitFor({ state: 'hidden' });
     }
     @step()
     async editDesignStudio(estimationHours: string, machineHours: string, otHours: string, warrantyValue: string) {

@@ -249,6 +249,7 @@ export class PPJOPage extends BasePage {
     @step()
     async validateSampleDetails(enquiryId: string, documentName: string, quantity: string, description: string) {
         await this.page.waitForLoadState('domcontentloaded');
+        await this.page.waitForTimeout(2000);
         await expect(this.page.locator('//div[@class="p-[18px] undefined"]').first(), `Sample details does not contain enquiry id: ${enquiryId}`).toContainText(enquiryId);
         const sampleDetails = await this.page.locator('//div[@class="p-[18px] undefined"]').first().innerText();
         expect(sampleDetails, `Sample details does not contain document name: ${documentName}`).toContain(documentName);
