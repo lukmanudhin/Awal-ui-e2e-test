@@ -7,8 +7,8 @@ import path from 'path';
  */
 // Determine which environment to use
 // Load environment file based on ENV variable
-const environment = process.env.ENV || 'qa';
-dotenv.config({ path: path.resolve(__dirname, `.env.${environment}`) });
+const environment = (process.env.ENV || 'qa').trim();
+dotenv.config({ path: path.resolve(__dirname, `env/.env.${environment}`) });
 
 /**
  * See https://playwright.dev/docs/test-configuration.

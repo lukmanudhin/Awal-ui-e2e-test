@@ -16,8 +16,20 @@
     "clean": "rm -rf allure-results allure-report playwright-report || echo 'Cleanup complete'",
     "test:sales": "playwright test tests/UI/sales tests/API/salesEnquiryAPITest.spec.ts && npm run allure:generate && npm run allure:open",
     "test:sales:headed": "playwright test tests/UI/sales tests/API/salesEnquiryAPITest.spec.ts --headed && npm run allure:generate && npm run allure:open",
-    "test:procurement": "playwright test tests/UI/procurement && npm run allure:generate && npm run allure:open",
-    "test:procurement:headed": "playwright test tests/UI/procurement --headed && npm run allure:generate && npm run allure:open"
+    "test:procurement": "playwright test tests/UI/procurements && npm run allure:generate && npm run allure:open",
+    "test:procurement:headed": "playwright test tests/UI/procurements --headed && npm run allure:generate && npm run allure:open",
+    "test:qa": "cross-env ENV=qa playwright test && npm run allure:generate && npm run allure:open",
+    "test:qa:headed": "cross-env ENV=qa playwright test --headed && npm run allure:generate && npm run allure:open",
+    "test:qa:sales": "cross-env ENV=qa playwright test tests/UI/sales tests/API/salesEnquiryAPITest.spec.ts && npm run allure:generate && npm run allure:open",
+    "test:qa:sales:headed": "cross-env ENV=qa playwright test tests/UI/sales tests/API/salesEnquiryAPITest.spec.ts --headed && npm run allure:generate && npm run allure:open",
+    "test:qa:procurement": "cross-env ENV=qa playwright test tests/UI/procurements && npm run allure:generate && npm run allure:open",
+    "test:qa:procurement:headed": "cross-env ENV=qa playwright test tests/UI/procurements --headed && npm run allure:generate && npm run allure:open",
+    "test:stage": "cross-env ENV=stage playwright test && npm run allure:generate && npm run allure:open",
+    "test:stage:headed": "cross-env ENV=stage playwright test --headed && npm run allure:generate && npm run allure:open",
+    "test:stage:sales": "cross-env ENV=stage playwright test tests/UI/sales tests/API/salesEnquiryAPITest.spec.ts && npm run allure:generate && npm run allure:open",
+    "test:stage:sales:headed": "cross-env ENV=stage playwright test tests/UI/sales tests/API/salesEnquiryAPITest.spec.ts --headed && npm run allure:generate && npm run allure:open",
+    "test:stage:procurement": "cross-env ENV=stage playwright test tests/UI/procurements && npm run allure:generate && npm run allure:open",
+    "test:stage:procurement:headed": "cross-env ENV=stage playwright test tests/UI/procurements --headed && npm run allure:generate && npm run allure:open"
   },
   "keywords": [],
   "author": "",
@@ -28,7 +40,8 @@
     "@playwright/test": "^1.59.1",
     "@types/node": "^25.6.0",
     "allure-commandline": "^2.38.1",
-    "allure-playwright": "^3.10.2"
+    "allure-playwright": "^3.10.2",
+    "cross-env": "^10.1.0"
   },
   "dependencies": {
     "dotenv": "^17.4.2"
