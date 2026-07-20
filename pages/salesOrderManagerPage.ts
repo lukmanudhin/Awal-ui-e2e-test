@@ -48,9 +48,8 @@ export class SalesOrderManagerPage extends BasePage {
         console.log(`✓ Customer Name displayed in Sales Order Manager: ${data.customerName}`);
         expect(detailsText, `Sales order details do not contain project name: ${data.projectName}`).toContain(data.projectName);
         console.log(`✓ Project Name displayed in Sales Order Manager: ${data.projectName}`);
-        // commented because of a bug
-        // expect(detailsText, `Sales order details do not contain email: ${data.email1}`).toContain(data.email1);
-        // console.log(`✓ Email displayed in Sales Order Manager: ${data.email1}`);
+        expect(detailsText, `Sales order details do not contain email: ${data.email1}`).toContain(data.email1);
+        console.log(`✓ Email displayed in Sales Order Manager: ${data.email1}`);
     }
     @step()
     async sendSalesOrderForApprovalAndValidateAPI(statusCode: number) {
