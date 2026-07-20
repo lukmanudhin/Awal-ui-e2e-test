@@ -26,6 +26,12 @@ import { PipelinePage } from "../pages/pipelinePage";
 import { CreditControlPage } from "../pages/creditControlPage";
 import { SalesReturnPage } from "../pages/salesReturnPage";
 import { SalesReturnAPI } from "../API/salesReturnAPI";
+import { PPJOAPI } from "../API/ppjoAPI";
+import { EstimationAPI } from "../API/estimationAPI";
+import { QuotationAPI } from "../API/quotationAPI";
+import { InvoiceRequestAPI } from "../API/invoiceRequestAPI";
+import { SalesOrderAPI } from "../API/salesOrderAPI";
+import { ApiLogger } from "../utils/apiLogger";
 
 type baseFixtures = {
   loginPage: LoginPage;
@@ -55,9 +61,17 @@ type baseFixtures = {
   creditControlPage: CreditControlPage;
   salesReturnPage: SalesReturnPage;
   salesReturnAPI: SalesReturnAPI;
+  ppjoAPI: PPJOAPI;
+  estimationAPI: EstimationAPI;
+  quotationAPI: QuotationAPI;
+  invoiceRequestAPI: InvoiceRequestAPI;
+  salesOrderAPI: SalesOrderAPI;
 };
 
 export const test = base.extend<baseFixtures>({
+  request: async ({ request }, use) => {
+    await use(ApiLogger(request));
+  },
   loginPage: async ({ page }, use) => {
     await use(new LoginPage(page));
   },
@@ -138,6 +152,21 @@ export const test = base.extend<baseFixtures>({
   },
   salesReturnAPI: async ({ request }, use) => {
     await use(new SalesReturnAPI(request));
+  },
+  ppjoAPI: async ({ request }, use) => {
+    await use(new PPJOAPI(request));
+  },
+  estimationAPI: async ({ request }, use) => {
+    await use(new EstimationAPI(request));
+  },
+  quotationAPI: async ({ request }, use) => {
+    await use(new QuotationAPI(request));
+  },
+  invoiceRequestAPI: async ({ request }, use) => {
+    await use(new InvoiceRequestAPI(request));
+  },
+  salesOrderAPI: async ({ request }, use) => {
+    await use(new SalesOrderAPI(request));
   },
 });
 

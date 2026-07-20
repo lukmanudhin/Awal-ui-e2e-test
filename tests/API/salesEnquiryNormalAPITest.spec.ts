@@ -1,25 +1,12 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "../../fixtures/baseFixtures";
 import { request as playwrightRequest } from "@playwright/test";
 import { SalesEnquiryAPI } from "../../API/salesEnquiryAPI";
-import { PPJOAPI } from "../../API/ppjoAPI";
-import { EstimationAPI } from "../../API/estimationAPI";
-import { QuotationAPI } from "../../API/quotationAPI";
-import { InvoiceRequestAPI } from "../../API/invoiceRequestAPI";
-import { SalesOrderAPI } from "../../API/salesOrderAPI";
 import { salesEnquiryNormalPayload } from "../../API-payloads/salesEnquiryNormalPayload";
 import { ENV } from "../../utils/ENV";
 import { Utils } from "../../utils/utils";
+import { ApiLogger } from "../../utils/apiLogger";
 
-// Mirrors the UI E2E flow covered by tests/UI/sales/salesEnquiryNormal.spec.ts (Acrylic Products,
-// PPJO -> Estimation -> Quotation -> Invoice Request -> Sales Order), but drives every step through
-// direct API calls instead of the browser so the full chain runs in a fraction of the ~8 minute UI runtime.
 test.describe.serial('Verify E2E flow of Sales Enquiry (Request Normal) through API', () => {
-    let salesEnquiryAPI: SalesEnquiryAPI;
-    let ppjoAPI: PPJOAPI;
-    let estimationAPI: EstimationAPI;
-    let quotationAPI: QuotationAPI;
-    let invoiceRequestAPI: InvoiceRequestAPI;
-    let salesOrderAPI: SalesOrderAPI;
     let accessToken: string;
 
     let enquiryId: string;
@@ -37,63 +24,63 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Normal) through 
 
     test.beforeAll('Setup', async () => {
         console.log('Test Start Time: ', Utils.getCurrentTime());
-        const request = await playwrightRequest.newContext();
-        salesEnquiryAPI = new SalesEnquiryAPI(request);
-        ppjoAPI = new PPJOAPI(request);
-        estimationAPI = new EstimationAPI(request);
-        quotationAPI = new QuotationAPI(request);
-        invoiceRequestAPI = new InvoiceRequestAPI(request);
-        salesOrderAPI = new SalesOrderAPI(request);
-        accessToken = await salesEnquiryAPI.getAccessToken(`${ENV.EMAIL_ID}`, `${ENV.PASSWORD}`);
+    });
+
+    test.beforeEach(async ({ salesEnquiryAPI }) => {
+        if (!accessToken) {
+            accessToken = await salesEnquiryAPI.getAccessToken(`${ENV.EMAIL_ID}`, `${ENV.PASSWORD}`);
+        }
     });
 
     test.afterAll('Teardown', async () => {
         if (enquiryId) {
+            const request = ApiLogger(await playwrightRequest.newContext());
+            const salesEnquiryAPI = new SalesEnquiryAPI(request);
             await salesEnquiryAPI.deleteSalesEnquiry(accessToken, enquiryId);
+            await salesEnquiryAPI.dispose();
         }
-        await salesEnquiryAPI.dispose();
     });
 
-    test('Verify Create Sales Enquiry API', async () => {
+    test('Verify Create Sales Enquiry API', async ({ salesEnquiryAPI }) => {
         const response = await salesEnquiryAPI.createSalesEnquiryAPI(accessToken, salesEnquiryNormalPayload);
         expect(response.message, 'Create Sales Enquiry API Message Mismatch').toBe('Data created successfully');
         enquiryId = response.result.extId;
         console.log('Created Sales Enquiry extId:', enquiryId);
     });
 
-    test('Verify Create Acrylic Products API', async () => {
+    test('Verify Create Acrylic Products API', async ({ salesEnquiryAPI }) => {
         const response = await salesEnquiryAPI.createAcrylicProducts(accessToken, enquiryId);
         expect(response.message, 'Create Acrylic Products API Message Mismatch').toBe('Data created successfully');
     });
 
-    test('Verify Request Artwork PPJO API', async () => {
+    test('Verify Request Artwork PPJO API', async ({ ppjoAPI }) => {
         const response = await ppjoAPI.requestArtwork(accessToken, enquiryId, '5', 'Artwork requirement details');
         expect(response.message, 'Request Artwork PPJO API Message Mismatch').toBe('Data created successfully');
     });
 
-    test('Verify Request AutoCAD PPJO API', async () => {
+    test('Verify Request AutoCAD PPJO API', async ({ ppjoAPI }) => {
         const response = await ppjoAPI.requestAutoCAD(accessToken, enquiryId, '5', 'AutoCAD requirement details');
         expect(response.message, 'Request AutoCAD PPJO API Message Mismatch').toBe('Data created successfully');
     });
 
-    test('Verify Request Site Visit PPJO API', async () => {
+    test('Verify Request Site Visit PPJO API', async ({ ppjoAPI }) => {
         const today = new Date();
         const siteVisitDate = `${today.getFullYear()}/${String(today.getMonth() + 1).padStart(2, '0')}/${String(today.getDate()).padStart(2, '0')}`;
         const response = await ppjoAPI.requestSiteVisit(accessToken, enquiryId, '287', siteVisitDate);
         expect(response.message, 'Request Site Visit PPJO API Message Mismatch').toBe('Data created successfully');
     });
 
-    test('Verify Request Procurement PPJO API', async () => {
+    test('Verify Request Procurement PPJO API', async ({ ppjoAPI }) => {
         const response = await ppjoAPI.requestProcurement(accessToken, enquiryId, '5', 'Procurement requirement details');
         expect(response.message, 'Request Procurement PPJO API Message Mismatch').toBe('Data created successfully');
     });
 
-    test('Verify Request Estimation PPJO API', async () => {
+    test('Verify Request Estimation PPJO API', async ({ ppjoAPI }) => {
         const response = await ppjoAPI.requestEstimation(accessToken, enquiryId, '5', 'Estimation requirement details');
         expect(response.message, 'Request Estimation PPJO API Message Mismatch').toBe('Data created successfully');
     });
 
-    test('Verify Get PPJO By Reference Id API', async () => {
+    test('Verify Get PPJO By Reference Id API', async ({ ppjoAPI }) => {
         const response = await ppjoAPI.getPpjoByReferenceId(accessToken, enquiryId);
         expect(response.message, 'Get PPJO By Reference Id API Message Mismatch').toBe('Data fetched successfully');
         ppjoId = response.result.ppjoId;
@@ -104,7 +91,7 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Normal) through 
         console.log('Resolved ppjoId:', ppjoId, 'ppjoNumber:', ppjoNumber, 'salesEnquiryId:', salesEnquiryNumericId);
     });
 
-    test('Verify Create BOQ API', async () => {
+    test('Verify Create BOQ API', async ({ estimationAPI }) => {
         const response = await estimationAPI.createBoq(accessToken, ppjoNumber, {
             signCode: '12358',
             signType: 'Metal',
@@ -123,7 +110,7 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Normal) through 
         console.log('Created estimationVerOptExtId:', estimationVerOptExtId);
     });
 
-    test('Verify Get All BOQ API', async () => {
+    test('Verify Get All BOQ API', async ({ estimationAPI }) => {
         const response = await estimationAPI.getAllBoq(accessToken, estimationVerOptExtId);
         expect(response.message, 'Get All BOQ API Message Mismatch').toBe('Data fetched successfully');
         estimationDetailExtId = response.result[0].boqDetailExtId;
@@ -131,12 +118,12 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Normal) through 
         console.log('Resolved estimationDetailExtId:', estimationDetailExtId);
     });
 
-    test('Verify Update Consumable Percentage (Sign) API', async () => {
+    test('Verify Update Consumable Percentage (Sign) API', async ({ estimationAPI }) => {
         const response = await estimationAPI.updateConsumableByEstimationDetailId(accessToken, estimationDetailExtId, false, 3);
         expect(response.message, 'Update Consumable Percentage (Sign) API Message Mismatch').toBe('Data updated successfully');
     });
 
-    test('Verify Create Estimation BOM (Sign) API', async () => {
+    test('Verify Create Estimation BOM (Sign) API', async ({ estimationAPI }) => {
         const response = await estimationAPI.createEstimationBom(accessToken, estimationDetailExtId, false, [{
             consumablePercentage: 3,
             materialId: 243,
@@ -163,7 +150,7 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Normal) through 
         56: { description: 'Testing', machineUtilizationHours: 3, hourlyRate: 100, estHours: 4, otHoursPercentage: 2, warrantyPercentage: 1 },
     };
 
-    test('Verify Update Estimation BOL (Sign, all departments) API', async () => {
+    test('Verify Update Estimation BOL (Sign, all departments) API', async ({ estimationAPI }) => {
         const bolResponse = await estimationAPI.getAllBolById(accessToken, estimationDetailExtId, false);
         expect(bolResponse.message, 'Get All BOL By Id API Message Mismatch').toBe('Data fetched successfully');
         const bolList = bolResponse.result.bol;
@@ -189,22 +176,22 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Normal) through 
         }
     });
 
-    test('Verify Create Summary (Sign) API', async () => {
+    test('Verify Create Summary (Sign) API', async ({ estimationAPI }) => {
         const response = await estimationAPI.createSummary(accessToken, estimationDetailExtId, false, 1);
         expect(response.message, 'Create Summary (Sign) API Message Mismatch').toBe('Data created successfully');
     });
 
-    test('Verify Create Packing API', async () => {
+    test('Verify Create Packing API', async ({ estimationAPI }) => {
         const response = await estimationAPI.createPacking(accessToken, estimationVerOptExtId, 3, 3, 3, 3, 0.05);
         expect(response.message, 'Create Packing API Message Mismatch').toBe('Data created successfully');
     });
 
-    test('Verify Update Consumable Percentage (Package) API', async () => {
+    test('Verify Update Consumable Percentage (Package) API', async ({ estimationAPI }) => {
         const response = await estimationAPI.updateConsumableByEstimationDetailId(accessToken, estimationVerOptExtId, true, 2);
         expect(response.message, 'Update Consumable Percentage (Package) API Message Mismatch').toBe('Data updated successfully');
     });
 
-    test('Verify Create Estimation BOM (Package) API', async () => {
+    test('Verify Create Estimation BOM (Package) API', async ({ estimationAPI }) => {
         const response = await estimationAPI.createEstimationBom(accessToken, estimationVerOptExtId, true, [{
             consumablePercentage: 2,
             materialId: 243,
@@ -221,7 +208,7 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Normal) through 
         expect(response.message, 'Create Estimation BOM (Package) API Message Mismatch').toBe('Data created successfully');
     });
 
-    test('Verify Create Estimation BOL (Package) API', async () => {
+    test('Verify Create Estimation BOL (Package) API', async ({ estimationAPI }) => {
         const response = await estimationAPI.createEstimationBol(accessToken, estimationVerOptExtId, true, [{
             departmentId: 57,
             description: 'Packing details for bol',
@@ -234,69 +221,69 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Normal) through 
         expect(response.message, 'Create Estimation BOL (Package) API Message Mismatch').toBe('Data created successfully');
     });
 
-    test('Verify Create Summary (Package) API', async () => {
+    test('Verify Create Summary (Package) API', async ({ estimationAPI }) => {
         const response = await estimationAPI.createSummary(accessToken, estimationVerOptExtId, true, 2);
         expect(response.message, 'Create Summary (Package) API Message Mismatch').toBe('Data created successfully');
     });
 
-    test('Verify Update Other Costing Status API', async () => {
+    test('Verify Update Other Costing Status API', async ({ estimationAPI }) => {
         const response = await estimationAPI.updateOtherCostingStatus(accessToken, estimationVerOptExtId, 1, true);
         expect(response.statusCode, 'Update Other Costing Status API status code mismatch').toBe(200);
     });
 
-    test('Verify Recalculate Cost Distribution API', async () => {
+    test('Verify Recalculate Cost Distribution API', async ({ estimationAPI }) => {
         const response = await estimationAPI.reCalculatingCostDistribution(accessToken, estimationVerOptExtId);
         expect(response.result, 'Recalculate Cost Distribution API did not report success').toBe(true);
     });
 
-    test('Verify Create Other Costing API', async () => {
+    test('Verify Create Other Costing API', async ({ estimationAPI }) => {
         const response = await estimationAPI.createOtherCosting(accessToken, estimationVerOptExtId, 25, 3);
         expect(response.message, 'Create Other Costing API Message Mismatch').toBe('Data created successfully');
     });
 
-    test('Verify Create Cost Distribution API', async () => {
+    test('Verify Create Cost Distribution API', async ({ estimationAPI }) => {
         const response = await estimationAPI.createCostDistribution(accessToken, estimationDetailExtId);
         expect(response.message, 'Create Cost Distribution API Message Mismatch').toBe('Data created successfully');
     });
 
-    test('Verify Calculate Summary With Incentive API', async () => {
+    test('Verify Calculate Summary With Incentive API', async ({ estimationAPI }) => {
         const response = await estimationAPI.calculateSummaryWithIncentive(accessToken, estimationVerOptExtId, estimationDetailExtId);
         expect(response.statusCode, 'Calculate Summary With Incentive API status code mismatch').toBe(200);
     });
 
-    test('Verify Generate Quotation API', async () => {
+    test('Verify Generate Quotation API', async ({ quotationAPI }) => {
         const response = await quotationAPI.generateQuotation(accessToken, ppjoId, salesEnquiryNumericId, customerName, 61, estimationVerOptExtId);
         expect(response.message, 'Generate Quotation API Message Mismatch').toBe('Data created successfully');
         quotationExtId = response.result;
         console.log('Created quotationExtId:', quotationExtId);
     });
 
-    test('Verify Submit Quotation For Approval API', async () => {
+    test('Verify Submit Quotation For Approval API', async ({ quotationAPI }) => {
         const response = await quotationAPI.submitForApproval(accessToken, quotationExtId);
         expect(response.status(), 'Submit Quotation For Approval API status code mismatch').toBe(200);
     });
 
-    test('Verify Quotation Manager Approve API', async () => {
+    test('Verify Quotation Manager Approve API', async ({ quotationAPI }) => {
         const response = await quotationAPI.quotationManagerApprove(accessToken, quotationExtId, true, '');
         expect(response.message, 'Quotation Manager Approve API Message Mismatch').toBe('Data updated successfully');
     });
 
-    test('Verify Send To Customer API', async () => {
+    test('Verify Send To Customer API', async ({ quotationAPI }) => {
         const response = await quotationAPI.sendToCustomer(accessToken, quotationExtId);
         expect(response.message, 'Send To Customer API Message Mismatch').toBe('Data updated successfully');
     });
 
-    test('Verify Quotation Approval (Customer Approved) API', async () => {
+    test('Verify Quotation Approval (Customer Approved) API', async ({ quotationAPI }) => {
         const response = await quotationAPI.quotationApproval(accessToken, quotationExtId, '123', 144);
         expect(response.message, 'Quotation Approval API Message Mismatch').toBe('Data created successfully');
     });
 
-    test('Verify Send Advance Invoice API', async () => {
+    test('Verify Send Advance Invoice API', async ({ quotationAPI }) => {
         const response = await quotationAPI.sendAdvanceInvoice(accessToken, quotationExtId, '123');
         expect(response.status(), 'Send Advance Invoice API status code mismatch').toBe(201);
     });
 
-    test('Verify Create Invoice Request API', async () => {
+    test('Verify Create Invoice Request API', async ({ invoiceRequestAPI }) => {
         const listResponse = await invoiceRequestAPI.getAllInvoiceRequest(accessToken, customerName);
         expect(listResponse.result.data.length, 'Auto-created invoice request was not found by customer name').toBeGreaterThan(0);
         invoiceExtId = listResponse.result.data[0].extId;
@@ -309,17 +296,17 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Normal) through 
         console.log('Resolved invoiceExtId:', invoiceExtId);
     });
 
-    test('Verify Invoice Manager Approval API', async () => {
+    test('Verify Invoice Manager Approval API', async ({ invoiceRequestAPI }) => {
         const response = await invoiceRequestAPI.updateManagerApproval(accessToken, invoiceExtId, true);
         expect(response.message, 'Invoice Manager Approval API Message Mismatch').toBe('Data updated successfully');
     });
 
-    test('Verify Acknowledge Invoice File Upload API', async () => {
+    test('Verify Acknowledge Invoice File Upload API', async ({ invoiceRequestAPI }) => {
         const response = await invoiceRequestAPI.acknowledgeFileUpload(accessToken, invoiceExtId);
         expect(response.message, 'Acknowledge Invoice File Upload API Message Mismatch').toBe('Data updated successfully');
     });
 
-    test('Verify Create Sales Order API', async () => {
+    test('Verify Create Sales Order API', async ({ salesOrderAPI }) => {
         const prepopulateResponse = await salesOrderAPI.getPrepopulateValues(accessToken, quotationExtId);
         const customerId = prepopulateResponse.result.customerId;
 
@@ -333,17 +320,17 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Normal) through 
         console.log('Created salesOrderExtId:', salesOrderExtId);
     });
 
-    test('Verify Update Sales Checklist Status API', async () => {
+    test('Verify Update Sales Checklist Status API', async ({ salesOrderAPI }) => {
         const response = await salesOrderAPI.updateSalesChecklistStatus(accessToken, salesOrderExtId, true, 'Approved');
         expect(response.message, 'Update Sales Checklist Status API Message Mismatch').toBe('Data updated successfully');
     });
 
-    test('Verify Sales Order Pending Approval API', async () => {
+    test('Verify Sales Order Pending Approval API', async ({ salesOrderAPI }) => {
         const response = await salesOrderAPI.salesOrderPendingApproval(accessToken, salesOrderExtId);
         expect(response.message, 'Sales Order Pending Approval API Message Mismatch').toBe('Data updated successfully');
     });
 
-    test('Verify Update Sales Order Status API', async () => {
+    test('Verify Update Sales Order Status API', async ({ salesOrderAPI }) => {
         const response = await salesOrderAPI.updateSalesOrderStatus(accessToken, salesOrderExtId, true, 'Approved');
         expect(response.message, 'Update Sales Order Status API Message Mismatch').toBe('Data updated successfully');
     });
