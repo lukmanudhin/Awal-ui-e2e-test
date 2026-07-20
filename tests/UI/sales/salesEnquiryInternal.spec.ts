@@ -58,20 +58,10 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Internal)', () =
         salesOrderManagerPage = new SalesOrderManagerPage(page);
     });
 
-    test.afterAll('Cleanup: delete created Sales Enquiry', async ({ request}) => {
-        // await modules.goToModule({ module: 'Sales', subModule: 'Internal Requests' });
-        // await salesEnquiryPage.search(enquiryId);
-        // await salesEnquiryPage.deleteSalesEnquiry(createEnquiryData.customerName);
-        // await salesEnquiryPage.validateDeleteSalesEnquiryAPI(200);
-        // await expect(salesEnquiryPage.successMessage('Record deleted successfully.'), "Sales enquiry delete success message does not match").toHaveText('Record deleted successfully.');
-        // console.log(`Sales enquiry for ${createEnquiryData.customerName} deleted successfully`);
+    test.afterAll('Cleanup: delete created Sales Enquiry', async ({ request }) => {
         await page.close();
         salesEnquiryAPI = new SalesEnquiryAPI(request);
-        const accessToken = await salesEnquiryAPI.getAccessToken(`${ENV.EMAIL_ID}`, `${ENV.PASSWORD}`);
-        const deleteAPIResponse = await salesEnquiryAPI.deleteSalesEnquiry(accessToken, extId);
-        expect(deleteAPIResponse.message, 'Delete Sales Enquiry API Message Mismatch').toBe('Data deleted successfully');
-        console.log('----------------------Delete Sales Enquiry API Response---------------------');
-        console.log('API Response:', deleteAPIResponse);
+        await salesEnquiryAPI.deleteSalesEnquiryIfCreated(extId);
     });
 
     test('Login and open Sales Enquiry module', async () => {

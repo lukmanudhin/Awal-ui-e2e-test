@@ -8,7 +8,6 @@ import { ApiLogger } from "../../utils/apiLogger";
 
 test.describe.serial('Verify E2E flow of Sales Enquiry (Request Normal) through API', () => {
     let accessToken: string;
-
     let enquiryId: string;
     let ppjoId: number;
     let ppjoNumber: string;

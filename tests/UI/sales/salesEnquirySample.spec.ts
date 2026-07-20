@@ -15,6 +15,7 @@ import { CostEstimationPage } from "../../../pages/costEstimationPage";
 import { RequestApprovalPage } from "../../../pages/requestApprovalPage";
 import { QuotationManagerPage } from "../../../pages/quotationManagerPage";
 import { SalesOrderManagerPage } from "../../../pages/salesOrderManagerPage";
+import { SalesEnquiryAPI } from "../../../API/salesEnquiryAPI";
 
 test.describe.serial('Verify E2E flow of Sales Enquiry (Request Sample)', () => {
     test.setTimeout(550000);
@@ -34,6 +35,8 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Sample)', () => 
     let enquiryId: string;
     let salesOrderId: string;
     let createEnquiryData: SalesEnquiryData;
+    let extId: string;
+    let salesEnquiryAPI: SalesEnquiryAPI;
 
     test.beforeAll('Setup', async ({ browser }) => {
         context = await browser.newContext();
@@ -52,13 +55,10 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Sample)', () => 
         salesOrderManagerPage = new SalesOrderManagerPage(page);
     });
 
-    test.afterAll('Cleanup: delete created Sales Enquiry', async () => {
-        await modules.goToModule({ module: 'Sales', subModule: 'Sales Enquiry' });
-        await salesEnquiryPage.search(enquiryId);
-        await salesEnquiryPage.validateDeleteSalesEnquiryAPI(200);
-        await expect(salesEnquiryPage.successMessage('Record deleted successfully.'), "Sales enquiry delete success message does not match").toHaveText('Record deleted successfully.');
-        console.log(`Sales enquiry for ${createEnquiryData.customerName} deleted successfully`);
+    test.afterAll('Cleanup: delete created Sales Enquiry', async ({ request }) => {
         await page.close();
+        salesEnquiryAPI = new SalesEnquiryAPI(request);
+        await salesEnquiryAPI.deleteSalesEnquiryIfCreated(extId);
     });
 
     test('Login and open Sales Enquiry module', async () => {
@@ -76,7 +76,7 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Sample)', () => 
         createEnquiryData.product = ['Acrylic Products'];
         await salesEnquiryPage.enterCustomerName(createEnquiryData);
         await salesEnquiryPage.createSalesEnquiry(createEnquiryData);
-        await salesEnquiryPage.validateCreateSalesEnquiryAPI(201, "Create Enquiry");
+        extId = await salesEnquiryPage.validateCreateSalesEnquiryAPI(201, "Create Enquiry");
         await expect(productsPage.successMessage('Sales enquiry upserted successfully'), "Sales enquiry success message does not match").toHaveText('Sales enquiry upserted successfully');
         console.log(`Sales enquiry created successfully for customer: ${createEnquiryData.customerName}`);
         await productsPage.validateProductTabsListed(createEnquiryData.product);

@@ -4,14 +4,12 @@ import { ENV } from "../../../utils/ENV";
 import { getCreateEnquiryData, type SalesEnquiryData } from "../../../testData/salesEnquiryData";
 import { addBOQData } from "../../../testData/addBoqData";
 import { Utils } from "../../../utils/utils";
-import { SalesEnquiryAPI } from "../../../API/salesEnquiryAPI";
 
 test.describe.serial('Verify Discount Request flow of Sales Enquiry (Request Normal)', () => {
     test.setTimeout(550000);
     let enquiryId: string;
     let extId: string;
     let createEnquiryData: SalesEnquiryData;
-    let salesEnquiryAPI: SalesEnquiryAPI;
 
     test.beforeEach('Login, Create Sales Enquiry and create PPJO', async ({ loginPage, homePage, salesEnquiryPage, productsPage, ppjoPage, page }) => {
         createEnquiryData = getCreateEnquiryData();
@@ -63,21 +61,10 @@ test.describe.serial('Verify Discount Request flow of Sales Enquiry (Request Nor
         });
     });
 
-    test.afterEach('Cleanup: delete created Sales Enquiry', async ({ page, modules, salesEnquiryPage, request }) => {
+    test.afterEach('Cleanup: delete created Sales Enquiry', async ({ page, salesEnquiryAPI }) => {
         await test.step('Cleanup: delete created Sales Enquiry', async () => {
-            // await modules.goToModule({ module: 'Sales', subModule: 'Sales Enquiry' });
-            // await salesEnquiryPage.search(createEnquiryData.customerName);
-            // await salesEnquiryPage.deleteSalesEnquiry(createEnquiryData.customerName);
-            // await salesEnquiryPage.validateDeleteSalesEnquiryAPI(200);
-            // await expect(salesEnquiryPage.successMessage('Record deleted successfully.'), "Sales enquiry delete success message does not match").toHaveText('Record deleted successfully.');
-            // console.log(`Sales enquiry for ${createEnquiryData.customerName} deleted successfully`);
             await page.close();
-            salesEnquiryAPI = new SalesEnquiryAPI(request);
-            const accessToken = await salesEnquiryAPI.getAccessToken(`${ENV.EMAIL_ID}`, `${ENV.PASSWORD}`);
-            const deleteAPIResponse = await salesEnquiryAPI.deleteSalesEnquiry(accessToken, extId);
-            expect(deleteAPIResponse.message, 'Delete Sales Enquiry API Message Mismatch').toBe('Data deleted successfully');
-            console.log('----------------------Delete Sales Enquiry API Response---------------------');
-            console.log('API Response:', deleteAPIResponse);
+            await salesEnquiryAPI.deleteSalesEnquiryIfCreated(extId);
         });
     });
 
@@ -99,7 +86,7 @@ test.describe.serial('Verify Discount Request flow of Sales Enquiry (Request Nor
         await test.step('Verify generate cost estimation and validate request attachments', async () => {
             await requestNormalPage.clickGenerateCostEstimation();
             // commented because of a bug
-            // await expect(costEstimationPage.costEstimationTitle, "Create Cost Estimation title does not match").toContainText('Create Cost Estimation');
+            await expect(costEstimationPage.costEstimationTitle, "Create Cost Estimation title does not match").toContainText('Create Cost Estimation');
         });
 
         await test.step('Verify that BOQ is created and BOQ details are generated successfully', async () => {

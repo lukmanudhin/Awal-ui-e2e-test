@@ -278,4 +278,13 @@ export class SalesEnquiryAPI {
         expect(response.status(), `Failed to create PVC products through API, status code: ${response.status()}`).toBe(201);
         return await response.json();
     }
+
+    async deleteSalesEnquiryIfCreated(extId: string) {
+        if (!extId) return;
+        const accessToken = await this.getAccessToken(`${ENV.EMAIL_ID}`, `${ENV.PASSWORD}`);
+        const deleteAPIResponse = await this.deleteSalesEnquiry(accessToken, extId);
+        expect(deleteAPIResponse.message, 'Delete Sales Enquiry API Message Mismatch').toBe('Data deleted successfully');
+        console.log('----------------------Delete Sales Enquiry API Response---------------------');
+        console.log('API Response:', deleteAPIResponse);
+    }
 }

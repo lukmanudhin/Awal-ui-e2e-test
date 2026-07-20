@@ -5,6 +5,7 @@ import { getCreateEnquiryData, type SalesEnquiryData } from "../../../testData/s
 
 test.describe('Create Sales Enquiry', () => {
     let createEnquiryData: SalesEnquiryData;
+    let extId: string;
     test.setTimeout(100000);
     test.beforeEach('Login', async ({ page, loginPage, homePage, salesEnquiryPage }) => {
         createEnquiryData = getCreateEnquiryData();
@@ -19,12 +20,9 @@ test.describe('Create Sales Enquiry', () => {
         });
     });
 
-    test.afterEach('Delete Sales Enquiry', async ({ salesEnquiryPage, page }) => {
-        await salesEnquiryPage.search(createEnquiryData.customerName);
-        await salesEnquiryPage.validateDeleteSalesEnquiryAPI(200);
-        await expect(salesEnquiryPage.successMessage('Record deleted successfully.'), "Sales enquiry delete success message does not match").toHaveText('Record deleted successfully.');
-        console.log(`Sales enquiry for ${createEnquiryData.customerName} deleted successfully`);
+    test.afterEach('Delete Sales Enquiry', async ({ salesEnquiryAPI, page }) => {
         await page.close();
+        await salesEnquiryAPI.deleteSalesEnquiryIfCreated(extId);
     });
 
     test('Verify new sales enquiry is created successfully', async ({ salesEnquiryPage, productsPage }) => {
@@ -32,7 +30,7 @@ test.describe('Create Sales Enquiry', () => {
         await expect(salesEnquiryPage.createSalesEnquiryTitle, "Create Sales Enquiry title does not match").toHaveText('Create Sales Enquiry');
         await salesEnquiryPage.enterCustomerName(createEnquiryData);
         await salesEnquiryPage.createSalesEnquiry(createEnquiryData);
-        await salesEnquiryPage.validateCreateSalesEnquiryAPI(201, "Create Enquiry");
+        extId = await salesEnquiryPage.validateCreateSalesEnquiryAPI(201, "Create Enquiry");
         await expect(productsPage.successMessage('Sales enquiry upserted successfully'), "Sales enquiry success message does not match").toHaveText('Sales enquiry upserted successfully');
         console.log(`Sales enquiry created successfully for customer: ${createEnquiryData.customerName}`);
         await productsPage.validateProductTabsListed(createEnquiryData.product);

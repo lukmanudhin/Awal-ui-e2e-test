@@ -5,6 +5,7 @@ import { getCreateEnquiryData, type SalesEnquiryData } from "../../../testData/s
 
 test.describe('Create Sales Enquiry', () => {
     let createEnquiryData: SalesEnquiryData;
+    let extId: string;
     test.setTimeout(100000);
     test.beforeEach('Login', async ({ page, loginPage, homePage, salesEnquiryPage, modules }) => {
         createEnquiryData = getCreateEnquiryData();
@@ -14,18 +15,15 @@ test.describe('Create Sales Enquiry', () => {
             await expect(page, "Login failed").toHaveURL(`${ENV.BASE_URL}/home`);
             console.log("Login successfull");
             await homePage.goToMenuAndSubMenu("Sales", 'Sales Enquiry');
-            await modules.goToModule({ subModule: 'Social Media'});
+            await modules.goToModule({ subModule: 'Social Media' });
             await expect(page, "Sales Enquiry page not found").toHaveURL(`${ENV.BASE_URL}/sales/leads/social-media/`);
             await expect(salesEnquiryPage.salesEnquiryTitle, "Sales Enquiry title does not match").toHaveText('Social Media');
         });
     });
 
-    test.afterEach('Delete Sales Enquiry', async ({ salesEnquiryPage, page }) => {
-        await salesEnquiryPage.search(createEnquiryData.customerName);
-        await salesEnquiryPage.validateDeleteSalesEnquiryAPI(200);
-        await expect(salesEnquiryPage.successMessage('Record deleted successfully.'), "Sales enquiry delete success message does not match").toHaveText('Record deleted successfully.');
-        console.log(`Sales enquiry for ${createEnquiryData.customerName} deleted successfully`);
+    test.afterEach('Delete Sales Enquiry', async ({ salesEnquiryAPI, page }) => {
         await page.close();
+        await salesEnquiryAPI.deleteSalesEnquiryIfCreated(extId);
     });
 
     test('Verify new sales enquiry is created successfully', async ({ salesEnquiryPage, productsPage }) => {
@@ -33,13 +31,13 @@ test.describe('Create Sales Enquiry', () => {
         await salesEnquiryPage.enterCustomerName(createEnquiryData);
         await salesEnquiryPage.enterSocialMedia(createEnquiryData.socialMedia);
         await salesEnquiryPage.createSalesEnquiry(createEnquiryData);
-        await salesEnquiryPage.validateCreateSalesEnquiryAPI(201, "Create Enquiry");
+        extId = await salesEnquiryPage.validateCreateSalesEnquiryAPI(201, "Create Enquiry");
         await expect(productsPage.successMessage('Sales enquiry upserted successfully'), "Sales enquiry success message does not match").toHaveText('Sales enquiry upserted successfully');
         console.log(`Sales enquiry created successfully for customer: ${createEnquiryData.customerName}`);
         await productsPage.validateProductTabsListed(createEnquiryData.product);
         await productsPage.enterAndSaveAllSelectedProductDetails(createEnquiryData.product);
         await salesEnquiryPage.search(createEnquiryData.customerName);
         await expect(salesEnquiryPage.socialMediaImage(createEnquiryData.socialMedia === 'Instagram' ? 'Insta' : createEnquiryData.socialMedia), 'Social media image is not visible').toBeVisible();
-        await expect(salesEnquiryPage.socialMediaStatus, "Sales enquiry status does not match").toHaveText('Enquiry Created');
+        await expect(salesEnquiryPage.socialMediaStatus, "Sales enquiry status does not match").toHaveText('Enquiry Created')
     });
 });

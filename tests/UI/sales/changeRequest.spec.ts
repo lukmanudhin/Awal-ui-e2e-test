@@ -4,13 +4,11 @@ import { ENV } from "../../../utils/ENV";
 import { getCreateEnquiryData, type SalesEnquiryData } from "../../../testData/salesEnquiryData";
 import { addBOQData } from "../../../testData/addBoqData";
 import { Utils } from "../../../utils/utils";
-import { SalesEnquiryAPI } from "../../../API/salesEnquiryAPI";
 
 test.describe.serial('Verify Change Request flow of Sales Enquiry (Request Normal)', () => {
     test.setTimeout(550000);
     let enquiryId: string;
     let createEnquiryData: SalesEnquiryData;
-    let salesEnquiryAPI: SalesEnquiryAPI;
     let extId: string;
 
     test.beforeEach('Login, Create Sales Enquiry and create PPJO', async ({ loginPage, homePage, salesEnquiryPage, productsPage, ppjoPage, page }) => {
@@ -65,19 +63,8 @@ test.describe.serial('Verify Change Request flow of Sales Enquiry (Request Norma
 
     test.afterEach('Cleanup: delete created Sales Enquiry', async ({ page, salesEnquiryAPI }) => {
         await test.step('Cleanup: delete created Sales Enquiry', async () => {
-            // await modules.goToModule({ module: 'Sales', subModule: 'Sales Enquiry' });
-            // await salesEnquiryPage.search(createEnquiryData.customerName);
-            // await salesEnquiryPage.deleteSalesEnquiry(createEnquiryData.customerName);
-            // await salesEnquiryPage.validateDeleteSalesEnquiryAPI(200);
-            // await expect(salesEnquiryPage.successMessage('Record deleted successfully.'), "Sales enquiry delete success message does not match").toHaveText('Record deleted successfully.');
-            // console.log(`Sales enquiry for ${createEnquiryData.customerName} deleted successfully`);
             await page.close();
-            // salesEnquiryAPI = new SalesEnquiryAPI(request);
-            const accessToken = await salesEnquiryAPI.getAccessToken(`${ENV.EMAIL_ID}`, `${ENV.PASSWORD}`);
-            const deleteAPIResponse = await salesEnquiryAPI.deleteSalesEnquiry(accessToken, extId);
-            expect(deleteAPIResponse.message, 'Delete Sales Enquiry API Message Mismatch').toBe('Data deleted successfully');
-            console.log('----------------------Delete Sales Enquiry API Response---------------------');
-            console.log('API Response:', deleteAPIResponse);
+            await salesEnquiryAPI.deleteSalesEnquiryIfCreated(extId);
         });
     });
 

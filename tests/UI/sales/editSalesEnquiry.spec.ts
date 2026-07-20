@@ -7,6 +7,7 @@ import { getCreateEnquiryData, type SalesEnquiryData } from "../../../testData/s
 test.describe('Edit Sales Enquiry', () => {
     test.setTimeout(150000);
     let createEnquiryData: SalesEnquiryData;
+    let extId: string;
     test.beforeEach('Create Sales Enquiry', async ({ salesEnquiryPage, productsPage, loginPage, page, homePage }) => {
         createEnquiryData = getCreateEnquiryData();
         await loginPage.launchAwalWebsite();
@@ -20,21 +21,18 @@ test.describe('Edit Sales Enquiry', () => {
         await expect(salesEnquiryPage.createSalesEnquiryTitle, "Create Sales Enquiry title does not match").toHaveText('Create Sales Enquiry');
         await salesEnquiryPage.enterCustomerName(createEnquiryData);
         await salesEnquiryPage.createSalesEnquiry(createEnquiryData);
-        await salesEnquiryPage.validateCreateSalesEnquiryAPI(201, "Create Enquiry");
+        extId = await salesEnquiryPage.validateCreateSalesEnquiryAPI(201, "Create Enquiry");
         await expect(productsPage.successMessage('Sales enquiry upserted successfully'), "Sales enquiry success message does not match").toHaveText('Sales enquiry upserted successfully');
         console.log(`Sales enquiry created successfully for customer: ${createEnquiryData.customerName}`);
         await productsPage.validateProductTabsListed(createEnquiryData.product);
         await productsPage.enterAndSaveAllSelectedProductDetails(createEnquiryData.product);
     });
 
-    test.afterEach('Delete Sales Enquiry', async ({ salesEnquiryPage, page }) => {
-        await salesEnquiryPage.search(createEnquiryData.customerName);
-        await salesEnquiryPage.validateDeleteSalesEnquiryAPI(200);
-        await expect(salesEnquiryPage.successMessage('Record deleted successfully.'), "Sales enquiry delete success message does not match").toHaveText('Record deleted successfully.');
-        console.log(`Sales enquiry for ${editEnquiryData.customerName} deleted successfully`);
+    test.afterEach('Delete Sales Enquiry', async ({ salesEnquiryAPI, page }) => {
         await page.close();
+        await salesEnquiryAPI.deleteSalesEnquiryIfCreated(extId);
     });
-    
+
     test('Verify sales enquiry is updated successfully', async ({ salesEnquiryPage, productsPage, page }) => {
         await salesEnquiryPage.editSalesEnquiry(createEnquiryData.customerName);
         await expect(salesEnquiryPage.editSalesEnquiryTitle, "Edit Sales Enquiry title does not match").toHaveText('Edit Sales Enquiry');

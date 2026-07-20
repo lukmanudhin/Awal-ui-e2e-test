@@ -9,6 +9,7 @@ test.describe.serial('Verify Invoice Register is rejected by the Manager', () =>
     test.setTimeout(550000);
     let enquiryId: string;
     let createEnquiryData: SalesEnquiryData;
+    let extId: string;
 
     test.beforeEach('Login, Create Sales Enquiry and create PPJO', async ({ loginPage, homePage, salesEnquiryPage, productsPage, ppjoPage, page }) => {
         createEnquiryData = getCreateEnquiryData();
@@ -28,7 +29,7 @@ test.describe.serial('Verify Invoice Register is rejected by the Manager', () =>
             createEnquiryData.product = ['Acrylic Products'];
             await salesEnquiryPage.enterCustomerName(createEnquiryData);
             await salesEnquiryPage.createSalesEnquiry(createEnquiryData);
-            await salesEnquiryPage.validateCreateSalesEnquiryAPI(201, "Create Enquiry");
+            extId = await salesEnquiryPage.validateCreateSalesEnquiryAPI(201, "Create Enquiry");
             await expect(productsPage.successMessage('Sales enquiry upserted successfully'), "Sales enquiry success message does not match").toHaveText('Sales enquiry upserted successfully');
             console.log(`Sales enquiry created successfully for customer: ${createEnquiryData.customerName}`);
             await productsPage.validateProductTabsListed(createEnquiryData.product);
@@ -60,14 +61,10 @@ test.describe.serial('Verify Invoice Register is rejected by the Manager', () =>
         });
     });
 
-    test.afterEach('Cleanup: delete created Sales Enquiry', async ({ page, modules, salesEnquiryPage }) => {
+    test.afterEach('Cleanup: delete created Sales Enquiry', async ({ page, salesEnquiryAPI }) => {
         await test.step('Cleanup: delete created Sales Enquiry', async () => {
-            await modules.goToModule({ module: 'Sales', subModule: 'Sales Enquiry' });
-            await salesEnquiryPage.search(createEnquiryData.customerName);
-            await salesEnquiryPage.validateDeleteSalesEnquiryAPI(200);
-            await expect(salesEnquiryPage.successMessage('Record deleted successfully.'), "Sales enquiry delete success message does not match").toHaveText('Record deleted successfully.');
-            console.log(`Sales enquiry for ${createEnquiryData.customerName} deleted successfully`);
             await page.close();
+            await salesEnquiryAPI.deleteSalesEnquiryIfCreated(extId);
         });
     });
 
@@ -277,7 +274,7 @@ test.describe.serial('Verify Invoice Register is rejected by the Manager', () =>
             await expect(invoiceRequestPage.successMessage('Invoice created successfully'), "Invoice created successfully message does not match").toContainText('Invoice created successfully');
             await modules.goToModule({ nestedSubModule: 'Invoice Request' });
             await invoiceRequestPage.search(createEnquiryData.customerName);
-            
+
             // commented because of a bug
             // await expect(invoiceRequestPage.invoiceStatus, "Invoice status does not match").toContainText('Completed');
             await expect(invoiceRequestPage.viewInvoiceBtn, "View invoice button is not visible").toBeVisible();
