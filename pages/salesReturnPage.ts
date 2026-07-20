@@ -69,12 +69,9 @@ export class SalesReturnPage extends BasePage {
     @step()
     async selectLeadNumber(leadNumber: string) {
         await this.selectOptionFromDropdown('Lead Number', leadNumber);
+        await this.page.waitForTimeout(1000);
     }
 
-    // Lead Number is reused across multiple sales return requests over time, so unlike
-    // BasePage.search() this does not require the result to narrow down to a single row -
-    // it just waits for the (newest-first sorted) list to filter, and callers rely on
-    // status/clickViewIcon's built-in .first() to target the just-created record.
     @step()
     async searchByLeadNumber(leadNumber: string) {
         await this.page.waitForTimeout(500);
