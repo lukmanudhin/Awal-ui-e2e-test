@@ -3,7 +3,7 @@ import { test } from "../../../fixtures/baseFixtures";
 import { ENV } from "../../../utils/ENV";
 import { CreditControlData, FinanceAssesmentData, getCreditControlData, getFinanceAssesmentData, getSalesAssesmentData, SalesAssesmentData } from "../../../testData/creditControlData";
 
-test.describe('Create Sales Enquiry', () => {
+test.describe('Credit Control Test E2E Flow', () => {
     let creditControlData: CreditControlData;
     let salesAssesmentData: SalesAssesmentData;
     let financeAssesmentData: FinanceAssesmentData
@@ -91,10 +91,9 @@ test.describe('Create Sales Enquiry', () => {
         await creditControlPage.search(applicationNumber);
         await expect(creditControlPage.status, 'Credit Control Status does not match').toHaveText('Approved');
         await creditControlPage.goToHistory();
-
-        //search not functioning
-        // await creditControlPage.search(applicationNumber);
-        // await expect(creditControlPage.status, 'Credit Control Status does not match').toHaveText('Approved');
+        
+        await creditControlPage.search(applicationNumber);
+        await expect(creditControlPage.status, 'Credit Control Status does not match').toHaveText('Approved');
 
         await modules.goToModule({ nestedSubModule: 'Credit Control' });
         await creditControlPage.search(applicationNumber);
