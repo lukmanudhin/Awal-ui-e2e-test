@@ -78,9 +78,9 @@ export class TradingPage extends BasePage {
 
     @step()
     async validateMaterialTable(tradingData: TradingData) {
-        await expect(this.page.locator('(//tr)[2]')).toContainText(tradingData.material);
+        await expect(this.page.locator('(//tr)[2]'), `Material table does not contain material: ${tradingData.material}`).toContainText(tradingData.material);
         const materialTable = await this.page.locator('(//tr)[2]').innerText();
-        expect(materialTable).toContain(tradingData.quantity);
+        expect(materialTable, "Material table does not contain quantity").toContain(tradingData.quantity);
     }
 
     async createOrderAndValidateAPI(statusCode: number) {

@@ -67,11 +67,11 @@ export class MaterialIndentRequestPage extends BasePage {
     @step()
     async addMaterial(mirDetails: CreateMIRData) {
         await this.addMaterialButton.click();
-        await expect(this.descriptionTxtBx).toHaveValue('');
-        await expect(this.sizeTxtBx).toHaveValue('');
+        await expect(this.descriptionTxtBx, "Description text box is not cleared").toHaveValue('');
+        await expect(this.sizeTxtBx, "Size text box is not cleared").toHaveValue('');
         await this.selectFromDropdown('Material Name*', mirDetails.material);
-        await expect(this.descriptionTxtBx).not.toHaveValue('');
-        await expect(this.sizeTxtBx).not.toHaveValue('');
+        await expect(this.descriptionTxtBx, "Description text box should not be empty").not.toHaveValue('');
+        await expect(this.sizeTxtBx, "Size text box should not be empty").not.toHaveValue('');
         await this.reqQuantityTxtBx.fill(mirDetails.quantity);
         await this.remarksTxtBx.fill(mirDetails.remarks);
         await this.selectDate(new Date().getDate() + 5);
@@ -80,9 +80,9 @@ export class MaterialIndentRequestPage extends BasePage {
     @step()
     async validateMaterialInformationTable(mirDetails: CreateMIRData) {
         await this.page.waitForLoadState('domcontentloaded');
-        await expect(this.page.locator('//tbody/tr')).toContainText(mirDetails.material);
+        await expect(this.page.locator('//tbody/tr'), `Table row does not contain material: ${mirDetails.material}`).toContainText(mirDetails.material);
         const tableRow = await this.page.locator('//tbody/tr').innerText();
-        expect(tableRow).toContain(mirDetails.quantity);
+        expect(tableRow, "Table row does not contain quantity").toContain(mirDetails.quantity);
         // expect(tableRow).toContain(mirDetails.remarks);
     }
     @step()    
@@ -117,9 +117,9 @@ export class MaterialIndentRequestPage extends BasePage {
         const requested = parseInt(requestedQuantity);
         const issued = parseInt(quantity);
         const finalPendingQuantity = requested - issued;
-        expect(await this.pendingQuantity.innerText()).toBe(requestedQuantity);
+        expect(await this.pendingQuantity.innerText(), "Pending quantity does not match expected value").toBe(requestedQuantity);
         await this.issuingQuantity.fill(quantity);
-        expect(await this.pendingQuantity.innerText()).toBe(`${finalPendingQuantity}`);
+        expect(await this.pendingQuantity.innerText(), "Pending quantity does not match expected value").toBe(`${finalPendingQuantity}`);
     }
     @step()
     async issueMaterialAndValidateAPI(statusCode: number) {

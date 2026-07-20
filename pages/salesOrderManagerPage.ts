@@ -27,7 +27,7 @@ export class SalesOrderManagerPage extends BasePage {
     }
     @step()
     async validateCustomerNameInSalesOrderManager(customerName: string) {
-        await expect(this.page.locator('//div[@class="min-w-[180px] flex flex-col"]').first()).toContainText(customerName);
+        await expect(this.page.locator('//div[@class="min-w-[180px] flex flex-col"]').first(), `Sales order details do not contain customer name: ${customerName}`).toContainText(customerName);
     }
     @step()
     async approveSalesOrderCheckListAndValidateAPI(statusCode: number) {

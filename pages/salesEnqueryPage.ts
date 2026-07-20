@@ -416,7 +416,7 @@ export class SalesEnquiryPage extends BasePage {
         await expect(this.websiteTextBox, "Website value mismatch in edit sales enquiry form").toHaveValue(data.website);
         await expect(this.pOBoxTextBox, "P.O. Box value mismatch in edit sales enquiry form").toHaveValue(data.poBox);
         await expect(this.projectNameTextBox, "Project Name value mismatch in edit sales enquiry form").toHaveValue(data.projectName);
-        await expect(this.projectModeRadio(data.projectMode)).toBeChecked();
+        await expect(this.projectModeRadio(data.projectMode), `Project Mode option mismatch in edit sales enquiry form: ${data.projectMode}`).toBeChecked();
         await expect(this.signageTypeRadio(data.signageType), `Signage Type option mismatch in edit sales enquiry form: ${data.signageType}`).toBeChecked();
         await expect(this.timePurposeRadio(data.timePurpose), `Time Purpose option mismatch in edit sales enquiry form: ${data.timePurpose}`).toBeChecked();
         await expect(this.designSuppliedByOption(data.designSuppliedBy), `Design Supplied By option mismatch in edit sales enquiry form: ${data.designSuppliedBy}`).toBeChecked();

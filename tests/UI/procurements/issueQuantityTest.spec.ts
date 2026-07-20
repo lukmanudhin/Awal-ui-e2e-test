@@ -38,14 +38,14 @@ test.describe('Verify Material Indent Life Cycle With Multiple Partial Issues E2
             await expect(materialIndentRequestPage.successMessage('Material Indent created successfully'), 'Material Indent created successfully success message does not found').toHaveText('Material Indent created successfully');
             materialIndentRequestId = await materialIndentRequestPage.getMaterialIndentRequestNumber();
             await materialIndentRequestPage.search(materialIndentRequestId);
-            await expect(materialIndentRequestPage.priorityLevel).toHaveText(MIRDetails.priority);
-            await expect(materialIndentRequestPage.mirStatus).toHaveText('Pending');
+            await expect(materialIndentRequestPage.priorityLevel, "Priority level text does not match").toHaveText(MIRDetails.priority);
+            await expect(materialIndentRequestPage.mirStatus, "MIR status text does not match").toHaveText('Pending');
 
 
             await modules.goToModule({ subModule: 'Material Indent Request (Manager)' });
             await materialIndentRequestPage.search(materialIndentRequestId);
-            await expect(materialIndentRequestPage.priorityLevel).toHaveText(MIRDetails.priority);
-            await expect(materialIndentRequestPage.mirStatus).toHaveText('New Request');
+            await expect(materialIndentRequestPage.priorityLevel, "Priority level text does not match").toHaveText(MIRDetails.priority);
+            await expect(materialIndentRequestPage.mirStatus, "MIR status text does not match").toHaveText('New Request');
             await materialIndentRequestPage.clickViewIcon();
             await ppjoPage.validateSampleDetails(materialIndentRequestId, 'PJO483', MIRDetails.priority, 'Vigneshwaran');
             await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
@@ -55,21 +55,21 @@ test.describe('Verify Material Indent Life Cycle With Multiple Partial Issues E2
             await expect(materialIndentRequestPage.successMessage('Material Indent Requets approved successfully'), 'Material Indent Requets approved successfully success message does not found').toHaveText('Material Indent Requets approved successfully');
             await materialIndentRequestPage.goToHistory();
             await materialIndentRequestPage.search(materialIndentRequestId);
-            await expect(materialIndentRequestPage.priorityLevel).toHaveText('Approved');
+            await expect(materialIndentRequestPage.priorityLevel, "Priority level text does not match").toHaveText('Approved');
 
 
             await modules.goToModule({ subModule: 'Material Indent Request' });
             await materialIndentRequestPage.search(materialIndentRequestId);
-            await expect(materialIndentRequestPage.mirStatus).toHaveText('Approved');
+            await expect(materialIndentRequestPage.mirStatus, "MIR status text does not match").toHaveText('Approved');
 
 
             await modules.goToModule({ subModule: 'Material Issue Notes' });
             await materialIndentRequestPage.search(materialIndentRequestId);
-            await expect(materialIndentRequestPage.status).toHaveText('New Request');
+            await expect(materialIndentRequestPage.status, "Status text does not match").toHaveText('New Request');
             await materialIndentRequestPage.clickViewIcon();
             await ppjoPage.validateSampleDetails(materialIndentRequestId, 'PJO483', materialIndentRequestId, 'Vigneshwaran');
             await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
-            await expect(materialIndentRequestPage.stockStatus).toHaveText('In Stock');
+            await expect(materialIndentRequestPage.stockStatus, "Stock status text does not match").toHaveText('In Stock');
             await materialIndentRequestPage.enterIssueQuantity(MIRDetails.quantity, '20');
             await materialIndentRequestPage.issueMaterialAndValidateAPI(201);
             await expect(materialIndentRequestPage.successMessage('Material Issue Notes created successfully'), 'Material Issue Notes created successfully success message does not found').toHaveText('Material Issue Notes created successfully');
@@ -82,7 +82,7 @@ test.describe('Verify Material Indent Life Cycle With Multiple Partial Issues E2
             await modules.goToModule({ subModule: 'Material Issue Notes' });
             await materialIndentRequestPage.search(materialIndentRequestId);
             await materialIndentRequestPage.clickViewIcon();
-            await expect(materialIndentRequestPage.stockStatus).toHaveText('In Stock');
+            await expect(materialIndentRequestPage.stockStatus, "Stock status text does not match").toHaveText('In Stock');
             await materialIndentRequestPage.enterIssueQuantity('30', '15');
             await materialIndentRequestPage.issueMaterialAndValidateAPI(200);
             await expect(materialIndentRequestPage.successMessage('Material Issue Notes created successfully'), 'Material Issue Notes created successfully success message does not found').toHaveText('Material Issue Notes created successfully');
@@ -95,7 +95,7 @@ test.describe('Verify Material Indent Life Cycle With Multiple Partial Issues E2
             await modules.goToModule({ subModule: 'Material Issue Notes' });
             await materialIndentRequestPage.search(materialIndentRequestId);
             await materialIndentRequestPage.clickViewIcon();
-            await expect(materialIndentRequestPage.stockStatus).toHaveText('In Stock');
+            await expect(materialIndentRequestPage.stockStatus, "Stock status text does not match").toHaveText('In Stock');
             await materialIndentRequestPage.enterIssueQuantity('15', '7');
             await materialIndentRequestPage.issueMaterialAndValidateAPI(200);
             await expect(materialIndentRequestPage.successMessage('Material Issue Notes created successfully'), 'Material Issue Notes created successfully success message does not found').toHaveText('Material Issue Notes created successfully');
@@ -108,7 +108,7 @@ test.describe('Verify Material Indent Life Cycle With Multiple Partial Issues E2
             await modules.goToModule({ subModule: 'Material Issue Notes' });
             await materialIndentRequestPage.search(materialIndentRequestId);
             await materialIndentRequestPage.clickViewIcon();
-            await expect(materialIndentRequestPage.stockStatus).toHaveText('In Stock');
+            await expect(materialIndentRequestPage.stockStatus, "Stock status text does not match").toHaveText('In Stock');
             await materialIndentRequestPage.enterIssueQuantity('8', '8');
             await materialIndentRequestPage.issueMaterialAndValidateAPI(200);
             await expect(materialIndentRequestPage.successMessage('Material Issue Notes created successfully'), 'Material Issue Notes created successfully success message does not found').toHaveText('Material Issue Notes created successfully');

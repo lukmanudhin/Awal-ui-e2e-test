@@ -61,7 +61,7 @@ test.describe('Verify Pipeline E2E Test', () => {
         await pipelinePage.validateSalesEnquiryDetails(createEnquiryData);
         await pipelinePage.goToTab('icon Notes');
         await pipelinePage.addNoteAndValidateAPI(pipelineData.note, 200);
-        await expect(pipelinePage.successMessage("Pipeline notes added successfully")).toHaveText("Pipeline notes added successfully");
+        await expect(pipelinePage.successMessage("Pipeline notes added successfully"), "Pipeline notes added successfully message does not match").toHaveText("Pipeline notes added successfully");
         await pipelinePage.validateCreatedTaskVisible();
         await pipelinePage.goToTab('icon Meeting Scheduler');
         await pipelinePage.addMeetingAndValidateAPI(pipelineData.meetingDescription, 200);

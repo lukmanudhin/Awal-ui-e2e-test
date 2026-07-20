@@ -37,13 +37,13 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
         await expect(materialIndentRequestPage.successMessage('Material Indent created successfully'), 'Material Indent created successfully success message does not found').toHaveText('Material Indent created successfully');
         materialIndentRequestId = await materialIndentRequestPage.getMaterialIndentRequestNumber();
         await materialIndentRequestPage.search(materialIndentRequestId);
-        await expect(materialIndentRequestPage.priorityLevel).toHaveText(MIRDetails.priority);
-        await expect(materialIndentRequestPage.mirStatus).toHaveText('Pending');
+        await expect(materialIndentRequestPage.priorityLevel, "Priority level text does not match").toHaveText(MIRDetails.priority);
+        await expect(materialIndentRequestPage.mirStatus, "MIR status text does not match").toHaveText('Pending');
 
         await modules.goToModule({ subModule: 'Material Indent Request (Manager)' });
         await materialIndentRequestPage.search(materialIndentRequestId);
-        await expect(materialIndentRequestPage.priorityLevel).toHaveText(MIRDetails.priority);
-        await expect(materialIndentRequestPage.mirStatus).toHaveText('New Request');
+        await expect(materialIndentRequestPage.priorityLevel, "Priority level text does not match").toHaveText(MIRDetails.priority);
+        await expect(materialIndentRequestPage.mirStatus, "MIR status text does not match").toHaveText('New Request');
         await materialIndentRequestPage.clickViewIcon();
         await ppjoPage.validateSampleDetails(materialIndentRequestId, 'PJO483', MIRDetails.priority, 'Vigneshwaran');
         await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
@@ -53,19 +53,19 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
         await expect(materialIndentRequestPage.successMessage('Material Indent Requets approved successfully'), 'Material Indent Requets approved successfully success message does not found').toHaveText('Material Indent Requets approved successfully');
         await materialIndentRequestPage.goToHistory();
         await materialIndentRequestPage.search(materialIndentRequestId);
-        await expect(materialIndentRequestPage.priorityLevel).toHaveText('Approved');
+        await expect(materialIndentRequestPage.priorityLevel, "Priority level text does not match").toHaveText('Approved');
 
         await modules.goToModule({ subModule: 'Material Indent Request' });
         await materialIndentRequestPage.search(materialIndentRequestId);
-        await expect(materialIndentRequestPage.mirStatus).toHaveText('Approved');
+        await expect(materialIndentRequestPage.mirStatus, "MIR status text does not match").toHaveText('Approved');
 
         await modules.goToModule({ subModule: 'Material Issue Notes' });
         await materialIndentRequestPage.search(materialIndentRequestId);
-        await expect(materialIndentRequestPage.status).toHaveText('New Request');
+        await expect(materialIndentRequestPage.status, "Status text does not match").toHaveText('New Request');
         await materialIndentRequestPage.clickViewIcon();
         await ppjoPage.validateSampleDetails(materialIndentRequestId, 'PJO483', materialIndentRequestId, 'Vigneshwaran');
         await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
-        await expect(materialIndentRequestPage.stockStatus).toHaveText('Out Of Stock');
+        await expect(materialIndentRequestPage.stockStatus, "Stock status text does not match").toHaveText('Out Of Stock');
         await expect(materialIndentRequestPage.issuingQuantity, 'Issuing quantity field is not disabled for Out Of Stock materials').toBeDisabled();
 
         await modules.goToModule({ subModule: 'PR Request' });
@@ -78,7 +78,7 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
         console.log(`PR ID: ${prId}`);
         await prRequestPage.searchPR(prId);
         await expect(prRequestPage.stockStatus, 'Stock status does not match').toHaveText('Out Of Stock');
-        await expect(prRequestPage.prStatus).toHaveText('PO Pending');
+        await expect(prRequestPage.prStatus, "PR status text does not match").toHaveText('PO Pending');
         await prRequestPage.clickViewIcon();
         await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
         await prRequestPage.approvePRRequestAndValidateAPI(200);
@@ -87,17 +87,17 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
         await modules.goToModule({ subModule: 'Purchase Request Sheet' });
         await prRequestPage.searchPR(prId);
         await expect(prRequestPage.stockStatus, 'Stock status does not match').toHaveText('Out Of Stock');
-        await expect(prRequestPage.prStatus).toHaveText('PO Pending');
+        await expect(prRequestPage.prStatus, "PR status text does not match").toHaveText('PO Pending');
         await prRequestPage.clickViewIcon();
         await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
 
         // nested sub module name improper
-        await modules.goToModule({ module: 'Procurement', subModule: 'PR to PO', nestedSubModule: 'PR to Po (Contract)' });
+        await modules.goToModule({ module: 'Procurement', subModule: 'PR to PO', nestedSubModule: 'PR to PO (Contract)' });
         const inContract =await procurementPage.searchPR(prId);
         await procurementPage.clickViewIcon();
         await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
 
-        await modules.goToModule({ nestedSubModule: 'PR to Po (Contract)' });
+        await modules.goToModule({ nestedSubModule: 'PR to PO (Contract)' });
         await procurementPage.searchPR(prId);
         if (!inContract) {
             await procurementPage.createVendorQuotation('Colan tech Info', 'Lopez and Mccarthy Inc');

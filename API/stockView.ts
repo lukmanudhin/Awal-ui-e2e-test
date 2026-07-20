@@ -36,8 +36,8 @@ export class StockViewAPI {
         console.log('====================================');
 
         // Basic check to ensure valid parsing
-        expect(highestStockItem.materialName).toBeDefined();
-        expect(Number(highestStockItem.currentQuantity)).toBeGreaterThan(0);
+        expect(highestStockItem.materialName, "Material name is not defined").toBeDefined();
+        expect(Number(highestStockItem.currentQuantity), "Highest stock item quantity is not greater than 0").toBeGreaterThan(0);
         return highestStockItem.materialName;
     }
 

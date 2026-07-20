@@ -31,7 +31,7 @@ test.describe('Credit Control Test E2E Flow', () => {
         await modules.goToModule({ module: 'Finance', subModule: 'Accounts Receivable', nestedSubModule: 'Credit Control' })
         await creditControlPage.clickCreateNewCreditControl();
         await creditControlPage.createNewCreditControl(creditControlData);
-        await expect(creditControlPage.successMessage('Data created successfully')).toHaveText('Data created successfully');
+        await expect(creditControlPage.successMessage('Data created successfully'), "Data created successfully message does not match").toHaveText('Data created successfully');
         await creditControlPage.search(creditControlData.customer);
         let applicationNumber = await creditControlPage.getApplicationNumber();
         await creditControlPage.search(applicationNumber);
@@ -42,7 +42,7 @@ test.describe('Credit Control Test E2E Flow', () => {
         await creditControlPage.clickViewIcon();
         await creditControlPage.validateCreditControlDetails(creditControlData);
         await creditControlPage.createSalesAssesment(salesAssesmentData);
-        await expect(creditControlPage.successMessage('Sales department created successfully')).toHaveText('Sales department created successfully');
+        await expect(creditControlPage.successMessage('Sales department created successfully'), "Sales department created successfully message does not match").toHaveText('Sales department created successfully');
         await creditControlPage.search(applicationNumber);
         await expect(salesEnquiryPage.enquiryStatus, 'Credit Status does not match').toHaveText('Pending For Approval');
         await modules.goToModule({ subModule: 'Credit Control (Manager)' });
@@ -53,7 +53,7 @@ test.describe('Credit Control Test E2E Flow', () => {
         await creditControlPage.goToTab('Sales Department Assessment');
         await creditControlPage.validateSalesAssesmentDetails(salesAssesmentData);
         await creditControlPage.approveCreditControlAndValidateAPI(200);
-        await expect(creditControlPage.successMessage('Credit Control approved successfully')).toHaveText('Credit Control approved successfully');
+        await expect(creditControlPage.successMessage('Credit Control approved successfully'), "Credit Control approved successfully message does not match").toHaveText('Credit Control approved successfully');
         await creditControlPage.goToTab('History');
         await creditControlPage.search(applicationNumber);
         await expect(creditControlPage.status, 'Credit Status does not match').toHaveText('Approved');
@@ -70,7 +70,7 @@ test.describe('Credit Control Test E2E Flow', () => {
 
         await creditControlPage.goToTab('Finance Department Assessment');
         await creditControlPage.submitFinanceDepartmentAssesment(financeAssesmentData);
-        await expect(creditControlPage.successMessage('Data created successfully')).toHaveText('Data created successfully');
+        await expect(creditControlPage.successMessage('Data created successfully'), "Data created successfully message does not match").toHaveText('Data created successfully');
         await creditControlPage.search(applicationNumber);
         await expect(creditControlPage.status, 'Credit Status does not match').toHaveText('Pending For Approval');
         await modules.goToModule({ nestedSubModule: 'Credit Control (Manager)' });
@@ -87,7 +87,7 @@ test.describe('Credit Control Test E2E Flow', () => {
         await creditControlPage.goToTab('Finance Department Assessment');
         await creditControlPage.validateFinanceAssesmentDetails(financeAssesmentData);
         await creditControlPage.approveFinanceAssesmentAndValidateAPI(200);
-        await expect(creditControlPage.successMessage('Data updated successfully')).toHaveText('Data updated successfully');
+        await expect(creditControlPage.successMessage('Data updated successfully'), "Data updated successfully message does not match").toHaveText('Data updated successfully');
         await creditControlPage.search(applicationNumber);
         await expect(creditControlPage.status, 'Credit Control Status does not match').toHaveText('Approved');
         await creditControlPage.goToHistory();

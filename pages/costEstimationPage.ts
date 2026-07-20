@@ -376,7 +376,7 @@ export class CostEstimationPage extends BasePage {
     }
     @step()
     async validateAddBOQAPI(statusCode: number) {
-        const responsePromise = this.page.waitForResponse('**/boq/createBoq');
+        const responsePromise = this.page.waitForResponse('**/BOQ/createBoq');
         await this.saveButton.click();
         const response = await responsePromise;
         expect(response.status(), `Add BOQ API status code mismatch. Expected ${statusCode}, received ${response.status()}`).toBe(statusCode);
@@ -417,7 +417,7 @@ export class CostEstimationPage extends BasePage {
     }
     @step()
     async validateDeleteBOQAPI(statusCode: number) {
-        const responsePromise = this.page.waitForResponse('**/boq/deleteBoqById?**');
+        const responsePromise = this.page.waitForResponse('**/BOQ/deleteBoqById?**');
         await this.deleteBtn.click();
         const response = await responsePromise;
         expect(response.status(), `Delete BOQ API status code mismatch. Expected ${statusCode}, received ${response.status()}`).toBe(statusCode);
@@ -452,7 +452,7 @@ export class CostEstimationPage extends BasePage {
     }
     @step()
     async validateEditBOQAPI(statusCode: number) {
-        const responsePromise = this.page.waitForResponse('**/boq/updateBoqById');
+        const responsePromise = this.page.waitForResponse('**/BOQ/updateBoqById');
         await this.updateBtn.click();
         const response = await responsePromise;
         expect(response.status(), `Update BOQ API status code mismatch. Expected ${statusCode}, received ${response.status()}`).toBe(statusCode);
@@ -728,11 +728,11 @@ export class CostEstimationPage extends BasePage {
         expect(SummaryTable, `Summary table does not contain description: ${BOQDetails.description}`).toContain(BOQDetails.description);
     }
     @step()
-    async editSummary(salesEnquiryData: SalesEnquiryData, vat: string, withHold: string, discount: string) {
+    async editSummary(salesEnquiryData: SalesEnquiryData, VAT: string, withHold: string, discount: string) {
         await this.editButton.click();
         if (salesEnquiryData.supplyType === 'Local') {
             await expect(this.page.locator('(//td[@colspan="24"])[1]//following-sibling::td[1]'), "Local summary VAT value should be empty or 0.000 before edit").toHaveText(/^(-|0\.000)$/);
-            await this.vatTxtBx.fill(`${vat}`);
+            await this.vatTxtBx.fill(`${VAT}`);
             await expect(this.page.locator('(//td[@colspan="24"])[1]//following-sibling::td[1]'), "Local summary VAT value was not updated after edit").not.toHaveText(/^(-|0\.000)$/);
             await expect(this.page.locator('(//td[@colspan="24"])[3]//following-sibling::td[1]'), "Local summary VAT value should be empty or 0.000 before edit").toHaveText(/^(-|0\.000)$/);
             await this.withHoldTxtBx.fill(`${withHold}`);
@@ -742,7 +742,7 @@ export class CostEstimationPage extends BasePage {
             await expect(this.page.locator('//td[@data-app-table-col="27"]//div'), "Export summary discount value was not updated after edit").not.toHaveText(/^(-|0\.000)$/);
         } else {
             await expect(this.page.locator('(//td[@colspan="24"])[3]//following-sibling::td[1]'), "Export summary VAT value should be empty or 0.000 before edit").toHaveText(/^(-|0\.000)$/);
-            await this.vatTxtBx.fill(`${vat}`);
+            await this.vatTxtBx.fill(`${VAT}`);
             await expect(this.page.locator('(//td[@colspan="24"])[3]//following-sibling::td[1]'), "Export summary VAT value was not updated after edit").not.toHaveText(/^(-|0\.000)$/);
             await expect(this.page.locator('//td[@data-app-table-col="29"]//div').first(), "Export summary discount value should be empty or 0.000 before edit").toHaveText(/^(-|0\.000)$/);
             await this.discountTxtBx.fill(`${discount}`);
@@ -824,10 +824,10 @@ export class CostEstimationPage extends BasePage {
     }
     @step()
     async validateRequestTableVisible(title: string, requestType: string) {
-        await expect(this.page.locator('(//div[@class="mt-4 bg-white p-4 rounded-md"])[2]')).toContainText(title);
+        await expect(this.page.locator('(//div[@class="mt-4 bg-white p-4 rounded-md"])[2]'), `Request table does not contain title: ${title}`).toContainText(title);
         const boqDetails = await this.page.locator('(//div[@class="mt-4 bg-white p-4 rounded-md"])[2]').innerText();
-        expect(boqDetails).toContain(requestType);
-        expect(boqDetails).toContain('View Attachment');
+        expect(boqDetails, `BOQ details do not contain request type: ${requestType}`).toContain(requestType);
+        expect(boqDetails, "BOQ details do not contain View Attachment").toContain('View Attachment');
     }
     @step()
     async validateViewDiscountAttachments(documentName: string, reason: string) {

@@ -158,7 +158,7 @@ export class PPJOPage extends BasePage {
     }
     @step()
     async validatePPJOAPI(statusCode: number, requestType: string) {
-        const responsePromise = this.page.waitForResponse('**/ppjo/createPpjo');
+        const responsePromise = this.page.waitForResponse('**/PPJO/createPpjo');
         if (await this.requestEstimationButton.isVisible()) {
             await this.requestEstimationButton.click();
         } else {
@@ -240,7 +240,7 @@ export class PPJOPage extends BasePage {
     @step()
     async addNewSampleRequest(fileName: string, quantity: string, description: string) {
         await this.addSampleButton.click();
-        await expect(this.banner).toContainText('New Sample Request');
+        await expect(this.banner, "Banner does not contain New Sample Request").toContainText('New Sample Request');
         await this.uploadFile('test_Documents', fileName);
         await expect(this.attachedDocument(fileName), `${fileName} is not visible in View Attached Documents`).toBeVisible();
         await this.quantityTextBox.fill(quantity);
@@ -250,11 +250,11 @@ export class PPJOPage extends BasePage {
     async validateSampleDetails(enquiryId: string, documentName: string, quantity: string, description: string) {
         await this.page.waitForLoadState('domcontentloaded');
         await this.page.waitForTimeout(2000);
-        await expect(this.page.locator('//div[@class="p-[18px] undefined"]').first(), `Sample details does not contain enquiry id: ${enquiryId}`).toContainText(enquiryId);
+        await expect(this.page.locator('//div[@class="p-[18px] undefined"]').first(), `Sample details do not contain enquiry id: ${enquiryId}`).toContainText(enquiryId);
         const sampleDetails = await this.page.locator('//div[@class="p-[18px] undefined"]').first().innerText();
-        expect(sampleDetails, `Sample details does not contain document name: ${documentName}`).toContain(documentName);
-        expect(sampleDetails, "Sample details does not contain quantity: 1").toContain(quantity);
-        expect(sampleDetails, "Sample details does not contain description: Sample Description").toContain(description);
+        expect(sampleDetails, `Sample details do not contain document name: ${documentName}`).toContain(documentName);
+        expect(sampleDetails, "Sample details do not contain quantity: 1").toContain(quantity);
+        expect(sampleDetails, "Sample details do not contain description: Sample Description").toContain(description);
     }
     @step()
     async requestEstimationAndValidateAPI(statusCode: number) {

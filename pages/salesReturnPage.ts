@@ -126,7 +126,7 @@ export class SalesReturnPage extends BasePage {
         const responsePromise = this.page.waitForResponse('**/salesReturn/updateSalesReturnStatus**');
         await this.submitQCButton.click();
         const response = await responsePromise;
-        expect(response.status()).toBe(statusCode);
+        expect(response.status(), "Response status does not match expected value").toBe(statusCode);
         console.log('Submitted to QC successfully');
         console.log('Verified submit to QC API with status code:', response.status());
     }

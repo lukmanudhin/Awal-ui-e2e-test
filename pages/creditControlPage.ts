@@ -185,35 +185,35 @@ export class CreditControlPage extends BasePage {
     async validateCreditControlDetails(data: CreditControlData) {
         await this.page.waitForLoadState('domcontentloaded');
         await this.page.waitForTimeout(1000);
-        await expect(this.page.locator('//div[@class="flex-grow p-6"]')).toContainText(data.customer);
+        await expect(this.page.locator('//div[@class="flex-grow p-6"]'), `Credit details do not contain customer: ${data.customer}`).toContainText(data.customer);
         const creditDetails = await this.page.locator('//div[@class="flex-grow p-6"]').innerText();
-        expect(creditDetails).toContain(data.customerAcknowledgementName);
-        expect(creditDetails).toContain(data.crnNo);
-        expect(creditDetails).toContain(data.vatNo);
-        expect(creditDetails).toContain(data.customerIndustry);
-        expect(creditDetails).toContain(data.contactPerson);
-        expect(creditDetails).toContain(data.contactPersonPosition);
-        expect(creditDetails).toContain(data.contactPersonNumber);
-        expect(creditDetails).toContain(data.financeContactName);
-        expect(creditDetails).toContain(data.financeContactPosition);
-        expect(creditDetails).toContain(data.financeContactNumber);
-        expect(creditDetails).toContain(data.founderName);
-        expect(creditDetails).toContain(data.founderPosition);
-        expect(creditDetails).toContain(data.founderNationality);
-        expect(creditDetails).toContain(data.signatoryName);
-        expect(creditDetails).toContain(data.bankName);
-        expect(creditDetails).toContain(data.bankBranch);
-        expect(creditDetails).toContain(data.bankAccountNumber);
-        expect(creditDetails).toContain(data.relationshipManager);
-        expect(creditDetails).toContain(data.bankContactNumber);
-        expect(creditDetails).toContain(data.traderName);
-        expect(creditDetails).toContain(data.tradeContactNumber);
-        expect(creditDetails).toContain(data.tradeContactPerson);
-        expect(creditDetails).toContain(data.facilityEnjoyed);
-        expect(creditDetails).toContain(data.tradeEmail);
-        expect(creditDetails).toContain(data.tradeDays);
-        expect(creditDetails).toContain(data.customerAcknowledgementName);
-        expect(creditDetails).toContain(data.acknowledgementDesignation);
+        expect(creditDetails, "Credit details do not contain customer acknowledgement name").toContain(data.customerAcknowledgementName);
+        expect(creditDetails, "Credit details do not contain CRN no").toContain(data.crnNo);
+        expect(creditDetails, "Credit details do not contain VAT no").toContain(data.vatNo);
+        expect(creditDetails, "Credit details do not contain customer industry").toContain(data.customerIndustry);
+        expect(creditDetails, "Credit details do not contain contact person").toContain(data.contactPerson);
+        expect(creditDetails, "Credit details do not contain contact person position").toContain(data.contactPersonPosition);
+        expect(creditDetails, "Credit details do not contain contact person number").toContain(data.contactPersonNumber);
+        expect(creditDetails, "Credit details do not contain finance contact name").toContain(data.financeContactName);
+        expect(creditDetails, "Credit details do not contain finance contact position").toContain(data.financeContactPosition);
+        expect(creditDetails, "Credit details do not contain finance contact number").toContain(data.financeContactNumber);
+        expect(creditDetails, "Credit details do not contain founder name").toContain(data.founderName);
+        expect(creditDetails, "Credit details do not contain founder position").toContain(data.founderPosition);
+        expect(creditDetails, "Credit details do not contain founder nationality").toContain(data.founderNationality);
+        expect(creditDetails, "Credit details do not contain signatory name").toContain(data.signatoryName);
+        expect(creditDetails, "Credit details do not contain bank name").toContain(data.bankName);
+        expect(creditDetails, "Credit details do not contain bank branch").toContain(data.bankBranch);
+        expect(creditDetails, "Credit details do not contain bank account number").toContain(data.bankAccountNumber);
+        expect(creditDetails, "Credit details do not contain relationship manager").toContain(data.relationshipManager);
+        expect(creditDetails, "Credit details do not contain bank contact number").toContain(data.bankContactNumber);
+        expect(creditDetails, "Credit details do not contain trader name").toContain(data.traderName);
+        expect(creditDetails, "Credit details do not contain trade contact number").toContain(data.tradeContactNumber);
+        expect(creditDetails, "Credit details do not contain trade contact person").toContain(data.tradeContactPerson);
+        expect(creditDetails, "Credit details do not contain facility enjoyed").toContain(data.facilityEnjoyed);
+        expect(creditDetails, "Credit details do not contain trade email").toContain(data.tradeEmail);
+        expect(creditDetails, "Credit details do not contain trade days").toContain(data.tradeDays);
+        expect(creditDetails, "Credit details do not contain customer acknowledgement name").toContain(data.customerAcknowledgementName);
+        expect(creditDetails, "Credit details do not contain acknowledgement designation").toContain(data.acknowledgementDesignation);
     }
     @step()
     async createSalesAssesment(data: SalesAssesmentData) {
@@ -231,13 +231,13 @@ export class CreditControlPage extends BasePage {
     @step()
     async validateSalesAssesmentDetails(data: SalesAssesmentData) {
         await this.page.waitForLoadState('domcontentloaded');
-        await expect(this.page.locator('//div[@class="p-0 undefined"]')).toContainText(data.creditPeriod);
+        await expect(this.page.locator('//div[@class="p-0 undefined"]'), `Sales assesment details do not contain credit period: ${data.creditPeriod}`).toContainText(data.creditPeriod);
         const salesAssesmentDetails = await this.page.locator('//div[@class="p-0 undefined"]').innerText();
-        expect(salesAssesmentDetails).toContain(data.paymentTerms);
+        expect(salesAssesmentDetails, "Sales assesment details do not contain payment terms").toContain(data.paymentTerms);
         // expect(salesAssesmentDetails).toContain(data.recommendedBy);
         // expect(salesAssesmentDetails).toContain(data.accountExecutive);
         // expect(salesAssesmentDetails).toContain(data.salesManager);
-        expect(salesAssesmentDetails).toContain(data.remarks);
+        expect(salesAssesmentDetails, "Sales assesment details do not contain remarks").toContain(data.remarks);
     }
     @step()
     async approveCreditControlAndValidateAPI(statusCode: number) {
@@ -267,14 +267,14 @@ export class CreditControlPage extends BasePage {
     }
     @step()
     async validateFinanceAssesmentDetails(data: FinanceAssesmentData) {
-        await expect(this.page.locator('//div[@class="p-[18px] !pb-0"]')).toContainText(data.monthOutstanding);
+        await expect(this.page.locator('//div[@class="p-[18px] !pb-0"]'), `Finance assesment details do not contain month outstanding: ${data.monthOutstanding}`).toContainText(data.monthOutstanding);
         const financeAssesmentDetails = await this.page.locator('//div[@class="p-[18px] !pb-0"]').innerText();
-        expect(financeAssesmentDetails).toContain(data.limitApproved);
-        expect(financeAssesmentDetails).toContain(data.bankReference);
-        expect(financeAssesmentDetails).toContain(data.tradeReference);
-        expect(financeAssesmentDetails).toContain(data.paymentTerms);
-        expect(financeAssesmentDetails).toContain(data.proposedLimit);
-        expect(financeAssesmentDetails).toContain(data.creditPeriod);
+        expect(financeAssesmentDetails, "Finance assesment details do not contain limit approved").toContain(data.limitApproved);
+        expect(financeAssesmentDetails, "Finance assesment details do not contain bank reference").toContain(data.bankReference);
+        expect(financeAssesmentDetails, "Finance assesment details do not contain trade reference").toContain(data.tradeReference);
+        expect(financeAssesmentDetails, "Finance assesment details do not contain payment terms").toContain(data.paymentTerms);
+        expect(financeAssesmentDetails, "Finance assesment details do not contain proposed limit").toContain(data.proposedLimit);
+        expect(financeAssesmentDetails, "Finance assesment details do not contain credit period").toContain(data.creditPeriod);
         // expect(financeAssesmentDetails).toContain(data.remarks);
     }
     @step()

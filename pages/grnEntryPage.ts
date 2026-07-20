@@ -42,7 +42,7 @@ export class GRNEntryPage extends BasePage {
         const pendingQuantity = await this.pendingQuantityCol.textContent();
         await this.currentQuantityTxtBx.fill(currentQty);
         const updatedQuantity = await this.pendingQuantityCol.textContent();
-        expect(parseInt(updatedQuantity ?? '0')).toBe(parseInt(pendingQuantity ?? '0') - parseInt(currentQty));
+        expect(parseInt(updatedQuantity ?? '0'), "Updated pending quantity does not match pending quantity minus current quantity").toBe(parseInt(pendingQuantity ?? '0') - parseInt(currentQty));
         await this.selectDate(new Date().getDate() + 5, 1)
         await this.remarksTxtBx.fill(remarks);
         await this.deliveryNoteTxtBx.fill(deliveryNote);

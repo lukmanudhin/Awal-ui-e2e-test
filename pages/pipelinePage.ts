@@ -139,19 +139,19 @@ export class PipelinePage extends BasePage {
 
   @step()
   async validatePipelineTable(pipelineData: PipelineData) {
-    await expect(this.page.locator('(//tr)[2]')).toContainText(pipelineData.fileName);
+    await expect(this.page.locator('(//tr)[2]'), `Material table does not contain file name: ${pipelineData.fileName}`).toContainText(pipelineData.fileName);
     const materialTable = await this.page.locator('(//tr)[2]').innerText();
-    expect(materialTable).toContain(pipelineData.fileRemarks);
+    expect(materialTable, "Material table does not contain file remarks").toContain(pipelineData.fileRemarks);
   }
 
   async validateSalesEnquiryDetails(data: SalesEnquiryData) {
-    await expect(this.page.locator('//div[@class="grid grid-cols-2 pt-4 "]').or(this.page.locator('//div[@class="d-flex flex-column w-full bg-white gap-2 p-4"]'))).toContainText(data.customerName);
+    await expect(this.page.locator('//div[@class="grid grid-cols-2 pt-4 "]').or(this.page.locator('//div[@class="d-flex flex-column w-full bg-white gap-2 p-4"]')), `Details do not contain customer name: ${data.customerName}`).toContainText(data.customerName);
     const details = await this.page.locator('//div[@class="grid grid-cols-2 pt-4 "]').or(this.page.locator('//div[@class="d-flex flex-column w-full bg-white gap-2 p-4"]')).innerText();
-    expect(details).toContain(data.mobileNumber1);
-    expect(details).toContain(data.country);
-    expect(details).toContain(data.state);
-    expect(details).toContain(data.city);
-    expect(details).toContain(data.projectName);
+    expect(details, "Details do not contain mobile number 1").toContain(data.mobileNumber1);
+    expect(details, "Details do not contain country").toContain(data.country);
+    expect(details, "Details do not contain state").toContain(data.state);
+    expect(details, "Details do not contain city").toContain(data.city);
+    expect(details, "Details do not contain project name").toContain(data.projectName);
   }
 
   async validateCreatedTaskVisible() {

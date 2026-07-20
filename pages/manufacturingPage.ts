@@ -44,9 +44,9 @@ export class ManufacturingPage extends BasePage {
     }
     @step()
     async validateMaterialTable(manufacturingData: ManufacturingData) {
-        await expect(this.page.locator('(//tr)[2]')).toContainText(manufacturingData.material);
+        await expect(this.page.locator('(//tr)[2]'), `Material table does not contain material: ${manufacturingData.material}`).toContainText(manufacturingData.material);
         const materialTable = await this.page.locator('(//tr)[2]').innerText();
-        expect(materialTable).toContain(manufacturingData.quantity);
+        expect(materialTable, "Material table does not contain quantity").toContain(manufacturingData.quantity);
     }
     @step()
     async createOrderAndValidateAPI(statusCode: number) {

@@ -272,32 +272,32 @@ export class QuotationManagerPage extends BasePage {
     @step()
     async validateExistingDataInSalesOrderChecklist(data: SalesEnquiryData) {
         //---------------Sales Checklist-----------------
-        await expect(this.radioButton('Email')).toBeChecked();
-        await expect(this.radioButton('Photocopy')).toBeChecked();
+        await expect(this.radioButton('Email'), "'Email' radio button is not checked").toBeChecked();
+        await expect(this.radioButton('Photocopy'), "'Photocopy' radio button is not checked").toBeChecked();
         const fileName = 'Test_Document.pdf';
         await expect(this.attachedDocument(fileName).first(), `${fileName} is not visible in View Attached Documents`).toBeVisible();
-        await expect(this.radioButton('Site Photo')).toBeChecked();
-        await expect(this.checkBox('Yes').first()).toBeChecked();
-        await expect(this.checkBox('Yes').nth(1)).toBeChecked();
-        await expect(this.checkBox('Yes').nth(2)).toBeChecked();
-        await expect(this.checkBox('Yes').nth(3)).toBeChecked();
-        await expect(this.salesCheckListRemarks).toHaveValue('Sales Checklist Remarks');
+        await expect(this.radioButton('Site Photo'), "'Site Photo' radio button is not checked").toBeChecked();
+        await expect(this.checkBox('Yes').first(), "'Yes' checkbox is not checked").toBeChecked();
+        await expect(this.checkBox('Yes').nth(1), "'Yes' checkbox is not checked").toBeChecked();
+        await expect(this.checkBox('Yes').nth(2), "'Yes' checkbox is not checked").toBeChecked();
+        await expect(this.checkBox('Yes').nth(3), "'Yes' checkbox is not checked").toBeChecked();
+        await expect(this.salesCheckListRemarks, "Sales check list remarks value does not match").toHaveValue('Sales Checklist Remarks');
 
         //---------------Delivery & Installation-----------------
-        await expect(this.radioButton('Delivery Only')).toBeChecked();
-        await expect(this.customerNameTxtBx).toHaveValue(data.customerName);
-        await expect(this.phoneTxtBx).toHaveValue(data.mobileNumber1);
-        await expect(this.locationTxtBx).toHaveValue(data.city);
-        await expect(this.checkBox('YES').last()).toBeChecked();
-        await expect(this.deliveryRemarksTxtBx).toHaveValue('Delivery Remarks');
+        await expect(this.radioButton('Delivery Only'), "'Delivery Only' radio button is not checked").toBeChecked();
+        await expect(this.customerNameTxtBx, "Customer name text box value does not match").toHaveValue(data.customerName);
+        await expect(this.phoneTxtBx, "Phone text box value does not match").toHaveValue(data.mobileNumber1);
+        await expect(this.locationTxtBx, "Location text box value does not match").toHaveValue(data.city);
+        await expect(this.checkBox('YES').last(), "'YES' checkbox is not checked").toBeChecked();
+        await expect(this.deliveryRemarksTxtBx, "Delivery remarks text box value does not match").toHaveValue('Delivery Remarks');
 
         //---------------Production Checklist-----------------
         await expect(this.attachedDocument(fileName).nth(1), `${fileName} is not visible in View Attached Documents`).toBeVisible();
-        await expect(this.checkBox('Material')).toBeChecked();
-        await expect(this.radioButton('Yes')).toBeChecked();
-        await expect(this.checkBox('YES').first()).toBeChecked();
-        await expect(this.checkBox('YES').nth(1)).toBeChecked();
-        await expect(this.productRemarksTxtBx).toHaveValue('Production Remarks');
+        await expect(this.checkBox('Material'), "'Material' checkbox is not checked").toBeChecked();
+        await expect(this.radioButton('Yes'), "'Yes' radio button is not checked").toBeChecked();
+        await expect(this.checkBox('YES').first(), "'YES' checkbox is not checked").toBeChecked();
+        await expect(this.checkBox('YES').nth(1), "'YES' checkbox is not checked").toBeChecked();
+        await expect(this.productRemarksTxtBx, "Product remarks text box value does not match").toHaveValue('Production Remarks');
     }
     @step()
     async managerRejectsQuotationAndValidateAPI(statusCode: number) {
@@ -339,8 +339,8 @@ export class QuotationManagerPage extends BasePage {
     @step()
     async validateVersion2AndOption1Visible(version: string, option: string) {
         const innerText = await this.page.locator('//div[@class="border-l-2 border-[#D9D9D9] pl-8"]').innerText();
-        expect(innerText).toContain(version);
-        expect(innerText).toContain(option);
+        expect(innerText, `Version and option details do not contain version: ${version}`).toContain(version);
+        expect(innerText, `Version and option details do not contain option: ${option}`).toContain(option);
     }
     @step()
     async enterChangeRequestDetails() {

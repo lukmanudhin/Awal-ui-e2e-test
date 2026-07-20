@@ -97,7 +97,7 @@ export class SalesEnquiryAPI {
                 sourceType: 'salesEnquiry'
             }
         });
-        expect(response.status()).toBe(200);
+        expect(response.status(), "Response status does not match expected value").toBe(200);
         const res = await response.json();
         return res;
     }
