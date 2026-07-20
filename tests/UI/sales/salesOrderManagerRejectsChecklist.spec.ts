@@ -271,8 +271,7 @@ test.describe.serial('Verify Sales Order Manager rejects the sales order', () =>
             await expect(invoiceRequestPage.successMessage('Invoice created successfully'), "Invoice created successfully message does not match").toContainText('Invoice created successfully');
             await modules.goToModule({ nestedSubModule: 'Invoice Request' });
             await invoiceRequestPage.search(createEnquiryData.customerName);
-            //commented because of a bug 
-            // await expect(invoiceRequestPage.invoiceStatus, "Invoice status does not match").toContainText('Completed');
+            await expect(invoiceRequestPage.invoiceStatus, "Invoice status does not match").toContainText('Pending For Approval');
             await expect(invoiceRequestPage.viewInvoiceBtn, "View invoice button is not visible").toBeVisible();
         });
 

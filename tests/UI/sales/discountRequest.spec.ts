@@ -447,7 +447,7 @@ test.describe.serial('Verify Discount Request flow of Sales Enquiry (Request Nor
             await invoiceRequestPage.validateBOQTableDetails(addBOQData);
             await modules.goToModule({ nestedSubModule: 'Invoice Request' });
             await invoiceRequestPage.search(createEnquiryData.customerName);
-            // await expect(invoiceRequestPage.invoiceStatus, "Invoice status does not match").toContainText('Completed');
+            await expect(invoiceRequestPage.invoiceStatus, "Invoice status does not match").toContainText('Pending For Approval');
             await expect(invoiceRequestPage.viewInvoiceBtn, "View invoice button is not visible").toBeVisible();
         });
 

@@ -273,8 +273,7 @@ test.describe.serial('Verify Invoice Register is rejected by the Manager', () =>
             await modules.goToModule({ nestedSubModule: 'Invoice Request' });
             await invoiceRequestPage.search(createEnquiryData.customerName);
 
-            // commented because of a bug
-            // await expect(invoiceRequestPage.invoiceStatus, "Invoice status does not match").toContainText('Completed');
+            await expect(invoiceRequestPage.invoiceStatus, "Invoice status does not match").toContainText('Pending For Approval');
             await expect(invoiceRequestPage.viewInvoiceBtn, "View invoice button is not visible").toBeVisible();
         });
 
