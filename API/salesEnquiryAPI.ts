@@ -1,6 +1,8 @@
 import { APIRequestContext, expect } from "@playwright/test";
 import { ENV } from "../utils/ENV";
 
+const SALES_API_BASE = `https://sales-api-${ENV.ENV_API}.colanapps.in/api/transaction/v1`;
+
 export class SalesEnquiryAPI {
     constructor(private request: APIRequestContext) {
     }
@@ -23,7 +25,7 @@ export class SalesEnquiryAPI {
 
     async createSalesEnquiryAPI(accessToken: string, data: any) {
         const response = await this.request.post(
-            `${ENV.BASE_URL_API}/salesEnquiry/upsertSalesEnquiry`,
+            `${SALES_API_BASE}/salesEnquiry/upsertSalesEnquiry`,
             {
                 headers: {
                     'Authorization': `Bearer ${accessToken}`,
@@ -39,7 +41,7 @@ export class SalesEnquiryAPI {
 
     async createEmbroideryAPI(accessToken: string, enquiryId: string) {
         const response = await this.request.post(
-            `${ENV.BASE_URL_API}/salesEnquiryForm/upsertEmbroidery`,
+            `${SALES_API_BASE}/salesEnquiryForm/upsertEmbroidery`,
             {
                 headers: {
                     'Authorization': `Bearer ${accessToken}`,
@@ -60,7 +62,7 @@ export class SalesEnquiryAPI {
 
     async createAcrylicProducts(accessToken: string, enquiryId: string) {
         const response = await this.request.post(
-            `${ENV.BASE_URL_API}/salesEnquiryForm/upsertAcrylicProducts`,
+            `${SALES_API_BASE}/salesEnquiryForm/upsertAcrylicProducts`,
             {
                 headers: {
                     'Authorization': `Bearer ${accessToken}`,
@@ -86,7 +88,7 @@ export class SalesEnquiryAPI {
     }
 
     async getSalesEnquiryByName(accessToken: string, searchName: string) {
-        const response = await this.request.get(`${ENV.BASE_URL_API}/salesEnquiry/getAllSalesEnquiry`, {
+        const response = await this.request.get(`${SALES_API_BASE}/salesEnquiry/getAllSalesEnquiry`, {
             headers: { 'Authorization': accessToken },
             params: {
                 pageNumber: 1,
@@ -101,7 +103,7 @@ export class SalesEnquiryAPI {
     }
 
     async deleteSalesEnquiry(accessToken: string, enquiryId: string) {
-        const response = await this.request.delete(`${ENV.BASE_URL_API}/salesEnquiry/delete/${enquiryId}`, {
+        const response = await this.request.delete(`${SALES_API_BASE}/salesEnquiry/delete/${enquiryId}`, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
                 'x-auth-token': accessToken,
@@ -113,7 +115,7 @@ export class SalesEnquiryAPI {
     }
 
     async viewSalesEnquiryAPI(accessToken: string, enquiryId: string) {
-        const response = await this.request.get(`${ENV.BASE_URL_API}/salesEnquiry/getEnquiryDetails?enquiryExtId=${enquiryId}`, {
+        const response = await this.request.get(`${SALES_API_BASE}/salesEnquiry/getEnquiryDetails?enquiryExtId=${enquiryId}`, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`
             }
@@ -125,7 +127,7 @@ export class SalesEnquiryAPI {
 
     async editSalesEnquiryAPI(accessToken: string, data: any) {
         const response = await this.request.post(
-            `${ENV.BASE_URL_API}/salesEnquiry/upsertSalesEnquiry`,
+            `${SALES_API_BASE}/salesEnquiry/upsertSalesEnquiry`,
             {
                 headers: {
                     'Authorization': `Bearer ${accessToken}`,
@@ -153,7 +155,7 @@ export class SalesEnquiryAPI {
 
     async createSignageIlluminatedAPI(accessToken: string, enquiryId: string) {
         const response = await this.request.post(
-            `${ENV.BASE_URL_API}/salesEnquiryForm/upsertSignageIlluminated`,
+            `${SALES_API_BASE}/salesEnquiryForm/upsertSignageIlluminated`,
             {
                 headers: {
                     'Accept': 'application/json, text/plain, */*',
@@ -181,7 +183,7 @@ export class SalesEnquiryAPI {
 
     async createAtmProductsAPI(accessToken: string, enquiryId: string) {
         const response = await this.request.post(
-            `${ENV.BASE_URL_API}/salesEnquiryForm/upsertAtmProducts`,
+            `${SALES_API_BASE}/salesEnquiryForm/upsertAtmProducts`,
             {
                 headers: {
                     'Accept': 'application/json, text/plain, */*',
@@ -208,7 +210,7 @@ export class SalesEnquiryAPI {
 
     async createVinylGraphicAPI(accessToken: string, enquiryId: string) {
         const response = await this.request.post(
-            `${ENV.BASE_URL_API}/salesEnquiryForm/upsertVinylGraphic`,
+            `${SALES_API_BASE}/salesEnquiryForm/upsertVinylGraphic`,
             {
                 headers: {
                     'Accept': 'application/json, text/plain, */*',
@@ -230,7 +232,7 @@ export class SalesEnquiryAPI {
 
     async createTradingProductsAPI(accessToken: string, enquiryId: string) {
         const response = await this.request.post(
-            `${ENV.BASE_URL_API}/salesEnquiryForm/upsertTradingProducts`,
+            `${SALES_API_BASE}/salesEnquiryForm/upsertTradingProducts`,
             {
                 headers: {
                     'Accept': 'application/json, text/plain, */*',
@@ -257,7 +259,7 @@ export class SalesEnquiryAPI {
 
     async createPvcProductsAPI(accessToken: string, enquiryId: string) {
         const response = await this.request.post(
-            `${ENV.BASE_URL_API}/salesEnquiryForm/upsertPvcProducts`,
+            `${SALES_API_BASE}/salesEnquiryForm/upsertPvcProducts`,
             {
                 headers: {
                     'Accept': 'application/json, text/plain, */*',

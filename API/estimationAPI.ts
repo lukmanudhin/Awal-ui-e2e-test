@@ -1,6 +1,7 @@
 import { APIRequestContext, expect } from "@playwright/test";
+import { ENV } from "../utils/ENV";
 
-const ESTIMATION_API_BASE = 'https://estimation-api-dev.colanapps.in/api/v1';
+const ESTIMATION_API_BASE = `https://estimation-api-${ENV.ENV_API}.colanapps.in/api/v1`;
 
 export class EstimationAPI {
     constructor(private request: APIRequestContext) {

@@ -1,4 +1,5 @@
 import { APIRequestContext, expect } from "@playwright/test";
+import { ENV } from "../utils/ENV";
 
 export class SalesReturnAPI {
     constructor(private request: APIRequestContext) {
@@ -6,7 +7,7 @@ export class SalesReturnAPI {
 
     async deleteSalesReturn(accessToken: string, salesReturnId: string) {
         const response = await this.request.delete(
-            `https://sales-api-dev.colanapps.in/api/v1/salesReturn/deleteSalesReturn/${salesReturnId}`,
+            `https://sales-api-${ENV.ENV_API}.colanapps.in/api/v1/salesReturn/deleteSalesReturn/${salesReturnId}`,
             {
                 headers: {
                     'Authorization': `Bearer ${accessToken}`,

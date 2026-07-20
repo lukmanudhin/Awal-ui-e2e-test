@@ -3,6 +3,8 @@ import * as fs from "fs";
 import * as path from "path";
 import { ENV } from "../utils/ENV";
 
+const SALES_API_BASE = `https://sales-api-${ENV.ENV_API}.colanapps.in/api/transaction/v1`;
+
 export class QuotationAPI {
     constructor(private request: APIRequestContext) {
     }
@@ -16,7 +18,7 @@ export class QuotationAPI {
 
     async generateQuotation(accessToken: string, ppjoId: number, salesEnquiryId: number, customerName: string, currencyId: number, versionOptionExtId: string) {
         const response = await this.request.post(
-            `${ENV.BASE_URL_API}/Quotation/GenerateQuotation`,
+            `${SALES_API_BASE}/Quotation/GenerateQuotation`,
             {
                 headers: this.headers(accessToken),
                 data: {
@@ -36,7 +38,7 @@ export class QuotationAPI {
 
     async submitForApproval(accessToken: string, quotationExtId: string) {
         const response = await this.request.put(
-            `${ENV.BASE_URL_API}/Quotation/SubmitForApproval/${quotationExtId}`,
+            `${SALES_API_BASE}/Quotation/SubmitForApproval/${quotationExtId}`,
             {
                 headers: this.headers(accessToken),
                 data: {}
@@ -48,7 +50,7 @@ export class QuotationAPI {
 
     async quotationManagerApprove(accessToken: string, quotationExtId: string, isApproved: boolean, comment: string) {
         const response = await this.request.post(
-            `${ENV.BASE_URL_API}/Quotation/quotationManagerApprove`,
+            `${SALES_API_BASE}/Quotation/quotationManagerApprove`,
             {
                 headers: this.headers(accessToken),
                 data: { quotationExtId, isApproved, comment }
@@ -60,7 +62,7 @@ export class QuotationAPI {
 
     async sendToCustomer(accessToken: string, quotationExtId: string) {
         const response = await this.request.post(
-            `${ENV.BASE_URL_API}/Quotation/sendToCustomer`,
+            `${SALES_API_BASE}/Quotation/sendToCustomer`,
             {
                 headers: this.headers(accessToken),
                 data: { quotationExtId }
@@ -73,7 +75,7 @@ export class QuotationAPI {
     async quotationApproval(accessToken: string, quotationExtId: string, documentNumber: string, paymentTermId: number) {
         const filePath = path.join(process.cwd(), 'test_Documents', 'Test_Document.pdf');
         const response = await this.request.post(
-            `${ENV.BASE_URL_API}/Quotation/QuotationApproval`,
+            `${SALES_API_BASE}/Quotation/QuotationApproval`,
             {
                 headers: this.headers(accessToken),
                 multipart: {
@@ -95,7 +97,7 @@ export class QuotationAPI {
 
     async sendAdvanceInvoice(accessToken: string, quotationExtId: string, documentNumber: string) {
         const response = await this.request.post(
-            `${ENV.BASE_URL_API}/Quotation/sendAdvanceInvoice`,
+            `${SALES_API_BASE}/Quotation/sendAdvanceInvoice`,
             {
                 headers: this.headers(accessToken),
                 data: { quotationExtId, documentNumber }

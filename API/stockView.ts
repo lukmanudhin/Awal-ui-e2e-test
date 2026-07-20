@@ -1,12 +1,14 @@
 import { APIRequestContext, expect } from "@playwright/test";
 import { ENV } from "../utils/ENV";
 
+const PROCUREMENT_API_BASE = `https://procurement-api-${ENV.ENV_API}.colanapps.in/api/v1`;
+
 export class StockViewAPI {
     constructor(private request: APIRequestContext) {
     }
 
     async getMaterialWithHighStock(accessToken: string) {
-        const response = await this.request.get(`https://procurement-api-dev.colanapps.in/api/v1/stockView/getAllStockView?PageNumber=1&PageSize=10`, {
+        const response = await this.request.get(`${PROCUREMENT_API_BASE}/stockView/getAllStockView?PageNumber=1&PageSize=10`, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`
             }
@@ -40,7 +42,7 @@ export class StockViewAPI {
     }
 
     async getOutOfStockMaterialName(accessToken: string, subStore: string) {
-        const response = await this.request.get(`https://procurement-api-dev.colanapps.in/api/v1/stockView/getAllStockView?PageNumber=1&PageSize=10&subStore=${subStore}&materialStatus=OutOfStock`, {
+        const response = await this.request.get(`${PROCUREMENT_API_BASE}/stockView/getAllStockView?PageNumber=1&PageSize=10&subStore=${subStore}&materialStatus=OutOfStock`, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`
             }
@@ -71,7 +73,7 @@ export class StockViewAPI {
     }
 
     async getOutOfStockMaterialList(accessToken: string, subStore: string) {
-        const response = await this.request.get(`https://procurement-api-dev.colanapps.in/api/v1/stockView/getAllStockView?PageNumber=1&PageSize=10&subStore=${subStore}&materialStatus=OutOfStock`, {
+        const response = await this.request.get(`${PROCUREMENT_API_BASE}/stockView/getAllStockView?PageNumber=1&PageSize=10&subStore=${subStore}&materialStatus=OutOfStock`, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`
             }
@@ -98,7 +100,7 @@ export class StockViewAPI {
     }
 
     async getOutOfStockMaterialExtId(accessToken: string, subStore: string) {
-        const response = await this.request.get(`https://procurement-api-dev.colanapps.in/api/v1/stockView/getAllStockView?subStore=${subStore}&materialStatus=OutOfStock`, {
+        const response = await this.request.get(`${PROCUREMENT_API_BASE}/stockView/getAllStockView?subStore=${subStore}&materialStatus=OutOfStock`, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`
             }
@@ -131,7 +133,7 @@ export class StockViewAPI {
     }
 
     // async getContractPeriod(accessToken: string, extId: string) {
-    //     const response = await this.request.get(`https://procurement-api-dev.colanapps.in/api/v1/contractQuotePrices/getContractQuoteById?extId=fea26043-2f3c-4212-8497-72e69fe02be6`, {
+    //     const response = await this.request.get(`${PROCUREMENT_API_BASE}/contractQuotePrices/getContractQuoteById?extId=fea26043-2f3c-4212-8497-72e69fe02be6`, {
     //         headers: {
     //             'Authorization': `Bearer ${accessToken}`
     //         }
@@ -147,7 +149,7 @@ export class StockViewAPI {
         // const context = await request.newContext();
         const currentDate = new Date();
 
-        const response = await this.request.get(`https://procurement-api-dev.colanapps.in/api/v1/contractQuotePrices/getContractQuoteById`, {
+        const response = await this.request.get(`${PROCUREMENT_API_BASE}/contractQuotePrices/getContractQuoteById`, {
             params: { extId: extId },
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
@@ -183,7 +185,7 @@ export class StockViewAPI {
 
 
     async getOutOfStockMaterialWithValidContract(accessToken: string, subStore: string): Promise<{ materialName: string; extId: string } | null> {
-        const response = await this.request.get(`https://procurement-api-dev.colanapps.in/api/v1/stockView/getAllStockView?PageNumber=1&PageSize=10&subStore=${subStore}&materialStatus=OutOfStock`, {
+        const response = await this.request.get(`${PROCUREMENT_API_BASE}/stockView/getAllStockView?PageNumber=1&PageSize=10&subStore=${subStore}&materialStatus=OutOfStock`, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`
             }
@@ -222,7 +224,7 @@ export class StockViewAPI {
     }
 
     async getOutOfStockMaterialWithValidContract2(accessToken: string, subStore: string): Promise<{ materialName: string; extId: string } | null> {
-        const response = await this.request.get(`https://procurement-api-dev.colanapps.in/api/v1/stockView/getAllStockView?PageNumber=1&PageSize=10&subStore=${subStore}&materialStatus=OutOfStock`, {
+        const response = await this.request.get(`${PROCUREMENT_API_BASE}/stockView/getAllStockView?PageNumber=1&PageSize=10&subStore=${subStore}&materialStatus=OutOfStock`, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`
             }
@@ -246,7 +248,7 @@ export class StockViewAPI {
 
         // Iterate through sorted materials, checking each extId for a valid contract
         for (const material of sortedMaterials) {
-            const contractResponse = await this.request.get(`https://procurement-api-dev.colanapps.in/api/v1/contractQuotePrices/getContractQuoteById`, {
+            const contractResponse = await this.request.get(`${PROCUREMENT_API_BASE}/contractQuotePrices/getContractQuoteById`, {
                 params: { extId: material.extId },
                 headers: {
                     'Authorization': `Bearer ${accessToken}`,

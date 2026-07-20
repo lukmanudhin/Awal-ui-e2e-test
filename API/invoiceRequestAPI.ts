@@ -1,8 +1,9 @@
 import { APIRequestContext, expect } from "@playwright/test";
 import * as fs from "fs";
 import * as path from "path";
+import { ENV } from "../utils/ENV";
 
-const FINANCE_API_BASE = 'https://finance-api-dev.colanapps.in/api';
+const FINANCE_API_BASE = `https://finance-api-${ENV.ENV_API}.colanapps.in/api`;
 
 export class InvoiceRequestAPI {
     constructor(private request: APIRequestContext) {
@@ -15,8 +16,6 @@ export class InvoiceRequestAPI {
         };
     }
 
-    // Invoice request records are auto-created by the backend as soon as Quotation/sendAdvanceInvoice
-    // is called - this looks up the auto-created extId by customer name so createInvoiceRequest can finalize it.
     async getAllInvoiceRequest(accessToken: string, search: string) {
         const response = await this.request.get(
             `${FINANCE_API_BASE}/InvoiceRequest/GetAllInvoiceRequest`,

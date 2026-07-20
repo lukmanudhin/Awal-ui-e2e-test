@@ -3,6 +3,8 @@ import * as fs from "fs";
 import * as path from "path";
 import { ENV } from "../utils/ENV";
 
+const SALES_API_BASE = `https://sales-api-${ENV.ENV_API}.colanapps.in/api/transaction/v1`;
+
 export class PPJOAPI {
     constructor(private request: APIRequestContext) {
     }
@@ -10,7 +12,7 @@ export class PPJOAPI {
     private async createFileBasedPpjo(accessToken: string, enquiryId: string, jobRequestTypeId: number, quantity: string, requirementDetails: string) {
         const filePath = path.join(process.cwd(), 'test_Documents', 'Test_Document.pdf');
         const response = await this.request.post(
-            `${ENV.BASE_URL_API}/ppjo/createPpjo`,
+            `${SALES_API_BASE}/ppjo/createPpjo`,
             {
                 headers: {
                     'Authorization': `Bearer ${accessToken}`,
@@ -44,7 +46,7 @@ export class PPJOAPI {
 
     async requestSiteVisit(accessToken: string, enquiryId: string, siteVisitorId: string, siteVisitRequestDate: string) {
         const response = await this.request.post(
-            `${ENV.BASE_URL_API}/ppjo/createPpjo`,
+            `${SALES_API_BASE}/ppjo/createPpjo`,
             {
                 headers: {
                     'Authorization': `Bearer ${accessToken}`,
@@ -73,7 +75,7 @@ export class PPJOAPI {
 
     async getPpjoByReferenceId(accessToken: string, enquiryId: string) {
         const response = await this.request.get(
-            `${ENV.BASE_URL_API}/ppjo/getPpjoByReferenceId`,
+            `${SALES_API_BASE}/ppjo/getPpjoByReferenceId`,
             {
                 headers: {
                     'Authorization': `Bearer ${accessToken}`,

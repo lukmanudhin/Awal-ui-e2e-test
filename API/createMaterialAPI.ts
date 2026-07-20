@@ -6,7 +6,7 @@ export class CreateMaterialAPI {
     }
 
     async createMaterial(accessToken: string, data: any) {
-        const response = await this.request.post(`https://core-api-dev.colanapps.in/api/v1/material/createMaterial`, {
+        const response = await this.request.post(`https://core-api-${ENV.ENV_API}.colanapps.in/api/v1/material/createMaterial`, {
             data,
             headers: {
                 'Authorization': `Bearer ${accessToken}`

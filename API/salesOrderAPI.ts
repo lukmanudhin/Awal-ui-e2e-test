@@ -3,6 +3,8 @@ import * as fs from "fs";
 import * as path from "path";
 import { ENV } from "../utils/ENV";
 
+const SALES_API_BASE = `https://sales-api-${ENV.ENV_API}.colanapps.in/api/transaction/v1`;
+
 export class SalesOrderAPI {
     constructor(private request: APIRequestContext) {
     }
@@ -16,7 +18,7 @@ export class SalesOrderAPI {
 
     async getPrepopulateValues(accessToken: string, quotationExtId: string) {
         const response = await this.request.get(
-            `${ENV.BASE_URL_API}/SalesOrder/getPrepopulateValues`,
+            `${SALES_API_BASE}/SalesOrder/getPrepopulateValues`,
             {
                 headers: this.headers(accessToken),
                 params: { quotationExtId }
@@ -26,17 +28,10 @@ export class SalesOrderAPI {
         return await response.json();
     }
 
-    // NOTE: native multipart file-upload endpoint carrying the full sales checklist (sales checklist,
-    // delivery & installation, production checklist). Field names/IDs below are a best-effort
-    // reconstruction from pages/quotationManagerPage.ts's generateChecklist() flow and from
-    // SalesOrder/getSalesOrderById's response shape for a previously-submitted order (which mirrors
-    // this codebase's consistent request/response DTO naming), since native file-upload bodies are not
-    // recoverable from Playwright trace or CDP network capture. May need adjustment based on the API's
-    // actual validation error on first run.
     async createSalesOrder(accessToken: string, quotationExtId: string, customerId: number, customerName: string, deliveryPhone: string, deliveryLocation: string, dateIso: string) {
         const filePath = path.join(process.cwd(), 'test_Documents', 'Test_Document.pdf');
         const response = await this.request.post(
-            `${ENV.BASE_URL_API}/SalesOrder/createSalesOrder`,
+            `${SALES_API_BASE}/SalesOrder/createSalesOrder`,
             {
                 headers: this.headers(accessToken),
                 multipart: {
@@ -83,7 +78,7 @@ export class SalesOrderAPI {
 
     async updateSalesChecklistStatus(accessToken: string, salesOrderExtId: string, isSalesCheckListApproved: boolean, comments: string) {
         const response = await this.request.put(
-            `${ENV.BASE_URL_API}/SalesOrder/updateSalesChecklistStatus`,
+            `${SALES_API_BASE}/SalesOrder/updateSalesChecklistStatus`,
             {
                 headers: this.headers(accessToken),
                 data: { salesOrderExtId, isSalesCheckListApproved, comments }
@@ -95,7 +90,7 @@ export class SalesOrderAPI {
 
     async salesOrderPendingApproval(accessToken: string, salesOrderExtId: string) {
         const response = await this.request.put(
-            `${ENV.BASE_URL_API}/SalesOrder/salesOrderPendingApproval`,
+            `${SALES_API_BASE}/SalesOrder/salesOrderPendingApproval`,
             {
                 headers: this.headers(accessToken),
                 data: { salesOrderExtId }
@@ -107,7 +102,7 @@ export class SalesOrderAPI {
 
     async updateSalesOrderStatus(accessToken: string, salesOrderExtId: string, isSalesOrderApproved: boolean, comments: string) {
         const response = await this.request.put(
-            `${ENV.BASE_URL_API}/SalesOrder/updateSalesOrderStatus`,
+            `${SALES_API_BASE}/SalesOrder/updateSalesOrderStatus`,
             {
                 headers: this.headers(accessToken),
                 data: { salesOrderExtId, isSalesOrderApproved, comments }
