@@ -11,6 +11,7 @@ allure-results/
 allure-report/
 
 # Environment files
+env/
 .env
 .env.*
 .github
