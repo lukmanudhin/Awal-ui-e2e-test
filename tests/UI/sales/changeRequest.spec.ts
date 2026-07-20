@@ -85,14 +85,12 @@ test.describe.serial('Verify Change Request flow of Sales Enquiry (Request Norma
 
         await test.step('Verify generate cost estimation and validate request attachments', async () => {
             await requestNormalPage.clickGenerateCostEstimation();
-            //commented because of a bug
-            // await expect(costEstimationPage.costEstimationTitle, "Create Cost Estimation title does not match").toContainText('Create Cost Estimation');
+            await expect(costEstimationPage.costEstimationTitle, "Create Cost Estimation title does not match").toContainText('Create Cost Estimation');
         });
 
         await test.step('Verify that BOQ is created and BOQ details are generated successfully', async () => {
             await costEstimationPage.clickAddEstimation();
-            //commented because of a bug
-            // await expect(costEstimationPage.costEstimationTitle, "Create Cost Estimation title does not match").toContainText('Create Cost Estimation');
+            await expect(costEstimationPage.costEstimationTitle, "Create Cost Estimation title does not match").toContainText('Create Cost Estimation');
             await expect(costEstimationPage.timeLine, "Default Timeline is not 00:00:00 Sec").toContainText('00:00:00 Sec');
             await costEstimationPage.addBOQ(addBOQData);
             await costEstimationPage.validateAddBOQAPI(201);
@@ -269,8 +267,7 @@ test.describe.serial('Verify Change Request flow of Sales Enquiry (Request Norma
         //----------------------------
         await test.step('Verify generate cost estimation and Add BOQ is created and Validate BOQ details are generated successfully ', async () => {
             await requestNormalPage.clickGenerateCostEstimation();
-            // commented because of a bug
-            // await expect(costEstimationPage.costEstimationTitle, "Create Cost Estimation title does not match").toContainText('Create Cost Estimation');
+            await expect(costEstimationPage.costEstimationTitle, "Create Cost Estimation title does not match").toContainText('Create Cost Estimation');
             await costEstimationPage.validateCustomerDetails(createEnquiryData, enquiryId);
             await costEstimationPage.validateRequestTableVisible('Change Request Details', 'ChangeRequest');
             await costEstimationPage.validateViewDiscountAttachments('Test_Document.pdf', 'E2E Discount Request Reason');

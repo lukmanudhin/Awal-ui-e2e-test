@@ -84,14 +84,12 @@ test.describe.serial('Verify E2E Quotation Manager Rejection flow of Sales Enqui
 
         await test.step('Verify generate cost estimation and validate request attachments', async () => {
             await requestNormalPage.clickGenerateCostEstimation();
-            // commented because of a bug
-            // await expect(costEstimationPage.costEstimationTitle, "Create Cost Estimation title does not match").toContainText('Create Cost Estimation');
+            await expect(costEstimationPage.costEstimationTitle, "Create Cost Estimation title does not match").toContainText('Create Cost Estimation');
         });
 
         await test.step('Verify that BOQ is created and BOQ details are generated successfully', async () => {
             await costEstimationPage.clickAddEstimation();
-            // commented because of a bug
-            // await expect(costEstimationPage.costEstimationTitle, "Create Cost Estimation title does not match").toContainText('Create Cost Estimation');
+            await expect(costEstimationPage.costEstimationTitle, "Create Cost Estimation title does not match").toContainText('Create Cost Estimation');
             await expect(costEstimationPage.timeLine, "Default Timeline is not 00:00:00 Sec").toContainText('00:00:00 Sec');
             await costEstimationPage.addBOQ(addBOQData);
             await costEstimationPage.validateAddBOQAPI(201);
