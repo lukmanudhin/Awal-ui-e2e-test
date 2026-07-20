@@ -8,11 +8,12 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
     let MIRDetails: CreateMIRData;
     let materialIndentRequestId: string;
     let accessToken: string;
+    let materialId: string;
 
     test.beforeEach('Setup', async ({ salesEnquiryAPI, createMaterialAPI }) => {
         MIRDetails = getMIRDetails();
         accessToken = await salesEnquiryAPI.getAccessToken(`${ENV.EMAIL_ID}`, `${ENV.PASSWORD}`);
-        await createMaterialAPI.createMaterial(accessToken, mirPayload);
+        materialId = await createMaterialAPI.createMaterial(accessToken, mirPayload);
 
         // await loginPage.launchAwalWebsite();
         // await loginPage.login(`${ENV.EMAIL_ID}`, `${ENV.PASSWORD}`);
@@ -22,8 +23,9 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
         // await expect(page, "Sales Enquiry page not found").toHaveURL(`${ENV.BASE_URL}/sales/sales-enquiry`);
     });
 
-    test.afterEach('Teardown', async ({ page, salesEnquiryAPI }) => {
+    test.afterEach('Teardown', async ({ page, salesEnquiryAPI, createMaterialAPI }) => {
         // await page.close();
+        await createMaterialAPI.deleteMaterial(accessToken, materialId);
         await salesEnquiryAPI.dispose();
     });
 
