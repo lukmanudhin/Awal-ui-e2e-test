@@ -359,8 +359,7 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Internal)', () =
         await salesOrderManagerPage.search(enquiryId);
         await expect(salesOrderManagerPage.salesOrderApproveStatus, "Sales order status does not match").toHaveText('Sales Checklist Approved by Manager');
         await salesOrderManagerPage.clickViewIcon();
-        //bug
-        // await salesOrderManagerPage.validateSalesOrderDetails(createEnquiryData);
+        await salesOrderManagerPage.validateSalesOrderDetails(createEnquiryData);
         await ppjoPage.validateBOQDetailsTable(addBOQData);
         await salesOrderManagerPage.sendSalesOrderForApprovalAndValidateAPI(200);
         await expect(salesOrderManagerPage.successMessage('Sales Order sent for approval successfully'), "Sales order sent for approval message does not match").toContainText('Sales Order sent for approval successfully');
@@ -373,8 +372,7 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Internal)', () =
         await salesOrderManagerPage.search(enquiryId);
         await expect(salesOrderManagerPage.salesOrderStatus, "Sales order status does not match").toHaveText('Pending Sales Order Approval');
         await salesOrderManagerPage.clickViewIcon();
-        // bug
-        // await salesOrderManagerPage.validateSalesOrderDetails(createEnquiryData);
+        await salesOrderManagerPage.validateSalesOrderDetails(createEnquiryData);
         await ppjoPage.validateBOQDetailsTable(addBOQData);
         await salesOrderManagerPage.approveSalesOrderAndValidateAPI(200);
         await expect(salesOrderManagerPage.successMessage('Sales Order approved successfully'), "Sales order approved message does not match").toContainText('Sales Order approved successfully');
