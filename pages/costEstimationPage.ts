@@ -376,7 +376,7 @@ export class CostEstimationPage extends BasePage {
     }
     @step()
     async validateAddBOQAPI(statusCode: number) {
-        const responsePromise = this.page.waitForResponse('**/BOQ/createBoq');
+        const responsePromise = this.page.waitForResponse('**/boq/createBoq');
         await this.saveButton.click();
         const response = await responsePromise;
         expect(response.status(), `Add BOQ API status code mismatch. Expected ${statusCode}, received ${response.status()}`).toBe(statusCode);
@@ -763,7 +763,7 @@ export class CostEstimationPage extends BasePage {
     async savePriceIndicationSlipAndValidateAPI(statusCode: number) {
         await this.page.waitForTimeout(5000);
         const responsePromise = this.page.waitForResponse('**/estimation/updateOptionStatusByVerOptId');
-        await this.saveButton.click({ timeout: 2000, force: true});
+        await this.saveButton.click({ timeout: 2000, force: true });
         const response = await responsePromise;
         expect(response.status(), `Save Price Indication Slip API status code mismatch. Expected ${statusCode}, received ${response.status()}`).toBe(statusCode);
         console.log('Price Indication Slip saved successfully');

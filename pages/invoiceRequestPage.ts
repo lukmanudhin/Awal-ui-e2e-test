@@ -16,6 +16,7 @@ export class InvoiceRequestPage extends BasePage {
     private readonly yesButton: Locator;
     private readonly reasonTextBox: Locator;
     private readonly notApproveButton: Locator;
+    public readonly managerAcknowledgementStatus: Locator;
     // private readonly browseFileButton: Locator;
     // private readonly uploadButton: Locator;
 
@@ -30,11 +31,13 @@ export class InvoiceRequestPage extends BasePage {
         this.acknowledgeIcon = this.page.locator('//img[contains(@src,"upload-yellow-icon.svg")]');
         this.invoiceStatus = this.page.locator('//span[@class=" text-xs py-[2px] px-[8px]"]');
         this.viewInvoiceBtn = this.page.getByRole('button', { name: 'View Invoice' });
-        this.acknowledgementStatus = this.page.locator('//td[@data-app-table-col="6"]//span').first();//.or(this.page.locator('(//td[@data-app-table-col="6"]//span)[2]'));
+        this.acknowledgementStatus = this.page.locator('//td[@data-app-table-col="5"]//span').first();
         this.approveButton = this.page.getByRole('button', { name: 'approve', exact: true });
         this.yesButton = this.page.getByRole('button', { name: 'Yes' });
         this.reasonTextBox = this.page.getByRole('textbox', { name: 'Enter Reason' });
         this.notApproveButton = this.page.getByRole('button', { name: 'not approve' });
+        this.managerAcknowledgementStatus = this.page.locator('//td[@data-app-table-col="6"]//span').first();
+
         // this.browseFileButton = this.page.getByRole('button', { name: 'Browse files' });
         // this.uploadButton = this.page.getByRole('button', { name: 'Upload' });
 
@@ -66,7 +69,7 @@ export class InvoiceRequestPage extends BasePage {
     @step()
     async selectInvoiceDate(date: number) {
         await this.page.waitForTimeout(500);
-        await this.selectDate(date + 2, 0); 
+        await this.selectDate(date + 2, 0);
     }
     @step()
     async createInvoiceAndValidateAPI(statusCode: number) {

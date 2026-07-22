@@ -6,7 +6,7 @@ export class HomePage extends BasePage {
     private readonly subMenu: (name: string) => Locator;
     constructor(public readonly page: Page) {
         super(page);
-        this.menu = (name: string) => this.page.locator(`//div[text()='${name}']//parent::button`);
+        this.menu = (name: string) => this.page.locator(`//div[text()='${name}']//ancestor::button`);
         this.subMenu = (name: string) => this.page.locator(`//div[text()='${name}']//ancestor::button`);
     }
     @step()

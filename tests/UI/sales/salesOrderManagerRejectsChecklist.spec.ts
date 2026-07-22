@@ -288,7 +288,7 @@ test.describe.serial('Verify Sales Order Manager rejects the sales order', () =>
             await invoiceRequestPage.acknowledgeInvoiceRequest();
             await invoiceRequestPage.validateAcknowledgementAPI(200);
             await expect(invoiceRequestPage.successMessage('Invoice register upload file'), "Invoice acknowledgement success message does not match").toContainText('Invoice register upload file');
-            await expect(invoiceRequestPage.acknowledgementStatus, "Invoice status does not match").toContainText('Yes');
+            await expect(invoiceRequestPage.managerAcknowledgementStatus, "Invoice status does not match").toContainText('Yes');
         });
 
         await test.step('Verify sales order checklist is generated from customer approved quotation and sales order is created successfully', async () => {

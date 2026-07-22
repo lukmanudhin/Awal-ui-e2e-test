@@ -158,7 +158,7 @@ export class PPJOPage extends BasePage {
     }
     @step()
     async validatePPJOAPI(statusCode: number, requestType: string) {
-        const responsePromise = this.page.waitForResponse('**/PPJO/createPpjo');
+        const responsePromise = this.page.waitForResponse('**/ppjo/createPpjo');
         if (await this.requestEstimationButton.isVisible()) {
             await this.requestEstimationButton.click();
         } else {
