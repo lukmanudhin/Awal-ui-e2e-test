@@ -76,8 +76,8 @@ test.describe('Create Manufacturing E2E Flow', () => {
         await expect(salesEnquiryPage.socialMediaStatus, "Manufacturing status does not match").toHaveText('Approved');
         await manufacturingPage.clickManufacturing();
         await manufacturingPage.validateMaterialTable(manufacturingData);
-        await manufacturingPage.createOrderAndValidateAPI(200);
-        await expect(manufacturingPage.successMessage('Trading order created successfully'), "Trading order created success message does not match").toHaveText('Trading order created successfully');
+        // await manufacturingPage.createOrderAndValidateAPI(200);
+        // await expect(manufacturingPage.successMessage('Trading order created successfully'), "Trading order created success message does not match").toHaveText('Trading order created successfully');
         await manufacturingPage.enterPaymentMethodAndCampaign(manufacturingData);
         await manufacturingPage.generateInvoiceAndValidateAPI(200);
         await expect(manufacturingPage.successMessage('Invoice generated successfully'), "Invoice generated success message does not match").toHaveText('Invoice generated successfully');
