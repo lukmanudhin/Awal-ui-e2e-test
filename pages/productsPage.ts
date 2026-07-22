@@ -242,6 +242,48 @@ export class ProductsPage extends BasePage {
         }
     }
 
+    @step()
+    async editProductDetails(productNames: string[]) {
+        if (productNames.includes('Signage')) {
+            await this.enterSignageDetails();
+            await this.validateCreateSignageAPI(201);
+        }
+
+        if (productNames.includes('Embroidery & Tailoring')) {
+            await this.openProductTab('Embroidery & Tailoring');
+            await this.enterEmbroidingDetails("Flag", "Pin", "Nylon");
+            await this.validateCreateEmbroideryAPI(201);
+            await expect(this.embriodSuccessMessage, "Embroidery success message does not match").toHaveText('Embroidery tailoring created successfully');
+        }
+
+        if (productNames.includes('ATM Products')) {
+            await this.enterAtmProductDetails();
+            await this.validateCreateAtmProductAPI(201);
+        }
+
+        if (productNames.includes('Acrylic Products')) {
+            await this.openProductTab('Acrylic Products');
+            await this.enterAcrylicProductDetails("Acrylic", "LED Strip", "Bolts", '3', '3', '3');
+            await this.validateCreateAcrylicProductAPI(201);
+            await expect(this.acrylicSuccessMessage, "Acrylic products success message does not match").toHaveText('Acrylic products created successfully');
+        }
+
+        if (productNames.includes('Vinyl Graphic')) {
+            await this.enterVinylGraphicDetails();
+            await this.validateCreateVinylGraphicAPI(201);
+        }
+
+        if (productNames.includes('Trading')) {
+            await this.enterTradingDetails();
+            await this.validateCreateTradingProductAPI(201);
+        }
+
+        if (productNames.includes('PVC Products')) {
+            await this.enterPvcProductDetails();
+            await this.validateCreatePvcProductAPI(201);
+        }
+    }
+
 
     private async selectFromDropdown(dropdownName: string, value: string) {
         await this.dropDown(dropdownName).clear();

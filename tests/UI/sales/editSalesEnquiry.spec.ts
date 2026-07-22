@@ -42,7 +42,7 @@ test.describe('Edit Sales Enquiry', () => {
         await salesEnquiryPage.validateCreateSalesEnquiryAPI(200, 'Update Enquiry');
         await expect(productsPage.successMessage('Sales enquiry upserted successfully'), "Sales enquiry update success message does not match").toHaveText('Sales enquiry upserted successfully');
         await productsPage.validateProductTabsListed(editEnquiryData.product);
-        await productsPage.enterAndSaveAllSelectedProductDetails(editEnquiryData.product);
+        await productsPage.editProductDetails(editEnquiryData.product);
         await salesEnquiryPage.viewSalesEnquiry(editEnquiryData.customerName);
         await salesEnquiryPage.validateViewSalesEnquiryAPI(200);
         await expect(page, "Lead view page URL was not opened after viewing updated sales enquiry").toHaveURL(/leadView/);
