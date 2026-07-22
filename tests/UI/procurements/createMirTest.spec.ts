@@ -56,7 +56,7 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
             await expect(materialIndentRequestPage.priorityLevel, "Priority level text does not match").toHaveText(MIRDetails.priority);
             await expect(materialIndentRequestPage.mirStatus, "MIR status text does not match").toHaveText('New Request');
             await materialIndentRequestPage.clickViewIcon();
-            await ppjoPage.validateSampleDetails(materialIndentRequestId, 'PJO483', MIRDetails.priority, 'Vigneshwaran');
+            await ppjoPage.validateSampleDetails(materialIndentRequestId, MIRDetails.pjoNumber, MIRDetails.priority, 'Vigneshwaran');
             await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
             await materialIndentRequestPage.managerApprovesMaterialRequestAndValidateAPI(200);
             // improper status code
@@ -77,7 +77,7 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
             await materialIndentRequestPage.search(materialIndentRequestId);
             await expect(materialIndentRequestPage.status, "Status text does not match").toHaveText('New Request');
             await materialIndentRequestPage.clickViewIcon();
-            await ppjoPage.validateSampleDetails(materialIndentRequestId, 'PJO483', materialIndentRequestId, 'Vigneshwaran');
+            await ppjoPage.validateSampleDetails(materialIndentRequestId, MIRDetails.pjoNumber, materialIndentRequestId, 'Vigneshwaran');
             await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
             await expect(materialIndentRequestPage.stockStatus, "Stock status text does not match").toHaveText('In Stock');
             await materialIndentRequestPage.enterIssueQuantity(MIRDetails.quantity, MIRDetails.quantity);
@@ -124,7 +124,7 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
             await expect(materialIndentRequestPage.priorityLevel, "Priority level text does not match").toHaveText(MIRDetails.priority);
             await expect(materialIndentRequestPage.mirStatus, "MIR status text does not match").toHaveText('New Request');
             await materialIndentRequestPage.clickViewIcon();
-            await ppjoPage.validateSampleDetails(materialIndentRequestId, 'PJO483', MIRDetails.priority, 'Vigneshwaran');
+            await ppjoPage.validateSampleDetails(materialIndentRequestId, MIRDetails.pjoNumber, MIRDetails.priority, 'Vigneshwaran');
             await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
             await materialIndentRequestPage.managerApprovesMaterialRequestAndValidateAPI(200);
             // improper status code
@@ -145,7 +145,7 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
             await materialIndentRequestPage.search(materialIndentRequestId);
             await expect(materialIndentRequestPage.status, "Status text does not match").toHaveText('New Request');
             await materialIndentRequestPage.clickViewIcon();
-            await ppjoPage.validateSampleDetails(materialIndentRequestId, 'PJO483', materialIndentRequestId, 'Vigneshwaran');
+            await ppjoPage.validateSampleDetails(materialIndentRequestId, MIRDetails.pjoNumber, materialIndentRequestId, 'Vigneshwaran');
             await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
             await expect(materialIndentRequestPage.stockStatus, "Stock status text does not match").toHaveText('In Stock');
             await materialIndentRequestPage.enterIssueQuantity(MIRDetails.quantity, '6');

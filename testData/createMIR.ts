@@ -12,7 +12,7 @@ export type CreateMIRData = {
 export const getMIRDetails = (): CreateMIRData => ({
   requisitionType: 'Raw Materials',
   priority: `${RandomDataGenerator.generatePriority()}`,
-  pjoNumber: 'PJO483',
+  pjoNumber: '802600615',
   material: 'WIRE - SINGLE STRAND 2 CORE',
   quantity: '50',
   remarks: 'Add Material Test Remarks',
