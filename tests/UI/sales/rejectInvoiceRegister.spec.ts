@@ -289,7 +289,7 @@ test.describe.serial('Verify Invoice Register is rejected by the Manager', () =>
             await invoiceRequestPage.goToTab('History');
             await invoiceRequestPage.search(createEnquiryData.customerName);
             await expect(invoiceRequestPage.invoiceStatus, "Invoice status does not match").toContainText('Not Approved');
-            await expect(invoiceRequestPage.acknowledgementStatus, "Invoice status does not match").toContainText('No');
+            await expect(invoiceRequestPage.managerAcknowledgementStatus, "Invoice status does not match").toContainText('No');
         });
 
         await test.step('Verify Invoice Register is rejected by the Manager with status reflected in sales enquiry', async () => {
