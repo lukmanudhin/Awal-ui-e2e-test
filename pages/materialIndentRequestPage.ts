@@ -85,7 +85,7 @@ export class MaterialIndentRequestPage extends BasePage {
         expect(tableRow, "Table row does not contain quantity").toContain(mirDetails.quantity);
         // expect(tableRow).toContain(mirDetails.remarks);
     }
-    @step()    
+    @step()
     async submitMaterialIndentRequestAndValidateAPI(statusCode: number) {
         await this.submitButton.click();
         const responsePromise = this.page.waitForResponse('**/materialIndentRequest/create');
@@ -93,6 +93,8 @@ export class MaterialIndentRequestPage extends BasePage {
         const response = await responsePromise;
         expect(response.status(), `Create Material Indent Request status code mismatch. Expected ${statusCode}, received ${response.status()}`).toBe(statusCode);
         console.log('Verified material indent request creation API with status code:', response.status());
+        const responseBody = await response.json();
+        return responseBody.result;
     }
     @step()
     async getMaterialIndentRequestNumber() {

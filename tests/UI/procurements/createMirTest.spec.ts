@@ -6,6 +6,7 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
     test.setTimeout(550000);
     let MIRDetails: CreateMIRData;
     let materialIndentRequestId: string;
+    let materialIndentRequestExtId: string;
     let accessToken: string;
 
     test.beforeEach('Setup', async ({ page, loginPage, homePage, salesEnquiryAPI, stockViewAPI }) => {
@@ -21,8 +22,9 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
         await expect(page, "Sales Enquiry page not found").toHaveURL(`${ENV.BASE_URL}/sales/sales-enquiry`);
     });
 
-    test.afterEach('Teardown', async ({ page, salesEnquiryAPI }) => {
+    test.afterEach('Teardown', async ({ page, salesEnquiryAPI, materialIndentRequestAPI }) => {
         await page.close();
+        await materialIndentRequestAPI.deleteMaterialIndentRequestIfCreated(accessToken, materialIndentRequestExtId);
         await salesEnquiryAPI.dispose();
     });
 
@@ -42,7 +44,7 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
         });
 
         await test.step('Submit the request and confirm it is pending', async () => {
-            await materialIndentRequestPage.submitMaterialIndentRequestAndValidateAPI(201);
+            materialIndentRequestExtId = await materialIndentRequestPage.submitMaterialIndentRequestAndValidateAPI(201);
             await expect(materialIndentRequestPage.successMessage('Material Indent created successfully'), 'Material Indent created successfully success message does not found').toHaveText('Material Indent created successfully');
             materialIndentRequestId = await materialIndentRequestPage.getMaterialIndentRequestNumber();
             await materialIndentRequestPage.search(materialIndentRequestId);
@@ -110,7 +112,7 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
         });
 
         await test.step('Submit the request and confirm it is pending', async () => {
-            await materialIndentRequestPage.submitMaterialIndentRequestAndValidateAPI(201);
+            materialIndentRequestExtId = await materialIndentRequestPage.submitMaterialIndentRequestAndValidateAPI(201);
             await expect(materialIndentRequestPage.successMessage('Material Indent created successfully'), 'Material Indent created successfully success message does not found').toHaveText('Material Indent created successfully');
             materialIndentRequestId = await materialIndentRequestPage.getMaterialIndentRequestNumber();
             await materialIndentRequestPage.search(materialIndentRequestId);
