@@ -164,61 +164,7 @@ export class SalesEnquiryPage extends BasePage {
     }
     @step()
     async createSalesEnquiry(data: SalesEnquiryData) {
-        // Address fields
-        await this.flatOrVillaTextBox.fill(data.flatOrVilla);
-        await expect(this.flatOrVillaTextBox, "Flat / Villa value mismatch while creating sales enquiry").toHaveValue(data.flatOrVilla);
-
-        await this.buildingTextBox.fill(data.building);
-        await expect(this.buildingTextBox, "Building value mismatch while creating sales enquiry").toHaveValue(data.building);
-
-        await this.blockTextBox.fill(data.block);
-        await expect(this.blockTextBox, "Block value mismatch while creating sales enquiry").toHaveValue(data.block);
-
-        await this.roadTextBox.fill(data.road);
-        await expect(this.roadTextBox, "Road value mismatch while creating sales enquiry").toHaveValue(data.road);
-
-        await this.areaTextBox.fill(data.area);
-        await expect(this.areaTextBox, "Area value mismatch while creating sales enquiry").toHaveValue(data.area);
-
-        // Contact details
-        await this.telephoneNumber1TextBox.fill(data.telephoneNumber1);
-        await expect(this.telephoneNumber1TextBox, "Telephone Number 1 value mismatch while creating sales enquiry").toHaveValue(data.telephoneNumber1);
-
-        await this.mobileNumber1TextBox.fill(data.mobileNumber1);
-        await expect(this.mobileNumber1TextBox, "Mobile Number 1 value mismatch while creating sales enquiry").toHaveValue(data.mobileNumber1);
-
-        await this.faxTextBox.fill(data.fax);
-        await expect(this.faxTextBox, "Fax value mismatch while creating sales enquiry").toHaveValue(data.fax);
-
-        await this.telephoneNumber2TextBox.fill(data.telephoneNumber2);
-        await expect(this.telephoneNumber2TextBox, "Telephone Number 2 value mismatch while creating sales enquiry").toHaveValue(data.telephoneNumber2);
-
-        await this.mobileNumber2TextBox.fill(data.mobileNumber2);
-        await expect(this.mobileNumber2TextBox, "Mobile Number 2 value mismatch while creating sales enquiry").toHaveValue(data.mobileNumber2);
-
-        await this.email1.fill(data.email1);
-        await expect(this.email1, "Email 1 value mismatch while creating sales enquiry").toHaveValue(data.email1);
-
-        await this.email2.fill(data.email2);
-        await expect(this.email2, "Email 2 value mismatch while creating sales enquiry").toHaveValue(data.email2);
-
-        await this.websiteTextBox.fill(data.website);
-        await expect(this.websiteTextBox, "Website value mismatch while creating sales enquiry").toHaveValue(data.website);
-
-        await this.pOBoxTextBox.fill(data.poBox);
-        await expect(this.pOBoxTextBox, "P.O. Box value mismatch while creating sales enquiry").toHaveValue(data.poBox);
-
-        // Country dropdown
-        await this.countryDropdown.pressSequentially(data.country);
-        await this.countryOption(data.country).click();
-
-        // State dropdown
-        await this.stateDropdown.pressSequentially(data.state);
-        await this.stateOption(data.state).click();
-
-        // City dropdown
-        await this.cityDropdown.pressSequentially(data.city);
-        await this.cityOption(data.city).click();
+        await this.enterAddress(data);
 
         // Project details
         await this.projectNameTextBox.fill(data.projectName);
@@ -305,6 +251,63 @@ export class SalesEnquiryPage extends BasePage {
 
         // Final submit
         await expect(this.enquiryButton('Create Enquiry'), "Create Enquiry button is not visible").toBeVisible();
+    }
+
+    async enterAddress(data: SalesEnquiryData) {
+        await this.flatOrVillaTextBox.fill(data.flatOrVilla);
+        await expect(this.flatOrVillaTextBox, "Flat / Villa value mismatch while creating sales enquiry").toHaveValue(data.flatOrVilla);
+
+        await this.buildingTextBox.fill(data.building);
+        await expect(this.buildingTextBox, "Building value mismatch while creating sales enquiry").toHaveValue(data.building);
+
+        await this.blockTextBox.fill(data.block);
+        await expect(this.blockTextBox, "Block value mismatch while creating sales enquiry").toHaveValue(data.block);
+
+        await this.roadTextBox.fill(data.road);
+        await expect(this.roadTextBox, "Road value mismatch while creating sales enquiry").toHaveValue(data.road);
+
+        await this.areaTextBox.fill(data.area);
+        await expect(this.areaTextBox, "Area value mismatch while creating sales enquiry").toHaveValue(data.area);
+
+        // Contact details
+        await this.telephoneNumber1TextBox.fill(data.telephoneNumber1);
+        await expect(this.telephoneNumber1TextBox, "Telephone Number 1 value mismatch while creating sales enquiry").toHaveValue(data.telephoneNumber1);
+
+        await this.mobileNumber1TextBox.fill(data.mobileNumber1);
+        await expect(this.mobileNumber1TextBox, "Mobile Number 1 value mismatch while creating sales enquiry").toHaveValue(data.mobileNumber1);
+
+        await this.faxTextBox.fill(data.fax);
+        await expect(this.faxTextBox, "Fax value mismatch while creating sales enquiry").toHaveValue(data.fax);
+
+        await this.telephoneNumber2TextBox.fill(data.telephoneNumber2);
+        await expect(this.telephoneNumber2TextBox, "Telephone Number 2 value mismatch while creating sales enquiry").toHaveValue(data.telephoneNumber2);
+
+        await this.mobileNumber2TextBox.fill(data.mobileNumber2);
+        await expect(this.mobileNumber2TextBox, "Mobile Number 2 value mismatch while creating sales enquiry").toHaveValue(data.mobileNumber2);
+
+        await this.email1.fill(data.email1);
+        await expect(this.email1, "Email 1 value mismatch while creating sales enquiry").toHaveValue(data.email1);
+
+        await this.email2.fill(data.email2);
+        await expect(this.email2, "Email 2 value mismatch while creating sales enquiry").toHaveValue(data.email2);
+
+        await this.websiteTextBox.fill(data.website);
+        await expect(this.websiteTextBox, "Website value mismatch while creating sales enquiry").toHaveValue(data.website);
+
+        await this.pOBoxTextBox.fill(data.poBox);
+        await expect(this.pOBoxTextBox, "P.O. Box value mismatch while creating sales enquiry").toHaveValue(data.poBox);
+
+        // Country dropdown
+        await this.countryDropdown.pressSequentially(data.country);
+        await this.countryOption(data.country).click();
+
+        // State dropdown
+        await this.stateDropdown.pressSequentially(data.state);
+        await this.stateOption(data.state).click();
+
+        // City dropdown
+        await this.cityDropdown.pressSequentially(data.city);
+        await this.cityOption(data.city).click();
     }
     @step()
     async validateCreateSalesEnquiryAPI(statusCode: number, enquiryType: string) {

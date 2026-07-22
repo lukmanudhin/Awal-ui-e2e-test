@@ -30,6 +30,10 @@ test.describe('Create Sales Enquiry', () => {
         await expect(salesEnquiryPage.createSalesEnquiryTitle, "Create Sales Enquiry title does not match").toHaveText('Create Sales Enquiry');
         await salesEnquiryPage.enterCustomerName(createEnquiryData);
         await salesEnquiryPage.createSalesEnquiry(createEnquiryData);
+        await salesEnquiryPage.goToTab('Shipping Address');
+        await salesEnquiryPage.enterAddress(createEnquiryData);
+        await salesEnquiryPage.goToTab('Billing Address');
+        await salesEnquiryPage.enterAddress(createEnquiryData);
         extId = await salesEnquiryPage.validateCreateSalesEnquiryAPI(201, "Create Enquiry");
         await expect(productsPage.successMessage('Sales enquiry upserted successfully'), "Sales enquiry success message does not match").toHaveText('Sales enquiry upserted successfully');
         console.log(`Sales enquiry created successfully for customer: ${createEnquiryData.customerName}`);
