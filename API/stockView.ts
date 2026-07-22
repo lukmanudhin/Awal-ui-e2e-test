@@ -132,165 +132,124 @@ export class StockViewAPI {
         }
     }
 
-    // async getContractPeriod(accessToken: string, extId: string) {
-    //     const response = await this.request.get(`${PROCUREMENT_API_BASE}/contractQuotePrices/getContractQuoteById?extId=fea26043-2f3c-4212-8497-72e69fe02be6`, {
-    //         headers: {
-    //             'Authorization': `Bearer ${accessToken}`
-    //         }
-    //     });
-    //     expect(response.status(), `Failed to get contract period through API, status code: ${response.status()}`).toBe(200);
-    //     const responseBody = await response.json();
-    //     console.log(responseBody.result.data[0].contractPeriod);
-    //     return responseBody.result.data[0].contractPeriod;
-    // }
-
-
-    async getMaterialWithValidContract(accessToken: string, extId: string): Promise<string | null> {
-        // const context = await request.newContext();
-        const currentDate = new Date();
-
-        const response = await this.request.get(`${PROCUREMENT_API_BASE}/contractQuotePrices/getContractQuoteById`, {
-            params: { extId: extId },
+    // Fetches every out-of-stock material (filtered by subStore, e.g. 'RawMaterials') that also
+    // has an Active (non-expired) contract in Contract/Quote Management, then returns the one
+    // with the longest materialName.
+    //
+    // Note: contractQuotePrices/getContractQuoteById expects the Contract/Quote Management
+    // record's own extId, NOT the material's stockView extId — passing the stockView extId 404s
+    // for every material. getAllContractQuote is a list endpoint that already returns
+    // materialName + expiryStatus per contract record, so materials are cross-referenced by name
+    // instead of probing getContractQuoteById per material.
+    async getOutOfStockMaterialWithActiveContract(accessToken: string, subStore: string): Promise<{ materialName: string; extId: string; contractExtId: string; vendorName: string } | null> {
+        const stockResponse = await this.request.get(`${PROCUREMENT_API_BASE}/stockView/getAllStockView?PageNumber=1&PageSize=200&subStore=${subStore}&materialStatus=OutOfStock`, {
             headers: {
-                'Authorization': `Bearer ${accessToken}`,
-                'x-auth-token': accessToken,
-                'Accept': 'application/json'
+                'Authorization': `Bearer ${accessToken}`
             }
         });
+        expect(stockResponse.status(), `Failed to get Out of Stock material through API, status code: ${stockResponse.status()}`).toBe(200);
+        const stockBody = await stockResponse.json();
+        const materials = stockBody?.result?.data;
 
-        // If material has no contract data, API returns 404 — treat as "no valid contract", not a failure
-        if (response.status() === 404) {
+        if (!Array.isArray(materials) || materials.length === 0) {
+            throw new Error('Target material data array is missing or empty.');
+        }
+
+        const contractResponse = await this.request.get(`${PROCUREMENT_API_BASE}/contractQuotePrices/getAllContractQuote?PageNumber=1&PageSize=200&Search=&Filter=`, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            }
+        });
+        expect(contractResponse.status(), `Failed to get contract quote list through API, status code: ${contractResponse.status()}`).toBe(200);
+        const contractBody = await contractResponse.json();
+        const contracts = contractBody?.result?.data;
+
+        if (!Array.isArray(contracts)) {
+            throw new Error('Contract quote data array is missing.');
+        }
+
+        const activeContractByMaterialName = new Map<string, { extId: string; vendorName: string }>();
+        for (const contract of contracts) {
+            if (contract.expiryStatus === 'Active') {
+                activeContractByMaterialName.set(contract.materialName, { extId: contract.extId, vendorName: contract.vendorName });
+            }
+        }
+
+        const outOfStockRawMaterialsInContract = materials
+            .filter((material: any) => activeContractByMaterialName.has(material.materialName))
+            .map((material: any) => {
+                const contract = activeContractByMaterialName.get(material.materialName)!;
+                return {
+                    materialName: material.materialName as string,
+                    extId: material.extId as string,
+                    contractExtId: contract.extId,
+                    vendorName: contract.vendorName
+                };
+            });
+
+        if (outOfStockRawMaterialsInContract.length === 0) {
+            // No out-of-stock material in this subStore currently has an active contract
             return null;
         }
 
-        expect(response.status(), `Unexpected status while fetching contract for extId ${extId}: ${response.status()}`).toBe(200);
+        // Pick the material with the longest name, matching this file's other selection helpers
+        const longest = outOfStockRawMaterialsInContract.reduce((longest, current) =>
+            current.materialName.length > longest.materialName.length ? current : longest
+        );
 
-        const data = await response.json();
-
-        if (data.success && data.result) {
-            const { materialDetails, vendorDetails } = data.result;
-
-            const hasValidContract = vendorDetails.some((vendor: any) => {
-                const endDate = new Date(vendor.contractEndDate);
-                return endDate > currentDate;
-            });
-
-            if (hasValidContract) {
-                return materialDetails.materialName;
-            }
-        }
-
-        return null;
+        return longest;
     }
 
-
-    async getOutOfStockMaterialWithValidContract(accessToken: string, subStore: string): Promise<{ materialName: string; extId: string } | null> {
-        const response = await this.request.get(`${PROCUREMENT_API_BASE}/stockView/getAllStockView?PageNumber=1&PageSize=10&subStore=${subStore}&materialStatus=OutOfStock`, {
+    // Fetches every out-of-stock material (filtered by subStore, e.g. 'RawMaterials') that has no
+    // contract record at all in Contract/Quote Management, then returns the one with the longest
+    // materialName. Mirrors getOutOfStockMaterialWithActiveContract but for the opposite case.
+    async getOutOfStockMaterialWithoutContract(accessToken: string, subStore: string): Promise<{ materialName: string; extId: string } | null> {
+        const stockResponse = await this.request.get(`${PROCUREMENT_API_BASE}/stockView/getAllStockView?PageNumber=1&PageSize=200&subStore=${subStore}&materialStatus=OutOfStock`, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`
             }
         });
-
-        expect(response.status(), `Failed to get Out of Stock material through API, status code: ${response.status()}`).toBe(200);
-        const responseBody = await response.json();
-
-        const materials = responseBody?.result?.data;
+        expect(stockResponse.status(), `Failed to get Out of Stock material through API, status code: ${stockResponse.status()}`).toBe(200);
+        const stockBody = await stockResponse.json();
+        const materials = stockBody?.result?.data;
 
         if (!Array.isArray(materials) || materials.length === 0) {
             throw new Error('Target material data array is missing or empty.');
         }
 
-        // Sort materials by materialName length in descending order (largest first)
-        const sortedMaterials = [...materials].sort((a, b) => {
-            const nameA = a.materialName || '';
-            const nameB = b.materialName || '';
-            return nameB.length - nameA.length;
-        });
-
-        // Iterate through sorted materials, checking each for a valid contract
-        for (const material of sortedMaterials) {
-            const validMaterialName = await this.getMaterialWithValidContract(accessToken, material.extId);
-
-            if (validMaterialName) {
-                return {
-                    materialName: validMaterialName,
-                    extId: material.extId
-                };
-            }
-        }
-
-        // No material in the out-of-stock list has a valid contract
-        return null;
-    }
-
-    async getOutOfStockMaterialWithValidContract2(accessToken: string, subStore: string): Promise<{ materialName: string; extId: string } | null> {
-        const response = await this.request.get(`${PROCUREMENT_API_BASE}/stockView/getAllStockView?PageNumber=1&PageSize=10&subStore=${subStore}&materialStatus=OutOfStock`, {
+        const contractResponse = await this.request.get(`${PROCUREMENT_API_BASE}/contractQuotePrices/getAllContractQuote?PageNumber=1&PageSize=200&Search=&Filter=`, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`
             }
         });
+        expect(contractResponse.status(), `Failed to get contract quote list through API, status code: ${contractResponse.status()}`).toBe(200);
+        const contractBody = await contractResponse.json();
+        const contracts = contractBody?.result?.data;
 
-        expect(response.status(), `Failed to get Out of Stock material through API, status code: ${response.status()}`).toBe(200);
-        const responseBody = await response.json();
-
-        const materials = responseBody?.result?.data;
-
-        if (!Array.isArray(materials) || materials.length === 0) {
-            throw new Error('Target material data array is missing or empty.');
+        if (!Array.isArray(contracts)) {
+            throw new Error('Contract quote data array is missing.');
         }
 
-        // Sort materials by materialName length in descending order (largest first)
-        const sortedMaterials = [...materials].sort((a, b) => {
-            const nameA = a.materialName || '';
-            const nameB = b.materialName || '';
-            return nameB.length - nameA.length;
-        });
+        // Any contract record at all (Active or Expired) counts as "in contract" for this check
+        const materialNamesInContract = new Set<string>(contracts.map((contract: any) => contract.materialName));
 
-        // Iterate through sorted materials, checking each extId for a valid contract
-        for (const material of sortedMaterials) {
-            const contractResponse = await this.request.get(`${PROCUREMENT_API_BASE}/contractQuotePrices/getContractQuoteById`, {
-                params: { extId: material.extId },
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`,
-                    'x-auth-token': accessToken,
-                    'Accept': 'application/json'
-                }
-            });
+        const outOfStockRawMaterialsWithoutContract = materials
+            .filter((material: any) => !materialNamesInContract.has(material.materialName))
+            .map((material: any) => ({
+                materialName: material.materialName as string,
+                extId: material.extId as string
+            }));
 
-            // If this material has no contract record at all, skip to the next extId
-            if (contractResponse.status() === 404) {
-                console.log(`No contract found for extId ${material.extId}, checking next material...`);
-                continue;
-            }
-
-            expect(contractResponse.status(), `Unexpected status while fetching contract for extId ${material.extId}: ${contractResponse.status()}`).toBe(200);
-
-            const contractData = await contractResponse.json();
-
-            if (contractData.success && contractData.result) {
-                const { materialDetails, vendorDetails } = contractData.result;
-                const currentDate = new Date();
-
-                const hasValidContract = vendorDetails.some((vendor: any) => {
-                    const endDate = new Date(vendor.contractEndDate);
-                    return endDate > currentDate;
-                });
-
-                if (hasValidContract) {
-                    // Found a material with a valid contract — stop and return it
-                    return {
-                        materialName: materialDetails.materialName,
-                        extId: material.extId
-                    };
-                }
-            }
-
-            // Contract exists but none of the vendors have a valid (non-expired) end date — skip to next
-            console.log(`No valid contract for extId ${material.extId}, checking next material...`);
+        if (outOfStockRawMaterialsWithoutContract.length === 0) {
+            // Every out-of-stock material in this subStore has some contract record
+            return null;
         }
 
-        // Exhausted all materials — none had a valid contract
-        console.log('No out-of-stock material with a valid contract was found.');
-        return null;
+        // Pick the material with the longest name, matching this file's other selection helpers
+        const longest = outOfStockRawMaterialsWithoutContract.reduce((longest, current) =>
+            current.materialName.length > longest.materialName.length ? current : longest
+        );
+
+        return longest;
     }
 }

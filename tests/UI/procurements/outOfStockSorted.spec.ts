@@ -33,7 +33,7 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
         await materialIndentRequestPage.search(MIRDetails.material);
         const currentStock = await materialIndentRequestPage.getMaterialCurrentQuatity();
         MIRDetails.quantity = `${currentStock === 0 ? currentStock + 1 : currentStock}`;
-        
+
         await modules.goToModule({ module: 'Store', subModule: 'Material Indent Request' });
 
         await materialIndentRequestPage.createMaterialIndentRequest(MIRDetails);
@@ -52,7 +52,7 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
         await expect(materialIndentRequestPage.priorityLevel, "Priority level text does not match").toHaveText(MIRDetails.priority);
         await expect(materialIndentRequestPage.mirStatus, "MIR status text does not match").toHaveText('New Request');
         await materialIndentRequestPage.clickViewIcon();
-        await ppjoPage.validateSampleDetails(materialIndentRequestId, 'PJO483', MIRDetails.priority, 'Vigneshwaran');
+        await ppjoPage.validateSampleDetails(materialIndentRequestId, MIRDetails.pjoNumber, MIRDetails.priority, 'Vigneshwaran');
         await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
         await materialIndentRequestPage.managerApprovesMaterialRequestAndValidateAPI(200);
 
@@ -70,7 +70,7 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
         await materialIndentRequestPage.search(materialIndentRequestId);
         await expect(materialIndentRequestPage.status, "Status text does not match").toHaveText('New Request');
         await materialIndentRequestPage.clickViewIcon();
-        await ppjoPage.validateSampleDetails(materialIndentRequestId, 'PJO483', materialIndentRequestId, 'Vigneshwaran');
+        await ppjoPage.validateSampleDetails(materialIndentRequestId, MIRDetails.pjoNumber, materialIndentRequestId, 'Vigneshwaran');
         await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
         await expect(materialIndentRequestPage.stockStatus, "Stock status text does not match").toHaveText('Out Of Stock');
         await expect(materialIndentRequestPage.issuingQuantity, 'Issuing quantity field is not disabled for Out Of Stock materials').toBeDisabled();
@@ -99,8 +99,8 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
         await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
 
         // nested sub module name improper
-        await modules.goToModule({ module: 'Procurement', subModule: 'PR to PO', nestedSubModule: 'PR to PO (Contract)' });
-        const inContract =await procurementPage.searchPR(prId);
+        await modules.goToModule({ module: 'Procurement', subModule: 'PR to PO', nestedSubModule: 'PR to Po (Contract)' });
+        const inContract = await procurementPage.searchPR(prId);
         await procurementPage.clickViewIcon();
         await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
 
@@ -127,7 +127,7 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
         await procurementPage.search(poNumber);
         await expect(materialIndentRequestPage.materialStatus, 'PO status does not match').toHaveText('Active');
 
-        await modules.goToModule({ module: 'Store', subModule: 'Material Management', nestedSubModule: 'GRN Entry'});
+        await modules.goToModule({ module: 'Store', subModule: 'Material Management', nestedSubModule: 'GRN Entry' });
         await grnEntryPage.createGRNEntry('Lopez and Mccarthy Inc', poNumber, '45', 'Create GRN Remarks', 'Delivery Note', '98765');
         await expect(grnEntryPage.successMessage('GRN created successfully'), 'GRN created successfully message does not match').toHaveText('GRN created successfully');
         const grnNumber = await grnEntryPage.getGRNNumber();
@@ -141,7 +141,7 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
         await expect(grnEntryPage.successMessage('GRN QC created successfully'), 'GRN QC created successfully message does not match').toContainText('GRN QC created successfully');
         await expect(grnEntryPage.qcCheckButton, 'QC check button is not visible').toBeVisible();
 
-        await modules.goToModule({ module: 'Store', subModule: 'Material Management', nestedSubModule: 'Put Away'});
+        await modules.goToModule({ module: 'Store', subModule: 'Material Management', nestedSubModule: 'Put Away' });
         await putAwayPage.search(grnNumber);
         await expect(putAwayPage.qcStatus, 'QC status does not match').toHaveText('Completed');
         await putAwayPage.clickStart();
