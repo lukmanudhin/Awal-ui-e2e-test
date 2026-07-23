@@ -80,6 +80,7 @@ export class MaterialIndentRequestPage extends BasePage {
     @step()
     async validateMaterialInformationTable(mirDetails: CreateMIRData) {
         await this.page.waitForLoadState('domcontentloaded');
+        await this.page.waitForTimeout(2000);
         await expect(this.page.locator('//tbody/tr'), `Table row does not contain material: ${mirDetails.material}`).toContainText(mirDetails.material);
         const tableRow = await this.page.locator('//tbody/tr').innerText();
         expect(tableRow, "Table row does not contain quantity").toContain(mirDetails.quantity);

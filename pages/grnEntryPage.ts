@@ -20,7 +20,7 @@ export class GRNEntryPage extends BasePage {
     constructor(public readonly page: Page) {
         super(page);
         this.createGRNButton = this.page.getByRole('button', { name: 'Create GRN plus icon' });
-        this.currentQuantityTxtBx = this.page.locator('#currentQuantity-242');
+        this.currentQuantityTxtBx = this.page.locator('//input[contains(@id,"currentQuantity")]');
         this.remarksTxtBx = this.page.getByRole('textbox', { name: 'Enter remarks' });
         this.deliveryNoteTxtBx = this.page.getByRole('textbox', { name: 'Delivery Note Number' });
         this.invoiceNumberTxtBx = this.page.getByRole('textbox', { name: 'Invoice Number' });
@@ -75,8 +75,6 @@ export class GRNEntryPage extends BasePage {
         await this.selectOptionFromDropdown('Functional Test', functionalTest);
         const fileName = 'Test_Document.pdf';
         await this.uploadFile('test_Documents', fileName);
-        await this.uploadFile('test_Documents', fileName, 1);
-        await this.uploadFile('test_Documents', fileName, 2);
         await this.submitButton.click();
     }
 }

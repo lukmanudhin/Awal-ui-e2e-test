@@ -7,6 +7,8 @@ export type CreateMIRData = {
   material: string;
   quantity: string;
   remarks: string;
+  vendor: string;
+  orderType: string;
 };
 
 export const getMIRDetails = (): CreateMIRData => ({
@@ -16,4 +18,6 @@ export const getMIRDetails = (): CreateMIRData => ({
   material: 'WIRE - SINGLE STRAND 2 CORE',
   quantity: '50',
   remarks: 'Add Material Test Remarks',
+  vendor: '',
+  orderType: 'Local - Product / Materials',
 });

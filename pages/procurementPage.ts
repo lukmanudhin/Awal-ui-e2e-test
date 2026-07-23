@@ -10,7 +10,7 @@ export class ProcurementPage extends BasePage {
     private readonly processBtn: Locator;
     private readonly confirmButton: Locator;
     private readonly yesButton: Locator;
-    private readonly status: Locator;
+    public readonly status: Locator;
     private readonly createVendorQuotationButton: Locator;
     private readonly assignVendorBtn: Locator;
     private readonly createGroupBtn: Locator;
@@ -68,6 +68,7 @@ export class ProcurementPage extends BasePage {
     }
 
     async getPONumber() {
+        await this.page.waitForTimeout(2000);
         const poNumber = await this.page.locator('//td[@data-app-table-col="2"]//div').first().innerText();
         return poNumber;
     }
