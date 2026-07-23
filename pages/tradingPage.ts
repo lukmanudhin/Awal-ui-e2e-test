@@ -8,6 +8,7 @@ export class TradingPage extends BasePage {
     private readonly signInButton: Locator;
     private readonly deleteButton: Locator;
     private readonly deleteConfirmationButton: Locator;
+    private readonly leadCreationButton: Locator;
     private readonly attachedDocument: (fileName: string) => Locator;
     constructor(public readonly page: Page) {
         super(page);
@@ -17,6 +18,7 @@ export class TradingPage extends BasePage {
         this.attachedDocument = (fileName: string) => this.page.getByText(fileName, { exact: true }).first();
         this.deleteButton = this.page.locator('//img[contains(@src,"delete.svg")]').first();
         this.deleteConfirmationButton = this.page.getByRole('button', { name: 'Delete' });
+        this.leadCreationButton = this.page.getByRole('button', { name: 'Lead Plus' });
     }
     @step()
     async login(emailId: string, password: string) {
@@ -33,7 +35,7 @@ export class TradingPage extends BasePage {
 
     @step()
     async clickCreateLeadButton() {
-        await this.page.getByRole('button', { name: 'Lead Plus' }).click();
+        await this.leadCreationButton.click();
         await this.page.waitForLoadState('domcontentloaded');
     }
 
@@ -56,7 +58,7 @@ export class TradingPage extends BasePage {
     }
 
     async clickTrading() {
-        await this.page.getByRole('button', { name: 'Trading' }).click();
+        await this.page.getByRole('button', { name: 'Trading' }).click({ force: true });
         await this.page.waitForLoadState('domcontentloaded');
     }
 
