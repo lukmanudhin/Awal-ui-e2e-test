@@ -3,7 +3,7 @@ import { test } from "../../../fixtures/baseFixtures";
 import { ENV } from "../../../utils/ENV";
 import { getSalesReturnData, getBankPaymentVoucherData } from "../../../testData/salesReturnData";
 
-test.describe('Sales Return', () => {
+test.describe('Sales Return E2E Test', () => {
     let accessToken: string;
     let salesReturnId: string;
     test.setTimeout(190000);
@@ -45,7 +45,7 @@ test.describe('Sales Return', () => {
         await salesReturnPage.searchByLeadNumber(leadNumber);
         let salesReturnNumber = await salesReturnPage.getSalesReturnNumber();
 
-        await salesReturnPage.search(salesReturnNumber);
+        await salesReturnPage.search(salesReturnNumber);        
         await expect(salesReturnPage.status, "Sales return status does not match").toHaveText('Pending From QC');
         await salesReturnPage.clickStartQCButton();
         await salesReturnPage.clickViewIcon();
