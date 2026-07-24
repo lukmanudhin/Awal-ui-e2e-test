@@ -98,8 +98,8 @@ export class BasePage {
     // }
 
     async search(name: string) {
-        // await this.page.waitForTimeout(500);
-        // await this.searchBox.fill(name);
+        await this.page.waitForTimeout(500);
+        await this.searchBox.fill(name);
         await expect.poll(
             async () => {
                 const count = await this.page.locator('//tr').count();

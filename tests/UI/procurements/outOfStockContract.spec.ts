@@ -30,7 +30,7 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
         await salesEnquiryAPI.dispose();
     });
 
-    test('Verify Material Indent Request is successfully created, approved by manager, and material is issued', async ({ putAwayPage, grnEntryPage, procurementPage, prRequestPage, modules, materialIndentRequestPage, ppjoPage }) => {
+    test('Verify Material Indent Request is successfully created, approved by manager, and material is issued', async ({ page, putAwayPage, grnEntryPage, procurementPage, prRequestPage, modules, materialIndentRequestPage, ppjoPage }) => {
         await modules.goToModule({ module: 'Store', subModule: 'Material Management', nestedSubModule: 'Stock View' });
         await materialIndentRequestPage.search(MIRDetails.material);
         const currentStock = await materialIndentRequestPage.getMaterialCurrentQuatity();
@@ -85,7 +85,7 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
         await modules.goToModule({ subModule: 'PR Request Manager' });
         const prId = await prRequestPage.searchPR(MIRDetails.material);
         console.log(`PR ID: ${prId}`);
-        await prRequestPage.searchPR(prId);
+        await prRequestPage.search(prId);
         await expect(prRequestPage.stockStatus, 'Stock status does not match').toHaveText('Out Of Stock');
         await expect(prRequestPage.prStatus, "PR status text does not match").toHaveText('PO Pending');
         await prRequestPage.clickViewIcon();
@@ -100,9 +100,6 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
         await prRequestPage.clickViewIcon();
         await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
 
-        // Material is guaranteed (via getOutOfStockMaterialWithValidContract2) to already have a
-        // valid contract, so no fallback to the non-contract "PR to PO" screen / vendor quotation
-        // creation is needed here.
         await modules.goToModule({ module: 'Procurement', subModule: 'PR to PO', nestedSubModule: 'PR to Po (Contract)' });
         await procurementPage.search(prId);
         await expect(procurementPage.status, 'Stock status does not match').toHaveText('New Request');
@@ -112,12 +109,10 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
         await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
 
         await modules.goToModule({ nestedSubModule: 'PR to Po (Contract)' });
-        // await procurementPage.searchPR(prId);
-        // await procurementPage.clickViewIcon();
-        await procurementPage.searchPR(prId);
+        await procurementPage.search(prId);
         await procurementPage.createPO(MIRDetails.orderType);
         await procurementPage.selectVendor(MIRDetails.vendor);
-        // await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
+        await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
         await procurementPage.confirmPurchaseOrder();
         await procurementPage.createPOAndValidateAPI(201);
         await expect(procurementPage.successMessage('Purchase order created successfully'), 'Purchase order created successfully success message does not match').toHaveText('Purchase order created successfully')
