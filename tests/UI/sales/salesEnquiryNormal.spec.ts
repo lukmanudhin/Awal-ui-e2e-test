@@ -364,9 +364,6 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Normal)', () => 
         await invoiceRequestPage.clickViewIcon();
         await invoiceRequestPage.validateEnquiryDetails(createEnquiryData);
         await invoiceRequestPage.validateBOQTableDetails(addBOQData);
-
-        // commented because of a bug
-        //no approve button visible
         await invoiceRequestPage.approveInvoiceRequestAndValidateAPI(200);
         await expect(invoiceRequestPage.successMessage('Data created successfully'), "Invoice approval success message does not match").toContainText('Data created successfully');
         await modules.goToModule({ nestedSubModule: 'Invoice Register' });
