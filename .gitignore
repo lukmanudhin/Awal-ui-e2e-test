@@ -9,6 +9,7 @@ blob-report/
 # Allure
 allure-results/
 allure-report/
+allure-report-single/
 
 # Environment files
 env/
