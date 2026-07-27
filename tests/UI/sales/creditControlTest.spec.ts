@@ -65,8 +65,7 @@ test.describe('Credit Control Test E2E Flow', () => {
         await creditControlPage.validateCreditControlDetails(creditControlData);
         await creditControlPage.goToTab('Sales Department Assessment');
 
-        // commented because of a bug
-        // await creditControlPage.validateSalesAssesmentDetails(salesAssesmentData);
+        await creditControlPage.validateSalesAssesmentDetails(salesAssesmentData);
 
         await creditControlPage.goToTab('Finance Department Assessment');
         await creditControlPage.submitFinanceDepartmentAssesment(financeAssesmentData);
@@ -81,8 +80,7 @@ test.describe('Credit Control Test E2E Flow', () => {
         await creditControlPage.validateCreditControlDetails(creditControlData);
         await creditControlPage.goToTab('Sales Department Assessment');
 
-        // commented because of a bug
-        // await creditControlPage.validateSalesAssesmentDetails(salesAssesmentData);
+        await creditControlPage.validateSalesAssesmentDetails(salesAssesmentData);
 
         await creditControlPage.goToTab('Finance Department Assessment');
         await creditControlPage.validateFinanceAssesmentDetails(financeAssesmentData);

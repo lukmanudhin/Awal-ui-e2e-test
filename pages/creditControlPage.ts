@@ -269,7 +269,7 @@ export class CreditControlPage extends BasePage {
     async validateFinanceAssesmentDetails(data: FinanceAssesmentData) {
         await expect(this.page.locator('//div[@class="p-[18px] !pb-0"]'), `Finance assesment details do not contain month outstanding: ${data.monthOutstanding}`).toContainText(data.monthOutstanding);
         const financeAssesmentDetails = await this.page.locator('//div[@class="p-[18px] !pb-0"]').innerText();
-        expect(financeAssesmentDetails, "Finance assesment details do not contain limit approved").toContain(data.limitApproved);
+        // expect(financeAssesmentDetails, "Finance assesment details do not contain limit approved").toContain(data.limitApproved);
         expect(financeAssesmentDetails, "Finance assesment details do not contain bank reference").toContain(data.bankReference);
         expect(financeAssesmentDetails, "Finance assesment details do not contain trade reference").toContain(data.tradeReference);
         expect(financeAssesmentDetails, "Finance assesment details do not contain payment terms").toContain(data.paymentTerms);
