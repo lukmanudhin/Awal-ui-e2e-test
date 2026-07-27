@@ -29,6 +29,7 @@ export class SalesReturnPage extends BasePage {
     private readonly approveButton: Locator;
     private readonly confirmYesButton: Locator;
     public readonly bankPaymentStatus: Locator;
+    private readonly closeRemarks: Locator;
 
     constructor(public readonly page: Page) {
         super(page);
@@ -58,6 +59,7 @@ export class SalesReturnPage extends BasePage {
         this.approveButton = this.page.getByRole('button', { name: 'Approve', exact: true });
         this.confirmYesButton = this.page.getByRole('button', { name: 'Yes' });
         this.bankPaymentStatus = this.page.locator('//td[@data-app-table-col="6"]//span').first();
+        this.closeRemarks = this.page.getByRole('textbox', { name: 'Final Remarks' });
     }
 
     @step()
@@ -144,6 +146,9 @@ export class SalesReturnPage extends BasePage {
     async fillCloseCaseDetails(moveReceivedProductTo: string) {
         await this.selectOptionFromDropdown('Move the Received Product to', moveReceivedProductTo);
         await this.customerConfirmedRefundCheckbox.check();
+        const fileName = 'Test_Document.pdf';
+        await this.uploadFile('test_Documents', fileName);
+        await this.closeRemarks.fill('Close Sales Return');
     }
 
     async closeCaseAndValidateAPI(statusCode: number) {
