@@ -2,16 +2,22 @@ import { expect } from "@playwright/test";
 import { test } from "../../../fixtures/baseFixtures";
 import { ENV } from "../../../utils/ENV";
 import { CreditControlData, FinanceAssesmentData, getCreditControlData, getFinanceAssesmentData, getSalesAssesmentData, SalesAssesmentData } from "../../../testData/creditControlData";
+import { SalesOrderAPI } from "../../../API/salesOrderAPI";
 
 test.describe('Credit Control Test E2E Flow', () => {
     let creditControlData: CreditControlData;
     let salesAssesmentData: SalesAssesmentData;
     let financeAssesmentData: FinanceAssesmentData
     test.setTimeout(260000);
-    test.beforeEach('Login', async ({ page, loginPage, homePage, salesEnquiryPage }) => {
+    test.beforeEach('Login', async ({ page, loginPage, homePage, salesEnquiryPage, salesEnquiryAPI }) => {
         creditControlData = getCreditControlData();
         salesAssesmentData = getSalesAssesmentData();
         financeAssesmentData = getFinanceAssesmentData();
+        const employeeName = await salesEnquiryAPI.getRandomEmployeeName();
+        salesAssesmentData.recommendedBy = employeeName;
+        salesAssesmentData.accountExecutive = employeeName;
+        salesAssesmentData.salesManager = employeeName;
+
         await test.step('Login', async () => {
             await loginPage.launchAwalWebsite();
             await loginPage.login(`${ENV.EMAIL_ID}`, `${ENV.PASSWORD}`);

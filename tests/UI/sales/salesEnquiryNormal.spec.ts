@@ -40,7 +40,7 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Normal)', () => 
     let salesEnquiryAPI: SalesEnquiryAPI;
 
 
-    test.beforeAll('Setup', async ({ browser }) => {
+    test.beforeAll('Setup', async ({ browser, request }) => {
         context = await browser.newContext();
         page = await context.newPage();
         createEnquiryData = getCreateEnquiryData();
@@ -56,11 +56,11 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Normal)', () => 
         quotationManagerPage = new QuotationManagerPage(page);
         invoiceRequestPage = new InvoiceRequestPage(page);
         salesOrderManagerPage = new SalesOrderManagerPage(page);
+        salesEnquiryAPI = new SalesEnquiryAPI(request);
     });
 
-    test.afterAll('Cleanup: delete created Sales Enquiry', async ({ request }) => {
+    test.afterAll('Cleanup: delete created Sales Enquiry', async () => {
         await page.close();
-        salesEnquiryAPI = new SalesEnquiryAPI(request);
         await salesEnquiryAPI.deleteSalesEnquiryIfCreated(extId);
     });
 
@@ -104,7 +104,8 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Normal)', () => 
         await ppjoPage.requestAutoCAD();
         await ppjoPage.validatePPJOAPI(201, 'Request AutoCAD');
         await expect(ppjoPage.successMessage('Autocad request submitted successfully'), "Request AutoCAD success message does not match").toContainText('Autocad request submitted successfully');
-        await ppjoPage.requestSiteVisit('EMP00287 - Neelamegam Subramani');
+        const siteVisitor = await salesEnquiryAPI.getRandomEmployeeName();
+        await ppjoPage.requestSiteVisit(siteVisitor);
         await ppjoPage.validatePPJOAPI(201, 'Request Site Visit');
         await expect(ppjoPage.successMessage('Site-visit request submitted successfully'), "Request Site Visit success message does not match").toContainText('Site-visit request submitted successfully');
         await ppjoPage.requestProcurement();

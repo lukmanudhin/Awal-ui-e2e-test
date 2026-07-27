@@ -94,9 +94,9 @@ export const getSalesAssesmentData = (): SalesAssesmentData => ({
     creditPeriod: '2',
     paymentTerms: '100 % Advance Full Payment',
     remarks: 'Credit Control E2E Flow Remarks',
-    recommendedBy: 'EMP00287 - Neelamegam Subramani',
-    accountExecutive: 'EMP00287 - Neelamegam Subramani',
-    salesManager: 'EMP00287 - Neelamegam Subramani',
+    recommendedBy: '',
+    accountExecutive: '',
+    salesManager: '',
 });
 
 export const getFinanceAssesmentData = (): FinanceAssesmentData => ({

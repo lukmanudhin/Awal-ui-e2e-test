@@ -11,6 +11,7 @@ test.describe('Create Sales Enquiry', () => {
         tradingData = getTradingData();
         accessToken = await salesEnquiryAPI.getAccessToken(`${ENV.EMAIL_ID}`, `${ENV.PASSWORD}`);
         tradingData.material = await stockViewAPI.getMaterialWithHighStock(accessToken);
+        tradingData.owner = await salesEnquiryAPI.getRandomEmployeeName();
         await test.step('Login', async () => {
             await loginPage.launchAwalWebsite();
             await loginPage.login(`${ENV.EMAIL_ID}`, `${ENV.PASSWORD}`);

@@ -11,7 +11,7 @@ test.describe.serial('Verify Discount Request flow of Sales Enquiry (Request Nor
     let extId: string;
     let createEnquiryData: SalesEnquiryData;
 
-    test.beforeEach('Login, Create Sales Enquiry and create PPJO', async ({ loginPage, homePage, salesEnquiryPage, productsPage, ppjoPage, page }) => {
+    test.beforeEach('Login, Create Sales Enquiry and create PPJO', async ({ loginPage, homePage, salesEnquiryPage, productsPage, ppjoPage, page, salesEnquiryAPI }) => {
         createEnquiryData = getCreateEnquiryData();
         await test.step('Login and open Sales Enquiry module', async () => {
             await loginPage.launchAwalWebsite();
@@ -49,7 +49,8 @@ test.describe.serial('Verify Discount Request flow of Sales Enquiry (Request Nor
             await ppjoPage.requestAutoCAD();
             await ppjoPage.validatePPJOAPI(201, 'Request AutoCAD');
             await expect(ppjoPage.successMessage('Autocad request submitted successfully'), "Request AutoCAD success message does not match").toContainText('Autocad request submitted successfully');
-            await ppjoPage.requestSiteVisit('EMP00287 - Neelamegam Subramani');
+            const siteVisitor = await salesEnquiryAPI.getRandomEmployeeName();
+            await ppjoPage.requestSiteVisit(siteVisitor);
             await ppjoPage.validatePPJOAPI(201, 'Request Site Visit');
             await expect(ppjoPage.successMessage('Site-visit request submitted successfully'), "Request Site Visit success message does not match").toContainText('Site-visit request submitted successfully');
             await ppjoPage.requestProcurement();

@@ -30,7 +30,7 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
         await salesEnquiryAPI.dispose();
     });
 
-    test('Verify Material Indent Request is successfully created, approved by manager, and material is issued', async ({ page, putAwayPage, grnEntryPage, procurementPage, prRequestPage, modules, materialIndentRequestPage, ppjoPage }) => {
+    test('Verify Material Indent Request is successfully created, approved by manager, and material is issued', async ({ salesEnquiryAPI, putAwayPage, grnEntryPage, procurementPage, prRequestPage, modules, materialIndentRequestPage, ppjoPage }) => {
         await modules.goToModule({ module: 'Store', subModule: 'Material Management', nestedSubModule: 'Stock View' });
         await materialIndentRequestPage.search(MIRDetails.material);
         const currentStock = await materialIndentRequestPage.getMaterialCurrentQuatity();
@@ -135,7 +135,8 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
         await grnEntryPage.clickViewIcon();
         await ppjoPage.validateSampleDetails(grnNumber, MIRDetails.vendor, poNumber, 'Not Started');
         await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
-        await grnEntryPage.startQC('Random Quantity', '7', '1', 'EMP00287 - Neelamegam Subramani', 'Pass', 'Pass', 'Pass');
+        const employeeName = await salesEnquiryAPI.getRandomEmployeeName();
+        await grnEntryPage.startQC('Random Quantity', '7', '1', employeeName, 'Pass', 'Pass', 'Pass');
         await expect(grnEntryPage.successMessage('GRN QC created successfully'), 'GRN QC created successfully message does not match').toContainText('GRN QC created successfully');
         await expect(grnEntryPage.qcCheckButton, 'QC check button is not visible').toBeVisible();
         
