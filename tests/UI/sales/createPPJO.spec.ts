@@ -34,7 +34,7 @@ test.describe('Create PPJO', () => {
         await salesEnquiryAPI.deleteSalesEnquiryIfCreated(extId);
     });
 
-    test('Verify user is able to create PPJO and request estimation', async ({ salesEnquiryPage, ppjoPage, page }) => {
+    test('Verify user is able to create PPJO and request estimation', async ({ salesEnquiryPage, ppjoPage, page, salesEnquiryAPI }) => {
         await salesEnquiryPage.search(createEnquiryData.customerName);
         await expect(salesEnquiryPage.createdSalesEnquiry(createEnquiryData.customerName), `Created sales enquiry is not visible for customer: ${createEnquiryData.customerName}`).toBeVisible();
         await salesEnquiryPage.clickCreatePPJO();
@@ -48,7 +48,8 @@ test.describe('Create PPJO', () => {
         await ppjoPage.requestAutoCAD();
         await ppjoPage.validatePPJOAPI(201, 'Request AutoCAD');
         await expect(ppjoPage.successMessage('Autocad request submitted successfully'), "Request AutoCAD success message does not match").toContainText('Autocad request submitted successfully');
-        await ppjoPage.requestSiteVisit('EMP00287 - Neelamegam Subramani');
+        const siteVisitor = await salesEnquiryAPI.getRandomEmployeeName();
+        await ppjoPage.requestSiteVisit(siteVisitor);
         await ppjoPage.validatePPJOAPI(201, 'Request Site Visit');
         await expect(ppjoPage.successMessage('Site-visit request submitted successfully'), "Request Site Visit success message does not match").toContainText('Site-visit request submitted successfully');
         await ppjoPage.requestProcurement();

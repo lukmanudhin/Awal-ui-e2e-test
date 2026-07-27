@@ -9,7 +9,7 @@ export class SalesEnquiryAPI {
 
     async getAccessToken(email: string, password: string) {
         const response = await this.request.post(
-            `https://user-management-api-dev.colanapps.in/api/v1/auth/login`,
+            `https://user-management-api-${ENV.ENV_API}.colanapps.in/api/v1/auth/login`,
             {
                 data: {
                     usernameOrEmail: `${email}`,
@@ -286,5 +286,27 @@ export class SalesEnquiryAPI {
         expect(deleteAPIResponse.message, 'Delete Sales Enquiry API Message Mismatch').toBe('Data deleted successfully');
         console.log('----------------------Delete Sales Enquiry API Response---------------------');
         console.log('API Response:', deleteAPIResponse);
+    }
+    
+    async getRandomEmployeeName() {
+        const accessToken = await this.getAccessToken(`${ENV.EMAIL_ID}`, `${ENV.PASSWORD}`);
+        const response = await this.request.get(
+            `https://core-api-${ENV.ENV_API}.colanapps.in/api/v1/employeeMaster/getAllEmployeeSearch?search=`,
+            {
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`,
+                    'x-auth-token': accessToken,
+                }
+            }
+        );
+        expect(response.status(), `Failed to get employee list through API, status code: ${response.status()}`).toBe(200);
+        const responseBody = await response.json();
+        const employees = responseBody?.result;
+
+        expect(Array.isArray(employees) && employees.length > 0, 'Employee list is empty or missing in getAllEmployeeSearch response').toBeTruthy();
+
+        const randomEmployee = employees[Math.floor(Math.random() * employees.length)];
+        console.log(`Site Visitor (fetched dynamically via API): ${randomEmployee.empName}`);
+        return randomEmployee.empName as string;
     }
 }
