@@ -243,8 +243,9 @@ export class CostEstimationPage extends BasePage {
     }
     @step()
     async validateCustomerDetails(data: SalesEnquiryData, enquiryId: string) {
-        await expect(this.page.locator('.p-4').first(), `View cost estimation details do not contain enquiry id: ${enquiryId}`).toContainText(enquiryId);
-        const detailsText = await this.page.locator('.p-4').first().innerText();
+        await this.page.waitForTimeout(2000);
+        await expect(this.page.locator('//div[@class="p-[18px] undefined"]').first(), `View cost estimation details do not contain enquiry id: ${enquiryId}`).toContainText(enquiryId);
+        const detailsText = await this.page.locator('//div[@class="p-[18px] undefined"]').first().innerText();
         console.log(`✓ Customer Name displayed: ${enquiryId}`);
 
         // Validate key details are visible
@@ -732,7 +733,7 @@ export class CostEstimationPage extends BasePage {
         await this.editButton.click();
         if (salesEnquiryData.supplyType === 'Local') {
             await expect(this.page.locator('(//td[@colspan="24"])[1]//following-sibling::td[1]'), "Local summary VAT value should be empty or 0.000 before edit").toHaveText(/^(-|0\.000)$/);
-            await this.vatTxtBx.fill(`${VAT}`);
+            await this.selectFromDropdown('Select VAT', VAT);
             await expect(this.page.locator('(//td[@colspan="24"])[1]//following-sibling::td[1]'), "Local summary VAT value was not updated after edit").not.toHaveText(/^(-|0\.000)$/);
             await expect(this.page.locator('(//td[@colspan="24"])[3]//following-sibling::td[1]'), "Local summary VAT value should be empty or 0.000 before edit").toHaveText(/^(-|0\.000)$/);
             await this.withHoldTxtBx.fill(`${withHold}`);
@@ -742,7 +743,7 @@ export class CostEstimationPage extends BasePage {
             await expect(this.page.locator('//td[@data-app-table-col="27"]//div'), "Export summary discount value was not updated after edit").not.toHaveText(/^(-|0\.000)$/);
         } else {
             await expect(this.page.locator('(//td[@colspan="24"])[3]//following-sibling::td[1]'), "Export summary VAT value should be empty or 0.000 before edit").toHaveText(/^(-|0\.000)$/);
-            await this.vatTxtBx.fill(`${VAT}`);
+            await this.selectFromDropdown('Select VAT', VAT);
             await expect(this.page.locator('(//td[@colspan="24"])[3]//following-sibling::td[1]'), "Export summary VAT value was not updated after edit").not.toHaveText(/^(-|0\.000)$/);
             await expect(this.page.locator('//td[@data-app-table-col="29"]//div').first(), "Export summary discount value should be empty or 0.000 before edit").toHaveText(/^(-|0\.000)$/);
             await this.discountTxtBx.fill(`${discount}`);
@@ -761,9 +762,9 @@ export class CostEstimationPage extends BasePage {
     }
     @step()
     async savePriceIndicationSlipAndValidateAPI(statusCode: number) {
-        await this.page.waitForTimeout(5000);
+        await expect(this.saveButton, 'Save button on Price Indication Slip tab did not become enabled').toBeEnabled();
         const responsePromise = this.page.waitForResponse('**/estimation/updateOptionStatusByVerOptId');
-        await this.saveButton.click({ timeout: 2000, force: true });
+        await this.saveButton.click();
         const response = await responsePromise;
         expect(response.status(), `Save Price Indication Slip API status code mismatch. Expected ${statusCode}, received ${response.status()}`).toBe(statusCode);
         console.log('Price Indication Slip saved successfully');
@@ -824,8 +825,8 @@ export class CostEstimationPage extends BasePage {
     }
     @step()
     async validateRequestTableVisible(title: string, requestType: string) {
-        await expect(this.page.locator('(//div[@class="mt-4 bg-white p-4 rounded-md"])[2]'), `Request table does not contain title: ${title}`).toContainText(title);
-        const boqDetails = await this.page.locator('(//div[@class="mt-4 bg-white p-4 rounded-md"])[2]').innerText();
+        await expect(this.page.locator('(//div[@class="p-0 bg-[#fff] rounded-[8px] max-h-[100%] mt-4"])[2]'), `Request table does not contain title: ${title}`).toContainText(title);
+        const boqDetails = await this.page.locator('(//div[@class="p-0 bg-[#fff] rounded-[8px] max-h-[100%] mt-4"])[2]').innerText();
         expect(boqDetails, `BOQ details do not contain request type: ${requestType}`).toContain(requestType);
         expect(boqDetails, "BOQ details do not contain View Attachment").toContain('View Attachment');
     }
