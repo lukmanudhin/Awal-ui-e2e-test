@@ -240,7 +240,7 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Normal)', () => 
         await costEstimationPage.goToTab('Summary');
         await costEstimationPage.validateEnquiryDetailsInSummary(createEnquiryData);
         await costEstimationPage.validateEnquiryDetailsInSummaryTable(addBOQData);
-        await costEstimationPage.editSummary(createEnquiryData, '3', '2', '4');
+        await costEstimationPage.editSummary(createEnquiryData, 'VAT 10% (Sales)', '2', '4');
         await costEstimationPage.validateCalculateSummaryAPI(200);
         await expect(costEstimationPage.successMessage('Summary with incentive saved'), "Summary saved successfully message does not match").toContainText('Summary with incentive saved');
     });

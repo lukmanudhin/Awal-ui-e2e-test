@@ -178,7 +178,7 @@ test.describe.serial('Verify Sales Order Manager rejects the sales order', () =>
 
         await test.step('Summary: Verify that the incentive summary is calculated and saved successfully', async () => {
             await costEstimationPage.goToTab('Summary');
-            await costEstimationPage.editSummary(createEnquiryData, '3', '2', '4');
+            await costEstimationPage.editSummary(createEnquiryData, 'VAT 10% (Sales)', '2', '4');
             await costEstimationPage.validateCalculateSummaryAPI(200);
             await expect(costEstimationPage.successMessage('Summary with incentive saved'), "Summary saved successfully message does not match").toContainText('Summary with incentive saved');
         });
