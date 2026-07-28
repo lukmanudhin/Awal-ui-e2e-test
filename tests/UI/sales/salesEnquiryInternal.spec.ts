@@ -1,5 +1,5 @@
 import { expect } from "@playwright/test";
-import { test, type BrowserContext, type Page } from "@playwright/test";
+import { test, request as playwrightRequest, type BrowserContext, type Page } from "@playwright/test";
 import { ENV } from "../../../utils/ENV";
 import { getCreateEnquiryData, type SalesEnquiryData } from "../../../testData/salesEnquiryData";
 import { addBOQData } from "../../../testData/addBoqData";
@@ -40,7 +40,7 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Internal)', () =
     let extId: string;
     let salesEnquiryAPI: SalesEnquiryAPI;
 
-    test.beforeAll('Setup', async ({ browser, request }) => {
+    test.beforeAll('Setup', async ({ browser }) => {
         context = await browser.newContext();
         page = await context.newPage();
         createEnquiryData = getCreateEnquiryData();
@@ -56,12 +56,13 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Internal)', () =
         quotationManagerPage = new QuotationManagerPage(page);
         invoiceRequestPage = new InvoiceRequestPage(page);
         salesOrderManagerPage = new SalesOrderManagerPage(page);
-        salesEnquiryAPI = new SalesEnquiryAPI(request);
+        salesEnquiryAPI = new SalesEnquiryAPI(await playwrightRequest.newContext());
     });
 
     test.afterAll('Cleanup: delete created Sales Enquiry', async () => {
         await page.close();
         await salesEnquiryAPI.deleteSalesEnquiryIfCreated(extId);
+        await salesEnquiryAPI.dispose();
     });
 
     test('Login and open Sales Enquiry module', async () => {
