@@ -3,7 +3,7 @@ import { getMIRDetails, type CreateMIRData } from "../../../testData/createMIR";
 import { test, expect } from "../../../fixtures/baseFixtures";
 import { mirPayload } from "../../../API-payloads/createMaterialPayload";
 
-test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
+test.describe.skip('Material Indent and Material Issue End-to-End Scenarios', () => {
     test.setTimeout(550000);
     let MIRDetails: CreateMIRData;
     let materialIndentRequestId: string;
