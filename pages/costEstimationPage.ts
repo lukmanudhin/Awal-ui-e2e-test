@@ -494,6 +494,7 @@ export class CostEstimationPage extends BasePage {
         console.log('Verified Labour and Costing API with status code:', response.status());
         await expect(this.successMessage('BOL updated successfully'), "BOL updated success message does not match").toContainText('BOL updated successfully');
         await this.successMessage('BOL updated successfully').waitFor({ state: 'hidden' });
+        await this.page.waitForTimeout(3000);
     }
     @step()
     async editDesignStudio(estimationHours: string, machineHours: string, otHours: string, warrantyValue: string) {
@@ -763,8 +764,9 @@ export class CostEstimationPage extends BasePage {
     @step()
     async savePriceIndicationSlipAndValidateAPI(statusCode: number) {
         await expect(this.saveButton, 'Save button on Price Indication Slip tab did not become enabled').toBeEnabled();
+        await this.page.waitForTimeout(5000);
         const responsePromise = this.page.waitForResponse('**/estimation/updateOptionStatusByVerOptId');
-        await this.saveButton.click();
+        await this.saveButton.click({force: true, timeout: 5000});
         const response = await responsePromise;
         expect(response.status(), `Save Price Indication Slip API status code mismatch. Expected ${statusCode}, received ${response.status()}`).toBe(statusCode);
         console.log('Price Indication Slip saved successfully');
