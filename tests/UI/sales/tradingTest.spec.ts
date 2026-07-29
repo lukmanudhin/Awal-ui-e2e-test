@@ -30,7 +30,7 @@ test.describe('Create Sales Enquiry', () => {
         console.log(`Lead for ${tradingData.customerName} deleted successfully`);
     });
 
-    test('Verify new sales enquiry is created successfully', async ({ ppjoPage, modules, tradingPage, salesEnquiryPage }) => {
+    test('Verify new trading order is created and approved successfully', async ({ ppjoPage, modules, tradingPage, salesEnquiryPage }) => {
         await modules.goToModule({ module: "Sales", subModule: 'Counter Sales', nestedSubModule: 'Trading' });
         await tradingPage.clickCreateLeadButton();
         await tradingPage.createLead(tradingData);
