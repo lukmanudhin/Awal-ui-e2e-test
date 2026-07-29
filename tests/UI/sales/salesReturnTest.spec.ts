@@ -59,14 +59,11 @@ test.describe('Sales Return E2E Test', () => {
         await salesReturnPage.sendToFinanceAndValidateAPI(200);
         await expect(salesReturnPage.successMessage('Sales return sent to Finance'), "Sales return sent to Finance message does not match").toHaveText('Sales return sent to Finance successfully');
         await salesReturnPage.search(salesReturnNumber);
-        //improper status Finanace
-        // await expect(salesReturnPage.status, "Sales return status does not match").toHaveText('Pending From Finance');          
+        await expect(salesReturnPage.status, "Sales return status does not match").toHaveText('Pending From Finance');          
 
-        // Finance: raise a Bank Payment Voucher for the return and get it approved
         await modules.goToModule({ module: 'Finance', subModule: 'Account Payable', nestedSubModule: 'Bank Payment Voucher' });
         await salesReturnPage.search(salesReturnNumber);
-        //improper status
-        // await expect(bankPaymentVoucherPage.bankPaymentStatus, "Sales return status does not match").toHaveText('Pending From Finance');
+        await expect(salesReturnPage.bankPaymentStatus, "Sales return status does not match").toHaveText('Pending From Finance');
         await salesReturnPage.clickViewIcon();
         await salesReturnPage.createBankPaymentVoucher(voucherData);
         await expect(salesReturnPage.successMessage('Bank Payable Voucher updated successfully'), "Bank Payment Voucher update success message does not match").toHaveText('Bank Payable Voucher updated successfully');
@@ -82,7 +79,6 @@ test.describe('Sales Return E2E Test', () => {
         await salesReturnPage.search(salesReturnNumber);
         await expect(salesReturnPage.bankPaymentStatus, "Sales return status does not match").toHaveText('Finance Completed');
 
-        // Back on the Sales Return record: verify Finance completion and close the case
         await modules.goToModule({ module: 'Sales', subModule: 'Sales Return' });
         await salesReturnPage.goToTab('Trading');
         await salesReturnPage.search(salesReturnNumber);
