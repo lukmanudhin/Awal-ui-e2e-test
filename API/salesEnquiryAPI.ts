@@ -287,6 +287,22 @@ export class SalesEnquiryAPI {
         console.log('----------------------Delete Sales Enquiry API Response---------------------');
         console.log('API Response:', deleteAPIResponse);
     }
+
+    async deleteLeadIfCreated(leadId: string) {
+        if (!leadId) return;
+        const accessToken = await this.getAccessToken(`${ENV.EMAIL_ID}`, `${ENV.PASSWORD}`);
+        const response = await this.request.delete(`${SALES_API_BASE}/quickLeads/deleteLeadById/${leadId}`, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'x-auth-token': accessToken,
+            }
+        });
+        expect(response.status(), `Failed to delete lead through API, status code: ${response.status()}`).toBe(200);
+        const deleteAPIResponse = await response.json();
+        expect(deleteAPIResponse.message, 'Delete Lead API Message Mismatch').toBe('Data deleted successfully');
+        console.log('----------------------Delete Lead API Response---------------------');
+        console.log('API Response:', deleteAPIResponse);
+    }
     
     async getRandomEmployeeName() {
         const accessToken = await this.getAccessToken(`${ENV.EMAIL_ID}`, `${ENV.PASSWORD}`);

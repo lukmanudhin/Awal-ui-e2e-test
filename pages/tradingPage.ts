@@ -94,7 +94,18 @@ export class TradingPage extends BasePage {
         await this.uploadFile('test_Documents', fileName);
         await expect(this.attachedDocument(fileName), `${fileName} is not visible in View Attached Documents`).toBeVisible();
         await this.notesTxtBx.fill(data.notes);
+    }
+
+    @step()
+    async createLeadAndValidateAPI(statusCode: number) {
+        const responsePromise = this.page.waitForResponse('**/quickLeads/createLead');
         await this.createLeadButton.click();
+        const response = await responsePromise;
+        expect(response.status(), `Create Lead API status code mismatch. Expected ${statusCode}, received ${response.status()}`).toBe(statusCode);
+        console.log('Lead created successfully');
+        console.log('Verified Create Lead API with status code:', response.status());
+        const responseBody = await response.json();
+        return responseBody.result as string;
     }
 
     async clickTrading() {

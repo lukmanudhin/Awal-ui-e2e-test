@@ -6,6 +6,7 @@ import { getTradingData, type TradingData } from "../../../testData/tradingData"
 test.describe('Create Sales Enquiry', () => {
     let tradingData: TradingData;
     let accessToken: string;
+    let leadId: string;
     test.setTimeout(100000);
     test.beforeEach('Login', async ({ page, loginPage, homePage, salesEnquiryPage, salesEnquiryAPI, stockViewAPI }) => {
         tradingData = getTradingData();
@@ -23,17 +24,17 @@ test.describe('Create Sales Enquiry', () => {
         });
     });
 
-    test.afterEach('Delete Sales Enquiry', async ({ tradingPage, page }) => {
-        await tradingPage.deleteTradingAndValidateAPI(200);
-        await expect(tradingPage.successMessage('Record deleted successfully.'), "Sales enquiry delete success message does not match").toHaveText('Record deleted successfully.');
-        console.log(`Sales enquiry for ${tradingData.customerName} deleted successfully`);
+    test.afterEach('Delete Lead', async ({ page, salesEnquiryAPI }) => {
         await page.close();
+        await salesEnquiryAPI.deleteLeadIfCreated(leadId);
+        console.log(`Lead for ${tradingData.customerName} deleted successfully`);
     });
 
     test('Verify new sales enquiry is created successfully', async ({ ppjoPage, modules, tradingPage, salesEnquiryPage }) => {
         await modules.goToModule({ module: "Sales", subModule: 'Counter Sales', nestedSubModule: 'Trading' });
         await tradingPage.clickCreateLeadButton();
         await tradingPage.createLead(tradingData);
+        leadId = await tradingPage.createLeadAndValidateAPI(201);
         await expect(tradingPage.successMessage('Quick lead created successfully'), "Quick lead created success message does not match").toHaveText('Quick lead created successfully');
         await tradingPage.search(tradingData.customerName);
         await expect(salesEnquiryPage.enquiryStatus, "Lead status does not match").toHaveText('Lead Created');
