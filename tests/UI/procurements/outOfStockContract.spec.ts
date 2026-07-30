@@ -139,10 +139,15 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
         await grnEntryPage.startQC('Random Quantity', '7', '1', employeeName, 'Pass', 'Pass', 'Pass');
         await expect(grnEntryPage.successMessage('GRN QC created successfully'), 'GRN QC created successfully message does not match').toContainText('GRN QC created successfully');
         await expect(grnEntryPage.qcCheckButton, 'QC check button is not visible').toBeVisible();
-        
+
         await modules.goToModule({ module: 'Store', subModule: 'Material Management', nestedSubModule: 'Put Away' });
         await putAwayPage.search(grnNumber);
         await expect(putAwayPage.qcStatus, 'QC status does not match').toHaveText('Completed');
         await putAwayPage.clickStart();
+        await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
+        await putAwayPage.clickPutAway();
+        await putAwayPage.enterPutAwayDetails('Warehouse  A - Salmabad Industrial Area', '5', 'aisle1', 'Put Away Rack 1', 'Finance_Self', MIRDetails.quantity);
+        // await putAwayPage.submitPutAwayAndValidateAPI(200);
+        // await expect(putAwayPage.successMessage('Put away completed successfully'), 'Put away completed successfully success message does not match').toHaveText('Put away completed successfully');
     });
 });
