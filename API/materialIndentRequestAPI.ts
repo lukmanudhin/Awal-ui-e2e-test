@@ -27,6 +27,61 @@ export class MaterialIndentRequestAPI {
         console.log('API Response:', deleteAPIResponse);
     }
 
+    async issueAvailableMaterialForMIR(accessToken: string, mirNumber: string) {
+        if (!mirNumber) return;
+
+        const headers = {
+            'Authorization': `Bearer ${accessToken}`,
+            'x-auth-token': accessToken,
+        };
+
+        const listResponse = await this.request.get(`${PROCUREMENT_API_BASE}/materialIssueNote/getAllPendingMaterial/?PageNumber=1&PageSize=10&Search=${mirNumber}&Filter=`, { headers });
+        expect(listResponse.status(), `Failed to get pending material issue list through API, status code: ${listResponse.status()}`).toBe(200);
+        const listBody = await listResponse.json();
+        const pendingRecord = (listBody?.result?.data ?? []).find((record: any) => record.mirid === mirNumber);
+
+        if (!pendingRecord) {
+            console.log(`No pending material issue record found for ${mirNumber}, nothing to restore`);
+            return;
+        }
+
+        const detailResponse = await this.request.get(`${PROCUREMENT_API_BASE}/materialIssueNote/getPendingMaterialById?extId=${pendingRecord.extId}`, { headers });
+        expect(detailResponse.status(), `Failed to get pending material detail through API, status code: ${detailResponse.status()}`).toBe(200);
+        const detail = (await detailResponse.json())?.result;
+
+        // Only issue what is actually on hand, and never more than the MIR still has pending
+        const createMaterialSummaryList = (detail?.materialInformationList ?? [])
+            .map((material: any) => ({
+                materialId: material.materialId,
+                uomId: material.uomId,
+                quantity: material.requestedQuantity,
+                issuingQuantity: Math.min(Number(material.stockInHand), Number(material.pendingQuantity)),
+                mirInfoId: material.mirInfoId,
+                isExcess: false,
+                excessToSubStoreQuantity: null,
+            }))
+            .filter((material: any) => material.issuingQuantity > 0);
+
+        if (createMaterialSummaryList.length === 0) {
+            console.log(`No stock on hand against ${mirNumber}, material is already out of stock`);
+            return;
+        }
+
+        const issueResponse = await this.request.post(`${PROCUREMENT_API_BASE}/materialIssueNote/createIssueMaterial`, {
+            headers,
+            data: {
+                mirId: detail.id,
+                pjoId: detail.pjoId,
+                departmentId: detail.departmentId,
+                subDepartmentId: detail.subDepartmentId,
+                requestedById: detail.requestedById,
+                createMaterialSummaryList,
+            },
+        });
+        expect(issueResponse.status(), `Failed to issue material through API, status code: ${issueResponse.status()}`).toBe(201);
+        console.log(`Restored out-of-stock state for ${mirNumber} by issuing:`, createMaterialSummaryList);
+    }
+
     async dispose() {
         await this.request.dispose();
     }

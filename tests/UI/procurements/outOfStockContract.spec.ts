@@ -10,6 +10,7 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
 
     test.beforeEach('Setup', async ({ page, loginPage, homePage, salesEnquiryAPI, stockViewAPI }) => {
         MIRDetails = getMIRDetails();
+        materialIndentRequestId = '';
         accessToken = await salesEnquiryAPI.getAccessToken(`${ENV.EMAIL_ID}`, `${ENV.PASSWORD}`);
         const material = await stockViewAPI.getOutOfStockMaterialWithActiveContract(accessToken, 'RawMaterials');
         console.log(material);
@@ -25,7 +26,10 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
         await expect(page, "Sales Enquiry page not found").toHaveURL(`${ENV.BASE_URL}/sales/sales-enquiry`);
     });
 
-    test.afterEach('Teardown', async ({ page, salesEnquiryAPI }) => {
+    test.afterEach('Teardown', async ({ page, salesEnquiryAPI, materialIndentRequestAPI }, testInfo) => {
+        if (testInfo.status !== 'passed') {
+            await materialIndentRequestAPI.issueAvailableMaterialForMIR(accessToken, materialIndentRequestId);
+        }
         await page.close();
         await salesEnquiryAPI.dispose();
     });
