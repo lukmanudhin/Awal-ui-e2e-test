@@ -59,7 +59,7 @@ export class PutAwayPage extends BasePage {
 
     @step()
     async submitPutAwayAndValidateAPI(statusCode: number) {
-        const responsePromise = this.page.waitForResponse('**/grnqc/createPutAway');
+        const responsePromise = this.page.waitForResponse('**/grnqc/createPutaway');
         await this.submitButton.click();
         const response = await responsePromise;
         expect(response.status(), `Submit Put Away API status code mismatch. Expected ${statusCode}, received ${response.status()}`).toBe(statusCode);
