@@ -33,8 +33,8 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
     test('Verify Material Indent Request is successfully created, approved by manager, and material is issued', async ({ salesEnquiryAPI, putAwayPage, grnEntryPage, procurementPage, prRequestPage, modules, materialIndentRequestPage, ppjoPage }) => {
         await modules.goToModule({ module: 'Store', subModule: 'Material Management', nestedSubModule: 'Stock View' });
         await materialIndentRequestPage.search(MIRDetails.material);
-        const currentStock = await materialIndentRequestPage.getMaterialCurrentQuatity();
-        MIRDetails.quantity = `${currentStock === 0 ? currentStock + 1 : currentStock}`;
+        let currentStock = await materialIndentRequestPage.getMaterialCurrentQuatity();
+        MIRDetails.quantity = '16';
 
         await modules.goToModule({ module: 'Store', subModule: 'Material Indent Request' });
 
@@ -126,7 +126,7 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
         await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
 
         await modules.goToModule({ module: 'Store', subModule: 'Material Management', nestedSubModule: 'GRN Entry' });
-        await grnEntryPage.createGRNEntry(MIRDetails.vendor, poNumber, '1', 'Create GRN Remarks', 'Delivery Note', '98765');
+        await grnEntryPage.createGRNEntry(MIRDetails.vendor, poNumber, '16', 'Create GRN Remarks', 'Delivery Note', '98765');
         await expect(grnEntryPage.successMessage('GRN created successfully'), 'GRN created successfully message does not match').toHaveText('GRN created successfully');
         const grnNumber = await grnEntryPage.getGRNNumber();
         await grnEntryPage.search(grnNumber);
@@ -136,7 +136,7 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
         await ppjoPage.validateSampleDetails(grnNumber, MIRDetails.vendor, poNumber, 'Not Started');
         await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
         const employeeName = await salesEnquiryAPI.getRandomEmployeeName();
-        await grnEntryPage.startQC('Random Quantity', '7', '1', employeeName, 'Pass', 'Pass', 'Pass');
+        await grnEntryPage.startQC('Random Quantity', '16', '1', employeeName, 'Pass', 'Pass', 'Pass');
         await expect(grnEntryPage.successMessage('GRN QC created successfully'), 'GRN QC created successfully message does not match').toContainText('GRN QC created successfully');
         await expect(grnEntryPage.qcCheckButton, 'QC check button is not visible').toBeVisible();
 
@@ -146,8 +146,26 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
         await putAwayPage.clickStart();
         await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
         await putAwayPage.clickPutAway();
-        await putAwayPage.enterPutAwayDetails('Warehouse  A - Salmabad Industrial Area', '5', 'aisle1', 'Put Away Rack 1', 'Finance_Self', MIRDetails.quantity);
-        // await putAwayPage.submitPutAwayAndValidateAPI(200);
-        // await expect(putAwayPage.successMessage('Put away completed successfully'), 'Put away completed successfully success message does not match').toHaveText('Put away completed successfully');
+        await putAwayPage.enterPutAwayDetails('Warehouse  A - Salmabad Industrial Area', '5', 'aisle1', 'Put Away Rack 1', 'Finance_Self', '15');
+        await putAwayPage.submitPutAwayAndValidateAPI(201);
+        await expect(putAwayPage.successMessage('Data created successfully'), 'Data created succesfully success message does not match').toHaveText('Data created successfully');
+
+        await modules.goToModule({ nestedSubModule: 'Stock View' });
+        await materialIndentRequestPage.search(MIRDetails.material);
+        currentStock = await materialIndentRequestPage.getMaterialCurrentQuatity();
+        MIRDetails.quantity = '15';
+        expect(currentStock, 'Stock quantity mismatch after material issue').toBe(15);
+        await expect(materialIndentRequestPage.status, 'Material status does not match').toHaveText('In Stock');
+
+        await modules.goToModule({ subModule: 'Material Issue Notes' });
+        await materialIndentRequestPage.search(materialIndentRequestId);
+        await expect(materialIndentRequestPage.status, "Status text does not match").toHaveText('New Request');
+        await materialIndentRequestPage.clickViewIcon();
+        await ppjoPage.validateSampleDetails(materialIndentRequestId, MIRDetails.pjoNumber, materialIndentRequestId, 'Vigneshwaran');
+        await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
+        await expect(materialIndentRequestPage.stockStatus, "Stock status text does not match").toHaveText('Partially Available');
+        await materialIndentRequestPage.enterIssueQuantity('16', '15');
+        await materialIndentRequestPage.issueMaterialAndValidateAPI(201);
+        await expect(materialIndentRequestPage.successMessage('Material Issue Notes created successfully'), 'Material Issue Notes created successfully success message does not found').toHaveText('Material Issue Notes created successfully');
     });
 });
