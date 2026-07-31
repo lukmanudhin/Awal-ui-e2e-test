@@ -252,4 +252,29 @@ export class StockViewAPI {
 
         return longest;
     }
+
+    // Returns a material's live total quantity and stock status straight from the API, by
+    // exact materialName match within a subStore. A material can have more than one stockView
+    // row (e.g. one per GRN batch/location), so quantities are summed across all matching rows
+    // rather than assuming a single row — this also sidesteps the UI search box's substring
+    // matching, which returns multiple rows whenever one material's name is a prefix/substring
+    // of another's (e.g. "PAINT" vs "ACRYLIC PAINT").
+    async getMaterialQuantityAndStatus(accessToken: string, materialName: string, subStore: string): Promise<{ currentQuantity: number; stockStatus: string }> {
+        const response = await this.request.get(`${PROCUREMENT_API_BASE}/stockView/getAllStockView?PageNumber=1&PageSize=1000&subStore=${subStore}`, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            }
+        });
+        expect(response.status(), `Failed to get stock view through API, status code: ${response.status()}`).toBe(200);
+        const responseBody = await response.json();
+        const materials = responseBody?.result?.data ?? [];
+
+        const matchingRows = materials.filter((m: any) => m.materialName === materialName);
+        expect(matchingRows.length > 0, `No stock view record found for material: ${materialName}`).toBeTruthy();
+
+        const currentQuantity = matchingRows.reduce((total: number, m: any) => total + Number(m.currentQuantity), 0);
+        const stockStatus = currentQuantity > 0 ? 'InStock' : 'OutOfStock';
+
+        return { currentQuantity, stockStatus };
+    }
 }
