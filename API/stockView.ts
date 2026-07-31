@@ -21,7 +21,7 @@ export class StockViewAPI {
         const stockItems = responseBody.result?.data;
 
         if (!Array.isArray(stockItems) || stockItems.length === 0) {
-            throw new Error('Could not parse the items array from responseBody.result.data');
+            throw new Error(`No Material in Stock. API message: ${responseBody.message}`);
         }
 
         // 4. Reduce array using your exact keys: 'currentQuantity' and 'materialName'

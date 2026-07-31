@@ -7,9 +7,9 @@ export class SalesEnquiryAPI {
     constructor(private request: APIRequestContext) {
     }
 
-    async getAccessToken(email: string, password: string) {
+    async getAccessToken(email: string, password: string) { 
         const response = await this.request.post(
-            `https://user-management-api-${ENV.ENV_API}.colanapps.in/api/v1/auth/login`,
+            `https://user-management-api-${ENV.ENV_API}.colanapps.in/api/v1/auth/authenticateUser`,
             {
                 data: {
                     usernameOrEmail: `${email}`,
