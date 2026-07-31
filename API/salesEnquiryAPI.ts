@@ -325,4 +325,26 @@ export class SalesEnquiryAPI {
         console.log(`Site Visitor (fetched dynamically via API): ${randomEmployee.empName}`);
         return randomEmployee.empName as string;
     }
+
+    // Display name of the account the tests log in as. Screens that show a "Requested By"
+    // value render this name, so specs should assert against it instead of hardcoding a
+    // person's name that only holds true for one environment's credentials.
+    async getLoggedInUserName(accessToken: string) {
+        const response = await this.request.get(
+            `https://user-management-api-${ENV.ENV_API}.colanapps.in/api/v1/profileSetting/getUserProfileSettings`,
+            {
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`,
+                    'x-auth-token': accessToken,
+                }
+            }
+        );
+        expect(response.status(), `Failed to get user profile through API, status code: ${response.status()}`).toBe(200);
+        const responseBody = await response.json();
+        const userName = responseBody?.result?.userName;
+
+        expect(userName, 'User name is missing in getUserProfileSettings response').toBeTruthy();
+        console.log(`Logged in user (fetched dynamically via API): ${userName}`);
+        return userName as string;
+    }
 }

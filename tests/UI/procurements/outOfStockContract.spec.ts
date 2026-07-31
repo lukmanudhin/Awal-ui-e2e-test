@@ -7,11 +7,13 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
     let MIRDetails: CreateMIRData;
     let materialIndentRequestId: string;
     let accessToken: string;
+    let requestedBy: string;
 
     test.beforeEach('Setup', async ({ page, loginPage, homePage, salesEnquiryAPI, stockViewAPI }) => {
         MIRDetails = getMIRDetails();
         materialIndentRequestId = '';
         accessToken = await salesEnquiryAPI.getAccessToken(`${ENV.EMAIL_ID}`, `${ENV.PASSWORD}`);
+        requestedBy = await salesEnquiryAPI.getLoggedInUserName(accessToken);
         const material = await stockViewAPI.getOutOfStockMaterialWithActiveContract(accessToken, 'RawMaterials');
         console.log(material);
         expect(material, 'No out-of-stock raw material with an active contract was found').not.toBeNull();
@@ -34,12 +36,7 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
         await salesEnquiryAPI.dispose();
     });
 
-    test('Verify Material Indent Request is successfully created, approved by manager, and material is issued', async ({ salesEnquiryAPI, putAwayPage, grnEntryPage, procurementPage, prRequestPage, modules, materialIndentRequestPage, ppjoPage }) => {
-        await modules.goToModule({ module: 'Store', subModule: 'Material Management', nestedSubModule: 'Stock View' });
-        await materialIndentRequestPage.search(MIRDetails.material);
-        let currentStock = await materialIndentRequestPage.getMaterialCurrentQuatity();
-        MIRDetails.quantity = '16';
-
+    test('Verify Material Indent Request is successfully created, approved by manager, and material is issued', async ({ salesEnquiryAPI, stockViewAPI, putAwayPage, grnEntryPage, procurementPage, prRequestPage, modules, materialIndentRequestPage, ppjoPage }) => {
         await modules.goToModule({ module: 'Store', subModule: 'Material Indent Request' });
 
         await materialIndentRequestPage.createMaterialIndentRequest(MIRDetails);
@@ -58,7 +55,7 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
         await expect(materialIndentRequestPage.priorityLevel, "Priority level text does not match").toHaveText(MIRDetails.priority);
         await expect(materialIndentRequestPage.mirStatus, "MIR status text does not match").toHaveText('New Request');
         await materialIndentRequestPage.clickViewIcon();
-        await ppjoPage.validateSampleDetails(materialIndentRequestId, MIRDetails.pjoNumber, MIRDetails.priority, 'Vigneshwaran');
+        await ppjoPage.validateSampleDetails(materialIndentRequestId, MIRDetails.pjoNumber, MIRDetails.priority, requestedBy);
         await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
         await materialIndentRequestPage.managerApprovesMaterialRequestAndValidateAPI(200);
 
@@ -76,7 +73,7 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
         await materialIndentRequestPage.search(materialIndentRequestId);
         await expect(materialIndentRequestPage.status, "Status text does not match").toHaveText('New Request');
         await materialIndentRequestPage.clickViewIcon();
-        await ppjoPage.validateSampleDetails(materialIndentRequestId, MIRDetails.pjoNumber, materialIndentRequestId, 'Vigneshwaran');
+        await ppjoPage.validateSampleDetails(materialIndentRequestId, MIRDetails.pjoNumber, materialIndentRequestId, requestedBy);
         await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
         await expect(materialIndentRequestPage.stockStatus, "Stock status text does not match").toHaveText('Out Of Stock');
         await expect(materialIndentRequestPage.issuingQuantity, 'Issuing quantity field is not disabled for Out Of Stock materials').toBeDisabled();
@@ -107,7 +104,7 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
         await modules.goToModule({ module: 'Procurement', subModule: 'PR to PO', nestedSubModule: 'PR to Po (Contract)' });
         await procurementPage.search(prId);
         await expect(procurementPage.status, 'Stock status does not match').toHaveText('New Request');
-        await procurementPage.enterRemarks('Purchase Order (Contract) Remarks');
+        await procurementPage.enterRemarks(MIRDetails.purchaseOrderRemarks);
         await expect(procurementPage.successMessage('Purchase order remark created successfully'), 'Purchase order remark created successfully success message does not found').toHaveText('Purchase order remark created successfully');
         await procurementPage.clickViewIcon();
         await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
@@ -130,7 +127,7 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
         await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
 
         await modules.goToModule({ module: 'Store', subModule: 'Material Management', nestedSubModule: 'GRN Entry' });
-        await grnEntryPage.createGRNEntry(MIRDetails.vendor, poNumber, '16', 'Create GRN Remarks', 'Delivery Note', '98765');
+        await grnEntryPage.createGRNEntry(MIRDetails.vendor, poNumber, MIRDetails.quantity, MIRDetails.grnRemarks, MIRDetails.deliveryNote, MIRDetails.invoiceNumber);
         await expect(grnEntryPage.successMessage('GRN created successfully'), 'GRN created successfully message does not match').toHaveText('GRN created successfully');
         const grnNumber = await grnEntryPage.getGRNNumber();
         await grnEntryPage.search(grnNumber);
@@ -140,7 +137,7 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
         await ppjoPage.validateSampleDetails(grnNumber, MIRDetails.vendor, poNumber, 'Not Started');
         await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
         const employeeName = await salesEnquiryAPI.getRandomEmployeeName();
-        await grnEntryPage.startQC('Random Quantity', '16', '1', employeeName, 'Pass', 'Pass', 'Pass');
+        await grnEntryPage.startQC(MIRDetails.qcMethod, MIRDetails.quantity, MIRDetails.qcFailedQuantity, employeeName, 'Pass', 'Pass', 'Pass');
         await expect(grnEntryPage.successMessage('GRN QC created successfully'), 'GRN QC created successfully message does not match').toContainText('GRN QC created successfully');
         await expect(grnEntryPage.qcCheckButton, 'QC check button is not visible').toBeVisible();
 
@@ -150,26 +147,31 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
         await putAwayPage.clickStart();
         await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
         await putAwayPage.clickPutAway();
-        await putAwayPage.enterPutAwayDetails('Warehouse  A - Salmabad Industrial Area', '5', 'aisle1', 'Put Away Rack 1', 'Finance_Self', '15');
+        await putAwayPage.enterPutAwayDetails(MIRDetails.warehouse, MIRDetails.conversionUnit, MIRDetails.row, MIRDetails.rack, MIRDetails.shelf, MIRDetails.putAwayQuantity);
         await putAwayPage.submitPutAwayAndValidateAPI(201);
         await expect(putAwayPage.successMessage('Data created successfully'), 'Data created succesfully success message does not match').toHaveText('Data created successfully');
 
-        await modules.goToModule({ nestedSubModule: 'Stock View' });
-        await materialIndentRequestPage.search(MIRDetails.material);
-        currentStock = await materialIndentRequestPage.getMaterialCurrentQuatity();
-        MIRDetails.quantity = '15';
-        expect(currentStock, 'Stock quantity mismatch after material issue').toBe(15);
-        await expect(materialIndentRequestPage.status, 'Material status does not match').toHaveText('In Stock');
+        // Verified through the API rather than the Stock View search box: that search matches on
+        // substrings, so a material whose name is contained in another material's name (e.g.
+        // "PAINT" also matching "ACRYLIC PAINT") returns several rows and reads the wrong one.
+        const stockAfterPutAway = await stockViewAPI.getMaterialQuantityAndStatus(accessToken, MIRDetails.material, 'RawMaterials');
+        expect(stockAfterPutAway.currentQuantity, 'Stock quantity mismatch after put away').toBe(Number(MIRDetails.putAwayQuantity));
+        expect(stockAfterPutAway.stockStatus, 'Material status does not match after put away').toBe('InStock');
 
         await modules.goToModule({ subModule: 'Material Issue Notes' });
         await materialIndentRequestPage.search(materialIndentRequestId);
         await expect(materialIndentRequestPage.status, "Status text does not match").toHaveText('New Request');
         await materialIndentRequestPage.clickViewIcon();
-        await ppjoPage.validateSampleDetails(materialIndentRequestId, MIRDetails.pjoNumber, materialIndentRequestId, 'Vigneshwaran');
+        await ppjoPage.validateSampleDetails(materialIndentRequestId, MIRDetails.pjoNumber, materialIndentRequestId, requestedBy);
         await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
         await expect(materialIndentRequestPage.stockStatus, "Stock status text does not match").toHaveText('Partially Available');
-        await materialIndentRequestPage.enterIssueQuantity('16', '15');
+        await materialIndentRequestPage.enterIssueQuantity(MIRDetails.quantity, MIRDetails.putAwayQuantity);
         await materialIndentRequestPage.issueMaterialAndValidateAPI(201);
         await expect(materialIndentRequestPage.successMessage('Material Issue Notes created successfully'), 'Material Issue Notes created successfully success message does not found').toHaveText('Material Issue Notes created successfully');
+
+        // Issuing everything that was put away must drain the material back to its pre-test state
+        const stockAfterIssue = await stockViewAPI.getMaterialQuantityAndStatus(accessToken, MIRDetails.material, 'RawMaterials');
+        expect(stockAfterIssue.currentQuantity, 'Stock quantity mismatch after material issue').toBe(0);
+        expect(stockAfterIssue.stockStatus, 'Material status does not match after material issue').toBe('OutOfStock');
     });
 });
