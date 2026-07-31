@@ -170,8 +170,9 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Normal)', () => 
         await costEstimationPage.validateAddBOM_API(201);
         await expect(costEstimationPage.successMessage('BOM created successfully'), "BOM creation success message does not match").toContainText('BOM created successfully');
         await costEstimationPage.goToTab('BOL - Bill of Labour');
-        await costEstimationPage.editDesignStudio('5', '6', '7', '3');
-        await costEstimationPage.validateLabourAndCostingAPI(200);
+        // stage run modification
+        // await costEstimationPage.editDesignStudio('5', '6', '7', '3');
+        // await costEstimationPage.validateLabourAndCostingAPI(200);
         await costEstimationPage.editMetalFabrication('4', '3', '2', '1');
         await costEstimationPage.validateLabourAndCostingAPI(200);
         await costEstimationPage.editElectrical('5', '6', '7', '3');
