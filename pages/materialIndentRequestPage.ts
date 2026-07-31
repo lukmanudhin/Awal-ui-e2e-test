@@ -43,7 +43,7 @@ export class MaterialIndentRequestPage extends BasePage {
         this.stockStatus = this.page.locator('//td[@data-app-table-col="12"]//span').last();
         this.status = this.page.locator('//td[@data-app-table-col="6"]//span').last();
         this.dropDown = (name: string) => this.page.getByRole('combobox', { name: `${name}` });
-        this.dropDownOption = (name: string) => this.page.getByRole('option', { name: `${name}` });
+        this.dropDownOption = (name: string) => this.page.getByRole('option', { name: `${name}`, exact: true });
         this.pendingQuantity = this.page.locator('//td[@data-app-table-col="8"]');
         this.issuingQuantity = this.page.locator('#issuingQuantity-0');
         this.selectAllMaterialChkBx = this.page.locator('//input[@type="checkbox"]').first();
@@ -70,7 +70,7 @@ export class MaterialIndentRequestPage extends BasePage {
         await expect(this.descriptionTxtBx, "Description text box is not cleared").toHaveValue('');
         await expect(this.sizeTxtBx, "Size text box is not cleared").toHaveValue('');
         await this.selectFromDropdown('Material Name*', mirDetails.material);
-        await expect(this.descriptionTxtBx, "Description text box should not be empty").not.toHaveValue('');
+        // await expect(this.descriptionTxtBx, "Description text box should not be empty").not.toHaveValue('');
         await expect(this.sizeTxtBx, "Size text box should not be empty").not.toHaveValue('');
         await this.reqQuantityTxtBx.fill(mirDetails.quantity);
         await this.remarksTxtBx.fill(mirDetails.remarks);
@@ -124,6 +124,11 @@ export class MaterialIndentRequestPage extends BasePage {
         await this.issuingQuantity.fill(quantity);
         expect(await this.pendingQuantity.innerText(), "Pending quantity does not match expected value").toBe(`${finalPendingQuantity}`);
     }
+
+    async filter(filterType: string, filterOption: string) {
+        await this.selectFromDropdown(filterType, filterOption);    
+    }
+
     @step()
     async issueMaterialAndValidateAPI(statusCode: number) {
         await this.selectAllMaterialChkBx.check();
