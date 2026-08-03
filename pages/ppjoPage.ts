@@ -69,7 +69,7 @@ export class PPJOPage extends BasePage {
         this.enquiryIdColumn = this.page.locator('//td[@data-app-table-col="1"]//div');
         this.sampleButton = this.page.getByRole('button', { name: 'Sample' });
         this.salesOrderTab = this.page.getByRole('tab', { name: 'Sales Order #' });
-        this.submitButton = this.page.getByRole('button', { name: 'Submit', exact: true })
+        this.submitButton = this.page.locator('//span[text()="Submit"]//parent::button');
 
         // Dynamic locators initialization
         this.dropDown = (name: string) => this.page.getByRole('combobox', { name: `${name}` }).first();
@@ -223,7 +223,7 @@ export class PPJOPage extends BasePage {
     }
     @step()
     async submitQuotationForApprovalAndValidateAPI(statusCode: number) {
-        await this.page.waitForTimeout(700);
+        await this.page.waitForTimeout(2000);
         await this.submitForApprovalButton.click({ force: true });
         const responsePromise = this.page.waitForResponse('**/Quotation/SubmitForApproval/**');
         await this.submitButton.click();
