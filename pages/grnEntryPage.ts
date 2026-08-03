@@ -67,7 +67,9 @@ export class GRNEntryPage extends BasePage {
     async startQC(qcMethod: string, randomQuantity: string, failedQuantity: string, inspectorName: string, visualInspection: string, dimensionalCheck: string, functionalTest: string) {
         await this.startQCBtn.click();
         await this.selectOptionFromDropdown('QC Method', qcMethod);
-        await this.randomQuantity.fill(randomQuantity);
+        if(qcMethod==='Random Quantity'){
+            await this.randomQuantity.fill(randomQuantity);
+        }
         await this.failedQuantity.fill(failedQuantity);
         await this.selectOptionFromDropdown('Inspector Name', inspectorName);
         await this.selectOptionFromDropdown('Visual Inspection', visualInspection);

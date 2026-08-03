@@ -64,5 +64,6 @@ export class PutAwayPage extends BasePage {
         const response = await responsePromise;
         expect(response.status(), `Submit Put Away API status code mismatch. Expected ${statusCode}, received ${response.status()}`).toBe(statusCode);
         console.log('Verified Submit Put Away API with status code:', response.status());
+        return true;
     }
 }

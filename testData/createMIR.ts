@@ -9,7 +9,6 @@ export type CreateMIRData = {
   remarks: string;
   vendor: string;
   orderType: string;
-  qcMethod: string;
   qcFailedQuantity: string;
   putAwayQuantity: string;
   grnRemarks: string;
@@ -41,7 +40,6 @@ export const getMIRDetails = (): CreateMIRData => {
     remarks: 'Add Material Test Remarks',
     vendor: '',
     orderType: 'Local - Product / Materials',
-    qcMethod: 'Random Quantity',
     qcFailedQuantity: `${qcFailedQuantity}`,
     putAwayQuantity: `${requestedQuantity - qcFailedQuantity}`,
     grnRemarks: 'Create GRN Remarks',
