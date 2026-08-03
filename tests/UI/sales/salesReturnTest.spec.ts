@@ -26,7 +26,8 @@ test.describe('Sales Return E2E Test', () => {
     });
 
     test('Verify sales return lifecycle through QC, Finance approval and case closure', async ({ page, modules, homePage, salesReturnPage }) => {
-        const leadNumber = 'LN01046';
+        // const leadNumber = 'LN01046';
+        const leadNumber = 'LN00003';
         const voucherData = getBankPaymentVoucherData();
         const salesReturnData = getSalesReturnData();
 
