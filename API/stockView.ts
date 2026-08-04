@@ -200,10 +200,16 @@ export class StockViewAPI {
         return longest;
     }
 
-    // Fetches every out-of-stock material (filtered by subStore, e.g. 'RawMaterials') that has no
-    // contract record at all in Contract/Quote Management, then returns the one with the longest
-    // materialName. Mirrors getOutOfStockMaterialWithActiveContract but for the opposite case.
-    async getOutOfStockMaterialWithoutContract(accessToken: string, subStore: string): Promise<{ materialName: string; extId: string } | null> {
+    // Fetches every out-of-stock material (filtered by subStore, e.g. 'RawMaterials') whose
+    // Contract/Quote Management records exist but are all expired, then returns the one with the
+    // longest materialName. Mirrors getOutOfStockMaterialWithActiveContract but for the opposite
+    // case, and returns the same shape so both can drive the same PR -> PO flow.
+    //
+    // Note: this deliberately keeps materials that have an expired contract rather than materials
+    // with no contract row at all. contractExtId/vendorName can only come from a contract record,
+    // so a material that has never been under contract has no vendor to return — the expired
+    // contract still names the vendor that supplies it, which is what the PO step needs.
+    async getOutOfStockMaterialWithoutContract(accessToken: string, subStore: string): Promise<{ materialName: string; extId: string; contractExtId: string; vendorName: string } | null> {
         const stockResponse = await this.request.get(`${PROCUREMENT_API_BASE}/stockView/getAllStockView?PageNumber=1&PageSize=200&subStore=${subStore}&materialStatus=OutOfStock`, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`
@@ -230,18 +236,33 @@ export class StockViewAPI {
             throw new Error('Contract quote data array is missing.');
         }
 
-        // Any contract record at all (Active or Expired) counts as "in contract" for this check
-        const materialNamesInContract = new Set<string>(contracts.map((contract: any) => contract.materialName));
+        // A material counts here only when it has at least one contract record and none of them
+        // are Active, so there is always a contract to read the vendor from.
+        const contractsByMaterialName = new Map<string, any[]>();
+        for (const contract of contracts) {
+            const existing = contractsByMaterialName.get(contract.materialName) ?? [];
+            existing.push(contract);
+            contractsByMaterialName.set(contract.materialName, existing);
+        }
 
         const outOfStockRawMaterialsWithoutContract = materials
-            .filter((material: any) => !materialNamesInContract.has(material.materialName))
-            .map((material: any) => ({
-                materialName: material.materialName as string,
-                extId: material.extId as string
-            }));
+            .filter((material: any) => {
+                const materialContracts = contractsByMaterialName.get(material.materialName);
+                return !!materialContracts && materialContracts.every((contract: any) => contract.expiryStatus !== 'Active');
+            })
+            .map((material: any) => {
+                const expiredContract = contractsByMaterialName.get(material.materialName)![0];
+                return {
+                    materialName: material.materialName as string,
+                    extId: material.extId as string,
+                    contractExtId: expiredContract.extId as string,
+                    vendorName: expiredContract.vendorName as string
+                };
+            });
 
         if (outOfStockRawMaterialsWithoutContract.length === 0) {
-            // Every out-of-stock material in this subStore has some contract record
+            // Every out-of-stock material in this subStore either has an active contract or has
+            // never been under contract at all
             return null;
         }
 
