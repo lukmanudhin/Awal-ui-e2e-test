@@ -20,14 +20,20 @@ export type CreateMIRData = {
   row: string;
   rack: string;
   shelf: string;
+  shipTo: string;
+  vendorQuotationVendor: string;
+  tempVendorName: string;
+  tempVendorEmail: string;
+  creditDays: string;
+  availableQuantity: string;
+  unitPrice: string;
+  eta: string;
+  deliveryPeriod: string;
+  paymentTerms: string;
+  shipmentMode: string;
 };
 
 export const getMIRDetails = (): CreateMIRData => {
-  // The out-of-stock flow chains these quantities together, so they are derived from one
-  // another rather than repeated as literals: the whole requested quantity is received on the
-  // GRN and sampled by QC, whatever fails QC is deducted, and the remainder is exactly what
-  // Put Away accepts (the app rejects a Put Away quantity that differs from the QC-passed
-  // quantity) and what is then issued to drain the material back to zero.
   const requestedQuantity = 50;
   const qcFailedQuantity = RandomDataGenerator.getNumber(1, 5);
 
@@ -46,12 +52,21 @@ export const getMIRDetails = (): CreateMIRData => {
     purchaseOrderRemarks: 'Purchase Order (Contract) Remarks',
     deliveryNote: `DN-${RandomDataGenerator.getNumber(10000, 99999)}`,
     invoiceNumber: `${RandomDataGenerator.getNumber(10000, 99999)}`,
-    // Double space is intentional: the dropdown filters on the raw option label, which is
-    // stored with two spaces. Collapsing it to one filters the list down to nothing.
     warehouse: 'Warehouse  A - Salmabad Industrial Area',
     conversionUnit: '5',
     row: 'aisle1',
     rack: 'Put Away Rack 1',
     shelf: 'Finance_Self',
+    shipTo: 'Colan tech Info',
+    vendorQuotationVendor: 'QA Vendor testing',
+    tempVendorName: `Test Vendor ${RandomDataGenerator.getNumber(100000, 999999)}`,
+    tempVendorEmail: `${RandomDataGenerator.getEmail()}`,
+    creditDays: '25',
+    availableQuantity: `${requestedQuantity}`,
+    unitPrice: '2',
+    eta: '6',
+    deliveryPeriod: '3',
+    paymentTerms: '% Cash on Delivery',
+    shipmentMode: 'Sea Freight',
   };
 };

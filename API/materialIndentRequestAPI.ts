@@ -27,6 +27,22 @@ export class MaterialIndentRequestAPI {
         console.log('API Response:', deleteAPIResponse);
     }
 
+    async deleteMIRIfCreated(accessToken: string, mirExtId: string) {
+        if (!mirExtId) return;
+
+        try {
+            const response = await this.request.delete(`${PROCUREMENT_API_BASE}/materialIndentRequest/deleteMIR/${mirExtId}`, {
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`,
+                    'x-auth-token': accessToken,
+                }
+            });
+            console.log(`Cleanup: deleted material indent request ${mirExtId}, status code ${response.status()}`);
+        } catch (error) {
+            console.log(`Cleanup: failed to delete material indent request ${mirExtId} -`, error);
+        }
+    }
+
     async issueAvailableMaterialForMIR(accessToken: string, mirNumber: string) {
         if (!mirNumber) return;
 

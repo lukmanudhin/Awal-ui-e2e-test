@@ -20,6 +20,7 @@ import { PRRequestPage } from "../pages/prRequestPage";
 import { ProcurementPage } from "../pages/procurementPage";
 import { GRNEntryPage } from "../pages/grnEntryPage";
 import { PutAwayPage } from "../pages/putAwayPage";
+import { VendorRegistrationPage } from "../pages/vendorRegistrationPage";
 import { ManufacturingPage } from "../pages/manufacturingPage";
 import { TradingPage } from "../pages/tradingPage";
 import { PipelinePage } from "../pages/pipelinePage";
@@ -56,6 +57,7 @@ type baseFixtures = {
   procurementPage: ProcurementPage;
   grnEntryPage: GRNEntryPage;
   putAwayPage: PutAwayPage;
+  vendorRegistrationPage: VendorRegistrationPage;
   manufacturingPage: ManufacturingPage;
   tradingPage: TradingPage;
   pipelinePage: PipelinePage;
@@ -136,6 +138,9 @@ export const test = base.extend<baseFixtures>({
   },
   putAwayPage: async ({ page }, use) => {
     await use(new PutAwayPage(page));
+  },
+  vendorRegistrationPage: async ({ page }, use) => {
+    await use(new VendorRegistrationPage(page));
   },
   manufacturingPage: async ({ page }, use) => {
     await use(new ManufacturingPage(page));
