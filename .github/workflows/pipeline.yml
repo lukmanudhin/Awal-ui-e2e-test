@@ -61,6 +61,11 @@ jobs:
       - name: Run Playwright tests
         id: run_tests
         continue-on-error: true
+        env:
+          EMAIL_ID: ${{ secrets.EMAIL_ID }}
+          PASSWORD: ${{ secrets.PASSWORD }}
+          BASE_URL: ${{ vars.BASE_URL }}
+          ENV_API: ${{ vars.ENV_API }}
         # run: npx playwright test tests/UI/sales tests/API
         run: npx playwright test salesEnquirySample.spec.ts
 
