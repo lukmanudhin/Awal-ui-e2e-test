@@ -232,10 +232,11 @@ export class SalesEnquiryPage extends BasePage {
         await this.payTermsOption(data.paymentTerms).click();
 
         // Currency
-        await this.currencyDropdown.clear();
-        await this.currencyDropdown.click();
-        await expect(this.currencyOption(data.currency), `Currency option is not visible: ${data.currency}`).toBeVisible();
-        await this.currencyOption(data.currency).click();
+        // await this.currencyDropdown.clear();
+        // await this.currencyDropdown.click();
+        // await expect(this.currencyOption(data.currency), `Currency option is not visible: ${data.currency}`).toBeVisible();
+        // await this.currencyOption(data.currency).click();
+        await this.selectOptionFromDropdown('Currency', data.currency)
 
         // Supply type
         await this.supplyTypeDropdown.clear();
