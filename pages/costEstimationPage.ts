@@ -103,6 +103,13 @@ export class CostEstimationPage extends BasePage {
     private readonly confirmButton: Locator;
     private readonly backArrowIcon: Locator;
     private readonly viewAttachmentsButton: Locator;
+    private readonly includePriceBtn: Locator;
+    private readonly stockStatus: Locator;
+    public readonly procurementStatus: Locator;
+    private readonly addMaterialBtn: Locator;
+    private readonly selectAllCheckbox: Locator;
+    private readonly sendToProcurementBtn: Locator;
+    public readonly stockStatusBOMTable: Locator;
 
     // Dynamic locators
     private readonly ppjoBanner: (name: string) => Locator;
@@ -111,8 +118,12 @@ export class CostEstimationPage extends BasePage {
     private readonly generateCostingBtn: (name: string) => Locator;
     private readonly dropDown: (name: string) => Locator;
     private readonly dropDownOption: (name: string) => Locator;
+    private readonly vendorCheckBx: (name: string) => Locator;
+    private readonly vendorQuoteCriteriaCell: (criteria: string, vendorName: string) => Locator;
+    private readonly vendorQuoteColumnHeader: (vendorName: string) => Locator;
     private readonly deliveryPeriod: Locator;
     private readonly warrantyPeriod: Locator;
+    public readonly unitCostValue: Locator;
     constructor(public readonly page: Page) {
         super(page);
         this.addEstimationBtn = this.page.getByRole('button', { name: 'Add Estimation Details' });
@@ -219,6 +230,14 @@ export class CostEstimationPage extends BasePage {
         this.viewAttachmentsButton = this.page.getByRole('button', { name: 'view View Attachment' });
         this.deliveryPeriod = this.page.getByRole('spinbutton', { name: 'Delivery Period*' });
         this.warrantyPeriod = this.page.getByRole('spinbutton', { name: 'Warranty Period*' });
+        this.unitCostValue = this.page.locator('//td[@data-app-table-col="6"]//div').first();
+        this.includePriceBtn = this.page.getByRole('button', { name: 'Include Price' });
+        this.stockStatus = this.page.locator('//td[@data-app-table-col="7"]//span');
+        this.procurementStatus = this.page.locator('//td[@data-app-table-col="10"]//span').first();
+        this.addMaterialBtn = this.page.getByRole('button', { name: 'Add Materials plus-blue-icon' });
+        this.selectAllCheckbox = this.page.locator('#select-all');
+        this.sendToProcurementBtn = this.page.getByRole('button', { name: 'Send To Procurement' });
+        this.stockStatusBOMTable = this.page.locator('//td[@data-app-table-col="11"]//span').first();
 
         // Dynamic locators initialization
         this.ppjoBanner = (name: string) => this.page.getByRole('banner').getByText(`${name}`);
@@ -227,6 +246,11 @@ export class CostEstimationPage extends BasePage {
         this.generateCostingBtn = (name: string) => this.page.locator(`//div[text()="${name}"]/parent::td/following-sibling::td[2]/child::div/child::button`);
         this.dropDown = (name: string) => this.page.getByRole('combobox', { name: `${name}` });
         this.dropDownOption = (name: string) => this.page.getByRole('option', { name: `${name}` });
+        this.vendorCheckBx = (name: string) => this.page.locator(`//span[normalize-space(text())="${name}"]//following-sibling::div//input[@type="checkbox"]`)
+        this.vendorQuoteColumnHeader = (vendorName: string) => this.page.locator(`//thead/tr/th[normalize-space()="${vendorName}"]`);
+        this.vendorQuoteCriteriaCell = (criteria: string, vendorName: string) => this.page.locator(
+            `//tbody/tr[td[1][normalize-space()="${criteria}"]]/td[position() = count(//thead/tr/th[normalize-space()="${vendorName}"]/preceding-sibling::th) + 1]`
+        );
     }
     @step()
     async validateEstimationDetailsTable() {
@@ -766,7 +790,7 @@ export class CostEstimationPage extends BasePage {
         await expect(this.saveButton, 'Save button on Price Indication Slip tab did not become enabled').toBeEnabled();
         await this.page.waitForTimeout(5000);
         const responsePromise = this.page.waitForResponse('**/estimation/updateOptionStatusByVerOptId');
-        await this.saveButton.click({force: true, timeout: 5000});
+        await this.saveButton.click({ force: true, timeout: 5000 });
         const response = await responsePromise;
         expect(response.status(), `Save Price Indication Slip API status code mismatch. Expected ${statusCode}, received ${response.status()}`).toBe(statusCode);
         console.log('Price Indication Slip saved successfully');
@@ -843,5 +867,29 @@ export class CostEstimationPage extends BasePage {
         const detailText = await this.page.locator('(//main)[2]').innerText();
         // expect(detailText, `Attachment details do not contain reason: ${reason}`).toContain(reason);
         await this.closeButton.click();
+    }
+
+    async includePrice(vendorName: string, unitPrice: string) {
+        await this.scrollUntilElementVisibleAndClick(this.eyeIcon);
+        await expect(this.vendorQuoteColumnHeader(vendorName), `Vendor "${vendorName}" has no column in the Vendor Quote Comparison table`).toBeVisible();
+        await expect(this.vendorQuoteCriteriaCell('Unit price', vendorName), `Unit price for vendor "${vendorName}" does not match in the Vendor Quote Comparison table`).toContainText(`${unitPrice}.000`);
+        await this.vendorCheckBx(vendorName).check();
+        await expect(this.page.locator('//h4[text()="Procurement Price"]//following-sibling::p').first()).toContainText(`${unitPrice}.000 Unit Price`);
+        await this.includePriceBtn.click();
+        await this.yesButton.click();
+    }
+
+    async goBackToBOQTab() {
+        await this.backArrowIcon.click();
+        await this.page.waitForLoadState('domcontentloaded');
+        await this.goToTab('BOQ');
+    }
+
+    async addMaterialAndSendToProcurement() {
+        await this.addMaterialBtn.click();
+        await this.page.waitForTimeout(500);
+        await expect(this.stockStatus).toHaveText('Out of Stock');
+        await this.selectAllCheckbox.check();
+        await this.sendToProcurementBtn.click();
     }
 }

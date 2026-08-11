@@ -34,13 +34,16 @@ export class ProcurementPage extends BasePage {
     private readonly allLineItemsSummaryViewBtn: Locator;
     private readonly approveButton: Locator;
     private readonly submitButton: Locator;
-    private readonly editIcons: Locator;
     private readonly tickIcon: Locator;
+    private readonly selectVendorBtn: Locator;
+    private readonly checkBox: Locator;
+    private readonly submitForEstimationBtn: Locator;
 
     // Dynamic locators
     private readonly rowByText: (text: string) => Locator;
     private readonly quoteRow: (prId: string, vendorName: string) => Locator;
     private readonly rowsForPR: (prId: string) => Locator;
+    private readonly editIcons: (name: string) => Locator;
 
     constructor(public readonly page: Page) {
         super(page);
@@ -53,7 +56,7 @@ export class ProcurementPage extends BasePage {
         this.confirmButton = this.page.getByRole('button', { name: 'Confirm' });
         this.yesButton = this.page.getByRole('button', { name: 'Yes' });
         this.status = this.page.locator('//td[@data-app-table-col="6"]//span').first();
-        this.createVendorQuotationButton = this.page.getByRole('button', { name: 'Create Vendor Quotation create' });
+        this.createVendorQuotationButton = this.page.getByRole('button', { name: 'Create Vendor Quotation create' }).or(this.page.getByRole('button', { name: 'Create Vendor Quotation +' }));
         this.assignVendorBtn = this.page.getByRole('button', { name: 'Assign Vendor' });
         this.createGroupBtn = this.page.getByRole('button', { name: 'Create New Group & Assign' });
         this.addNewVendorBtn = this.page.getByRole('button', { name: 'Add New Vendor add' });
@@ -75,13 +78,17 @@ export class ProcurementPage extends BasePage {
         this.allLineItemsSummaryViewBtn = this.page.getByRole('button', { name: 'All Line Items Summary View' });
         this.approveButton = this.page.getByRole('button', { name: 'Approve' });
         this.submitButton = this.page.getByRole('button', { name: 'Submit' });
-        this.editIcons = this.page.locator('//img[contains(@src,"edit")]');
         this.tickIcon = this.page.locator('//img[contains(@src,"tick.svg")]');
+        this.selectVendorBtn = this.page.getByRole('button', { name: 'Select Vendors' });
+        this.checkBox = this.page.getByRole('checkbox');
+        this.submitForEstimationBtn = this.page.getByRole('button', { name: 'Submit For Estimation' });
+        
         // Dynamic locators initialization
         this.rowByText = (text: string) => this.page.getByRole('row', { name: text });
         this.quoteRow = (prId: string, vendorName: string) =>
             this.page.getByRole('row').filter({ hasText: prId }).filter({ hasText: vendorName }).first();
         this.rowsForPR = (prId: string) => this.page.getByRole('row').filter({ hasText: prId });
+        this.editIcons = (name: string) => this.page.locator(`//h3[text()="${name}"]//following-sibling::div//span//img`);
     }
     @step()
     async enterRemarks(remarks: string) {
@@ -194,7 +201,7 @@ export class ProcurementPage extends BasePage {
 
     @step()
     async prepareVendorQuotationAndValidateAPI(statusCode: number) {
-        const responsePromise = this.page.waitForResponse('**/vendorQuotation/createVendorQuotation');
+        const responsePromise = this.page.waitForResponse('**/createVendorQuotation');
         await this.prepareVendorQuotationBtn.click();
         const response = await responsePromise;
         expect(response.status(), `Prepare Vendor Quotation API status code mismatch. Expected ${statusCode}, received ${response.status()}`).toBe(statusCode);
@@ -237,13 +244,13 @@ export class ProcurementPage extends BasePage {
         await this.saveMaterialRowBtn.click();
 
         await this.page.mouse.wheel(0, 1000);
-        await this.editIcons.nth(1).click();
+        await this.editIcons('Delivery Period').click();
         await this.page.locator('//input[@maxlength="100"]').fill(mirDetails.deliveryPeriod);
         await this.tickIcon.click();
 
         await this.selectOptionFromDropdown('Select payment terms', mirDetails.paymentTerms);
 
-        await this.editIcons.nth(2).click();
+        await this.editIcons('Shipment Mode').click();
         await this.selectOptionFromDropdown('Select shipment mode', mirDetails.shipmentMode);
         await this.tickIcon.click();
     }
@@ -268,6 +275,16 @@ export class ProcurementPage extends BasePage {
         if (await this.yesButton.isVisible()) {
             await this.yesButton.click();
         }
+    }
+
+    @step()
+    async selectVendorAndSubmitForEstimation(enquiryId: string, vendorName: string) {
+        await this.goToTab('Quotes Received');
+        await this.quoteRow(enquiryId, vendorName).getByRole('checkbox').check();
+        await this.selectVendorBtn.click();
+        await this.page.waitForTimeout(2000);
+        await this.checkBox.nth(0).click();
+        await this.submitForEstimationBtn.click();
     }
 
     @step()

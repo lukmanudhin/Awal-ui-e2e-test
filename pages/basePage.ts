@@ -186,7 +186,7 @@ export class BasePage {
 
     async scrollUntilElementVisibleAndClick(element: Locator) {
         await this.page.locator('//tr').first().click();
-        const MAX_SCROLLS = 10;
+        const MAX_SCROLLS = 13;
         const SCROLL_DELAY_MS = 300;
 
         for (let i = 0; i < MAX_SCROLLS; i++) {
@@ -213,6 +213,7 @@ export class BasePage {
     async selectOptionFromDropdown(dropdownName: string, value: string) {
         await this.dropDownField(dropdownName).clear();
         await this.dropDownField(dropdownName).fill(value);
+        await expect(this.dropDownMenu(value), `"${value}" is not an available option in the "${dropdownName}" dropdown`).toBeVisible();
         await this.dropDownMenu(value).click();
     }
 
