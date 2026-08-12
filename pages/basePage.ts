@@ -184,8 +184,8 @@ export class BasePage {
         await this.dateLocator(`${targetDate.getDate()}`).click();
     }
 
-    async scrollUntilElementVisibleAndClick(element: Locator) {
-        await this.page.locator('//tr').first().click();
+    async scrollUntilElementVisibleAndClick(element: Locator, count?: number) {
+        await this.page.locator('//table').nth(count || 0).click();
         const MAX_SCROLLS = 13;
         const SCROLL_DELAY_MS = 300;
 
@@ -208,6 +208,10 @@ export class BasePage {
             await this.page.keyboard.press('ArrowRight');
             await this.page.waitForTimeout(SCROLL_DELAY_MS);
         }
+    }
+
+    async waitForTableToLoad(timeout = 30_000) {
+        await expect(this.page.locator('.MuiSkeleton-root').first(), 'Table is still showing loading placeholders').toBeHidden({ timeout });
     }
 
     async selectOptionFromDropdown(dropdownName: string, value: string) {
