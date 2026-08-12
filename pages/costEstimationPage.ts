@@ -107,6 +107,11 @@ export class CostEstimationPage extends BasePage {
     private readonly stockStatus: Locator;
     public readonly procurementStatus: Locator;
     private readonly addMaterialBtn: Locator;
+    private readonly addServicesBtn: Locator;
+    public readonly serviceProcurementStatus: Locator;
+    private readonly serviceViewIcon: Locator;
+    public readonly serviceProcurementCost: Locator;
+    private readonly serviceRowCheckbox: (serviceName: string) => Locator;
     private readonly selectAllCheckbox: Locator;
     private readonly sendToProcurementBtn: Locator;
     public readonly stockStatusBOMTable: Locator;
@@ -235,6 +240,10 @@ export class CostEstimationPage extends BasePage {
         this.stockStatus = this.page.locator('//td[@data-app-table-col="7"]//span');
         this.procurementStatus = this.page.locator('//td[@data-app-table-col="10"]//span').first();
         this.addMaterialBtn = this.page.getByRole('button', { name: 'Add Materials plus-blue-icon' });
+        this.addServicesBtn = this.page.getByRole('button', { name: 'Add services / subcontractor' });
+        this.serviceProcurementStatus = this.page.locator('//td[@data-app-table-col="5"]//span').first();
+        this.serviceViewIcon = this.page.locator('//table[contains(.,"Procurement Service Cost")]//tbody/tr[1]/td[@data-app-table-col="6"]//span').first();
+        this.serviceProcurementCost = this.page.locator('//td[@data-app-table-col="4"]//div').first();
         this.selectAllCheckbox = this.page.locator('#select-all');
         this.sendToProcurementBtn = this.page.getByRole('button', { name: 'Send To Procurement' });
         this.stockStatusBOMTable = this.page.locator('//td[@data-app-table-col="11"]//span').first();
@@ -247,6 +256,7 @@ export class CostEstimationPage extends BasePage {
         this.dropDown = (name: string) => this.page.getByRole('combobox', { name: `${name}` });
         this.dropDownOption = (name: string) => this.page.getByRole('option', { name: `${name}` });
         this.vendorCheckBx = (name: string) => this.page.locator(`//span[normalize-space(text())="${name}"]//following-sibling::div//input[@type="checkbox"]`)
+        this.serviceRowCheckbox = (serviceName: string) => this.page.getByRole('row', { name: serviceName }).getByRole('checkbox');
         this.vendorQuoteColumnHeader = (vendorName: string) => this.page.locator(`//thead/tr/th[normalize-space()="${vendorName}"]`);
         this.vendorQuoteCriteriaCell = (criteria: string, vendorName: string) => this.page.locator(
             `//tbody/tr[td[1][normalize-space()="${criteria}"]]/td[position() = count(//thead/tr/th[normalize-space()="${vendorName}"]/preceding-sibling::th) + 1]`
@@ -891,5 +901,39 @@ export class CostEstimationPage extends BasePage {
         await expect(this.stockStatus).toHaveText('Out of Stock');
         await this.selectAllCheckbox.check();
         await this.sendToProcurementBtn.click();
+    }
+
+    @step()
+    async addSubcontractorServiceAndSendToProcurement(serviceName: string) {
+        await this.addServicesBtn.click();
+        await this.page.waitForTimeout(500);
+        await expect(this.serviceRowCheckbox(serviceName), `Service "${serviceName}" is not listed in the Add Services / Subcontractor list`).toBeVisible();
+        await this.serviceRowCheckbox(serviceName).check();
+        await this.sendToProcurementBtn.click();
+    }
+
+    @step()
+    async includeServicePrice(vendorName: string, unitPrice: string) {
+        await this.waitForTableToLoad();
+        await this.scrollUntilElementVisibleAndClick(this.serviceViewIcon, 1);
+        await this.page.waitForLoadState('domcontentloaded');
+        await expect(this.vendorQuoteColumnHeader(vendorName), `Vendor "${vendorName}" has no column in the Vendor Quote Comparison table`).toBeVisible();
+        await expect(this.vendorQuoteCriteriaCell('Unit price', vendorName), `Unit price for vendor "${vendorName}" does not match in the Vendor Quote Comparison table`).toContainText(`${unitPrice}.000`);
+        await this.vendorCheckBx(vendorName).check();
+        await this.includePriceBtn.click();
+        await this.yesButton.click();
+    }
+
+    @step()
+    async goBackFromServiceQuoteComparison() {
+        await this.goBack();
+        await this.waitForTableToLoad();
+    }
+
+    @step()
+    async goBackToCostDistributionTab() {
+        await this.backArrowIcon.click();
+        await this.page.waitForLoadState('domcontentloaded');
+        await this.goToTab('Cost Distribution');
     }
 }

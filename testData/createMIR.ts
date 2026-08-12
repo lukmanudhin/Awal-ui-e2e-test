@@ -31,6 +31,8 @@ export type CreateMIRData = {
   deliveryPeriod: string;
   paymentTerms: string;
   shipmentMode: string;
+  landedCost: string;
+  subcontractorService: string;
 };
 
 export const getMIRDetails = (): CreateMIRData => {
@@ -68,5 +70,7 @@ export const getMIRDetails = (): CreateMIRData => {
     deliveryPeriod: '3',
     paymentTerms: '% Cash on Delivery',
     shipmentMode: 'Sea Freight',
+    landedCost: '250',
+    subcontractorService: 'ELECTRICAL',
   };
 };

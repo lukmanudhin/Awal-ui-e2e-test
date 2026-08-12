@@ -38,6 +38,8 @@ export class ProcurementPage extends BasePage {
     private readonly selectVendorBtn: Locator;
     private readonly checkBox: Locator;
     private readonly submitForEstimationBtn: Locator;
+    private readonly landedCostTxtBx: Locator;
+    private readonly subContractorEditIcon: Locator;
 
     // Dynamic locators
     private readonly rowByText: (text: string) => Locator;
@@ -82,7 +84,9 @@ export class ProcurementPage extends BasePage {
         this.selectVendorBtn = this.page.getByRole('button', { name: 'Select Vendors' });
         this.checkBox = this.page.getByRole('checkbox');
         this.submitForEstimationBtn = this.page.getByRole('button', { name: 'Submit For Estimation' });
-        
+        this.landedCostTxtBx = this.page.locator('#landedCost');
+        this.subContractorEditIcon = this.page.locator('//table[contains(.,"Subcontractor Service Name")]//tbody/tr').nth(0).locator('img').first();
+
         // Dynamic locators initialization
         this.rowByText = (text: string) => this.page.getByRole('row', { name: text });
         this.quoteRow = (prId: string, vendorName: string) =>
@@ -244,6 +248,46 @@ export class ProcurementPage extends BasePage {
         await this.saveMaterialRowBtn.click();
 
         await this.page.mouse.wheel(0, 1000);
+        await this.editIcons('Delivery Period').click();
+        await this.page.locator('//input[@maxlength="100"]').fill(mirDetails.deliveryPeriod);
+        await this.tickIcon.click();
+
+        await this.selectOptionFromDropdown('Select payment terms', mirDetails.paymentTerms);
+
+        await this.editIcons('Shipment Mode').click();
+        await this.selectOptionFromDropdown('Select shipment mode', mirDetails.shipmentMode);
+        await this.tickIcon.click();
+    }
+
+    @step()
+    async selectRequestType(type: string) {
+        await this.selectOptionFromDropdown('Material Type', type);
+        await this.waitForTableToLoad();
+    }
+
+    @step()
+    async validateVendorQuotationServiceTable(serviceName: string) {
+        const quotationTable = this.page.locator('(//table[@class="w-full border-collapse table-fixed"])[2]');
+        await expect(quotationTable, 'Vendor quotation table is not showing the Services / Subcontractor columns').toContainText('Services / Subcontractor');
+        await expect(quotationTable, `Vendor quotation table does not list service: ${serviceName}`).toContainText(serviceName);
+    }
+
+    @step()
+    async enterSubcontractorQuoteDetails(mirDetails: CreateMIRData) {
+        if (!(await this.creditDaysTxtBx.inputValue())) {
+            await this.creditDaysTxtBx.fill(mirDetails.creditDays);
+        }
+        await this.selectDate(new Date().getDate());
+        await this.selectDate(new Date().getDate() + 1, 1);
+        await this.uploadFile('test_Documents', 'Test_Document.pdf');
+
+        await this.subContractorEditIcon.click();;
+        await this.unitPriceTxtBx.fill(mirDetails.unitPrice);
+        await this.landedCostTxtBx.fill(mirDetails.landedCost);
+        await this.etaTxtBx.fill(mirDetails.eta);
+        await this.saveMaterialRowBtn.first().click();
+        await this.page.mouse.wheel(0, 1000);
+
         await this.editIcons('Delivery Period').click();
         await this.page.locator('//input[@maxlength="100"]').fill(mirDetails.deliveryPeriod);
         await this.tickIcon.click();
