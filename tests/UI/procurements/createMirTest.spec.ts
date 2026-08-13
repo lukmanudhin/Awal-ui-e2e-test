@@ -94,10 +94,12 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
             await expect(materialIndentRequestPage.priorityLevel, 'Acknowledgement status does not match').toHaveText('Pending');
         });
 
-        await modules.goToModule({ subModule: 'Material Management', nestedSubModule: 'Stock View' });
-        await materialIndentRequestPage.search(MIRDetails.material);
-        const updatedStock = await materialIndentRequestPage.getMaterialCurrentQuatity();
-        expect(updatedStock, 'Stock quantity mismatch after material issue').toBe(currentStock - parseFloat(MIRDetails.quantity));
+        await test.step('Validate stock quantity after material issue', async () => {
+            await modules.goToModule({ subModule: 'Material Management', nestedSubModule: 'Stock View' });
+            await materialIndentRequestPage.search(MIRDetails.material);
+            const updatedStock = await materialIndentRequestPage.getMaterialCurrentQuatity();
+            expect(updatedStock, 'Stock quantity mismatch after material issue').toBe(currentStock - parseFloat(MIRDetails.quantity));
+        });
     });
 
     test('Verify Material Indent Request is partially issued when issued quantity is less than requested quantity', async ({ modules, materialIndentRequestPage, ppjoPage }) => {
