@@ -1,7 +1,7 @@
 import { ENV } from "../../../utils/ENV";
 import { getMIRDetails, type CreateMIRData } from "../../../testData/createMIR";
 import { getVendorRegistrationData, type VendorRegistrationData } from "../../../testData/vendorRegistrationData";
-import { mirPayload } from "../../../API-payloads/createMaterialPayload";
+import { getMaterialPayload } from "../../../API-payloads/createMaterialPayload";
 import { test, expect } from "../../../fixtures/baseFixtures";
 
 test.describe('Material Indent and Material Issue For Out of Stock Raw Material With out ContractEnd-to-End Scenarios', () => {
@@ -25,9 +25,10 @@ test.describe('Material Indent and Material Issue For Out of Stock Raw Material 
         vendorData.evaluatorName = await salesEnquiryAPI.getRandomEmployeeName();
         requestedBy = await salesEnquiryAPI.getLoggedInUserName(accessToken);
         vendorData.companyName = MIRDetails.tempVendorName;
-        createdMaterialId = await createMaterialAPI.createMaterial(accessToken, mirPayload);
-        MIRDetails.material = mirPayload.materialName;
-        console.log(`Raw material created: "${mirPayload.materialName}"`);
+        const materialPayload = getMaterialPayload();
+        createdMaterialId = await createMaterialAPI.createMaterial(accessToken, materialPayload);
+        MIRDetails.material = materialPayload.materialName;
+        console.log(`Material created: "${materialPayload.materialName}"`);
 
         await loginPage.launchAwalWebsite();
         await loginPage.login(`${ENV.EMAIL_ID}`, `${ENV.PASSWORD}`);

@@ -1,9 +1,9 @@
 import { ENV } from "../../../utils/ENV";
 import { getMIRDetails, type CreateMIRData } from "../../../testData/createMIR";
 import { test, expect } from "../../../fixtures/baseFixtures";
-import { mirPayload } from "../../../API-payloads/createMaterialPayload";
+import { getMaterialPayload } from "../../../API-payloads/createMaterialPayload";
 
-test.describe.skip('Material Indent and Material Issue End-to-End Scenarios', () => {
+test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
     test.setTimeout(550000);
     let MIRDetails: CreateMIRData;
     let materialIndentRequestId: string;
@@ -13,7 +13,8 @@ test.describe.skip('Material Indent and Material Issue End-to-End Scenarios', ()
     test.beforeEach('Setup', async ({ salesEnquiryAPI, createMaterialAPI }) => {
         MIRDetails = getMIRDetails();
         accessToken = await salesEnquiryAPI.getAccessToken(`${ENV.EMAIL_ID}`, `${ENV.PASSWORD}`);
-        materialId = await createMaterialAPI.createMaterial(accessToken, mirPayload);
+        const materialPayload = getMaterialPayload();
+        materialId = await createMaterialAPI.createMaterial(accessToken, materialPayload);
 
         // await loginPage.launchAwalWebsite();
         // await loginPage.login(`${ENV.EMAIL_ID}`, `${ENV.PASSWORD}`);
@@ -32,7 +33,7 @@ test.describe.skip('Material Indent and Material Issue End-to-End Scenarios', ()
     test('Verify Material Indent Request is successfully created, approved by manager, and material is issued', async ({ salesEnquiryAPI, createMaterialAPI }) => {
         // MIRDetails = getMIRDetails();
         // accessToken = await salesEnquiryAPI.getAccessToken(`${ENV.EMAIL_ID}`, `${ENV.PASSWORD}`);
-        // await createMaterialAPI.createMaterial(accessToken, mirPayload);
+        // await createMaterialAPI.createMaterial(accessToken, materialPayload);
     });
 
 });

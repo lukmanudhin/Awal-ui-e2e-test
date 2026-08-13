@@ -1,12 +1,20 @@
 import { RandomDataGenerator } from "../utils/randomDataGenerator";
 
-export const mirPayload = {
+export type MaterialType = 'raw' | 'consumable' | 'sparePart';
+
+const MATERIAL_TYPES: Record<MaterialType, { materialTypeId: number; description: string }> = {
+    raw: { materialTypeId: 75, description: 'raw material' },
+    consumable: { materialTypeId: 84, description: 'consumable material' },
+    sparePart: { materialTypeId: 83, description: 'spare part material' },
+};
+
+export const getMaterialPayload = (materialType: MaterialType = 'raw') => ({
     materialCode: "",
     materialName: RandomDataGenerator.getRandomMaterialName(),
-    description: "raw material",
+    description: MATERIAL_TYPES[materialType].description,
     erpCode: "",
     materialCategoryId: 76,
-    materialTypeId: 75,
+    materialTypeId: MATERIAL_TYPES[materialType].materialTypeId,
     purchaseUomId: null,
     inventoryUomId: null,
     minimumOrderQuantity: 0,
@@ -26,4 +34,4 @@ export const mirPayload = {
     linkWithAssetId: 0,
     taxId: null,
     taxValue: null,
-}
+});

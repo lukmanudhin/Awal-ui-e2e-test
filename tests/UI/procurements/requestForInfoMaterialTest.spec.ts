@@ -2,7 +2,7 @@ import { test, expect } from "../../../fixtures/baseFixtures";
 import { ENV } from "../../../utils/ENV";
 import { getCreateEnquiryData, type SalesEnquiryData } from "../../../testData/salesEnquiryData";
 import { addBOQData } from "../../../testData/addBoqData";
-import { mirPayload } from "../../../API-payloads/createMaterialPayload";
+import { getMaterialPayload } from "../../../API-payloads/createMaterialPayload";
 import { getMIRDetails, type CreateMIRData } from "../../../testData/createMIR";
 
 
@@ -23,10 +23,11 @@ test.describe('Request For Info - Material End-to-End Scenarios', () => {
 
         await test.step('Create a raw material through API', async () => {
             accessToken = await salesEnquiryAPI.getAccessToken(`${ENV.EMAIL_ID}`, `${ENV.PASSWORD}`);
-            createdMaterialId = await createMaterialAPI.createMaterial(accessToken, mirPayload);
-            material = mirPayload.materialName;
+            const materialPayload = getMaterialPayload();
+            createdMaterialId = await createMaterialAPI.createMaterial(accessToken, materialPayload);
+            material = materialPayload.materialName;
             MIRDetails.material = material;
-            console.log(`Raw material created: "${mirPayload.materialName}"`);
+            console.log(`Material created: "${materialPayload.materialName}"`);
         });
 
         await test.step('Login and navigate to Sales Enquiry', async () => {
