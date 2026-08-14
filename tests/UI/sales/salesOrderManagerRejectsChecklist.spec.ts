@@ -72,7 +72,7 @@ test.describe.serial('Verify Sales Order Manager rejects the sales order', () =>
 
     test('Verify Sales Order Manager rejects the sales order and the rejection is confirmed successfully', async ({ page, ppjoPage, modules, salesEnquiryPage, salesOrderManagerPage, costEstimationPage, invoiceRequestPage, quotationManagerPage, requestNormalPage, requestApprovalPage }) => {
         await test.step('Return to Sales Enquiry and Validate Sales Enquiry status', async () => {
-            await ppjoPage.goBackFromPPJO();
+            await modules.goToModule({ subModule: 'Sales Enquiry' });
             await expect(page, "Sales Enquiry list page was not opened after going back from PPJO").toHaveURL(`${ENV.BASE_URL}/sales/sales-enquiry`);
             enquiryId = await salesEnquiryPage.search(createEnquiryData.customerName);
         });

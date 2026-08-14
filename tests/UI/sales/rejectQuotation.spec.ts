@@ -71,7 +71,7 @@ test.describe.serial('Verify E2E Quotation Rejection flow of Sales Enquiry (Requ
 
     test('Verify customer rejects quotation and the status is reflected in quotation', async ({ page, modules, salesEnquiryPage, ppjoPage, requestNormalPage, costEstimationPage, requestApprovalPage, quotationManagerPage }) => {
         await test.step('Return to Sales Enquiry and Validate Sales Enquiry status', async () => {
-            await ppjoPage.goBackFromPPJO();
+            await modules.goToModule({ subModule: 'Sales Enquiry' });
             await expect(page, "Sales Enquiry list page was not opened after going back from PPJO").toHaveURL(`${ENV.BASE_URL}/sales/sales-enquiry`);
             enquiryId = await salesEnquiryPage.search(createEnquiryData.customerName);
             await salesEnquiryPage.validateCustomerStatus(createEnquiryData.customerName, 'Pending From Estimation');

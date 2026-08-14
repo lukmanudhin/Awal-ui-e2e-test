@@ -71,7 +71,7 @@ test.describe.serial('Verify Invoice Register is rejected by the Manager', () =>
 
     test('Verify Invoice Register is rejected by the Manager and acknowledged with the acknowledgement status updated to No', async ({ requestApprovalPage, quotationManagerPage, page, modules, salesEnquiryPage, ppjoPage, invoiceRequestPage, requestNormalPage, costEstimationPage }) => {
         await test.step('Return to Sales Enquiry and Validate Sales Enquiry status', async () => {
-            await ppjoPage.goBackFromPPJO();
+            await modules.goToModule({ subModule: 'Sales Enquiry' });
             await expect(page, "Sales Enquiry list page was not opened after going back from PPJO").toHaveURL(`${ENV.BASE_URL}/sales/sales-enquiry`);
             enquiryId = await salesEnquiryPage.search(createEnquiryData.customerName);
             await salesEnquiryPage.validateCustomerStatus(createEnquiryData.customerName, 'Pending From Estimation');

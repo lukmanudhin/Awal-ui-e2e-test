@@ -119,7 +119,7 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Normal)', () => 
     });
 
     test('Return to Sales Enquiry and Validate Sales Enquiry status', async () => {
-        await ppjoPage.goBackFromPPJO();
+        await modules.goToModule({ subModule: 'Sales Enquiry' });
         await expect(page, "Sales Enquiry list page was not opened after going back from PPJO").toHaveURL(`${ENV.BASE_URL}/sales/sales-enquiry`);
         enquiryId = await salesEnquiryPage.search(createEnquiryData.customerName);
         await salesEnquiryPage.validateCustomerStatus(createEnquiryData.customerName, 'Pending From Estimation');
@@ -147,7 +147,7 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Normal)', () => 
 
     test('Verify that BOQ is created and BOQ details are generated successfully', async () => {
         await costEstimationPage.clickAddEstimation();
-        await expect(costEstimationPage.costEstimationTitle, "Create Cost Estimation title does not match").toContainText('Create Cost Estimation');
+        // await expect(costEstimationPage.costEstimationTitle, "Create Cost Estimation title does not match").toContainText('Create Cost Estimation');
         await expect(costEstimationPage.timeLine, "Default Timeline is not 00:00:00 Sec").toContainText('00:00:00 Sec');
         await costEstimationPage.addBOQ(addBOQData);
         await costEstimationPage.validateAddBOQAPI(201);

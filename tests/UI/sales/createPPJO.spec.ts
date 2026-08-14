@@ -34,7 +34,7 @@ test.describe('Create PPJO', () => {
         await salesEnquiryAPI.deleteSalesEnquiryIfCreated(extId);
     });
 
-    test('Verify user is able to create PPJO and request estimation', async ({ salesEnquiryPage, ppjoPage, page, salesEnquiryAPI }) => {
+    test('Verify user is able to create PPJO and request estimation', async ({ salesEnquiryPage, ppjoPage, page, salesEnquiryAPI, modules }) => {
         await salesEnquiryPage.search(createEnquiryData.customerName);
         await expect(salesEnquiryPage.createdSalesEnquiry(createEnquiryData.customerName), `Created sales enquiry is not visible for customer: ${createEnquiryData.customerName}`).toBeVisible();
         await salesEnquiryPage.clickCreatePPJO();
@@ -59,7 +59,7 @@ test.describe('Create PPJO', () => {
         await ppjoPage.validatePPJOAPI(201, 'Request Estimation');
         await expect(ppjoPage.successMessage('Estimation request submitted successfully'), "Request Estimation success message does not match").toContainText('Estimation request submitted successfully');
         await ppjoPage.validatePPJOTableDetails();
-        await ppjoPage.goBackFromPPJO();
+        await modules.goToModule({ subModule: 'Sales Enquiry' });
         await expect(page, "Sales Enquiry list page was not opened after going back from PPJO").toHaveURL(`${ENV.BASE_URL}/sales/sales-enquiry`);
         await salesEnquiryPage.search(createEnquiryData.customerName);
         await salesEnquiryPage.validateCustomerStatus(createEnquiryData.customerName, 'Pending From Estimation');

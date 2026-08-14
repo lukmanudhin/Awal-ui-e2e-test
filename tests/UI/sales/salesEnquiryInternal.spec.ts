@@ -118,7 +118,7 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Internal)', () =
     });
 
     test('Return to Sales Enquiry and Validate Sales Enquiry status', async () => {
-        await ppjoPage.goBackFromPPJO();
+        await modules.goToModule({ subModule: 'Sales Enquiry' });
         await expect(page, "Sales Enquiry list page was not opened after going back from PPJO").toHaveURL(`${ENV.BASE_URL}/sales/internal-request`);
         await salesEnquiryPage.search(enquiryId);
         await salesEnquiryPage.validateCustomerStatus(createEnquiryData.customerName, 'Pending From Estimation');
