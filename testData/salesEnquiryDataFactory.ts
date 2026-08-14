@@ -8,4 +8,5 @@ export const PERMISSIONS          = ['Yes', 'No'] as const;
 export const CURRENCIES           = ['BHD', 'GBP', 'AED', 'INR'] as const;
 export const SUPPLY_TYPES         = ['Local', 'Export'] as const;
 export const SOCIAL_MEDIA         = ['Facebook', 'Insta'] as const;
+export const MATERIALS            = ['Aluminium 2.5mm', 'Steel 2.5mm', 'Aluminium alloys 4.5mm', 'Stainless steel 2.5mm', 'ALUMINIUM SHEET 2X6X12mm', 'Stainless Steel Sheet 2X4X12mm'] as const;
 // export const SOCIAL_MEDIA         = ['Facebook', 'Insta', 'Linked-In'] as const;
