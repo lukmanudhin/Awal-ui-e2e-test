@@ -4,7 +4,7 @@ import { getVendorRegistrationData, type VendorRegistrationData } from "../../..
 import { getMaterialPayload } from "../../../API-payloads/createMaterialPayload";
 import { test, expect } from "../../../fixtures/baseFixtures";
 
-test.describe('Material Indent and Material Issue For Out of Stock Raw Material With out ContractEnd-to-End Scenarios', () => {
+test.describe('Material Indent and Material Issue For Out of Stock Raw Material With out Contract End-to-End Scenarios', () => {
     test.setTimeout(550000);
     let MIRDetails: CreateMIRData;
     let vendorData: VendorRegistrationData;
@@ -16,7 +16,7 @@ test.describe('Material Indent and Material Issue For Out of Stock Raw Material 
     let vendorExtId: string;
     let putAwayDone = false;
 
-    test.beforeEach('Setup', async ({ page, loginPage, homePage, salesEnquiryAPI, stockViewAPI, createMaterialAPI }) => {
+    test.beforeEach('Setup', async ({ page, loginPage, homePage, salesEnquiryAPI, createMaterialAPI }) => {
         MIRDetails = getMIRDetails();
         vendorData = getVendorRegistrationData();
         materialIndentRequestId = '';
@@ -52,7 +52,7 @@ test.describe('Material Indent and Material Issue For Out of Stock Raw Material 
         await salesEnquiryAPI.dispose();
     });
 
-    test('Verify an out of stock material with no contract is procured through a vendor quotation and issued after put away', async ({ page, salesEnquiryAPI, stockViewAPI, putAwayPage, grnEntryPage, procurementPage, prRequestPage, modules, materialIndentRequestPage, ppjoPage, vendorRegistrationPage }) => {
+    test('Verify an out of stock material with no contract is procured through a vendor quotation and issued after put away', async ({ salesEnquiryAPI, stockViewAPI, putAwayPage, grnEntryPage, procurementPage, prRequestPage, modules, materialIndentRequestPage, ppjoPage, vendorRegistrationPage }) => {
         let prId: string;
         let poNumber: string;
         let grnNumber: string;
