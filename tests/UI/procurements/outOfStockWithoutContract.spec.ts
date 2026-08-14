@@ -13,6 +13,7 @@ test.describe('Material Indent and Material Issue For Out of Stock Raw Material 
     let accessToken: string;
     let requestedBy: string;
     let createdMaterialId: string;
+    let vendorExtId: string;
     let putAwayDone = false;
 
     test.beforeEach('Setup', async ({ page, loginPage, homePage, salesEnquiryAPI, stockViewAPI, createMaterialAPI }) => {
@@ -46,6 +47,7 @@ test.describe('Material Indent and Material Issue For Out of Stock Raw Material 
         if (createdMaterialId) {
             await createMaterialAPI.deleteMaterial(accessToken, createdMaterialId);
         }
+        await createMaterialAPI.deleteVendorIfCreated(accessToken, vendorExtId);
         await page.close();
         await salesEnquiryAPI.dispose();
     });
@@ -167,6 +169,7 @@ test.describe('Material Indent and Material Issue For Out of Stock Raw Material 
             await procurementPage.awardVendor(prId, MIRDetails.tempVendorName);
 
             await vendorRegistrationPage.enterGeneralInformation(vendorData);
+            vendorExtId = await vendorRegistrationPage.saveAndValidateAPI(201);
             await expect(vendorRegistrationPage.successMessage('Vendor general information saved successfully'), 'Vendor general information saved successfully message does not match').toHaveText('Vendor general information saved successfully');
 
             await vendorRegistrationPage.enterCompanyInformation(vendorData);

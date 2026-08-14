@@ -163,7 +163,18 @@ export class VendorRegistrationPage extends BasePage {
         await this.selectOptionFromDropdown('Quality Assurance', vendorData.qualityAssurance);
         await this.descriptionTxtBx.fill(vendorData.companyDescription);
         await this.uploadFile('test_Documents', 'Test_Document.pdf');
-        await this.saveVendorStep();
+        // await this.saveVendorStep();
+    }
+
+    async saveAndValidateAPI(statusCode: number) {
+        const responsePromise = this.page.waitForResponse('**/vendor/upsertGeneral');
+        await this.nextButton.click();
+        const response = await responsePromise;
+        const responseBody = await response.json();
+        const extId = responseBody.result;
+        expect(response.status(), `Enter general information API status code does not match. Expected ${statusCode}, received ${response.status()}`).toBe(statusCode);
+        console.log('Verified vendor creation API with status code:', response.status());
+        return extId;
     }
 
     @step()
