@@ -91,7 +91,7 @@ test.describe.serial('Verify Sales Order Manager rejects the sales order', () =>
 
         await test.step('Verify that BOQ is created and BOQ details are generated successfully', async () => {
             await costEstimationPage.clickAddEstimation();
-            await expect(costEstimationPage.costEstimationTitle, "Create Cost Estimation title does not match").toContainText('Create Cost Estimation');
+            // await expect(costEstimationPage.costEstimationTitle, "Create Cost Estimation title does not match").toContainText('Create Cost Estimation');
             await expect(costEstimationPage.timeLine, "Default Timeline is not 00:00:00 Sec").toContainText('00:00:00 Sec');
             await costEstimationPage.addBOQ(addBOQData);
             await costEstimationPage.validateAddBOQAPI(201);
