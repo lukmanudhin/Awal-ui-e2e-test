@@ -77,7 +77,7 @@ export class PPJOPage extends BasePage {
         this.dateOption = (date: string) => this.page.locator(`//div[@class="css-8uic9k" and text()="${date}"]`).first();
         this.attachedDocument = (fileName: string) => this.page.getByText(fileName, { exact: true }).first();
         this.createdSalesEnquiry = (name: string) => this.page.getByText(`${name}`).first();
-        this.modalTitle = (name: string) => this.page.getByRole('heading', { name: new RegExp(`^${name} close$`) });
+        this.modalTitle = (name: string) => this.page.getByRole('banner').getByText(`${name}`);
         this.siteVisitorOption = (name: string) => this.page.getByRole('option', { name, exact: true });
         this.banner = this.page.getByRole('banner');
     }
@@ -159,10 +159,10 @@ export class PPJOPage extends BasePage {
     @step()
     async validatePPJOAPI(statusCode: number, requestType: string) {
         const responsePromise = this.page.waitForResponse('**/ppjo/createPpjo');
-        if (await this.requestEstimationButton.isVisible()) {
-            await this.requestEstimationButton.click();
-        } else {
+        if (await this.saveButton.isVisible()) {
             await this.saveButton.click();
+        } else {
+            await this.requestEstimationButton.last().click();
         }
         // await this.page.waitForTimeout(2000);
         await this.page.waitForLoadState('domcontentloaded');
