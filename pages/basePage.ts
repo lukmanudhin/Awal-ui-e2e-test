@@ -129,7 +129,12 @@ export class BasePage {
 
     async clickViewIcon() {
         await this.page.waitForTimeout(500);
-        await this.eyeIcon.click({ force: true });
+        const urlBeforeClick = this.page.url();
+        await expect(async () => {
+            await this.eyeIcon.click({ force: true });
+            await this.page.waitForTimeout(300);
+            expect(this.page.url(), 'Clicking the view icon did not navigate away from the current page').not.toBe(urlBeforeClick);
+        }).toPass({ timeout: 20000, intervals: [500, 1000, 2000] });
         await this.page.waitForLoadState('domcontentloaded');
     }
 
