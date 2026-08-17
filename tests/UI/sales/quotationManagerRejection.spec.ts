@@ -111,14 +111,13 @@ test.describe.serial('Verify E2E Quotation Manager Rejection flow of Sales Enqui
             await costEstimationPage.validateAddBOM_API(201);
             await expect(costEstimationPage.successMessage('BOM created successfully'), "BOM creation success message does not match").toContainText('BOM created successfully');
             await costEstimationPage.goToTab('BOL - Bill of Labour');
-            // stage run modification
-            // await costEstimationPage.editDesignStudio('5', '6', '7', '3');
-            // await costEstimationPage.validateLabourAndCostingAPI(200);
-            await costEstimationPage.editMetalFabrication('4', '3', '2', '1');
+            await costEstimationPage.editBOLDepartment('Design Studio', '4', '3', '2', '1');
             await costEstimationPage.validateLabourAndCostingAPI(200);
-            await costEstimationPage.editElectrical('5', '6', '7', '3');
+            await costEstimationPage.editBOLDepartment('Welding', '4', '3', '2', '1');
             await costEstimationPage.validateLabourAndCostingAPI(200);
-            await costEstimationPage.editCutting('4', '3', '2', '1');
+            await costEstimationPage.editBOLDepartment('Vinyl Graphics & Application', '5', '6', '7', '3');
+            await costEstimationPage.validateLabourAndCostingAPI(200);
+            await costEstimationPage.editBOLDepartment('Plotter Cutting', '4', '3', '2', '1');
             await costEstimationPage.validateLabourAndCostingAPI(200);
         });
 

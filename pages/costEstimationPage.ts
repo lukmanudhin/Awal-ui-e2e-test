@@ -126,6 +126,7 @@ export class CostEstimationPage extends BasePage {
     private readonly vendorCheckBx: (name: string) => Locator;
     private readonly vendorQuoteCriteriaCell: (criteria: string, vendorName: string) => Locator;
     private readonly vendorQuoteColumnHeader: (vendorName: string) => Locator;
+    private readonly bolEditIcon: (department: string) => Locator;
     private readonly deliveryPeriod: Locator;
     private readonly warrantyPeriod: Locator;
     public readonly unitCostValue: Locator;
@@ -257,6 +258,7 @@ export class CostEstimationPage extends BasePage {
         this.dropDownOption = (name: string) => this.page.getByRole('option', { name: `${name}` });
         this.vendorCheckBx = (name: string) => this.page.locator(`//span[normalize-space(text())="${name}"]//following-sibling::div//input[@type="checkbox"]`)
         this.serviceRowCheckbox = (serviceName: string) => this.page.getByRole('row', { name: serviceName }).getByRole('checkbox');
+        this.bolEditIcon = (department: string) => this.page.getByRole('row').filter({ hasText: department }).locator('img').first();
         this.vendorQuoteColumnHeader = (vendorName: string) => this.page.locator(`//thead/tr/th[normalize-space()="${vendorName}"]`);
         this.vendorQuoteCriteriaCell = (criteria: string, vendorName: string) => this.page.locator(
             `//tbody/tr[td[1][normalize-space()="${criteria}"]]/td[position() = count(//thead/tr/th[normalize-space()="${vendorName}"]/preceding-sibling::th) + 1]`
@@ -548,6 +550,13 @@ export class CostEstimationPage extends BasePage {
     @step()
     async editCutting(estimationHours: string, machineHours: string, otHours: string, warrantyValue: string) {
         await this.editCuttingIcon.click({ force: true });
+        await this.labourAndCostingDetails(estimationHours, machineHours, otHours, warrantyValue);
+    }
+
+    @step()
+    async editBOLDepartment(department: string, estimationHours: string, machineHours: string, otHours: string, warrantyValue: string) {
+        await expect(this.bolEditIcon(department), `No BOL row found for department "${department}"`).toBeVisible();
+        await this.bolEditIcon(department).click({ force: true });
         await this.labourAndCostingDetails(estimationHours, machineHours, otHours, warrantyValue);
     }
     @step()
