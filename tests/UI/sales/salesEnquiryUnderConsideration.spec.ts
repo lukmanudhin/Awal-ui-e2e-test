@@ -194,7 +194,7 @@ test.describe.serial('Verify Quotation Under Consideration flow of Sales Enquiry
         });
 
         await test.step('Verify estimation status in Request Normal is updated to Pending For Approval after submission', async () => {
-            await costEstimationPage.goBackToEstimationListPage();
+            await modules.goToModule({ subModule: 'Request (Normal)' });
             await salesEnquiryPage.search(enquiryId);
             await expect(requestNormalPage.estimationStatus, "Pending For Approval status does not match").toHaveText('Pending For Approval');
         });

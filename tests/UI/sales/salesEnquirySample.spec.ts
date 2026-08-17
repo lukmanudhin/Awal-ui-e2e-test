@@ -239,7 +239,7 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Sample)', () => 
     });
 
     test('Verify estimation status in Request Internal is updated to Pending For Approval after submission', async () => {
-        await costEstimationPage.goBackToEstimationListPage();
+        await modules.goToModule({ subModule: 'Request (Normal)' });
         await salesEnquiryPage.search(enquiryId);
         await expect(requestNormalPage.estimationStatus, "Pending For Approval status does not match").toHaveText('Pending For Approval');
     });

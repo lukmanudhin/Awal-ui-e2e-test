@@ -194,7 +194,7 @@ test.describe.serial('Verify Sales Order Manager rejects the sales order', () =>
         });
 
         await test.step('Verify estimation status in Request Normal is updated to Pending For Approval after submission', async () => {
-            await costEstimationPage.goBackToEstimationListPage();
+            await modules.goToModule({ subModule: 'Request (Normal)' });
             await salesEnquiryPage.search(enquiryId);
             await expect(requestNormalPage.estimationStatus, "Pending For Approval status does not match").toHaveText('Pending For Approval');
         });
@@ -285,7 +285,7 @@ test.describe.serial('Verify Sales Order Manager rejects the sales order', () =>
             await expect(invoiceRequestPage.successMessage('Data created successfully'), "Invoice approval success message does not match").toContainText('Data created successfully');
             await modules.goToModule({ nestedSubModule: 'Invoice Register' });
             await invoiceRequestPage.search(createEnquiryData.customerName);
-            await expect(invoiceRequestPage.invoiceStatus, "Invoice status does not match").toContainText('Approved');
+            await expect(invoiceRequestPage.invoiceRegisterStatus, "Invoice status does not match").toContainText('Approved');
             await invoiceRequestPage.acknowledgeInvoiceRequest();
             await invoiceRequestPage.validateAcknowledgementAPI(200);
             await expect(invoiceRequestPage.successMessage('Invoice register upload file'), "Invoice acknowledgement success message does not match").toContainText('Invoice register upload file');

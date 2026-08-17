@@ -195,7 +195,7 @@ test.describe.serial('Verify Invoice Register is rejected by the Manager', () =>
         });
 
         await test.step('Verify estimation status in Request Normal is updated to Pending For Approval after submission', async () => {
-            await costEstimationPage.goBackToEstimationListPage();
+            await modules.goToModule({ subModule: 'Request (Normal)' });
             await salesEnquiryPage.search(enquiryId);
             await expect(requestNormalPage.estimationStatus, "Pending For Approval status does not match").toHaveText('Pending For Approval');
         });
@@ -289,7 +289,7 @@ test.describe.serial('Verify Invoice Register is rejected by the Manager', () =>
             await expect(invoiceRequestPage.successMessage('Invoice register not approved'), "Invoice register not approved success message does not match").toContainText('Invoice register not approved');
             await invoiceRequestPage.goToTab('History');
             await invoiceRequestPage.search(createEnquiryData.customerName);
-            await expect(invoiceRequestPage.invoiceStatus, "Invoice status does not match").toContainText('Not Approved');
+            await expect(invoiceRequestPage.invoiceRegisterStatus, "Invoice status does not match").toContainText('Not Approved');
             await expect(invoiceRequestPage.managerAcknowledgementStatus, "Invoice status does not match").toContainText('No');
         });
 
