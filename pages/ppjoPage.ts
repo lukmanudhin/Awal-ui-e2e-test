@@ -32,7 +32,6 @@ export class PPJOPage extends BasePage {
     public readonly enquiryIdColumn: Locator;
     private readonly sampleButton: Locator;
     public readonly salesOrderTab: Locator;
-    private readonly submitButton: Locator;
 
     // Dynamic locators
     public readonly createdSalesEnquiry: (name: string) => Locator;
@@ -59,7 +58,7 @@ export class PPJOPage extends BasePage {
         this.backButton = this.page.getByRole('img', { name: 'back arrow' });
         this.editDeliveryDateIcon = this.page.getByRole('img', { name: 'Edit' });
         this.calenderIcon = this.page.getByRole('button', { name: 'Choose date' });
-        this.submitForApprovalButton = this.page.getByRole('button', { name: 'Submit for Approval' });
+        this.submitForApprovalButton = this.page.getByRole('button', { name: 'Sent to Approval' });
         this.confirmButton = this.page.getByRole('button', { name: 'Yes' });
         this.viewEstimationBtn = this.page.getByRole('button', { name: 'View Estimation' });
         this.requestSiteVisitBtn = this.page.getByRole('button', { name: 'Request Site Visit' });
@@ -69,7 +68,6 @@ export class PPJOPage extends BasePage {
         this.enquiryIdColumn = this.page.locator('//td[@data-app-table-col="1"]//div');
         this.sampleButton = this.page.getByRole('button', { name: 'Sample' });
         this.salesOrderTab = this.page.getByRole('tab', { name: 'Sales Order #' });
-        this.submitButton = this.page.locator('//span[text()="Submit"]//parent::button');
 
         // Dynamic locators initialization
         this.dropDown = (name: string) => this.page.getByRole('combobox', { name: `${name}` }).first();
@@ -226,7 +224,7 @@ export class PPJOPage extends BasePage {
         await this.page.waitForTimeout(2000);
         await this.submitForApprovalButton.click({ force: true });
         const responsePromise = this.page.waitForResponse('**/Quotation/SubmitForApproval/**');
-        await this.submitButton.click();
+        await this.confirmButton.click();
         const response = await responsePromise;
         expect(response.status(), `Submit Quotation for approval API status code mismatch. Expected ${statusCode}, received ${response.status()}`).toBe(statusCode);
         console.log('Quotation submitted for approval successfully');

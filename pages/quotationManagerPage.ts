@@ -41,7 +41,7 @@ export class QuotationManagerPage extends BasePage {
         super(page);
         this.approveButton = this.page.getByRole('button', { name: 'Approve' });
         this.yesButton = this.page.getByRole('button', { name: 'Yes' });
-        this.quotationStatus = this.page.locator('//span[@class=" text-xs py-[2px] px-[8px]"]').first();
+        this.quotationStatus = this.page.locator('//td[@data-app-table-col="7"]//span').first();
         this.customerApprovalTable = this.page.locator('(//table[@class="w-full border-collapse table-fixed"])[2]//tr');
         this.submitButton = this.page.getByRole('button', { name: 'Submit' });
         // this.uploadButton = this.page.getByRole('button', { name: 'Upload' });
@@ -73,8 +73,8 @@ export class QuotationManagerPage extends BasePage {
     }
     @step()
     async validateEnquiryDetails(data: SalesEnquiryData) {
-        await expect(this.page.locator('//div[@class="grid grid-cols-2 mb-3"]/div[1]'), `View sales enquiry details do not contain customer name: ${data.customerName}`).toContainText(data.customerName);
-        const detailsText = await this.page.locator('//div[@class="grid grid-cols-2 mb-3"]/div[1]').innerText();
+        await expect(this.page.locator('//div[@class="grid grid-cols-2 mb-3 text-black-10"]/div[1]'), `View sales enquiry details do not contain customer name: ${data.customerName}`).toContainText(data.customerName);
+        const detailsText = await this.page.locator('//div[@class="grid grid-cols-2 mb-3 text-black-10"]/div[1]').innerText();
         console.log(`✓ Customer Name displayed: ${data.customerName}`);
 
         // Validate country

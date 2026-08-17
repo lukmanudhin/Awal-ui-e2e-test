@@ -17,6 +17,7 @@ export class InvoiceRequestPage extends BasePage {
     private readonly reasonTextBox: Locator;
     private readonly notApproveButton: Locator;
     public readonly managerAcknowledgementStatus: Locator;
+    public readonly invoiceRegisterStatus: Locator;
     // private readonly browseFileButton: Locator;
     // private readonly uploadButton: Locator;
 
@@ -29,7 +30,7 @@ export class InvoiceRequestPage extends BasePage {
         this.invoiceDateIcon = this.page.locator('//input[@placeholder="Enter Invoice Date"]//following-sibling::div/button');
         this.backArrow = this.page.getByRole('img', { name: 'back arrow' });
         this.acknowledgeIcon = this.page.locator('//img[contains(@src,"upload-yellow-icon.svg")]');
-        this.invoiceStatus = this.page.locator('//span[@class=" text-xs py-[2px] px-[8px]"]');
+        this.invoiceStatus = this.page.locator('//td[@data-app-table-col="6"]//span').first();
         this.viewInvoiceBtn = this.page.getByRole('button', { name: 'View Invoice' });
         this.acknowledgementStatus = this.page.locator('//td[@data-app-table-col="5"]//span').first();
         this.approveButton = this.page.getByRole('button', { name: 'approve', exact: true });
@@ -37,6 +38,7 @@ export class InvoiceRequestPage extends BasePage {
         this.reasonTextBox = this.page.getByRole('textbox', { name: 'Enter Reason' });
         this.notApproveButton = this.page.getByRole('button', { name: 'not approve' });
         this.managerAcknowledgementStatus = this.page.locator('//td[@data-app-table-col="6"]//span').first();
+        this.invoiceRegisterStatus = this.page.locator('//td[@data-app-table-col="7"]//span').first();
 
         // this.browseFileButton = this.page.getByRole('button', { name: 'Browse files' });
         // this.uploadButton = this.page.getByRole('button', { name: 'Upload' });
@@ -51,8 +53,13 @@ export class InvoiceRequestPage extends BasePage {
     }
     @step()
     async validateEnquiryDetails(data: SalesEnquiryData) {
-        await expect(this.page.locator('(//div[@class="bg-[#f2f2f2] p-4 space-y-2 text-[14px] text-[#231F20] rounded-md border border-[E5E7EA]"])[1]').or(this.page.locator('//div[@class="space-y-6"]')), `Invoice request details do not contain customer name: ${data.customerName}`).toContainText(data.customerName);
-        const detailsText = await this.page.locator('(//div[@class="bg-[#f2f2f2] p-4 space-y-2 text-[14px] text-[#231F20] rounded-md border border-[E5E7EA]"])[1]').or(this.page.locator('//div[@class="space-y-6"]')).innerText();
+        const detailsContainer = this.page.locator('//div[@class="bg-white-30 p-4 space-y-2 text-[14px] text-black-10 rounded-md border border-gray-200"]')
+            .or(this.page.locator('//div[@class="grid grid-cols-2 gap-y-6 gap-x-8 mb-6"]'))
+            .or(this.page.locator('//div[@class="grid grid-cols-2 gap-y-6 gap-x-8"]'))
+            .or(this.page.locator('//div[@class="grid grid-cols-2 gap-8"]'))
+            .first();
+        await expect(detailsContainer, `Invoice request details do not contain customer name: ${data.customerName}`).toContainText(data.customerName);
+        const detailsText = await detailsContainer.innerText();
         console.log(`✓ Customer Name displayed in Invoice Request: ${data.customerName}`);
         // expect(detailsText, `Invoice request details do not contain country: ${data.building}`).toContain(data.building);
         // console.log(`✓ Building displayed in Invoice Request: ${data.building}`);
@@ -61,7 +68,7 @@ export class InvoiceRequestPage extends BasePage {
     }
     @step()
     async validateBOQTableDetails(boqData: BOQData) {
-        const boqText = await this.page.locator('//tr[@class="border border-[#ece9e9] p-[3px] h-[40px] text-[14px] font-[400] text-[#231F20]"]').first().innerText();
+        const boqText = await this.page.locator('//table//tbody').first().innerText();
         // expect(boqText, 'BOQ table does not contain product name').toContain(boqData.signName);
         expect(boqText, 'BOQ table does not contain quantity').toContain(boqData.quantity);
         expect(boqText, 'BOQ table does not contain description').toContain(boqData.description);

@@ -7,7 +7,6 @@ export class SalesOrderManagerPage extends BasePage {
     public readonly salesOrderStatus: Locator;
     private readonly approveButton: Locator;
     private readonly reasonTextBox: Locator;
-    private readonly submitButton: Locator;
     public readonly salesOrderApproveStatus: Locator;
     private readonly sendForApprovalButton: Locator;
     private readonly yesButton: Locator;
@@ -15,10 +14,9 @@ export class SalesOrderManagerPage extends BasePage {
     private readonly salesOrderId: Locator;
     constructor(public readonly page: Page) {
         super(page);
-        this.salesOrderStatus = this.page.locator('//span[@class=" text-xs py-[2px] px-[8px]"]').first();
+        this.salesOrderStatus = this.page.locator('//span[contains(@class, "text-xs") and contains(@class, "py-[2px]") and contains(@class, "px-[8px]")]').first();
         this.approveButton = this.page.getByRole('button', { name: 'Approve' });
         this.reasonTextBox = this.page.getByRole('textbox', { name: 'Enter Reason for Approval' }).or(this.page.getByRole('textbox', { name: 'Enter Reason' }));
-        this.submitButton = this.page.getByRole('button', { name: 'Submit' });
         this.salesOrderApproveStatus = this.page.locator('//td[@data-app-table-col="8"]//span').first();
         this.sendForApprovalButton = this.page.getByRole('button', { name: 'Send for Approval' });
         this.yesButton = this.page.getByRole('button', { name: 'Yes' });
@@ -32,9 +30,8 @@ export class SalesOrderManagerPage extends BasePage {
     @step()
     async approveSalesOrderCheckListAndValidateAPI(statusCode: number) {
         await this.approveButton.click();
-        await this.reasonTextBox.fill('Approved');
         const responsePromise = this.page.waitForResponse('**/SalesOrder/updateSalesChecklistStatus');
-        await this.submitButton.click();
+        await this.yesButton.click();
         const response = await responsePromise;
         expect(response.status(), `Approve sales order check list API status code mismatch. Expected ${statusCode}, received ${response.status()}`).toBe(statusCode);
         console.log('Sales order check list approved successfully');
@@ -65,9 +62,8 @@ export class SalesOrderManagerPage extends BasePage {
     @step()
     async approveSalesOrderAndValidateAPI(statusCode: number) {
         await this.approveButton.click();
-        await this.reasonTextBox.fill('Approved');
         const responsePromise = this.page.waitForResponse('**/SalesOrder/updateSalesOrderStatus');
-        await this.submitButton.click();
+        await this.yesButton.click();
         const response = await responsePromise;
         expect(response.status(), `Approve sales order API status code mismatch. Expected ${statusCode}, received ${response.status()}`).toBe(statusCode);
         console.log('Sales order approved successfully');
