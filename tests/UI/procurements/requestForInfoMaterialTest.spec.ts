@@ -82,7 +82,7 @@ test.describe('Request For Info - Material End-to-End Scenarios', () => {
         });
 
         await test.step('Verify the enquiry moves to Pending From Estimation', async () => {
-            await ppjoPage.goBackFromPPJO();
+            await modules.goToModule({ subModule: 'Sales Enquiry' });
             await expect(page, "Sales Enquiry list page was not opened after going back from PPJO").toHaveURL(`${ENV.BASE_URL}/sales/sales-enquiry`);
             enquiryId = await salesEnquiryPage.search(createEnquiryData.customerName);
             await salesEnquiryPage.validateCustomerStatus(createEnquiryData.customerName, 'Pending From Estimation');
@@ -123,13 +123,13 @@ test.describe('Request For Info - Material End-to-End Scenarios', () => {
 
         await test.step('Enter the Bill of Labour details', async () => {
             await costEstimationPage.goToTab('BOL - Bill of Labour');
-            await costEstimationPage.editDesignStudio('5', '6', '7', '3');
+            await costEstimationPage.editBOLDepartment('Design Studio', '4', '3', '2', '1');
             await costEstimationPage.validateLabourAndCostingAPI(200);
-            await costEstimationPage.editMetalFabrication('4', '3', '2', '1');
+            await costEstimationPage.editBOLDepartment('Welding', '4', '3', '2', '1');
             await costEstimationPage.validateLabourAndCostingAPI(200);
-            await costEstimationPage.editElectrical('5', '6', '7', '3');
+            await costEstimationPage.editBOLDepartment('Vinyl Graphics & Application', '5', '6', '7', '3');
             await costEstimationPage.validateLabourAndCostingAPI(200);
-            await costEstimationPage.editCutting('4', '3', '2', '1');
+            await costEstimationPage.editBOLDepartment('Plotter Cutting', '4', '3', '2', '1');
             await costEstimationPage.validateLabourAndCostingAPI(200);
         });
 
