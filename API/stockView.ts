@@ -7,8 +7,8 @@ export class StockViewAPI {
     constructor(private request: APIRequestContext) {
     }
 
-    async getMaterialWithHighStock(accessToken: string) {
-        const response = await this.request.get(`${PROCUREMENT_API_BASE}/stockView/getAllStockView?PageNumber=1&PageSize=10`, {
+    async getMaterialWithHighStock(accessToken: string, subStore: string) {
+        const response = await this.request.get(`${PROCUREMENT_API_BASE}/stockView/getAllStockView?PageNumber=1&PageSize=10&subStore=${subStore}&materialStatus=InStock`, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`
             }

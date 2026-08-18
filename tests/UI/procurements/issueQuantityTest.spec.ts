@@ -14,7 +14,7 @@ test.describe('Verify Material Indent Life Cycle With Multiple Partial Issues E2
 
         await test.step('Find a material that holds enough stock to cover the whole request', async () => {
             accessToken = await salesEnquiryAPI.getAccessToken(`${ENV.EMAIL_ID}`, `${ENV.PASSWORD}`);
-            MIRDetails.material = await stockViewAPI.getMaterialWithHighStock(accessToken);
+            MIRDetails.material = await stockViewAPI.getMaterialWithHighStock(accessToken, 'RawMaterials');
             requestedBy = await salesEnquiryAPI.getLoggedInUserName(accessToken);
         });
 

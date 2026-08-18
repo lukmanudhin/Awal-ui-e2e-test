@@ -14,7 +14,7 @@ test.describe('Create Manufacturing E2E Flow', () => {
         createEnquiryData = getCreateEnquiryData();
         manufacturingData = getManufacturingData();
         accessToken = await salesEnquiryAPI.getAccessToken(`${ENV.EMAIL_ID}`, `${ENV.PASSWORD}`);
-        manufacturingData.material = await stockViewAPI.getMaterialWithHighStock(accessToken);
+        manufacturingData.material = await stockViewAPI.getMaterialWithHighStock(accessToken, 'RawMaterials');
 
         await test.step('Login', async () => {
             await loginPage.launchAwalWebsite();
