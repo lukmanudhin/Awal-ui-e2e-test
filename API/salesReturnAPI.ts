@@ -5,7 +5,8 @@ export class SalesReturnAPI {
     constructor(private request: APIRequestContext) {
     }
 
-    async deleteSalesReturn(accessToken: string, salesReturnId: string) {
+    async deleteSalesReturnIfCreated(accessToken: string, salesReturnId: string) {
+        if (!salesReturnId) return;
         const response = await this.request.delete(
             `https://sales-api-${ENV.ENV_API}.colanapps.in/api/v1/salesReturn/deleteSalesReturn/${salesReturnId}`,
             {
