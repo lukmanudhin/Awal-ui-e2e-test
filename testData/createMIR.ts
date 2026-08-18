@@ -33,6 +33,7 @@ export type CreateMIRData = {
   shipmentMode: string;
   landedCost: string;
   subcontractorService: string;
+  employeeName: string;
 };
 
 export const getMIRDetails = (): CreateMIRData => {
@@ -72,5 +73,6 @@ export const getMIRDetails = (): CreateMIRData => {
     shipmentMode: 'Sea Freight',
     landedCost: '250',
     subcontractorService: 'ELECTRICAL',
+    employeeName: ``,
   };
 };
