@@ -109,6 +109,7 @@ export class TradingPage extends BasePage {
     }
 
     async clickTrading() {
+        await this.tradingButton.focus();
         await this.tradingButton.click({ force: true });
         await this.page.waitForLoadState('domcontentloaded');
     }

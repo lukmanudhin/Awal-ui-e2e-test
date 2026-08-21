@@ -338,7 +338,7 @@ export class QuotationManagerPage extends BasePage {
     }
     @step()
     async validateVersion2AndOption1Visible(version: string, option: string) {
-        const innerText = await this.page.locator('//div[@class="border-l-2 border-[#D9D9D9] pl-8"]').innerText();
+        const innerText = await this.page.locator('//div[@class="border-l-2 border-gray-200 pl-8 text-black-10"]').innerText();
         expect(innerText, `Version and option details do not contain version: ${version}`).toContain(version);
         expect(innerText, `Version and option details do not contain option: ${option}`).toContain(option);
     }

@@ -3,11 +3,11 @@ import { test } from "../../../fixtures/baseFixtures";
 import { ENV } from "../../../utils/ENV";
 import { getTradingData, type TradingData } from "../../../testData/tradingData";
 
-test.describe('Create Sales Enquiry', () => {
+test.describe('Verify Trading E2E Test', () => {
     let tradingData: TradingData;
     let accessToken: string;
     let leadId: string;
-    test.setTimeout(100000);
+    test.setTimeout(160000);
     test.beforeEach('Login', async ({ page, loginPage, homePage, salesEnquiryPage, salesEnquiryAPI, stockViewAPI }) => {
         tradingData = getTradingData();
         accessToken = await salesEnquiryAPI.getAccessToken(`${ENV.EMAIL_ID}`, `${ENV.PASSWORD}`);

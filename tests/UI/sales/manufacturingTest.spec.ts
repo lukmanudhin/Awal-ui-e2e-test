@@ -54,10 +54,10 @@ test.describe('Create Manufacturing E2E Flow', () => {
         await expect(manufacturingPage.successMessage('Material added successfully'), "Manufacturing material added success message does not match").toHaveText('Material added successfully');
         await manufacturingPage.validateMaterialTable(manufacturingData);
         await manufacturingPage.createOrderAndValidateAPI(200);
-        await expect(manufacturingPage.successMessage('Trading order created successfully'), "Trading order created success message does not match").toHaveText('Trading order created successfully');
+        await expect(manufacturingPage.successMessage('Manufacturing order created successfully'), "Manufacturing order created success message does not match").toHaveText('Manufacturing order created successfully');
         await ppjoPage.validateSampleDetails(createEnquiryData.customerName, createEnquiryData.city, createEnquiryData.country, createEnquiryData.telephoneNumber1);
         await manufacturingPage.requestApprovalAndValidateAPI(200);
-        await expect(manufacturingPage.successMessage('Trading sent for approval'), "Trading sent for approval message does not match").toHaveText('Trading sent for approval');
+        await expect(manufacturingPage.successMessage('Manufacturing sent for approval'), "Manufacturing sent for approval message does not match").toHaveText('Manufacturing sent for approval');
         await manufacturingPage.search(createEnquiryData.customerName);
         await expect(salesEnquiryPage.socialMediaStatus, "Sales enquiry status does not match").toHaveText('Pending For Approval');
         await modules.goToModule({ nestedSubModule: 'Manufacturing Approval' });
@@ -67,7 +67,7 @@ test.describe('Create Manufacturing E2E Flow', () => {
         await ppjoPage.validateSampleDetails(createEnquiryData.customerName, createEnquiryData.city, createEnquiryData.country, createEnquiryData.telephoneNumber1);
         await manufacturingPage.validateMaterialTable(manufacturingData);
         await manufacturingPage.approveInvoiceAndValidateAPI(200);
-        await expect(manufacturingPage.successMessage('Trading approved successfully'), "Trading approved success message does not match").toHaveText('Trading approved successfully');
+        await expect(manufacturingPage.successMessage('Manufacturing approved successfully'), "Manufacturing approved success message does not match").toHaveText('Manufacturing approved successfully');
         await manufacturingPage.goToTab('History');
         await manufacturingPage.search(createEnquiryData.customerName);
         await expect(salesEnquiryPage.enquiryStatus, "Manufacturing approval status does not match").toHaveText('Approved');

@@ -20,14 +20,15 @@ test.describe('Sales Return E2E Test', () => {
 
     test.afterEach('Delete Sales Return', async ({ salesReturnAPI, page }) => {
         await page.close();
-        const deleteAPIResponse = await salesReturnAPI.deleteSalesReturn(accessToken, salesReturnId);
+        const deleteAPIResponse = await salesReturnAPI.deleteSalesReturnIfCreated(accessToken, salesReturnId);
         expect(deleteAPIResponse.message, 'Delete Sales Return API Message Mismatch').toBe('Data deleted successfully');
         console.log(`Sales return ${salesReturnId} deleted successfully`);
     });
 
     test('Verify sales return lifecycle through QC, Finance approval and case closure', async ({ page, modules, homePage, salesReturnPage }) => {
         // const leadNumber = 'LN01046';
-        const leadNumber = 'LN00003';
+        // const leadNumber = 'LN00003';
+        const leadNumber = process.env.ENV === 'qa' ? 'LN01046' : 'LN00003';
         const voucherData = getBankPaymentVoucherData();
         const salesReturnData = getSalesReturnData();
 
@@ -36,7 +37,6 @@ test.describe('Sales Return E2E Test', () => {
         await salesReturnPage.clickNewTrading();
         await salesReturnPage.selectLeadNumber(leadNumber);
         expect(await salesReturnPage.tableRow.count(), "Sales return row is not found").toBeGreaterThanOrEqual(2);
-        await salesReturnPage.clickViewIcon();
         await salesReturnPage.addSalesReturnDetails(salesReturnData);
         salesReturnId = await salesReturnPage.validateCreateSalesReturnAPI(201);
         await expect(salesReturnPage.successMessage('Sales return created successfully'), "Sales return created success message does not match").toHaveText('Sales return created successfully');
@@ -49,7 +49,6 @@ test.describe('Sales Return E2E Test', () => {
         await salesReturnPage.search(salesReturnNumber);        
         await expect(salesReturnPage.status, "Sales return status does not match").toHaveText('Pending From QC');
         await salesReturnPage.clickStartQCButton();
-        await salesReturnPage.clickViewIcon();
         await salesReturnPage.submitQCInspectionForm(salesReturnData);
         await expect(salesReturnPage.successMessage('QC Inspected successfully'), "QC Inspected success message does not match").toHaveText('QC Inspected successfully');
         await salesReturnPage.submitToQCAndValidateAPI(200);

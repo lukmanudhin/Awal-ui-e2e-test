@@ -65,7 +65,7 @@ export class PPJOPage extends BasePage {
         this.requestSampleBtn = this.page.getByRole('button', { name: 'Request Sample' });
         this.newSampleDescription = this.page.locator('#requirementDetails');
         this.addSampleButton = this.page.getByRole('button', { name: 'Add New Sample Request Add' });
-        this.enquiryIdColumn = this.page.locator('//td[@data-app-table-col="1"]//div');
+        this.enquiryIdColumn = this.page.locator('//td[@data-app-table-col="2"]//div');
         this.sampleButton = this.page.getByRole('button', { name: 'Sample' });
         this.salesOrderTab = this.page.getByRole('tab', { name: 'Sales Order #' });
 
@@ -162,7 +162,7 @@ export class PPJOPage extends BasePage {
         } else {
             await this.requestEstimationButton.last().click();
         }
-        // await this.page.waitForTimeout(2000);
+        await this.page.waitForTimeout(2000);
         await this.page.waitForLoadState('domcontentloaded');
         const response = await responsePromise;
         expect(response.status(), `${requestType} API failed with status code. Expected ${statusCode}, received ${response.status()}`).toBe(statusCode);

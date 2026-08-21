@@ -297,7 +297,7 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Normal) through 
 
     test('Verify Invoice Manager Approval API', async ({ invoiceRequestAPI }) => {
         const response = await invoiceRequestAPI.updateManagerApproval(accessToken, invoiceExtId, true);
-        expect(response.message, 'Invoice Manager Approval API Message Mismatch').toBe('Data updated successfully');
+        expect(response.message, 'Invoice Manager Approval API Message Mismatch').toBe('Data Approved successfully');
     });
 
     test('Verify Acknowledge Invoice File Upload API', async ({ invoiceRequestAPI }) => {

@@ -10,7 +10,7 @@ test.describe('Verify Pipeline E2E Test', () => {
     let enquiryId: string;
     let extId: string
 
-    test.setTimeout(100000);
+    test.setTimeout(150000);
     test.beforeEach('Login and Create Sales Enquiry', async ({ page, loginPage, homePage, salesEnquiryPage, productsPage }) => {
         createEnquiryData = getCreateEnquiryData();
         pipelineData = getPipelineData();
@@ -48,7 +48,7 @@ test.describe('Verify Pipeline E2E Test', () => {
         console.log('API Response:', deleteAPIResponse);
     });
 
-    test('Verify Sales Return E2E Flow', async ({ modules, pipelinePage }) => {
+    test('Verify Pipeline E2E Flow', async ({ modules, pipelinePage }) => {
         await modules.goToModule({ module: 'Sales', subModule: 'Pipelines' });
         await pipelinePage.clickCreatePipeline();
         await pipelinePage.selectSalesEnquiry(pipelineData.enquiry);

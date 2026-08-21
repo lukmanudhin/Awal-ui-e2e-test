@@ -30,6 +30,7 @@ export class SalesReturnPage extends BasePage {
     private readonly confirmYesButton: Locator;
     public readonly bankPaymentStatus: Locator;
     private readonly closeRemarks: Locator;
+    private readonly qcFormBtn: Locator;
 
     constructor(public readonly page: Page) {
         super(page);
@@ -60,6 +61,7 @@ export class SalesReturnPage extends BasePage {
         this.confirmYesButton = this.page.getByRole('button', { name: 'Yes' });
         this.bankPaymentStatus = this.page.locator('//td[@data-app-table-col="6"]//span').first();
         this.closeRemarks = this.page.getByRole('textbox', { name: 'Final Remarks' });
+        this.qcFormBtn = this.page.getByRole('button', { name: 'QC Form' });
     }
 
     @step()
@@ -86,6 +88,7 @@ export class SalesReturnPage extends BasePage {
 
     @step()
     async addSalesReturnDetails(data: SalesReturnData) {
+        await this.eyeIcon.click();
         await this.quantityInput.fill(data.quantity);
         await this.salesReturnReasonInput.fill(data.reason);
         await this.remarksInput.fill(data.remarks);
@@ -118,6 +121,7 @@ export class SalesReturnPage extends BasePage {
 
     @step()
     async submitQCInspectionForm(data: SalesReturnData) {
+        await this.qcFormBtn.click();
         await this.failedQuantityInput.fill(data.failedQuantity);
         await this.qcRemarkInput.fill(data.qcRemark);
         await this.uploadFile('test_Documents', data.fileName);

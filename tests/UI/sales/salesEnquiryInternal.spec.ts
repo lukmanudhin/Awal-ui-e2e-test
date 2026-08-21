@@ -77,7 +77,7 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Internal)', () =
 
     test('Create enquiry and save Acrylic product details', async () => {
         await salesEnquiryPage.clickInternalRequestButton();
-        createEnquiryData.customerName = 'EMP157-Vignesh Waran';
+        createEnquiryData.customerName = 'EMP164-Praveeen Kumar';
         createEnquiryData.product = ['Acrylic Products'];
         await salesEnquiryPage.createSalesEnquiry(createEnquiryData);
         extId = await salesEnquiryPage.validateCreateSalesEnquiryAPI(201, "Create Enquiry");
@@ -118,7 +118,7 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Internal)', () =
     });
 
     test('Return to Sales Enquiry and Validate Sales Enquiry status', async () => {
-        await modules.goToModule({ subModule: 'Sales Enquiry' });
+        await modules.goToModule({ subModule: 'Internal Requests' });
         await expect(page, "Sales Enquiry list page was not opened after going back from PPJO").toHaveURL(`${ENV.BASE_URL}/sales/internal-request`);
         await salesEnquiryPage.search(enquiryId);
         await salesEnquiryPage.validateCustomerStatus(createEnquiryData.customerName, 'Pending From Estimation');
@@ -257,7 +257,7 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Internal)', () =
     });
 
     test('Verify estimation status in Request Internal is updated to Pending For Approval after submission', async () => {
-        await modules.goToModule({ subModule: 'Request (Normal)' });
+        await modules.goToModule({ subModule: 'Request (Internal)' });
         await salesEnquiryPage.search(enquiryId);
         await expect(requestNormalPage.estimationStatus, "Pending For Approval status does not match").toHaveText('Pending For Approval');
     });

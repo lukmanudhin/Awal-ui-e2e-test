@@ -125,6 +125,7 @@ export class BasePage {
     async goToTab(tabName: string) {
         await this.tab(tabName).click();
         await this.page.waitForLoadState('domcontentloaded');
+        await this.waitForTableToLoad();
     }
 
     async clickViewIcon() {

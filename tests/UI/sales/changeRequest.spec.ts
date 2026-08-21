@@ -262,7 +262,7 @@ test.describe.serial('Verify Change Request flow of Sales Enquiry (Request Norma
         await test.step('Verify Customer - Discount Request status is reflected in Estimation - Request (Normal)', async () => {
             await modules.goToModule({ module: 'Estimation', subModule: 'Request (Normal)' });
             await requestNormalPage.search(enquiryId);
-            await expect(requestNormalPage.quotationStatus, "Quotation status does not match in Estimation - Request (Normal)").toHaveText('Customer - Change Request');
+            await expect(requestNormalPage.estimationStatus, "Quotation status does not match in Estimation - Request (Normal)").toHaveText('Customer - Change Request');
         });
 
         //----------------------------

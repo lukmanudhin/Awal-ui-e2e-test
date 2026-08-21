@@ -145,8 +145,9 @@ export class PipelinePage extends BasePage {
   }
 
   async validateSalesEnquiryDetails(data: SalesEnquiryData) {
-    await expect(this.page.locator('//div[@class="grid grid-cols-2 pt-4 "]').or(this.page.locator('//div[@class="d-flex flex-column w-full bg-white gap-2 p-4"]')), `Details do not contain customer name: ${data.customerName}`).toContainText(data.customerName);
-    const details = await this.page.locator('//div[@class="grid grid-cols-2 pt-4 "]').or(this.page.locator('//div[@class="d-flex flex-column w-full bg-white gap-2 p-4"]')).innerText();
+    await this.page.waitForTimeout(3000);
+    await expect(this.page.locator('//div[@class="grid grid-cols-2 pt-4 "]').or(this.page.locator('//div[@class="d-flex flex-column w-full bg-white gap-2 p-4 text-black-10"]')), `Details do not contain customer name: ${data.customerName}`).toContainText(data.customerName);
+    const details = await this.page.locator('//div[@class="grid grid-cols-2 pt-4 "]').or(this.page.locator('//div[@class="d-flex flex-column w-full bg-white gap-2 p-4 text-black-10"]')).innerText();
     expect(details, "Details do not contain mobile number 1").toContain(data.mobileNumber1);
     expect(details, "Details do not contain country").toContain(data.country);
     expect(details, "Details do not contain state").toContain(data.state);

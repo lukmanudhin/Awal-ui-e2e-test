@@ -870,8 +870,8 @@ export class CostEstimationPage extends BasePage {
     }
     @step()
     async validateRequestTableVisible(title: string, requestType: string) {
-        await expect(this.page.locator('(//div[@class="p-0 bg-[#fff] rounded-[8px] max-h-[100%] mt-4"])[2]'), `Request table does not contain title: ${title}`).toContainText(title);
-        const boqDetails = await this.page.locator('(//div[@class="p-0 bg-[#fff] rounded-[8px] max-h-[100%] mt-4"])[2]').innerText();
+        await expect(this.page.locator('(//div[@class="p-0 bg-white rounded-[8px] max-h-[100%] mt-4"])[2]'), `Request table does not contain title: ${title}`).toContainText(title);
+        const boqDetails = await this.page.locator('(//div[@class="p-0 bg-white rounded-[8px] max-h-[100%] mt-4"])[2]').innerText();
         expect(boqDetails, `BOQ details do not contain request type: ${requestType}`).toContain(requestType);
         expect(boqDetails, "BOQ details do not contain View Attachment").toContain('View Attachment');
     }

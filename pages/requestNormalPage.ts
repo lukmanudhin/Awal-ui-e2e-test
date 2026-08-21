@@ -18,7 +18,7 @@ export class RequestNormalPage extends BasePage {
 
         // Dynamic locators initialization
         this.customerRow = (name: string) => this.page.getByRole('row').filter({ hasText: name }).first();
-        this.estimationStatus = this.page.locator('//td[@data-app-table-col="5"]//span');
+        this.estimationStatus = this.page.locator('//td[@data-app-table-col="5"]//span').first();
     }
     @step()
     async validateEnquiryDetailsInRequestNormal(customerName: string) {
