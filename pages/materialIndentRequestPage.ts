@@ -25,6 +25,10 @@ export class MaterialIndentRequestPage extends BasePage {
     private readonly selectAllMaterialChkBx: Locator;
     private readonly issueMaterialButton: Locator;
     public readonly materialStatus: Locator;
+    private readonly returnedQuantityTxtBx: Locator;
+    private readonly addConsumablesBtn: Locator;
+    private readonly newQuantityTxtBx: Locator;
+    private readonly employeeTxtBx: Locator;
     constructor(public readonly page: Page) {
         super(page);
         this.createButton = this.page.getByRole('button', { name: 'Create plus icon' });
@@ -49,6 +53,10 @@ export class MaterialIndentRequestPage extends BasePage {
         this.selectAllMaterialChkBx = this.page.locator('//input[@type="checkbox"]').first();
         this.issueMaterialButton = this.page.getByRole('button', { name: 'Issue Materials' });
         this.materialStatus = this.page.locator('//td[@data-app-table-col="7"]//span').first();
+        this.returnedQuantityTxtBx = this.page.getByRole('spinbutton', { name: 'Returned Qty' });
+        this.addConsumablesBtn = this.page.getByRole('button', { name: 'Add Item plus icon' });
+        this.newQuantityTxtBx = this.page.getByRole('spinbutton', { name: 'New Qty*' });
+        this.employeeTxtBx = this.page.getByRole('combobox', { name: 'Employee & Name*' });
     }
 
     private async selectFromDropdown(dropdownName: string, value: string) {
@@ -63,7 +71,11 @@ export class MaterialIndentRequestPage extends BasePage {
         await this.selectFromDropdown('Requisition Type*', mirDetails.requisitionType);
         await this.selectFromDropdown('Priority Level', mirDetails.priority);
         await this.selectFromDropdown('PJO Number', mirDetails.pjoNumber);
+        if(await this.employeeTxtBx.isVisible()){
+            await this.selectOptionFromDropdown('Employee & Name*', mirDetails.employeeName)
+        }
     }
+
     @step()
     async addMaterial(mirDetails: CreateMIRData) {
         await this.addMaterialButton.click();
@@ -75,6 +87,16 @@ export class MaterialIndentRequestPage extends BasePage {
         await this.reqQuantityTxtBx.fill(mirDetails.quantity);
         await this.remarksTxtBx.fill(mirDetails.remarks);
         await this.selectDate(new Date().getDate() + 5);
+        await this.saveButton.click();
+    }
+
+    async addConsumables(mirDetails: CreateMIRData) {
+        await this.addConsumablesBtn.click();
+        await this.selectOptionFromDropdown('Item Name*', mirDetails.material)
+        await this.returnedQuantityTxtBx.fill(mirDetails.returnQuantity);
+        await this.remarksTxtBx.fill('Remarks');
+        await this.selectDate(new Date().getDate() + 1)
+        await this.newQuantityTxtBx.fill(mirDetails.quantity);
         await this.saveButton.click();
     }
     @step()
@@ -126,7 +148,7 @@ export class MaterialIndentRequestPage extends BasePage {
     }
 
     async filter(filterType: string, filterOption: string) {
-        await this.selectFromDropdown(filterType, filterOption);    
+        await this.selectFromDropdown(filterType, filterOption);
     }
 
     @step()

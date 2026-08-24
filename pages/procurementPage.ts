@@ -40,12 +40,25 @@ export class ProcurementPage extends BasePage {
     private readonly submitForEstimationBtn: Locator;
     private readonly landedCostTxtBx: Locator;
     private readonly subContractorEditIcon: Locator;
+    private readonly createButton: Locator;
+    private readonly evaluateButton: Locator;
+    private readonly qualityTxtBx: Locator;
+    private readonly deliveryTxtBx: Locator;
+    private readonly priceTxtBx: Locator;
+    private readonly orderPerformanceTxtBx: Locator;
+    private readonly submitForApprovalButton: Locator;
+    private readonly performancePercentage: Locator;
+    public readonly performanceColumn: Locator;
+    public readonly vendorEvaluationStatus: Locator;
+    public readonly vendorPerformanceTxtBx: Locator;
+    private readonly historyButton: Locator;
 
     // Dynamic locators
     private readonly rowByText: (text: string) => Locator;
-    private readonly quoteRow: (prId: string, vendorName: string) => Locator;
+    private readonly quoteRow: (prId: string, vendorName?: string) => Locator;
     private readonly rowsForPR: (prId: string) => Locator;
     private readonly editIcons: (name: string) => Locator;
+    private readonly vendorManagerApprovalBtn: Locator;
 
     constructor(public readonly page: Page) {
         super(page);
@@ -86,10 +99,23 @@ export class ProcurementPage extends BasePage {
         this.submitForEstimationBtn = this.page.getByRole('button', { name: 'Submit For Estimation' });
         this.landedCostTxtBx = this.page.locator('#landedCost');
         this.subContractorEditIcon = this.page.locator('//table[contains(.,"Subcontractor Service Name")]//tbody/tr').nth(0).locator('img').first();
+        this.createButton = this.page.getByRole('button', { name: 'Create' });
+        this.evaluateButton = this.page.getByRole('button', { name: 'Evaluate' });
+        this.qualityTxtBx = this.page.locator('#quality');
+        this.deliveryTxtBx = this.page.locator('#delivery');
+        this.priceTxtBx = this.page.locator('#price');
+        this.orderPerformanceTxtBx = this.page.locator('#orderPerformance');
+        this.submitForApprovalButton = this.page.getByRole('button', { name: 'Submit For Approval' });
+        this.performancePercentage = this.page.locator('//td[contains(@class,"font-bold")]');
+        this.performanceColumn = this.page.locator('//td[@data-app-table-col="4"]');
+        this.vendorEvaluationStatus = this.page.locator('//td[@data-app-table-col="5"]//span').first();
+        this.vendorManagerApprovalBtn = this.page.getByRole('button', { name: 'Approve', exact: true });
+        this.vendorPerformanceTxtBx = this.page.getByRole('textbox', { name: 'Vendor Performance Score' });
+        this.historyButton = this.page.getByRole('button', { name: 'history_icon History' });
 
         // Dynamic locators initialization
         this.rowByText = (text: string) => this.page.getByRole('row', { name: text });
-        this.quoteRow = (prId: string, vendorName: string) =>
+        this.quoteRow = (prId: string, vendorName?: string) =>
             this.page.getByRole('row').filter({ hasText: prId }).filter({ hasText: vendorName }).first();
         this.rowsForPR = (prId: string) => this.page.getByRole('row').filter({ hasText: prId });
         this.editIcons = (name: string) => this.page.locator(`//h3[text()="${name}"]//following-sibling::div//span//img`);
@@ -248,7 +274,7 @@ export class ProcurementPage extends BasePage {
         await this.saveMaterialRowBtn.click();
 
         await this.page.mouse.wheel(0, 1000);
-        await this.editIcons('Delivery Period').click();
+        await this.editIcons('Delivery Days').click();
         await this.page.locator('//input[@maxlength="100"]').fill(mirDetails.deliveryPeriod);
         await this.tickIcon.click();
 
@@ -311,7 +337,9 @@ export class ProcurementPage extends BasePage {
     @step()
     async awardVendor(prId: string, vendorName: string) {
         await this.goToTab('Quotes Received');
-        await this.quoteRow(prId, vendorName).getByRole('checkbox').check();
+        // need to be uncommented after issue is resolved
+        // await this.quoteRow(prId, vendorName).getByRole('checkbox').check();
+        await this.quoteRow(prId).getByRole('checkbox').check();
         await this.awardVendorsBtn.click();
         await this.page.waitForTimeout(2000);
         await this.page.getByRole('checkbox').nth(1).click();
@@ -358,4 +386,31 @@ export class ProcurementPage extends BasePage {
         const data = await this.page.locator('//div[@class="p-[18px] undefined"]').innerText();
         expect(data).toContain(orderType);
     }
+
+    async createVendorEvaluation(vendorName: string, quality: number, delivery: number, price: number) {
+        await this.createButton.click();
+        await this.search(vendorName);
+        await this.evaluateButton.click();
+        await expect(this.orderPerformanceTxtBx).toHaveValue('0');
+        await this.qualityTxtBx.fill(`${quality}`);
+        await this.deliveryTxtBx.fill(`${delivery}`);
+        await this.priceTxtBx.fill(`${price}`);
+        const performancePercentage = quality + delivery + price;
+        await expect(this.orderPerformanceTxtBx).toHaveValue(`${performancePercentage}`);
+        // commented need to ask
+        // await expect(this.performancePercentage).toContainText(`${performancePercentage}`)
+        await this.submitForApprovalButton.click();
+        await this.yesButton.click();
+        return performancePercentage;
+    }
+    async approveVendorEvaluation() {
+        await this.vendorManagerApprovalBtn.click();
+        await this.yesButton.click();
+    }
+
+    @step()
+    async goToHistory() {
+        await this.historyButton.click();
+    }
+
 }

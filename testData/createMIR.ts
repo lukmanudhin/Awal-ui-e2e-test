@@ -34,6 +34,7 @@ export type CreateMIRData = {
   landedCost: string;
   subcontractorService: string;
   employeeName: string;
+  returnQuantity: string;
 };
 
 export const getMIRDetails = (): CreateMIRData => {
@@ -61,7 +62,7 @@ export const getMIRDetails = (): CreateMIRData => {
     rack: 'Put Away Rack 1',
     shelf: 'Finance_Self',
     shipTo: 'Colan tech Info',
-    vendorQuotationVendor: 'QA Vendor testing',
+    vendorQuotationVendor: 'PowerMech',
     tempVendorName: `Test Vendor ${RandomDataGenerator.getNumber(100000, 999999)}`,
     tempVendorEmail: `${RandomDataGenerator.getEmail()}`,
     creditDays: '25',
@@ -74,5 +75,6 @@ export const getMIRDetails = (): CreateMIRData => {
     landedCost: '250',
     subcontractorService: 'ELECTRICAL',
     employeeName: ``,
+    returnQuantity: '2'
   };
 };

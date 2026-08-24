@@ -6,6 +6,7 @@ export type VendorRegistrationData = {
   telephoneNumber: string;
   mobileNumber: string;
   emailAddress: string;
+  vendorType: string;
   webAddress: string;
   facebookLink: string;
   instagramLink: string;
@@ -40,6 +41,8 @@ export type VendorRegistrationData = {
   qualityAssurance: string;
   companyDescription: string;
   // Goods & Services
+  requestType: string;
+  productType: string;
   goodsDescription: string;
   totalSales: string[];
   totalExportSales: string[];
@@ -59,6 +62,7 @@ export type VendorRegistrationData = {
   routingBankDetails: string;
   // Evaluation
   recommendation: string;
+  conditional: string;
   modeOfDiscussion: string;
   evaluatorName: string;
 };
@@ -68,6 +72,7 @@ export const getVendorRegistrationData = (): VendorRegistrationData => ({
   telephoneNumber: `${RandomDataGenerator.getPhoneNumber()}`,
   mobileNumber: `${RandomDataGenerator.getPhoneNumber()}`,
   emailAddress: `${RandomDataGenerator.getEmail()}`,
+  vendorType: 'Local',
   webAddress: 'https://demo.com',
   facebookLink: 'facebook.com',
   instagramLink: 'instagram.com',
@@ -101,7 +106,8 @@ export const getVendorRegistrationData = (): VendorRegistrationData => ({
   crNumber: '4',
   qualityAssurance: 'ISO 9001',
   companyDescription: 'Vendor Creation',
-
+  requestType: 'Product',
+  productType: 'Raw Materials',
   goodsDescription: 'Temp Vendor Des',
   // One value per year column shown on the Goods & Services step
   totalSales: ['4', '5', '7'],
@@ -120,6 +126,7 @@ export const getVendorRegistrationData = (): VendorRegistrationData => ({
   swiftCode: '2324',
   routingBankDetails: 'Test',
   recommendation: 'Test Assesment Recomendation',
+  conditional: 'a. Sample required for test',
   modeOfDiscussion: 'On-Site Visit',
   evaluatorName: '',
 });

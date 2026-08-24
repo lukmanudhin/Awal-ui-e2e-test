@@ -51,8 +51,9 @@ export class VendorRegistrationPage extends BasePage {
 
     private readonly nextButton: Locator;
     private readonly submitButton: Locator;
-    private readonly agreementChkBx: Locator;
+    private readonly vendorType: (name: string) => Locator;
     private readonly companyNameTxtBx: Locator;
+    private readonly conditionalChkBx: (name: string) => Locator;
 
     // Dynamic locators
     private readonly totalSalesTxtBx: (index: number) => Locator;
@@ -99,7 +100,7 @@ export class VendorRegistrationPage extends BasePage {
         this.faxNumberTxtBx = this.page.getByRole('textbox', { name: 'Fax Number' });
         this.creditLimitAmountTxtBx = this.page.getByRole('textbox', { name: 'Credit Limit Amount*' });
         this.ibanTxtBx = this.page.getByRole('textbox', { name: 'International Bank Account' });
-        this.swiftCodeTxtBx = this.page.getByRole('textbox', { name: 'Swift/Bank Identifier Code*' });
+        this.swiftCodeTxtBx = this.page.getByRole('textbox', { name: 'Swift/Bank Identifier Code' });
         this.routingBankDetailsTxtBx = this.page.getByRole('textbox', { name: 'Routing Bank Details(if' });
 
         this.evaluationForm = this.page.locator('#evaluation-form');
@@ -108,19 +109,24 @@ export class VendorRegistrationPage extends BasePage {
 
         this.nextButton = this.page.getByRole('button', { name: 'Next' });
         this.submitButton = this.page.getByRole('button', { name: 'Submit' });
-        this.agreementChkBx = this.page.getByRole('checkbox');
+        this.vendorType = (name: string) => this.page.locator(`//label[text()='${name}']//preceding-sibling::div`)
         this.companyNameTxtBx = this.page.getByRole('textbox', { name: 'Name of Company*' });
+        this.conditionalChkBx = (name: string) => this.page.locator(`//label[text()='${name}']//preceding-sibling::span//input`);
 
         // Dynamic locators initialization
         this.totalSalesTxtBx = (index: number) => this.page.locator(`[id="experience.totalSales.${index}.value"]`);
         this.totalExportSalesTxtBx = (index: number) => this.page.locator(`[id="experience.totalExportSales.${index}.value"]`);
     }
 
+    async enterCompanyName(companyName: string) {
+        await this.companyNameTxtBx.fill(companyName)
+    }
+
     @step()
     async enterGeneralInformation(vendorData: VendorRegistrationData) {
         await expect(this.companyNameTxtBx).toHaveValue(vendorData.companyName);
         await this.selectDate(new Date().getDate());
-        await this.agreementChkBx.first().check();
+        await this.vendorType(vendorData.vendorType).check();
         await this.telephoneNumberTxtBx.fill(vendorData.telephoneNumber);
         await this.mobileNumberTxtBx.fill(vendorData.mobileNumber);
         await this.emailAddressTxtBx.fill(vendorData.emailAddress);
@@ -144,7 +150,7 @@ export class VendorRegistrationPage extends BasePage {
         await this.designation2TxtBx.fill(vendorData.designation2);
         await this.phoneNumber2TxtBx.fill(vendorData.phoneNumber2);
         await this.contactEmail2TxtBx.fill(vendorData.contactEmail2);
-        await this.saveVendorStep();
+        // await this.saveVendorStep();
     }
 
     @step()
@@ -163,7 +169,7 @@ export class VendorRegistrationPage extends BasePage {
         await this.selectOptionFromDropdown('Quality Assurance', vendorData.qualityAssurance);
         await this.descriptionTxtBx.fill(vendorData.companyDescription);
         await this.uploadFile('test_Documents', 'Test_Document.pdf');
-        // await this.saveVendorStep();
+        await this.saveVendorStep();
     }
 
     async saveAndValidateAPI(statusCode: number) {
@@ -179,6 +185,8 @@ export class VendorRegistrationPage extends BasePage {
 
     @step()
     async enterGoodsAndServices(vendorData: VendorRegistrationData) {
+        await this.selectOptionFromDropdown('Request Type', vendorData.requestType );
+        await this.selectOptionFromDropdown('Product Type', vendorData.productType);
         await this.goodsDescriptionTxtBx.fill(vendorData.goodsDescription);
         for (const [index, sales] of vendorData.totalSales.entries()) {
             await this.totalSalesTxtBx(index).fill(sales);
@@ -210,7 +218,7 @@ export class VendorRegistrationPage extends BasePage {
 
     @step()
     async enterEvaluation(vendorData: VendorRegistrationData) {
-        await this.agreementChkBx.first().check();
+        await this.conditionalChkBx(vendorData.conditional).check();
         const [evaluationFileChooser] = await Promise.all([
             this.page.waitForEvent('filechooser'),
             this.evaluationForm.getByRole('button', { name: 'Upload' }).click(),
