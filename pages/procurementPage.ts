@@ -274,7 +274,7 @@ export class ProcurementPage extends BasePage {
         await this.saveMaterialRowBtn.click();
 
         await this.page.mouse.wheel(0, 1000);
-        await this.editIcons('Delivery Days').click();
+        await this.editIcons('Delivery Period').click();
         await this.page.locator('//input[@maxlength="100"]').fill(mirDetails.deliveryPeriod);
         await this.tickIcon.click();
 
