@@ -9,7 +9,6 @@ export class RequestApprovalPage extends BasePage {
     public readonly approvedStatus: Locator;
     private readonly reasonTextBox: Locator;
     public readonly rejectStatus: Locator;
-    public readonly status: Locator;
 
     constructor(public readonly page: Page) {
         super(page);
@@ -20,7 +19,6 @@ export class RequestApprovalPage extends BasePage {
         this.approvedStatus = this.page.getByText('Approved', { exact: true });
         this.reasonTextBox = this.page.getByRole('textbox', { name: 'Reason*' });
         this.rejectStatus = this.page.locator('//span[text()="Rejected"]');
-        this.status = this.page.locator('//td[@data-app-table-col="5"]//span');
     }
     @step()
     async clickViewCostEstimation(customerName: string) {

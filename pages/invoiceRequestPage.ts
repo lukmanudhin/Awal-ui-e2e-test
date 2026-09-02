@@ -9,15 +9,11 @@ export class InvoiceRequestPage extends BasePage {
     private readonly invoiceDateIcon: Locator;
     private readonly backArrow: Locator;
     private readonly acknowledgeIcon: Locator;
-    public readonly invoiceStatus: Locator;
     public readonly viewInvoiceBtn: Locator;
-    public readonly acknowledgementStatus: Locator;
     private readonly approveButton: Locator;
     private readonly yesButton: Locator;
     private readonly reasonTextBox: Locator;
     private readonly notApproveButton: Locator;
-    public readonly managerAcknowledgementStatus: Locator;
-    public readonly invoiceRegisterStatus: Locator;
     // private readonly browseFileButton: Locator;
     // private readonly uploadButton: Locator;
 
@@ -30,15 +26,11 @@ export class InvoiceRequestPage extends BasePage {
         this.invoiceDateIcon = this.page.locator('//input[@placeholder="Enter Invoice Date"]//following-sibling::div/button');
         this.backArrow = this.page.getByRole('img', { name: 'back arrow' });
         this.acknowledgeIcon = this.page.locator('//img[contains(@src,"upload-yellow-icon.svg")]');
-        this.invoiceStatus = this.page.locator('//td[@data-app-table-col="6"]//span').first();
         this.viewInvoiceBtn = this.page.getByRole('button', { name: 'View Invoice' });
-        this.acknowledgementStatus = this.page.locator('//td[@data-app-table-col="5"]//span').first();
         this.approveButton = this.page.getByRole('button', { name: 'approve', exact: true });
         this.yesButton = this.page.getByRole('button', { name: 'Yes' });
         this.reasonTextBox = this.page.getByRole('textbox', { name: 'Enter Reason' });
         this.notApproveButton = this.page.getByRole('button', { name: 'not approve' });
-        this.managerAcknowledgementStatus = this.page.locator('//td[@data-app-table-col="6"]//span').first();
-        this.invoiceRegisterStatus = this.page.locator('//td[@data-app-table-col="7"]//span').first();
 
         // this.browseFileButton = this.page.getByRole('button', { name: 'Browse files' });
         // this.uploadButton = this.page.getByRole('button', { name: 'Upload' });

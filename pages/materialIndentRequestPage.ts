@@ -14,17 +14,12 @@ export class MaterialIndentRequestPage extends BasePage {
     private readonly saveButton: Locator;
     private readonly submitButton: Locator;
     private readonly yesButton: Locator;
-    public readonly mirStatus: Locator;
-    public readonly priorityLevel: Locator;
     private readonly approveButton: Locator;
     private readonly historyButton: Locator;
-    public readonly stockStatus: Locator;
-    public readonly status: Locator
     private readonly pendingQuantity: Locator
     public readonly issuingQuantity: Locator
     private readonly selectAllMaterialChkBx: Locator;
     private readonly issueMaterialButton: Locator;
-    public readonly materialStatus: Locator;
     private readonly returnedQuantityTxtBx: Locator;
     private readonly addConsumablesBtn: Locator;
     private readonly newQuantityTxtBx: Locator;
@@ -40,19 +35,14 @@ export class MaterialIndentRequestPage extends BasePage {
         this.saveButton = this.page.getByRole('button', { name: 'Save' });
         this.submitButton = this.page.getByRole('button', { name: 'Submit' });
         this.yesButton = this.page.getByRole('button', { name: 'Yes' });
-        this.mirStatus = this.page.locator('//td[@data-app-table-col="9"]//span').last();
-        this.priorityLevel = this.page.locator('//td[@data-app-table-col="8"]//span').last();
         this.approveButton = this.page.getByRole('button', { name: 'Approve' });
         this.historyButton = this.page.getByRole('button', { name: 'History filter' });
-        this.stockStatus = this.page.locator('//td[@data-app-table-col="12"]//span').last();
-        this.status = this.page.locator('//td[@data-app-table-col="6"]//span').last();
         this.dropDown = (name: string) => this.page.getByRole('combobox', { name: `${name}` });
         this.dropDownOption = (name: string) => this.page.getByRole('option', { name: `${name}`, exact: true });
         this.pendingQuantity = this.page.locator('//td[@data-app-table-col="8"]');
         this.issuingQuantity = this.page.locator('#issuingQuantity-0');
         this.selectAllMaterialChkBx = this.page.locator('//input[@type="checkbox"]').first();
         this.issueMaterialButton = this.page.getByRole('button', { name: 'Issue Materials' });
-        this.materialStatus = this.page.locator('//td[@data-app-table-col="7"]//span').first();
         this.returnedQuantityTxtBx = this.page.getByRole('spinbutton', { name: 'Returned Qty' });
         this.addConsumablesBtn = this.page.getByRole('button', { name: 'Add Item plus icon' });
         this.newQuantityTxtBx = this.page.getByRole('spinbutton', { name: 'New Qty*' });

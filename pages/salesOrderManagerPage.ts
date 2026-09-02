@@ -7,7 +7,6 @@ export class SalesOrderManagerPage extends BasePage {
     public readonly salesOrderStatus: Locator;
     private readonly approveButton: Locator;
     private readonly reasonTextBox: Locator;
-    public readonly salesOrderApproveStatus: Locator;
     private readonly sendForApprovalButton: Locator;
     private readonly yesButton: Locator;
     private readonly approvalPopUpMessage: Locator;
@@ -17,7 +16,6 @@ export class SalesOrderManagerPage extends BasePage {
         this.salesOrderStatus = this.page.locator('//span[contains(@class, "text-xs") and contains(@class, "py-[2px]") and contains(@class, "px-[8px]")]').first();
         this.approveButton = this.page.getByRole('button', { name: 'Approve' });
         this.reasonTextBox = this.page.getByRole('textbox', { name: 'Enter Reason for Approval' }).or(this.page.getByRole('textbox', { name: 'Enter Reason' }));
-        this.salesOrderApproveStatus = this.page.locator('//td[@data-app-table-col="8"]//span').first();
         this.sendForApprovalButton = this.page.getByRole('button', { name: 'Send for Approval' });
         this.yesButton = this.page.getByRole('button', { name: 'Yes' });
         this.approvalPopUpMessage = this.page.locator('(//main)[2]//p');

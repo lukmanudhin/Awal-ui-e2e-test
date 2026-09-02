@@ -59,15 +59,15 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
         await test.step('Verify the indent request is listed with Pending status', async () => {
             materialIndentRequestId = await materialIndentRequestPage.getMaterialIndentRequestNumber();
             await materialIndentRequestPage.search(materialIndentRequestId);
-            await expect(materialIndentRequestPage.priorityLevel, "Priority level text does not match").toHaveText(MIRDetails.priority);
-            await expect(materialIndentRequestPage.mirStatus, "MIR status text does not match").toHaveText('Pending');
+            await expect(materialIndentRequestPage.status(MIRDetails.priority), "Priority level text does not match").toBeVisible();
+            await expect(materialIndentRequestPage.status('Pending'), "MIR status text does not match").toBeVisible();
         });
 
         await test.step('Manager approves the material indent request', async () => {
             await modules.goToModule({ subModule: 'Material Indent Request (Manager)' });
             await materialIndentRequestPage.search(materialIndentRequestId);
-            await expect(materialIndentRequestPage.priorityLevel, "Priority level text does not match").toHaveText(MIRDetails.priority);
-            await expect(materialIndentRequestPage.mirStatus, "MIR status text does not match").toHaveText('New Request');
+            await expect(materialIndentRequestPage.status(MIRDetails.priority), "Priority level text does not match").toBeVisible();
+            await expect(materialIndentRequestPage.status('New Request'), "MIR status text does not match").toBeVisible();
             await materialIndentRequestPage.clickViewIcon();
             await ppjoPage.validateSampleDetails(materialIndentRequestId, MIRDetails.pjoNumber, MIRDetails.priority, requestedBy);
             await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
@@ -79,20 +79,20 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
         await test.step('Verify the approval is reflected in history and in the indent request list', async () => {
             await materialIndentRequestPage.goToHistory();
             await materialIndentRequestPage.search(materialIndentRequestId);
-            await expect(materialIndentRequestPage.priorityLevel, "Priority level text does not match").toHaveText('Approved');
+            await expect(materialIndentRequestPage.status('Approved'), "Priority level text does not match").toBeVisible();
             await modules.goToModule({ subModule: 'Material Indent Request' });
             await materialIndentRequestPage.search(materialIndentRequestId);
-            await expect(materialIndentRequestPage.mirStatus, "MIR status text does not match").toHaveText('Approved');
+            await expect(materialIndentRequestPage.status('Approved'), "MIR status text does not match").toBeVisible();
         });
 
         await test.step('Verify the material cannot be issued while it is out of stock', async () => {
             await modules.goToModule({ subModule: 'Material Issue Notes' });
             await materialIndentRequestPage.search(materialIndentRequestId);
-            await expect(materialIndentRequestPage.status, "Status text does not match").toHaveText('New Request');
+            await expect(materialIndentRequestPage.status('New Request'), "Status text does not match").toBeVisible();
             await materialIndentRequestPage.clickViewIcon();
             await ppjoPage.validateSampleDetails(materialIndentRequestId, MIRDetails.pjoNumber, materialIndentRequestId, requestedBy);
             await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
-            await expect(materialIndentRequestPage.stockStatus, "Stock status text does not match").toHaveText('Out Of Stock');
+            await expect(materialIndentRequestPage.status('Out Of Stock'), "Stock status text does not match").toBeVisible();
             await expect(materialIndentRequestPage.issuingQuantity, 'Issuing quantity field is not disabled for Out Of Stock materials').toBeDisabled();
         });
 
@@ -108,8 +108,8 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
             prId = await prRequestPage.searchPR(MIRDetails.material);
             console.log(`PR ID: ${prId}`);
             await prRequestPage.search(prId);
-            await expect(prRequestPage.stockStatus, 'Stock status does not match').toHaveText('Out Of Stock');
-            await expect(prRequestPage.prStatus, "PR status text does not match").toHaveText('PO Pending');
+            await expect(prRequestPage.status('Out Of Stock'), 'Stock status does not match').toBeVisible();
+            await expect(prRequestPage.status('PO Pending'), "PR status text does not match").toBeVisible();
             await prRequestPage.clickViewIcon();
             await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
             await prRequestPage.approvePRRequestAndValidateAPI(200);
@@ -119,8 +119,8 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
         await test.step('Verify the purchase requisition in the Purchase Request Sheet', async () => {
             await modules.goToModule({ subModule: 'Purchase Request Sheet' });
             await prRequestPage.search(prId);
-            await expect(prRequestPage.stockStatus, 'Stock status does not match').toHaveText('Out Of Stock');
-            await expect(prRequestPage.prStatus, "PR status text does not match").toHaveText('PO Pending');
+            await expect(prRequestPage.status('Out Of Stock'), 'Stock status does not match').toBeVisible();
+            await expect(prRequestPage.status('PO Pending'), "PR status text does not match").toBeVisible();
             await prRequestPage.clickViewIcon();
             await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
         });
@@ -128,7 +128,7 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
         await test.step('Add purchase order remarks in PR to PO (Contract)', async () => {
             await modules.goToModule({ module: 'Procurement', subModule: 'PR to PO', nestedSubModule: 'PR to Po (Contract)' });
             await procurementPage.search(prId);
-            await expect(procurementPage.status, 'Stock status does not match').toHaveText('New Request');
+            await expect(procurementPage.status('New Request'), 'Stock status does not match').toBeVisible();
             await procurementPage.enterRemarks(MIRDetails.purchaseOrderRemarks);
             await expect(procurementPage.successMessage('Purchase order remark created successfully'), 'Purchase order remark created successfully success message does not found').toHaveText('Purchase order remark created successfully');
             await procurementPage.clickViewIcon();
@@ -146,14 +146,33 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
             await expect(procurementPage.successMessage('Purchase order created successfully'), 'Purchase order created successfully success message does not match').toHaveText('Purchase order created successfully')
         });
 
-        await modules.goToModule({ nestedSubModule: 'View PO' });
-        poNumber = await procurementPage.getPONumber();
-        await procurementPage.search(poNumber);
-        await expect(materialIndentRequestPage.priorityLevel, 'PO status does not match').toHaveText('Active');
-        await procurementPage.clickViewIcon();
-        await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
-        await ppjoPage.validateSampleDetails(materialIndentRequestId, MIRDetails.vendor, MIRDetails.orderType, MIRDetails.vendor);
+        await test.step('Verify the created purchase order is Active', async () => {
+            await modules.goToModule({ nestedSubModule: 'View PO' });
+            poNumber = await procurementPage.getPONumber();
+            await procurementPage.search(poNumber);
+            await expect(materialIndentRequestPage.status('Active'), 'PO status does not match').toBeVisible();
+            await procurementPage.clickViewIcon();
+            await ppjoPage.validateSampleDetails(prId, MIRDetails.vendor, MIRDetails.orderType, MIRDetails.vendor);
+            await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
+        });
 
-        await modules.goToModule({ subModule: 'Material Issue Notes' });
+        await test.step('Create the GRN entry for the purchase order', async () => {
+            await modules.goToModule({ module: 'Store', subModule: 'Material Management', nestedSubModule: 'GRN Entry' });
+            await grnEntryPage.createGRNEntry(MIRDetails.vendor, poNumber, MIRDetails.quantity, MIRDetails.grnRemarks, MIRDetails.deliveryNote, MIRDetails.invoiceNumber);
+            await expect(grnEntryPage.successMessage('GRN created successfully'), 'GRN created successfully message does not match').toHaveText('GRN created successfully');
+            grnNumber = await grnEntryPage.getGRNNumber();
+            await grnEntryPage.search(grnNumber);
+            await expect(grnEntryPage.status('Not Started'), 'QC status does not match').toBeVisible();
+            await expect(grnEntryPage.status('Submitted'), 'GRN status does not match').toBeVisible();
+            await grnEntryPage.clickViewIcon();
+            await ppjoPage.validateSampleDetails(grnNumber, MIRDetails.vendor, poNumber, 'Not Started');
+            await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
+        });
+
+        const employeeName = await salesEnquiryAPI.getRandomEmployeeName();
+        await grnEntryPage.startQC('Random Quantity', MIRDetails.quantity, MIRDetails.qcFailedQuantity, employeeName, 'Pass', 'Pass', 'Pass');
+        await expect(grnEntryPage.successMessage('GRN QC created successfully'), 'GRN QC created successfully message does not match').toContainText('GRN QC created successfully');
+        await expect(grnEntryPage.qcCheckButton, 'QC check button is not visible').toBeVisible();
+        
     });
 });

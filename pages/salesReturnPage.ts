@@ -4,7 +4,6 @@ import type { SalesReturnData, BankPaymentVoucherData } from "../testData/salesR
 
 export class SalesReturnPage extends BasePage {
     public readonly tableRow: Locator;
-    public readonly status: Locator;
     private readonly customerConfirmedRefundCheckbox: Locator;
     private readonly closeCaseButton: Locator;
     private readonly newTradingButton: Locator;
@@ -28,14 +27,12 @@ export class SalesReturnPage extends BasePage {
     private readonly submitForApprovalButton: Locator;
     private readonly approveButton: Locator;
     private readonly confirmYesButton: Locator;
-    public readonly bankPaymentStatus: Locator;
     private readonly closeRemarks: Locator;
     private readonly qcFormBtn: Locator;
 
     constructor(public readonly page: Page) {
         super(page);
         this.tableRow = this.page.locator('//tr');
-        this.status = this.page.locator('//td[@data-app-table-col="4"]//span').first();
         this.customerConfirmedRefundCheckbox = this.page.getByRole('checkbox', { name: 'Customer confirmed refund' });
         this.closeCaseButton = this.page.getByRole('button', { name: 'Close Case' });
         this.newTradingButton = this.page.getByRole('button', { name: 'New Trading add' });
@@ -59,7 +56,6 @@ export class SalesReturnPage extends BasePage {
         this.submitForApprovalButton = this.page.getByRole('button', { name: 'Submit For Approval' });
         this.approveButton = this.page.getByRole('button', { name: 'Approve', exact: true });
         this.confirmYesButton = this.page.getByRole('button', { name: 'Yes' });
-        this.bankPaymentStatus = this.page.locator('//td[@data-app-table-col="6"]//span').first();
         this.closeRemarks = this.page.getByRole('textbox', { name: 'Final Remarks' });
         this.qcFormBtn = this.page.getByRole('button', { name: 'QC Form' });
     }

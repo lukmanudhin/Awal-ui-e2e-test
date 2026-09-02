@@ -10,8 +10,6 @@ export class GRNEntryPage extends BasePage {
     private readonly pendingQuantityCol: Locator;
     private readonly saveAsDraftButton: Locator;
     private readonly submitToQCBtn: Locator;
-    public readonly qcStatus: Locator;
-    public readonly status: Locator;
     private readonly startQCBtn: Locator;
     private readonly randomQuantity: Locator;
     private readonly failedQuantity: Locator;
@@ -27,8 +25,6 @@ export class GRNEntryPage extends BasePage {
         this.pendingQuantityCol = this.page.locator('//td[@data-app-table-col="10"]//div');
         this.saveAsDraftButton = this.page.getByRole('button', { name: 'Save as Draft' });
         this.submitToQCBtn = this.page.getByRole('button', { name: 'Submit To QC' });
-        this.qcStatus = this.page.locator('//td[@data-app-table-col="5"]//span');
-        this.status = this.page.locator('//td[@data-app-table-col="7"]//span');
         this.startQCBtn = this.page.getByRole('button', { name: 'Start QC' });
         this.randomQuantity = this.page.getByRole('spinbutton', { name: 'Random Quantity' });
         this.failedQuantity = this.page.getByRole('spinbutton', { name: 'Failed Quantity' });

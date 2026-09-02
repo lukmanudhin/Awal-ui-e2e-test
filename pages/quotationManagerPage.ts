@@ -8,7 +8,6 @@ import process from "process";
 export class QuotationManagerPage extends BasePage {
     private readonly approveButton: Locator;
     private readonly yesButton: Locator;
-    public readonly quotationStatus: Locator;
     public readonly customerApprovalTable: Locator;
     private readonly submitButton: Locator;
     // private readonly uploadButton: Locator;
@@ -41,7 +40,6 @@ export class QuotationManagerPage extends BasePage {
         super(page);
         this.approveButton = this.page.getByRole('button', { name: 'Approve' });
         this.yesButton = this.page.getByRole('button', { name: 'Yes' });
-        this.quotationStatus = this.page.locator('//td[@data-app-table-col="7"]//span').first();
         this.customerApprovalTable = this.page.locator('(//table[@class="w-full border-collapse table-fixed"])[2]//tr');
         this.submitButton = this.page.getByRole('button', { name: 'Submit' });
         // this.uploadButton = this.page.getByRole('button', { name: 'Upload' });

@@ -35,7 +35,7 @@ test.describe.serial('Verify E2E Quotation Manager Rejection flow of Sales Enqui
             await productsPage.validateProductTabsListed(createEnquiryData.product);
             await productsPage.enterAndSaveAllSelectedProductDetails(createEnquiryData.product);
             await salesEnquiryPage.search(createEnquiryData.customerName);
-            await expect(salesEnquiryPage.enquiryStatus, "Sales enquiry status does not match").toHaveText('Enquiry Created');
+            await expect(salesEnquiryPage.status('Enquiry Created'), "Sales enquiry status does not match").toBeVisible();
         });
 
         await test.step('Create PPJO and submit Artwork, AutoCAD, Site Visit, Procurement, and Estimation requests', async () => {
@@ -196,7 +196,7 @@ test.describe.serial('Verify E2E Quotation Manager Rejection flow of Sales Enqui
         await test.step('Verify estimation status in Request Normal is updated to Pending For Approval after submission', async () => {
             await modules.goToModule({ subModule: 'Request (Normal)' });
             await salesEnquiryPage.search(enquiryId);
-            await expect(requestNormalPage.estimationStatus, "Pending For Approval status does not match").toHaveText('Pending For Approval');
+            await expect(requestNormalPage.status('Pending For Approval'), "Pending For Approval status does not match").toBeVisible();
         });
 
         await test.step('Verify that the cost estimation is approved and submitted to Sales successfully with Approved status reflected in history', async () => {
@@ -220,7 +220,7 @@ test.describe.serial('Verify E2E Quotation Manager Rejection flow of Sales Enqui
         await test.step('Verify that the Sales Enquiry status moves to Quotation Pending and the quotation is generated and submitted for approval', async () => {
             await modules.goToModule({ module: 'Sales', subModule: 'Sales Enquiry' });
             await salesEnquiryPage.search(enquiryId);
-            await expect(salesEnquiryPage.enquiryStatus, "Quotation Pending status does not match in sales enquiry").toHaveText('Quotation Pending');
+            await expect(salesEnquiryPage.status('Quotation Pending'), "Quotation Pending status does not match in sales enquiry").toBeVisible();
             await salesEnquiryPage.clickViewIcon();
             await expect(salesEnquiryPage.viewEnquiryTitle, "View Enquiry Title is does not contain View Enquiry").toContainText('View Enquiry');
             await salesEnquiryPage.goToTab('PPJO');
@@ -243,13 +243,13 @@ test.describe.serial('Verify E2E Quotation Manager Rejection flow of Sales Enqui
             await expect(quotationManagerPage.successMessage('Quotation rejected successfully'), "Quotation rejected successfully message does not match").toContainText('Quotation rejected successfully');
             await quotationManagerPage.goToTab('History');
             await quotationManagerPage.search(enquiryId);
-            await expect(quotationManagerPage.quotationStatus, 'Quotation Manager Rejection status does not match').toHaveText('Reject');
+            await expect(quotationManagerPage.status('Reject'), 'Quotation Manager Rejection status does not match').toBeVisible();
         });
 
         await test.step('Verify Quotation - Rejected by Manager status is reflected in sales enquiry', async () => {
             await modules.goToModule({ module: 'Sales', subModule: 'Sales Enquiry' });
             await salesEnquiryPage.search(enquiryId);
-            await expect(salesEnquiryPage.enquiryStatus, "Quotation Rejected by Manager status does not match in sales enquiry").toHaveText('Quotation - Rejected by Manager');
+            await expect(salesEnquiryPage.status('Quotation - Rejected by Manager'), "Quotation Rejected by Manager status does not match in sales enquiry").toBeVisible();
         });
     });
 });

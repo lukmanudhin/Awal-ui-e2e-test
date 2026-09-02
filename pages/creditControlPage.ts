@@ -7,7 +7,6 @@ export class CreditControlPage extends BasePage {
     private readonly next_MonthIcon: Locator;
     private readonly acknowledgementCalenderBtn: Locator;
     private readonly date_Locator: (date: string) => Locator;
-    public readonly status: Locator;
     // public readonly statusCreditManager: Locator;
     private readonly createNewButton: Locator;
     private readonly companyNameInput: Locator;
@@ -61,7 +60,6 @@ export class CreditControlPage extends BasePage {
         this.yearCalenderButton = this.page.getByLabel('Choose date', { exact: true }).first();
         this.next_MonthIcon = this.page.getByRole('button', { name: 'Next month' });
         this.date_Locator = (date: string) => this.page.locator(`//div[@class="css-8uic9k" and text()="${date}"]`).first();
-        this.status = this.page.locator('//td[@data-app-table-col="4"]//span').first();
         this.acknowledgementCalenderBtn = this.page.locator('section').filter({ hasText: 'Upload Customer' }).getByLabel('Choose date');
         // this.statusCreditManager = this.page.locator('//td[@data-app-table-col="5"]//span');
         this.createNewButton = this.page.getByRole('button', { name: 'create new plus icon' });

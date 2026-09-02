@@ -8,7 +8,6 @@ export class RequestNormalPage extends BasePage {
     public readonly requestNormalTab: Locator;
 
     // Dynamic locators
-    public readonly estimationStatus: Locator;
     private readonly customerRow: (name: string) => Locator;
     constructor(public readonly page: Page) {
         super(page);
@@ -18,7 +17,6 @@ export class RequestNormalPage extends BasePage {
 
         // Dynamic locators initialization
         this.customerRow = (name: string) => this.page.getByRole('row').filter({ hasText: name }).first();
-        this.estimationStatus = this.page.locator('//td[@data-app-table-col="5"]//span').first();
     }
     @step()
     async validateEnquiryDetailsInRequestNormal(customerName: string) {

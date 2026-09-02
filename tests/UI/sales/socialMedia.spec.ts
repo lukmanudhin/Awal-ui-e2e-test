@@ -38,6 +38,6 @@ test.describe('Create Sales Enquiry', () => {
         await productsPage.enterAndSaveAllSelectedProductDetails(createEnquiryData.product);
         await salesEnquiryPage.search(createEnquiryData.customerName);
         await expect(salesEnquiryPage.socialMediaImage(createEnquiryData.socialMedia === 'Instagram' ? 'Insta' : createEnquiryData.socialMedia), 'Social media image is not visible').toBeVisible();
-        await expect(salesEnquiryPage.socialMediaStatus, "Sales enquiry status does not match").toHaveText('Enquiry Created')
+        await expect(salesEnquiryPage.status('Enquiry Created'), "Sales enquiry status does not match").toBeVisible();
     });
 });

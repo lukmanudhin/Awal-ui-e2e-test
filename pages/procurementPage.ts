@@ -11,7 +11,6 @@ export class ProcurementPage extends BasePage {
     private readonly processBtn: Locator;
     private readonly confirmButton: Locator;
     private readonly yesButton: Locator;
-    public readonly status: Locator;
     private readonly createVendorQuotationButton: Locator;
     private readonly assignVendorBtn: Locator;
     private readonly createGroupBtn: Locator;
@@ -49,7 +48,6 @@ export class ProcurementPage extends BasePage {
     private readonly submitForApprovalButton: Locator;
     private readonly performancePercentage: Locator;
     public readonly performanceColumn: Locator;
-    public readonly vendorEvaluationStatus: Locator;
     public readonly vendorPerformanceTxtBx: Locator;
     private readonly historyButton: Locator;
 
@@ -70,7 +68,6 @@ export class ProcurementPage extends BasePage {
         this.processBtn = this.page.getByRole('button', { name: 'Process' });
         this.confirmButton = this.page.getByRole('button', { name: 'Confirm' });
         this.yesButton = this.page.getByRole('button', { name: 'Yes' });
-        this.status = this.page.locator('//td[@data-app-table-col="6"]//span').first();
         this.createVendorQuotationButton = this.page.getByRole('button', { name: 'Create Vendor Quotation create' }).or(this.page.getByRole('button', { name: 'Create Vendor Quotation +' }));
         this.assignVendorBtn = this.page.getByRole('button', { name: 'Assign Vendor' });
         this.createGroupBtn = this.page.getByRole('button', { name: 'Create New Group & Assign' });
@@ -108,7 +105,6 @@ export class ProcurementPage extends BasePage {
         this.submitForApprovalButton = this.page.getByRole('button', { name: 'Submit For Approval' });
         this.performancePercentage = this.page.locator('//td[contains(@class,"font-bold")]');
         this.performanceColumn = this.page.locator('//td[@data-app-table-col="4"]');
-        this.vendorEvaluationStatus = this.page.locator('//td[@data-app-table-col="5"]//span').first();
         this.vendorManagerApprovalBtn = this.page.getByRole('button', { name: 'Approve', exact: true });
         this.vendorPerformanceTxtBx = this.page.getByRole('textbox', { name: 'Vendor Performance Score' });
         this.historyButton = this.page.getByRole('button', { name: 'history_icon History' });
@@ -169,7 +165,7 @@ export class ProcurementPage extends BasePage {
         await this.searchBox.fill(name);
         await this.page.waitForTimeout(2000);
         if (await this.page.locator('//tr').count() > 1) {
-            await expect(this.status, 'Stock status does not match').toHaveText('New Request');
+            await expect(this.status('New Request'), 'Stock status does not match').toBeVisible();
             await this.enterRemarks('Purchase Order (Contract) Remarks');
             await expect(this.successMessage('Purchase order remark created successfully'), 'Purchase order remark created successfully success message does not found').toHaveText('Purchase order remark created successfully');
             console.log('Material in Contract');

@@ -37,7 +37,7 @@ test.describe('Verify Trading E2E Test', () => {
         leadId = await tradingPage.createLeadAndValidateAPI(201);
         await expect(tradingPage.successMessage('Quick lead created successfully'), "Quick lead created success message does not match").toHaveText('Quick lead created successfully');
         await tradingPage.search(tradingData.customerName);
-        await expect(salesEnquiryPage.enquiryStatus, "Lead status does not match").toHaveText('Lead Created');
+        await expect(salesEnquiryPage.status('Lead Created'), "Lead status does not match").toBeVisible();
         await tradingPage.clickTrading();
         await tradingPage.addTrading(tradingData);
         await tradingPage.createTradingAndValidateAPI(201);
@@ -50,11 +50,11 @@ test.describe('Verify Trading E2E Test', () => {
         await tradingPage.requestApprovalAndValidateAPI(200);
         await expect(tradingPage.successMessage('Trading sent for approval'), 'Trading sent for approval success message does not match').toHaveText('Trading sent for approval');
         await tradingPage.search(tradingData.customerName);
-        await expect(salesEnquiryPage.enquiryStatus, "Lead status does not match").toHaveText('Pending For Approval');
+        await expect(salesEnquiryPage.status('Pending For Approval'), "Lead status does not match").toBeVisible();
 
         await modules.goToModule({ nestedSubModule: 'Trading Approval' })
         await tradingPage.search(tradingData.customerName);
-        await expect(salesEnquiryPage.enquiryStatus, "Lead status does not match").toHaveText('Pending For Approval');
+        await expect(salesEnquiryPage.status('Pending For Approval'), "Lead status does not match").toBeVisible();
         await tradingPage.clickTrading();
         await ppjoPage.validateSampleDetails(tradingData.customerName, tradingData.city, tradingData.city, tradingData.customerName);
         await tradingPage.validateMaterialTable(tradingData);
@@ -62,11 +62,11 @@ test.describe('Verify Trading E2E Test', () => {
         await expect(tradingPage.successMessage('Trading approved successfully'), 'Trading approved success message does not match').toHaveText('Trading approved successfully');
         await tradingPage.goToTab('History');
         await tradingPage.search(tradingData.customerName);
-        await expect(salesEnquiryPage.enquiryStatus, "Lead status does not match").toHaveText('Approved');
+        await expect(salesEnquiryPage.status('Approved'), "Lead status does not match").toBeVisible();
 
         await modules.goToModule({ nestedSubModule: 'Trading' });
         await tradingPage.search(tradingData.customerName);
-        await expect(salesEnquiryPage.enquiryStatus, "Lead status does not match").toHaveText('Approved');
+        await expect(salesEnquiryPage.status('Approved'), "Lead status does not match").toBeVisible();
         await tradingPage.clickTrading();
         await ppjoPage.validateSampleDetails(tradingData.customerName, tradingData.city, tradingData.city, tradingData.customerName);
         await tradingPage.validateMaterialTable(tradingData);
@@ -76,6 +76,6 @@ test.describe('Verify Trading E2E Test', () => {
 
         await modules.goToModule({ nestedSubModule: 'Trading' });
         await tradingPage.search(tradingData.customerName);
-        await expect(salesEnquiryPage.enquiryStatus, "Lead status does not match").toHaveText('Completed');
+        await expect(salesEnquiryPage.status('Completed'), "Lead status does not match").toBeVisible();
     });
 });

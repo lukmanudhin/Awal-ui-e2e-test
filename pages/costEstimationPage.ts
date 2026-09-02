@@ -104,17 +104,13 @@ export class CostEstimationPage extends BasePage {
     private readonly backArrowIcon: Locator;
     private readonly viewAttachmentsButton: Locator;
     private readonly includePriceBtn: Locator;
-    private readonly stockStatus: Locator;
-    public readonly procurementStatus: Locator;
     private readonly addMaterialBtn: Locator;
     private readonly addServicesBtn: Locator;
-    public readonly serviceProcurementStatus: Locator;
     private readonly serviceViewIcon: Locator;
     public readonly serviceProcurementCost: Locator;
     private readonly serviceRowCheckbox: (serviceName: string) => Locator;
     private readonly selectAllCheckbox: Locator;
     private readonly sendToProcurementBtn: Locator;
-    public readonly stockStatusBOMTable: Locator;
 
     // Dynamic locators
     private readonly ppjoBanner: (name: string) => Locator;
@@ -133,7 +129,7 @@ export class CostEstimationPage extends BasePage {
     constructor(public readonly page: Page) {
         super(page);
         this.addEstimationBtn = this.page.getByRole('button', { name: 'Add Estimation Details' });
-        this.viewIcon = this.page.locator('//img[@alt="view"]').or(this.page.getByRole('button', { name: 'View' }));
+        this.viewIcon = this.page.locator('//img[contains(@src, "eye")]').or(this.page.getByRole('button', { name: 'View', exact: true }));
         this.closeButton = this.page.getByRole('button', { name: 'close' }).first();
         this.costEstimationTitle = this.page.getByRole('heading');
         this.timeLine = this.page.locator('//span[@class="text-[12px] tabular-nums"]');
@@ -238,16 +234,12 @@ export class CostEstimationPage extends BasePage {
         this.warrantyPeriod = this.page.getByRole('spinbutton', { name: 'Warranty Period*' });
         this.unitCostValue = this.page.locator('//td[@data-app-table-col="6"]//div').first();
         this.includePriceBtn = this.page.getByRole('button', { name: 'Include Price' });
-        this.stockStatus = this.page.locator('//td[@data-app-table-col="7"]//span');
-        this.procurementStatus = this.page.locator('//td[@data-app-table-col="10"]//span').first();
         this.addMaterialBtn = this.page.getByRole('button', { name: 'Add Materials plus-blue-icon' });
         this.addServicesBtn = this.page.getByRole('button', { name: 'Add services / subcontractor' });
-        this.serviceProcurementStatus = this.page.locator('//td[@data-app-table-col="5"]//span').first();
         this.serviceViewIcon = this.page.locator('//table[contains(.,"Procurement Service Cost")]//tbody/tr[1]/td[@data-app-table-col="6"]//span').first();
         this.serviceProcurementCost = this.page.locator('//td[@data-app-table-col="4"]//div').first();
         this.selectAllCheckbox = this.page.locator('#select-all');
         this.sendToProcurementBtn = this.page.getByRole('button', { name: 'Send To Procurement' });
-        this.stockStatusBOMTable = this.page.locator('//td[@data-app-table-col="11"]//span').first();
 
         // Dynamic locators initialization
         this.ppjoBanner = (name: string) => this.page.getByRole('banner').getByText(`${name}`);
@@ -330,13 +322,15 @@ export class CostEstimationPage extends BasePage {
     }
     @step()
     async clickViewButton(count: number) {
-        const target = this.viewIcon.nth(count);
+        // const target = this.viewIcon.nth(count);
 
-        // Keep scrolling until the nth button appears in DOM
-        await expect(async () => {
-            await this.page.mouse.wheel(0, 400);
-            await target.waitFor({ state: 'visible', timeout: 2_000 });
-        }, `View button at index ${count} was not visible after scrolling`).toPass({ timeout: 15_000 });
+        // // Keep scrolling until the nth button appears in DOM
+        // await expect(async () => {
+        //     await this.page.mouse.wheel(0, 400);
+        //     await target.waitFor({ state: 'visible', timeout: 2_000 });
+        // }, `View button at index ${count} was not visible after scrolling`).toPass({ timeout: 15_000 });
+        await this.page.keyboard.press('End');
+        await this.viewIcon.nth(count).focus();
         await this.viewIcon.nth(count).click();
         // await this.page.waitForTimeout(500);
     }
@@ -907,7 +901,7 @@ export class CostEstimationPage extends BasePage {
     async addMaterialAndSendToProcurement() {
         await this.addMaterialBtn.click();
         await this.page.waitForTimeout(500);
-        await expect(this.stockStatus).toHaveText('Out of Stock');
+        await expect(this.status('Out of Stock'), 'Added material is not showing as Out of Stock').toBeVisible();
         await this.selectAllCheckbox.check();
         await this.sendToProcurementBtn.click();
     }

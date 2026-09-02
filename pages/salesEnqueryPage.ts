@@ -47,11 +47,9 @@ export class SalesEnquiryPage extends BasePage {
     public readonly editSalesEnquiryTitle: Locator;
     private readonly createPPJOButton: Locator;
     public readonly viewEnquiryTitle: Locator;
-    public readonly enquiryStatus: Locator;
     public readonly enquiryId: Locator;
     private readonly internalRequestBtn: Locator;
     private readonly enquiryBtn;
-    public readonly socialMediaStatus: Locator;
     public readonly socialMediaImage: (name: string) => Locator;
 
     // Dynamic locators
@@ -119,7 +117,6 @@ export class SalesEnquiryPage extends BasePage {
         this.requestEstimationButton = this.page.getByRole('button', { name: 'Request Estimation' });
         this.internalRequestBtn = this.page.getByRole('button', { name: 'Internal Request' });
         this.enquiryBtn = this.page.getByRole('button', { name: 'Enquiry' });
-        this.socialMediaStatus = this.page.locator('//td[@data-app-table-col="4"]//span').first();
 
         // Dynamic locators initialization
         this.projectModeRadio = (name: string) => this.page.locator('label').filter({ hasText: `${name}` }).first();
@@ -140,7 +137,6 @@ export class SalesEnquiryPage extends BasePage {
         this.createPPJOButton = this.page.locator('//span[text()="Create PPJO"]//parent::button').first();
         this.permission = (name: string) => this.page.locator(`//label[text()="${name}"]/preceding-sibling::div`);
         this.viewEnquiryTitle = this.page.getByRole('heading');
-        this.enquiryStatus = this.page.locator('//td[@data-app-table-col="3"]//span').first();
         this.enquiryId = this.page.locator(`//td[@data-app-table-col="0"]//div`).first();
         this.socialMediaImage = (name: string) => this.page.getByRole('img', { name: `${name}` });
     }

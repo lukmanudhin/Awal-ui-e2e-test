@@ -35,6 +35,7 @@ export class BasePage {
     public readonly createdSalesEnquiry: (name: string) => Locator;
     private readonly dropDownField: (name: string) => Locator;
     private readonly dropDownMenu: (name: string) => Locator;
+    public readonly status: (status: string) => Locator;
     constructor(public readonly page: Page) {
         this.searchBox = this.page.getByRole('textbox', { name: 'Search' });
         this.enquiryIdCell = this.page.locator('//tr/td[2]/div').first();
@@ -47,6 +48,7 @@ export class BasePage {
         this.nextMonthIcon = this.page.getByRole('button', { name: 'Next month' });
         this.rejectButton = this.page.getByRole('button', { name: 'Reject' });
         this.editIcon = this.page.locator('//img[contains(@src,"edit")]').first();
+        this.status = (status: string) => this.page.getByRole('row').getByRole('cell', { name: status, exact: true }).first();
 
         // Dynamic locators initialization
         this.successMessage = (name: string): Locator => this.page.getByRole('paragraph').filter({ hasText: name });

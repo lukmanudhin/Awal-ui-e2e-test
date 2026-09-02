@@ -68,15 +68,15 @@ test.describe('Material Indent and Material Issue For Out of Stock Raw Material 
             await expect(materialIndentRequestPage.successMessage('Material Indent created successfully'), 'Material Indent created successfully success message does not found').toHaveText('Material Indent created successfully');
             materialIndentRequestId = await materialIndentRequestPage.getMaterialIndentRequestNumber();
             await materialIndentRequestPage.search(materialIndentRequestId);
-            await expect(materialIndentRequestPage.priorityLevel, "Priority level text does not match").toHaveText(MIRDetails.priority);
-            await expect(materialIndentRequestPage.mirStatus, "MIR status text does not match").toHaveText('Pending');
+            await expect(materialIndentRequestPage.status(MIRDetails.priority), "Priority level text does not match").toBeVisible();
+            await expect(materialIndentRequestPage.status('Pending'), "MIR status text does not match").toBeVisible();
         });
 
         await test.step('Approve the Material Indent Request as the manager', async () => {
             await modules.goToModule({ subModule: 'Material Indent Request (Manager)' });
             await materialIndentRequestPage.search(materialIndentRequestId);
-            await expect(materialIndentRequestPage.priorityLevel, "Priority level text does not match").toHaveText(MIRDetails.priority);
-            await expect(materialIndentRequestPage.mirStatus, "MIR status text does not match").toHaveText('New Request');
+            await expect(materialIndentRequestPage.status(MIRDetails.priority), "Priority level text does not match").toBeVisible();
+            await expect(materialIndentRequestPage.status('New Request'), "MIR status text does not match").toBeVisible();
             await materialIndentRequestPage.clickViewIcon();
             await ppjoPage.validateSampleDetails(materialIndentRequestId, MIRDetails.pjoNumber, MIRDetails.priority, requestedBy);
             await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
@@ -86,23 +86,23 @@ test.describe('Material Indent and Material Issue For Out of Stock Raw Material 
             await expect(materialIndentRequestPage.successMessage('Material Indent Requets approved successfully'), 'Material Indent Requets approved successfully success message does not found').toHaveText('Material Indent Requets approved successfully');
             await materialIndentRequestPage.goToHistory();
             await materialIndentRequestPage.search(materialIndentRequestId);
-            await expect(materialIndentRequestPage.priorityLevel, "Priority level text does not match").toHaveText('Approved');
+            await expect(materialIndentRequestPage.status('Approved'), "Priority level text does not match").toBeVisible();
         });
 
         await test.step('Verify the Material Indent Request shows as Approved in the requester list', async () => {
             await modules.goToModule({ subModule: 'Material Indent Request' });
             await materialIndentRequestPage.search(materialIndentRequestId);
-            await expect(materialIndentRequestPage.mirStatus, "MIR status text does not match").toHaveText('Approved');
+            await expect(materialIndentRequestPage.status('Approved'), "MIR status text does not match").toBeVisible();
         });
 
         await test.step('Verify the material cannot be issued while it is out of stock', async () => {
             await modules.goToModule({ subModule: 'Material Issue Notes' });
             await materialIndentRequestPage.search(materialIndentRequestId);
-            await expect(materialIndentRequestPage.status, "Status text does not match").toHaveText('New Request');
+            await expect(materialIndentRequestPage.status('New Request'), "Status text does not match").toBeVisible();
             await materialIndentRequestPage.clickViewIcon();
             await ppjoPage.validateSampleDetails(materialIndentRequestId, MIRDetails.pjoNumber, materialIndentRequestId, requestedBy);
             await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
-            await expect(materialIndentRequestPage.stockStatus, "Stock status text does not match").toHaveText('Out Of Stock');
+            await expect(materialIndentRequestPage.status('Out Of Stock'), "Stock status text does not match").toBeVisible();
             await expect(materialIndentRequestPage.issuingQuantity, 'Issuing quantity field is not disabled for Out Of Stock materials').toBeDisabled();
         });
 
@@ -118,8 +118,8 @@ test.describe('Material Indent and Material Issue For Out of Stock Raw Material 
             prId = await prRequestPage.searchPR(MIRDetails.material);
             console.log(`PR ID: ${prId}`);
             await prRequestPage.search(prId);
-            await expect(prRequestPage.stockStatus, 'Stock status does not match').toHaveText('Out Of Stock');
-            await expect(prRequestPage.prStatus, "PR status text does not match").toHaveText('PO Pending');
+            await expect(prRequestPage.status('Out Of Stock'), 'Stock status does not match').toBeVisible();
+            await expect(prRequestPage.status('PO Pending'), "PR status text does not match").toBeVisible();
             await prRequestPage.clickViewIcon();
             await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
             await prRequestPage.approvePRRequestAndValidateAPI(200);
@@ -129,8 +129,8 @@ test.describe('Material Indent and Material Issue For Out of Stock Raw Material 
         await test.step('Verify the approved Purchase Requisition in the Purchase Request Sheet', async () => {
             await modules.goToModule({ subModule: 'Purchase Request Sheet' });
             await prRequestPage.search(prId);
-            await expect(prRequestPage.stockStatus, 'Stock status does not match').toHaveText('Out Of Stock');
-            await expect(prRequestPage.prStatus, "PR status text does not match").toHaveText('PO Pending');
+            await expect(prRequestPage.status('Out Of Stock'), 'Stock status does not match').toBeVisible();
+            await expect(prRequestPage.status('PO Pending'), "PR status text does not match").toBeVisible();
             await prRequestPage.clickViewIcon();
             await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
         });
@@ -205,7 +205,7 @@ test.describe('Material Indent and Material Issue For Out of Stock Raw Material 
             await modules.goToModule({ nestedSubModule: 'View PO' });
             poNumber = await procurementPage.getPONumber();
             await procurementPage.search(poNumber);
-            await expect(materialIndentRequestPage.priorityLevel, 'View PO status does not match').toHaveText('Active');
+            await expect(materialIndentRequestPage.status('Active'), 'View PO status does not match').toBeVisible();
             await procurementPage.clickViewIcon();
             await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
             await procurementPage.validatePODetails(MIRDetails.tempVendorName, MIRDetails.orderType);
@@ -217,8 +217,8 @@ test.describe('Material Indent and Material Issue For Out of Stock Raw Material 
             await expect(grnEntryPage.successMessage('GRN created successfully'), 'GRN created successfully message does not match').toHaveText('GRN created successfully');
             grnNumber = await grnEntryPage.getGRNNumber();
             await grnEntryPage.search(grnNumber);
-            await expect(grnEntryPage.qcStatus, 'QC status does not match').toHaveText('Not Started');
-            await expect(grnEntryPage.status, 'GRN status does not match').toHaveText('Submitted');
+            await expect(grnEntryPage.status('Not Started'), 'QC status does not match').toBeVisible();
+            await expect(grnEntryPage.status('Submitted'), 'GRN status does not match').toBeVisible();
             await grnEntryPage.clickViewIcon();
             await ppjoPage.validateSampleDetails(grnNumber, MIRDetails.tempVendorName, poNumber, 'Not Started');
             await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
@@ -231,7 +231,7 @@ test.describe('Material Indent and Material Issue For Out of Stock Raw Material 
         await test.step('Put away the QC passed quantity and verify the material is In Stock', async () => {
             await modules.goToModule({ module: 'Store', subModule: 'Material Management', nestedSubModule: 'Put Away' });
             await putAwayPage.search(grnNumber);
-            await expect(putAwayPage.qcStatus, 'QC status does not match').toHaveText('Completed');
+            await expect(putAwayPage.status('Completed'), 'QC status does not match').toBeVisible();
             await putAwayPage.clickStart();
             await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
             await putAwayPage.clickPutAway();
@@ -248,11 +248,11 @@ test.describe('Material Indent and Material Issue For Out of Stock Raw Material 
         await test.step('Issue the material and verify the stock returns to Out Of Stock', async () => {
             await modules.goToModule({ subModule: 'Material Issue Notes' });
             await materialIndentRequestPage.search(materialIndentRequestId);
-            await expect(materialIndentRequestPage.status, "Status text does not match").toHaveText('New Request');
+            await expect(materialIndentRequestPage.status('New Request'), "Status text does not match").toBeVisible();
             await materialIndentRequestPage.clickViewIcon();
             await ppjoPage.validateSampleDetails(materialIndentRequestId, MIRDetails.pjoNumber, materialIndentRequestId, requestedBy);
             await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
-            await expect(materialIndentRequestPage.stockStatus, "Stock status text does not match").toHaveText('Partially Available');
+            await expect(materialIndentRequestPage.status('Partially Available'), "Stock status text does not match").toBeVisible();
             await materialIndentRequestPage.enterIssueQuantity(MIRDetails.quantity, MIRDetails.putAwayQuantity);
             await materialIndentRequestPage.issueMaterialAndValidateAPI(201);
             await expect(materialIndentRequestPage.successMessage('Material Issue Notes created successfully'), 'Material Issue Notes created successfully success message does not found').toHaveText('Material Issue Notes created successfully');

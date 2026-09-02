@@ -5,8 +5,6 @@ export class PRRequestPage extends BasePage {
     private readonly selectAllChkBx: Locator;
     private readonly createPRButton: Locator;
     private readonly submitForApprovalButton: Locator;
-    public readonly stockStatus: Locator;
-    public readonly prStatus: Locator;
     private readonly approveButton: Locator;
     private readonly confirmButton: Locator;
     constructor(public readonly page: Page) {
@@ -14,8 +12,6 @@ export class PRRequestPage extends BasePage {
         this.selectAllChkBx = this.page.locator('#select-all');
         this.createPRButton = this.page.getByRole('button', { name: 'Create PR' });
         this.submitForApprovalButton = this.page.getByRole('button', { name: 'Submit For Approval' });
-        this.stockStatus = this.page.locator('//td[@data-app-table-col="6"]//span').first();
-        this.prStatus = this.page.locator('//td[@data-app-table-col="7"]//span').first();
         this.approveButton = this.page.getByRole('button', { name: 'Approve' });
         this.confirmButton = this.page.getByRole('button', { name: 'Confirm' });
     }

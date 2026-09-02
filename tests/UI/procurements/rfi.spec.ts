@@ -117,7 +117,7 @@ test.describe('Request For Info - Subcontractor Service End-to-End Scenarios', (
       await costEstimationPage.addBOM(material, MIRDetails.quantity, '1');
       await costEstimationPage.validateAddBOM_API(201);
       await expect(costEstimationPage.successMessage('BOM created successfully'), "BOM creation success message does not match").toContainText('BOM created successfully');
-      await expect(costEstimationPage.stockStatusBOMTable, `Stock status of material "${material}" is not Out of Stock in the BOM table`).toHaveText('Out of Stock');
+      await expect(costEstimationPage.status('Out of Stock'), `Stock status of material "${material}" is not Out of Stock in the BOM table`).toBeVisible();
     });
 
     await costEstimationPage.goToTab('BOL - Bill of Labour');

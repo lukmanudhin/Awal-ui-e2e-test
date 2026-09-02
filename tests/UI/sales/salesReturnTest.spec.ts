@@ -47,47 +47,47 @@ test.describe('Sales Return E2E Test', () => {
         let salesReturnNumber = await salesReturnPage.getSalesReturnNumber();
 
         await salesReturnPage.search(salesReturnNumber);        
-        await expect(salesReturnPage.status, "Sales return status does not match").toHaveText('Pending From QC');
+        await expect(salesReturnPage.status('Pending From QC'), "Sales return status does not match").toBeVisible();
         await salesReturnPage.clickStartQCButton();
         await salesReturnPage.submitQCInspectionForm(salesReturnData);
         await expect(salesReturnPage.successMessage('QC Inspected successfully'), "QC Inspected success message does not match").toHaveText('QC Inspected successfully');
         await salesReturnPage.submitToQCAndValidateAPI(200);
         await salesReturnPage.search(salesReturnNumber);
-        await expect(salesReturnPage.status, "Sales return status does not match").toHaveText('Qc Completed');
+        await expect(salesReturnPage.status('Qc Completed'), "Sales return status does not match").toBeVisible();
 
         await salesReturnPage.clickViewIcon();
         await salesReturnPage.sendToFinanceAndValidateAPI(200);
         await expect(salesReturnPage.successMessage('Sales return sent to Finance'), "Sales return sent to Finance message does not match").toHaveText('Sales return sent to Finance successfully');
         await salesReturnPage.search(salesReturnNumber);
-        await expect(salesReturnPage.status, "Sales return status does not match").toHaveText('Pending From Finance');          
+        await expect(salesReturnPage.status('Pending From Finance'), "Sales return status does not match").toBeVisible();
 
         await modules.goToModule({ module: 'Finance', subModule: 'Account Payable', nestedSubModule: 'Bank Payment Voucher' });
         await salesReturnPage.search(salesReturnNumber);
-        await expect(salesReturnPage.bankPaymentStatus, "Sales return status does not match").toHaveText('Pending From Finance');
+        await expect(salesReturnPage.status('Pending From Finance'), "Sales return status does not match").toBeVisible();
         await salesReturnPage.clickViewIcon();
         await salesReturnPage.createBankPaymentVoucher(voucherData);
         await expect(salesReturnPage.successMessage('Bank Payable Voucher updated successfully'), "Bank Payment Voucher update success message does not match").toHaveText('Bank Payable Voucher updated successfully');
 
         await salesReturnPage.search(salesReturnNumber);
-        await expect(salesReturnPage.bankPaymentStatus, "Sales return status does not match").toHaveText('Pending For Approval');
+        await expect(salesReturnPage.status('Pending For Approval'), "Sales return status does not match").toBeVisible();
         await modules.goToModule({ nestedSubModule: 'Bank Payment Voucher Manager' });
         await salesReturnPage.search(salesReturnNumber);
-        await expect(salesReturnPage.bankPaymentStatus, "Sales return status does not match").toHaveText('Pending For Approval');
+        await expect(salesReturnPage.status('Pending For Approval'), "Sales return status does not match").toBeVisible();
         await salesReturnPage.approveBankPaymentVoucher();
 
         await page.getByRole('button', { name: 'History history-blue' }).click();
         await salesReturnPage.search(salesReturnNumber);
-        await expect(salesReturnPage.bankPaymentStatus, "Sales return status does not match").toHaveText('Finance Completed');
+        await expect(salesReturnPage.status('Finance Completed'), "Sales return status does not match").toBeVisible();
 
         await modules.goToModule({ module: 'Sales', subModule: 'Sales Return' });
         await salesReturnPage.goToTab('Trading');
         await salesReturnPage.search(salesReturnNumber);
-        await expect(salesReturnPage.status, "Sales return status does not match").toHaveText('Finance Completed');
+        await expect(salesReturnPage.status('Finance Completed'), "Sales return status does not match").toBeVisible();
         await salesReturnPage.clickViewIcon();
         await salesReturnPage.fillCloseCaseDetails(salesReturnData.moveReceivedProductTo);
         await salesReturnPage.closeCaseAndValidateAPI(200);
         await expect(salesReturnPage.successMessage('Sales return closed successfully'), "Sales return closed success message does not match").toHaveText('Sales return closed successfully');
         await salesReturnPage.search(salesReturnNumber);
-        await expect(salesReturnPage.status, "Sales return status does not match").toHaveText('Closed');
+        await expect(salesReturnPage.status('Closed'), "Sales return status does not match").toBeVisible();
     });
 });

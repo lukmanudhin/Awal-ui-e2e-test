@@ -2,7 +2,6 @@ import { Page, Locator, expect } from "@playwright/test";
 import { BasePage, step } from "./basePage";
 
 export class PutAwayPage extends BasePage {
-    public readonly qcStatus: Locator;
     private readonly startButton: Locator;
     private readonly putAwayButton: Locator;
     private readonly cancelButton: Locator;
@@ -16,7 +15,6 @@ export class PutAwayPage extends BasePage {
 
     constructor(public readonly page: Page) {
         super(page);
-        this.qcStatus = this.page.locator('//td[@data-app-table-col="4"]//span').first();
         this.startButton = this.page.getByRole('button', { name: 'Start' });
         this.putAwayButton = this.page.getByRole('button', { name: 'Put Away' });
         this.cancelButton = this.page.getByRole('button', { name: 'Cancel' });

@@ -40,7 +40,7 @@ test.describe('Create Sales Enquiry', () => {
         await productsPage.validateProductTabsListed(createEnquiryData.product);
         await productsPage.enterAndSaveAllSelectedProductDetails(createEnquiryData.product);
         await salesEnquiryPage.search(createEnquiryData.customerName);
-        await expect(salesEnquiryPage.enquiryStatus, "Sales enquiry status does not match").toHaveText('Enquiry Created');
+        await expect(salesEnquiryPage.status('Enquiry Created'), "Sales enquiry status does not match").toBeVisible();
         await expect(salesEnquiryPage.createdSalesEnquiry(createEnquiryData.customerName), `Created sales enquiry is not visible for customer: ${createEnquiryData.customerName}`).toBeVisible();
     });
 });

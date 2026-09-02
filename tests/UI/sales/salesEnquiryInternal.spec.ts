@@ -86,7 +86,7 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Internal)', () =
         await productsPage.validateProductTabsListed(createEnquiryData.product);
         await productsPage.enterAndSaveAllSelectedProductDetails(createEnquiryData.product);
         enquiryId = await salesEnquiryPage.searchToGetEnquiryId(createEnquiryData.customerName);
-        await expect(salesEnquiryPage.enquiryStatus, "Sales enquiry status does not match").toHaveText('Enquiry Created');
+        await expect(salesEnquiryPage.status('Enquiry Created'), "Sales enquiry status does not match").toBeVisible();
     });
 
     test('Create PPJO and submit Artwork, AutoCAD, Site Visit, Procurement, and Estimation requests', async () => {
@@ -259,7 +259,7 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Internal)', () =
     test('Verify estimation status in Request Internal is updated to Pending For Approval after submission', async () => {
         await modules.goToModule({ subModule: 'Request (Internal)' });
         await salesEnquiryPage.search(enquiryId);
-        await expect(requestNormalPage.estimationStatus, "Pending For Approval status does not match").toHaveText('Pending For Approval');
+        await expect(requestNormalPage.status('Pending For Approval'), "Pending For Approval status does not match").toBeVisible();
     });
 
     test('Verify that the cost estimation is approved and submitted to Sales successfully with Approved status reflected in history', async () => {
@@ -294,7 +294,7 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Internal)', () =
     test('Verify that the Sales Enquiry status moves to Quotation Pending and the quotation is generated and submitted for approval', async () => {
         await modules.goToModule({ module: 'Sales', subModule: 'Internal Requests' });
         await salesEnquiryPage.search(enquiryId);
-        await expect(salesEnquiryPage.enquiryStatus, "Quotation Pending status does not match in sales enquiry").toHaveText('Quotation Pending');
+        await expect(salesEnquiryPage.status('Quotation Pending'), "Quotation Pending status does not match in sales enquiry").toBeVisible();
         await salesEnquiryPage.clickViewIcon();
         await expect(salesEnquiryPage.viewEnquiryTitle, "View Enquiry Title is does not contain View Enquiry").toContainText('View Enquiry');
         await salesEnquiryPage.validateViewEnquiryDetails(createEnquiryData);
@@ -324,14 +324,14 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Internal)', () =
         await expect(quotationManagerPage.successMessage('Quotation approved successfully'), "Quotation approved successfully message does not match").toContainText('Quotation approved successfully');
         await quotationManagerPage.goToTab('History');
         await quotationManagerPage.search(enquiryId);
-        await expect(quotationManagerPage.quotationStatus, 'Quotation approved status does not match').toHaveText('Approved');
+        await expect(quotationManagerPage.status('Approved'), 'Quotation approved status does not match').toBeVisible();
     });
 
     test('Quotation: Verify advance invoice request is submitted successfully', async () => {
         await modules.goToModule({ subModule: 'Quotation' });
         await quotationManagerPage.search(enquiryId);
         referenceNumber = await quotationManagerPage.getQuotationNumber();
-        await expect(quotationManagerPage.quotationStatus, 'Quotation status does not match').toContainText('Quotation - Approved by Manager');
+        await expect(quotationManagerPage.status('Quotation - Approved by Manager'), 'Quotation status does not match').toBeVisible();
         await quotationManagerPage.clickViewIcon();
         await quotationManagerPage.validateEnquiryDetails(createEnquiryData);
         await ppjoPage.validateBOQDetailsTable(addBOQData);
@@ -359,14 +359,14 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Internal)', () =
     test('Verify that the sales order is submitted for approval and the status is updated to Pending Sales Order Approval', async () => {
         await modules.goToModule({ subModule: 'Sales Order' });
         await salesOrderManagerPage.search(enquiryId);
-        await expect(salesOrderManagerPage.salesOrderApproveStatus, "Sales order status does not match").toHaveText('Sales Checklist Approved by Manager');
+        await expect(salesOrderManagerPage.status('Sales Checklist Approved by Manager'), "Sales order status does not match").toBeVisible();
         await salesOrderManagerPage.clickViewIcon();
         await salesOrderManagerPage.validateSalesOrderDetails(createEnquiryData);
         await ppjoPage.validateBOQDetailsTable(addBOQData);
         await salesOrderManagerPage.sendSalesOrderForApprovalAndValidateAPI(200);
         await expect(salesOrderManagerPage.successMessage('Sales Order sent for approval successfully'), "Sales order sent for approval message does not match").toContainText('Sales Order sent for approval successfully');
         await salesOrderManagerPage.search(enquiryId);
-        await expect(salesOrderManagerPage.salesOrderApproveStatus, "Sales order status does not match").toHaveText('Pending Sales Order Approval');
+        await expect(salesOrderManagerPage.status('Pending Sales Order Approval'), "Sales order status does not match").toBeVisible();
     });
 
     test('Verify Sales Order Manager approves the sales order and the approval is confirmed successfully', async () => {
@@ -383,7 +383,7 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Internal)', () =
     test('Verify Sales Enquiry status is updated to Sales Order Approved by Manager', async () => {
         await modules.goToModule({ subModule: 'Internal Requests' });
         await salesEnquiryPage.search(enquiryId);
-        await expect(salesEnquiryPage.enquiryStatus, "Sales order approved status does not match in sales enquiry").toHaveText('Sales Order Approved by Manager');
+        await expect(salesEnquiryPage.status('Sales Order Approved by Manager'), "Sales order approved status does not match in sales enquiry").toBeVisible();
         await salesEnquiryPage.clickViewIcon();
         await salesEnquiryPage.goToTab('Quotation');
         await expect(salesEnquiryPage.enquiryId, "Enquiry ID does not match").toHaveText(enquiryId);

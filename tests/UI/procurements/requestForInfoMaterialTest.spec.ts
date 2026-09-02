@@ -118,7 +118,7 @@ test.describe('Request For Info - Material End-to-End Scenarios', () => {
             await costEstimationPage.addBOM(material, MIRDetails.quantity, '1');
             await costEstimationPage.validateAddBOM_API(201);
             await expect(costEstimationPage.successMessage('BOM created successfully'), "BOM creation success message does not match").toContainText('BOM created successfully');
-            await expect(costEstimationPage.stockStatusBOMTable, `Stock status of material "${material}" is not Out of Stock in the BOM table`).toHaveText('Out of Stock');
+            await expect(costEstimationPage.status('Out of Stock'), `Stock status of material "${material}" is not Out of Stock in the BOM table`).toBeVisible();
         });
 
         await test.step('Enter the Bill of Labour details', async () => {
@@ -146,13 +146,13 @@ test.describe('Request For Info - Material End-to-End Scenarios', () => {
             await costEstimationPage.goToTab('Procurement Request');
             await costEstimationPage.addMaterialAndSendToProcurement();
             await expect(costEstimationPage.successMessage('Procurement request created successfully'), "Procurement request created successfully message does not match").toContainText('Procurement request created successfully');
-            await expect(costEstimationPage.procurementStatus, "procurement status does not match").toContainText('Pending');
+            await expect(costEstimationPage.status('Pending'), "procurement status does not match").toBeVisible();
         });
 
         await test.step('Create a vendor quotation for an existing vendor and a new temp vendor', async () => {
             await modules.goToModule({ module: 'Procurement', subModule: 'Request for Info', nestedSubModule: 'View Quotation Request' });
             await procurementPage.search(enquiryId);
-            await expect(costEstimationPage.procurementStatus, "procurement status does not match").toContainText('New Request');
+            await expect(costEstimationPage.status('New Request'), "procurement status does not match").toBeVisible();
             await procurementPage.createVendorQuotation(MIRDetails.shipTo, MIRDetails.vendorQuotationVendor, { name: MIRDetails.tempVendorName, email: MIRDetails.tempVendorEmail });
             await procurementPage.validateVendorQuotationMaterialTable(MIRDetails.material, MIRDetails.quantity);
             await procurementPage.prepareVendorQuotationAndValidateAPI(201);
@@ -195,7 +195,7 @@ test.describe('Request For Info - Material End-to-End Scenarios', () => {
             await expect(costEstimationPage.costEstimationTitle, "Create Cost Estimation title does not match").toContainText('Create Cost Estimation');
             await costEstimationPage.clickAddEstimation();
             await costEstimationPage.goToTab('Procurement Request');
-            await expect(costEstimationPage.procurementStatus, "procurement status does not match").toContainText('Completed');
+            await expect(costEstimationPage.status('Completed'), "procurement status does not match").toBeVisible();
             await costEstimationPage.includePrice(MIRDetails.vendorQuotationVendor, MIRDetails.unitPrice);
             await expect(costEstimationPage.successMessage('Procurement price updated successfully'), "Procurement price updated successfully message does not match").toContainText('Procurement price updated successfully');
         });

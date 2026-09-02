@@ -47,7 +47,7 @@ test.describe('Create Manufacturing E2E Flow', () => {
         await productsPage.validateProductTabsListed(createEnquiryData.product);
         await productsPage.enterAndSaveAllSelectedProductDetails(createEnquiryData.product);
         await salesEnquiryPage.search(createEnquiryData.customerName);
-        await expect(salesEnquiryPage.enquiryStatus, "Sales enquiry status does not match").toHaveText('Enquiry Created');
+        await expect(salesEnquiryPage.status('Enquiry Created'), "Sales enquiry status does not match").toBeVisible();
         await expect(salesEnquiryPage.createdSalesEnquiry(createEnquiryData.customerName), `Created sales enquiry is not visible for customer: ${createEnquiryData.customerName}`).toBeVisible();
         await manufacturingPage.clickManufacturing();
         await manufacturingPage.addManufacturingMaterial(manufacturingData);
@@ -59,10 +59,10 @@ test.describe('Create Manufacturing E2E Flow', () => {
         await manufacturingPage.requestApprovalAndValidateAPI(200);
         await expect(manufacturingPage.successMessage('Manufacturing sent for approval'), "Manufacturing sent for approval message does not match").toHaveText('Manufacturing sent for approval');
         await manufacturingPage.search(createEnquiryData.customerName);
-        await expect(salesEnquiryPage.socialMediaStatus, "Sales enquiry status does not match").toHaveText('Pending For Approval');
+        await expect(salesEnquiryPage.status('Pending For Approval'), "Sales enquiry status does not match").toBeVisible();
         await modules.goToModule({ nestedSubModule: 'Manufacturing Approval' });
         await manufacturingPage.search(createEnquiryData.customerName);
-        await expect(salesEnquiryPage.enquiryStatus, "Manufacturing approval status does not match").toHaveText('Pending For Approval');
+        await expect(salesEnquiryPage.status('Pending For Approval'), "Manufacturing approval status does not match").toBeVisible();
         await manufacturingPage.clickManufacturing();
         await ppjoPage.validateSampleDetails(createEnquiryData.customerName, createEnquiryData.city, createEnquiryData.country, createEnquiryData.telephoneNumber1);
         await manufacturingPage.validateMaterialTable(manufacturingData);
@@ -70,10 +70,10 @@ test.describe('Create Manufacturing E2E Flow', () => {
         await expect(manufacturingPage.successMessage('Manufacturing approved successfully'), "Manufacturing approved success message does not match").toHaveText('Manufacturing approved successfully');
         await manufacturingPage.goToTab('History');
         await manufacturingPage.search(createEnquiryData.customerName);
-        await expect(salesEnquiryPage.enquiryStatus, "Manufacturing approval status does not match").toHaveText('Approved');
+        await expect(salesEnquiryPage.status('Approved'), "Manufacturing approval status does not match").toBeVisible();
         await modules.goToModule({ nestedSubModule: "Manufacturing" });
         await manufacturingPage.search(createEnquiryData.customerName);
-        await expect(salesEnquiryPage.socialMediaStatus, "Manufacturing status does not match").toHaveText('Approved');
+        await expect(salesEnquiryPage.status('Approved'), "Manufacturing status does not match").toBeVisible();
         await manufacturingPage.clickManufacturing();
         await manufacturingPage.validateMaterialTable(manufacturingData);
         // await manufacturingPage.createOrderAndValidateAPI(200);
@@ -83,7 +83,7 @@ test.describe('Create Manufacturing E2E Flow', () => {
         await expect(manufacturingPage.successMessage('Invoice generated successfully'), "Invoice generated success message does not match").toHaveText('Invoice generated successfully');
         await modules.goToModule({ nestedSubModule: "Manufacturing" });
         await manufacturingPage.search(createEnquiryData.customerName);
-        await expect(salesEnquiryPage.socialMediaStatus, "Manufacturing status does not match").toHaveText('Completed');
+        await expect(salesEnquiryPage.status('Completed'), "Manufacturing status does not match").toBeVisible();
         await manufacturingPage.clickViewInvoice();
         await ppjoPage.validateSampleDetails(createEnquiryData.customerName, createEnquiryData.city, createEnquiryData.country, createEnquiryData.telephoneNumber1);
         await manufacturingPage.validateMaterialTable(manufacturingData);

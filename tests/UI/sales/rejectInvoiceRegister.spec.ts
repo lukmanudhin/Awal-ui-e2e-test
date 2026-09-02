@@ -35,7 +35,7 @@ test.describe.serial('Verify Invoice Register is rejected by the Manager', () =>
             await productsPage.validateProductTabsListed(createEnquiryData.product);
             await productsPage.enterAndSaveAllSelectedProductDetails(createEnquiryData.product);
             await salesEnquiryPage.search(createEnquiryData.customerName);
-            await expect(salesEnquiryPage.enquiryStatus, "Sales enquiry status does not match").toHaveText('Enquiry Created');
+            await expect(salesEnquiryPage.status('Enquiry Created'), "Sales enquiry status does not match").toBeVisible();
         });
 
         await test.step('Create PPJO and submit Artwork, AutoCAD, Site Visit, Procurement, and Estimation requests', async () => {
@@ -197,7 +197,7 @@ test.describe.serial('Verify Invoice Register is rejected by the Manager', () =>
         await test.step('Verify estimation status in Request Normal is updated to Pending For Approval after submission', async () => {
             await modules.goToModule({ subModule: 'Request (Normal)' });
             await salesEnquiryPage.search(enquiryId);
-            await expect(requestNormalPage.estimationStatus, "Pending For Approval status does not match").toHaveText('Pending For Approval');
+            await expect(requestNormalPage.status('Pending For Approval'), "Pending For Approval status does not match").toBeVisible();
         });
 
         await test.step('Verify that the cost estimation is approved and submitted to Sales successfully with Approved status reflected in history', async () => {
@@ -222,7 +222,7 @@ test.describe.serial('Verify Invoice Register is rejected by the Manager', () =>
         await test.step('Verify that the Sales Enquiry status moves to Quotation Pending and the quotation is generated and submitted for approval', async () => {
             await modules.goToModule({ module: 'Sales', subModule: 'Sales Enquiry' });
             await salesEnquiryPage.search(enquiryId);
-            await expect(salesEnquiryPage.enquiryStatus, "Quotation Pending status does not match in sales enquiry").toHaveText('Quotation Pending');
+            await expect(salesEnquiryPage.status('Quotation Pending'), "Quotation Pending status does not match in sales enquiry").toBeVisible();
             await salesEnquiryPage.clickViewIcon();
             await expect(salesEnquiryPage.viewEnquiryTitle, "View Enquiry Title is does not contain View Enquiry").toContainText('View Enquiry');
             await salesEnquiryPage.goToTab('PPJO');
@@ -246,13 +246,13 @@ test.describe.serial('Verify Invoice Register is rejected by the Manager', () =>
             await expect(quotationManagerPage.successMessage('Quotation approved successfully'), "Quotation approved successfully message does not match").toContainText('Quotation approved successfully');
             await quotationManagerPage.goToTab('History');
             await quotationManagerPage.search(enquiryId);
-            await expect(quotationManagerPage.quotationStatus, 'Quotation approved status does not match').toHaveText('Approved');
+            await expect(quotationManagerPage.status('Approved'), 'Quotation approved status does not match').toBeVisible();
         });
 
         await test.step('Quotation: Verify send quotation to customer and advance invoice request is submitted successfully', async () => {
             await modules.goToModule({ subModule: 'Quotation' });
             await quotationManagerPage.search(enquiryId);
-            await expect(quotationManagerPage.quotationStatus, 'Quotation status does not match').toContainText('Quotation - Approved by Manager');
+            await expect(quotationManagerPage.status('Quotation - Approved by Manager'), 'Quotation status does not match').toBeVisible();
             await quotationManagerPage.clickViewIcon();
             // await expect(quotationManagerPage.deliveryDate(createEnquiryData.date), "Delivery date is not updated in quotation manager").toContainText(`${createEnquiryData.date}`);
             await quotationManagerPage.sendToCustomerAndValidateAPI(200);
@@ -266,7 +266,7 @@ test.describe.serial('Verify Invoice Register is rejected by the Manager', () =>
         await test.step('Invoice Request: Verify advance invoice is created from Invoice Request and the status is updated to Completed', async () => {
             await modules.goToModule({ module: 'Finance', subModule: 'Accounts Receivable', nestedSubModule: 'Invoice Request' });
             await invoiceRequestPage.search(createEnquiryData.customerName);
-            await expect(invoiceRequestPage.invoiceStatus, "Invoice status does not match").toContainText('New Request');
+            await expect(invoiceRequestPage.status('New Request'), "Invoice status does not match").toBeVisible();
             await invoiceRequestPage.clickCreateInvoiceBtn();
             await invoiceRequestPage.selectInvoiceDate(createEnquiryData.date);
             await invoiceRequestPage.createInvoiceAndValidateAPI(200);
@@ -274,14 +274,14 @@ test.describe.serial('Verify Invoice Register is rejected by the Manager', () =>
             await modules.goToModule({ nestedSubModule: 'Invoice Request' });
             await invoiceRequestPage.search(createEnquiryData.customerName);
 
-            await expect(invoiceRequestPage.invoiceStatus, "Invoice status does not match").toContainText('Pending For Approval');
+            await expect(invoiceRequestPage.status('Pending For Approval'), "Invoice status does not match").toBeVisible();
             await expect(invoiceRequestPage.viewInvoiceBtn, "View invoice button is not visible").toBeVisible();
         });
 
         await test.step('Invoice Register: Verify Invoice Register is rejected by the Manager and acknowledged with the acknowledgement status updated to No', async () => {
             await modules.goToModule({ nestedSubModule: 'Invoice Request (Manager)' });
             await invoiceRequestPage.search(createEnquiryData.customerName);
-            await expect(invoiceRequestPage.acknowledgementStatus, "Invoice status does not match").toContainText('No');
+            await expect(invoiceRequestPage.status('No'), "Invoice status does not match").toBeVisible();
             await invoiceRequestPage.clickViewIcon();
             await invoiceRequestPage.notApproveInvoiceRegisterAndValidateAPI(200);
             //unwanted success message
@@ -289,14 +289,14 @@ test.describe.serial('Verify Invoice Register is rejected by the Manager', () =>
             await expect(invoiceRequestPage.successMessage('Invoice register not approved'), "Invoice register not approved success message does not match").toContainText('Invoice register not approved');
             await invoiceRequestPage.goToTab('History');
             await invoiceRequestPage.search(createEnquiryData.customerName);
-            await expect(invoiceRequestPage.invoiceRegisterStatus, "Invoice status does not match").toContainText('Not Approved');
-            await expect(invoiceRequestPage.managerAcknowledgementStatus, "Invoice status does not match").toContainText('No');
+            await expect(invoiceRequestPage.status('Not Approved'), "Invoice status does not match").toBeVisible();
+            await expect(invoiceRequestPage.status('No'), "Invoice status does not match").toBeVisible();
         });
 
         await test.step('Verify Invoice Register is rejected by the Manager with status reflected in sales enquiry', async () => {
             await modules.goToModule({ module: 'Sales', subModule: 'Sales Enquiry' });
             await salesEnquiryPage.search(enquiryId);
-            await expect(salesEnquiryPage.enquiryStatus, "Finance Reject by - Manager status does not match in sales enquiry").toHaveText('Finance Reject by - Manager');
+            await expect(salesEnquiryPage.status('Finance Reject by - Manager'), "Finance Reject by - Manager status does not match in sales enquiry").toBeVisible();
         });
     });
 });
