@@ -213,11 +213,12 @@ export class QuotationManagerPage extends BasePage {
         await this.salesCheckListRemarks.fill(remarks);
     }
 
-    private async enterDeliveryInstallationDetails(data: SalesEnquiryData, modeOfDelivery: string, deliveryNote: string, deliveryRemarks: string) {
+    private async enterDeliveryInstallationDetails(data: SalesEnquiryData, modeOfDelivery: string, deliveryNote: string, deliveryRemarks: string, installationCategory: string) {
         await this.radioButton(modeOfDelivery).check();
         await this.customerNameTxtBx.fill(data.customerName);
         await this.phoneTxtBx.fill(data.mobileNumber1);
         await this.locationTxtBx.fill(data.city);
+        await this.selectOptionFromDropdown('Installation Category', installationCategory);
         await this.checkBox(deliveryNote).last().check();
         await this.deliveryRemarksTxtBx.fill(deliveryRemarks);
     }
@@ -254,7 +255,7 @@ export class QuotationManagerPage extends BasePage {
             await this.generateCheckListButton.click();
         }
         await this.enterSalesChecklist('Email', 'Photocopy', 'Site Photo', 'Yes', 'Yes', 'Yes', 'Yes', 'Sales Checklist Remarks');
-        await this.enterDeliveryInstallationDetails(data, 'Delivery Only', 'YES', 'Delivery Remarks');
+        await this.enterDeliveryInstallationDetails(data, 'Delivery Only', 'YES', 'Delivery Remarks', 'Priority Installation');
         await this.enterProductionChecklist(data.date, 'Material', 'Yes', 'YES', 'YES', 'Production Remarks');
         // await this.submitCheckListButton.click();
     }
