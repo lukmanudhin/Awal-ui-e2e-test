@@ -142,7 +142,8 @@ export class SalesEnquiryPage extends BasePage {
     }
     @step()
     async enterCustomerName(data: SalesEnquiryData) {
-        await this.page.waitForTimeout(1000);
+        await this.customerNameTextBox.waitFor({ state: 'visible', timeout: 30000 });
+        await expect(this.customerNameTextBox).toBeEnabled({ timeout: 5000 });
         await this.customerNameTextBox.fill(data.customerName);
         await expect(this.customerNameTextBox, "Customer Name value mismatch while creating sales enquiry").toHaveValue(data.customerName);
     }
@@ -444,7 +445,6 @@ export class SalesEnquiryPage extends BasePage {
         await this.page.waitForTimeout(1000);
     }
 
-    // await page.getByRole('button', { name: 'Internal Request' }).click();
     @step()
     async updateSalesEnquiry(data: SalesEnquiryData) {
         await this.customerNameTextBox.fill(data.customerName, { timeout: 5000, force: true });

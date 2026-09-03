@@ -867,13 +867,12 @@ export class CostEstimationPage extends BasePage {
         await expect(this.page.locator('(//div[@class="p-0 bg-white rounded-[8px] max-h-[100%] mt-4"])[2]'), `Request table does not contain title: ${title}`).toContainText(title);
         const boqDetails = await this.page.locator('(//div[@class="p-0 bg-white rounded-[8px] max-h-[100%] mt-4"])[2]').innerText();
         expect(boqDetails, `BOQ details do not contain request type: ${requestType}`).toContain(requestType);
-        expect(boqDetails, "BOQ details do not contain View Attachment").toContain('View Attachment');
     }
     @step()
     async validateViewDiscountAttachments(documentName: string, reason: string) {
         await this.page.keyboard.press('End');
         await this.page.waitForTimeout(250);
-        await this.viewAttachmentsButton.click();
+        await this.viewIcon.last().click();
         await this.page.waitForTimeout(500);
         await expect(this.ppjoBanner('Attachments'), "Attachments banner not found").toBeVisible();
         await expect(this.page.locator('(//main)[2]'), `Attachment details do not contain document name: ${documentName}`).toContainText(documentName);
