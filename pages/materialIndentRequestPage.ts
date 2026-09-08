@@ -24,6 +24,8 @@ export class MaterialIndentRequestPage extends BasePage {
     private readonly addConsumablesBtn: Locator;
     private readonly newQuantityTxtBx: Locator;
     private readonly employeeTxtBx: Locator;
+    private readonly pjoTextBx: Locator;
+    private readonly addSparePartsBtn: Locator;
     constructor(public readonly page: Page) {
         super(page);
         this.createButton = this.page.getByRole('button', { name: 'Create plus icon' });
@@ -47,6 +49,8 @@ export class MaterialIndentRequestPage extends BasePage {
         this.addConsumablesBtn = this.page.getByRole('button', { name: 'Add Item plus icon' });
         this.newQuantityTxtBx = this.page.getByRole('spinbutton', { name: 'New Qty*' });
         this.employeeTxtBx = this.page.getByRole('combobox', { name: 'Employee & Name*' });
+        this.pjoTextBx = this.page.getByRole('combobox', { name: 'PJO Number' });
+        this.addSparePartsBtn = this.page.getByRole('button', { name: 'Add Parts plus icon' });
     }
 
     private async selectFromDropdown(dropdownName: string, value: string) {
@@ -60,8 +64,10 @@ export class MaterialIndentRequestPage extends BasePage {
         await this.page.waitForLoadState('domcontentloaded');
         await this.selectFromDropdown('Requisition Type*', mirDetails.requisitionType);
         await this.selectFromDropdown('Priority Level', mirDetails.priority);
-        await this.selectFromDropdown('PJO Number', mirDetails.pjoNumber);
-        if(await this.employeeTxtBx.isVisible()){
+        if (await this.pjoTextBx.isVisible()) {
+            await this.selectFromDropdown('PJO Number', mirDetails.pjoNumber);
+        }
+        if (await this.employeeTxtBx.isVisible()) {
             await this.selectOptionFromDropdown('Employee & Name*', mirDetails.employeeName)
         }
     }
@@ -87,6 +93,16 @@ export class MaterialIndentRequestPage extends BasePage {
         await this.remarksTxtBx.fill('Remarks');
         await this.selectDate(new Date().getDate() + 1)
         await this.newQuantityTxtBx.fill(mirDetails.quantity);
+        await this.saveButton.click();
+    }
+    async addSpareParts(mirDetails: CreateMIRData) {
+        await this.addSparePartsBtn.click();
+        await this.selectOptionFromDropdown('Spare Part Name*', mirDetails.material);
+        await this.reqQuantityTxtBx.fill(mirDetails.quantity);
+        await this.selectOptionFromDropdown('Breakdown Type*', mirDetails.breakDownType);
+        await this.selectDate(new Date().getDate() + 1);
+        await this.selectOptionFromDropdown('Warranty Status', mirDetails.warrantyStatus);
+        await this.selectDate(new Date().getDate() + 2, 1);
         await this.saveButton.click();
     }
     @step()

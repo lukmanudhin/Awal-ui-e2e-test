@@ -35,6 +35,8 @@ export type CreateMIRData = {
   subcontractorService: string;
   employeeName: string;
   returnQuantity: string;
+  breakDownType: string;
+  warrantyStatus: string;
 };
 
 export const getMIRDetails = (): CreateMIRData => {
@@ -75,6 +77,8 @@ export const getMIRDetails = (): CreateMIRData => {
     landedCost: '250',
     subcontractorService: 'ELECTRICAL',
     employeeName: ``,
-    returnQuantity: '2'
+    returnQuantity: '2',
+    breakDownType: 'Machine Breakdown',
+    warrantyStatus: 'In Warranty'
   };
 };
