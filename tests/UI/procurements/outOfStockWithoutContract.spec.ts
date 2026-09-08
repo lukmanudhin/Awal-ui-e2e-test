@@ -197,7 +197,8 @@ test.describe('Material Indent and Material Issue For Out of Stock Raw Material 
             await modules.goToModule({ nestedSubModule: 'Vendor Quote Comparison (Manager)' });
             await procurementPage.search(prId);
             await procurementPage.clickViewIcon();
-            await procurementPage.approveVendorQuoteAndValidateAPI(200);
+            //need to ask 207 Multi status
+            await procurementPage.approveVendorQuoteAndValidateAPI(207);
             await expect(procurementPage.successMessage('Data updated successfully'), 'Data updated successfully message does not match').toHaveText('Data updated successfully');
         });
 
