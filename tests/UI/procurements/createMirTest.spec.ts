@@ -29,7 +29,7 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
         await salesEnquiryAPI.dispose();
     });
 
-    test('Verify Material Indent Request is successfully created, approved by manager, and material is issued', async ({ modules, materialIndentRequestPage, ppjoPage }) => {
+    test('Verify Material Indent Request is successfully created, approved by manager, and material is issued', async ({ modules, materialIndentRequestPage }) => {
         await modules.goToModule({ module: 'Store', subModule: 'Material Management', nestedSubModule: 'Stock View' });
         await materialIndentRequestPage.search(MIRDetails.material);
         const currentStock = await materialIndentRequestPage.getMaterialCurrentQuatity();
@@ -59,7 +59,7 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
             await expect(materialIndentRequestPage.status(MIRDetails.priority), "Priority level text does not match").toBeVisible();
             await expect(materialIndentRequestPage.status('New Request'), "MIR status text does not match").toBeVisible();
             await materialIndentRequestPage.clickViewIcon();
-            await ppjoPage.validateSampleDetails(materialIndentRequestId, MIRDetails.pjoNumber, MIRDetails.priority, MIRDetails.employeeName);
+            await materialIndentRequestPage.validateMIRDetails(materialIndentRequestId, MIRDetails.pjoNumber, MIRDetails.priority, MIRDetails.employeeName);
             await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
             await materialIndentRequestPage.managerApprovesMaterialRequestAndValidateAPI(200);
             // improper status code
@@ -80,7 +80,7 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
             await materialIndentRequestPage.search(materialIndentRequestId);
             await expect(materialIndentRequestPage.status('New Request'), "Status text does not match").toBeVisible();
             await materialIndentRequestPage.clickViewIcon();
-            await ppjoPage.validateSampleDetails(materialIndentRequestId, MIRDetails.pjoNumber, materialIndentRequestId, MIRDetails.employeeName);
+            await materialIndentRequestPage.validateMIRDetails(materialIndentRequestId, MIRDetails.pjoNumber, MIRDetails.employeeName);
             await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
             await expect(materialIndentRequestPage.status('In Stock'), "Stock status text does not match").toBeVisible();
             await materialIndentRequestPage.enterIssueQuantity(MIRDetails.quantity, MIRDetails.quantity);
@@ -129,7 +129,7 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
             await expect(materialIndentRequestPage.status(MIRDetails.priority), "Priority level text does not match").toBeVisible();
             await expect(materialIndentRequestPage.status('New Request'), "MIR status text does not match").toBeVisible();
             await materialIndentRequestPage.clickViewIcon();
-            await ppjoPage.validateSampleDetails(materialIndentRequestId, MIRDetails.pjoNumber, MIRDetails.priority, MIRDetails.employeeName);
+            await materialIndentRequestPage.validateMIRDetails(materialIndentRequestId, MIRDetails.pjoNumber, MIRDetails.priority, MIRDetails.employeeName);
             await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
             await materialIndentRequestPage.managerApprovesMaterialRequestAndValidateAPI(200);
             // improper status code
@@ -150,7 +150,7 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
             await materialIndentRequestPage.search(materialIndentRequestId);
             await expect(materialIndentRequestPage.status('New Request'), "Status text does not match").toBeVisible();
             await materialIndentRequestPage.clickViewIcon();
-            await ppjoPage.validateSampleDetails(materialIndentRequestId, MIRDetails.pjoNumber, materialIndentRequestId, MIRDetails.employeeName);
+            await materialIndentRequestPage.validateMIRDetails(materialIndentRequestId, MIRDetails.pjoNumber, MIRDetails.employeeName);
             await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
             await expect(materialIndentRequestPage.status('In Stock'), "Stock status text does not match").toBeVisible();
             await materialIndentRequestPage.enterIssueQuantity(MIRDetails.quantity, '6');

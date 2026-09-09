@@ -42,7 +42,7 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
         await salesEnquiryAPI.dispose();
     });
 
-    test('Verify Material Indent Request is successfully created, approved by manager, and material is issued with Random Quantity', async ({ salesEnquiryAPI, stockViewAPI, putAwayPage, grnEntryPage, procurementPage, prRequestPage, modules, materialIndentRequestPage, ppjoPage }) => {
+    test('Verify Material Indent Request is successfully created, approved by manager, and material is issued with Random Quantity', async ({ salesEnquiryAPI, stockViewAPI, putAwayPage, grnEntryPage, procurementPage, prRequestPage, modules, materialIndentRequestPage }) => {
         let prId: string;
         let poNumber: string;
         let grnNumber: string;
@@ -69,7 +69,7 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
             await expect(materialIndentRequestPage.status(MIRDetails.priority), "Priority level text does not match").toBeVisible();
             await expect(materialIndentRequestPage.status('New Request'), "MIR status text does not match").toBeVisible();
             await materialIndentRequestPage.clickViewIcon();
-            await ppjoPage.validateSampleDetails(materialIndentRequestId, MIRDetails.pjoNumber, MIRDetails.priority, requestedBy);
+            await materialIndentRequestPage.validateMIRDetails(materialIndentRequestId, MIRDetails.pjoNumber, MIRDetails.priority, requestedBy);
             await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
             await materialIndentRequestPage.managerApprovesMaterialRequestAndValidateAPI(200);
             // improper status code
@@ -90,7 +90,7 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
             await materialIndentRequestPage.search(materialIndentRequestId);
             await expect(materialIndentRequestPage.status('New Request'), "Status text does not match").toBeVisible();
             await materialIndentRequestPage.clickViewIcon();
-            await ppjoPage.validateSampleDetails(materialIndentRequestId, MIRDetails.pjoNumber, materialIndentRequestId, requestedBy);
+            await materialIndentRequestPage.validateMIRDetails(materialIndentRequestId, MIRDetails.pjoNumber, requestedBy);
             await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
             await expect(materialIndentRequestPage.status('Out Of Stock'), "Stock status text does not match").toBeVisible();
             await expect(materialIndentRequestPage.issuingQuantity, 'Issuing quantity field is not disabled for Out Of Stock materials').toBeDisabled();
@@ -152,7 +152,7 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
             await procurementPage.search(poNumber);
             await expect(materialIndentRequestPage.status('Active'), 'PO status does not match').toBeVisible();
             await procurementPage.clickViewIcon();
-            await ppjoPage.validateSampleDetails(prId, MIRDetails.vendor, MIRDetails.orderType, MIRDetails.vendor);
+            await materialIndentRequestPage.validateMIRDetails(prId, MIRDetails.vendor, MIRDetails.orderType);
             await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
         });
 
@@ -165,7 +165,7 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
             await expect(grnEntryPage.status('Not Started'), 'QC status does not match').toBeVisible();
             await expect(grnEntryPage.status('Submitted'), 'GRN status does not match').toBeVisible();
             await grnEntryPage.clickViewIcon();
-            await ppjoPage.validateSampleDetails(grnNumber, MIRDetails.vendor, poNumber, 'Not Started');
+            await materialIndentRequestPage.validateMIRDetails(grnNumber, MIRDetails.vendor, poNumber, 'Not Started');
             await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
         });
 
@@ -199,7 +199,7 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
             await materialIndentRequestPage.search(materialIndentRequestId);
             await expect(materialIndentRequestPage.status('New Request'), "Status text does not match").toBeVisible();
             await materialIndentRequestPage.clickViewIcon();
-            await ppjoPage.validateSampleDetails(materialIndentRequestId, MIRDetails.pjoNumber, materialIndentRequestId, requestedBy);
+            await materialIndentRequestPage.validateMIRDetails(materialIndentRequestId, MIRDetails.pjoNumber, requestedBy);
             await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
             await expect(materialIndentRequestPage.status('Partially Available'), "Stock status text does not match").toBeVisible();
             await materialIndentRequestPage.enterIssueQuantity(MIRDetails.quantity, MIRDetails.putAwayQuantity);
@@ -215,7 +215,7 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
         });
     });
 
-    test('Verify Material Indent Request is successfully created, approved by manager, and material is issued with All Quantity', async ({ salesEnquiryAPI, stockViewAPI, putAwayPage, grnEntryPage, procurementPage, prRequestPage, modules, materialIndentRequestPage, ppjoPage }) => {
+    test('Verify Material Indent Request is successfully created, approved by manager, and material is issued with All Quantity', async ({ salesEnquiryAPI, stockViewAPI, putAwayPage, grnEntryPage, procurementPage, prRequestPage, modules, materialIndentRequestPage }) => {
         let prId: string;
         let poNumber: string;
         let grnNumber: string;
@@ -242,7 +242,7 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
             await expect(materialIndentRequestPage.status(MIRDetails.priority), "Priority level text does not match").toBeVisible();
             await expect(materialIndentRequestPage.status('New Request'), "MIR status text does not match").toBeVisible();
             await materialIndentRequestPage.clickViewIcon();
-            await ppjoPage.validateSampleDetails(materialIndentRequestId, MIRDetails.pjoNumber, MIRDetails.priority, requestedBy);
+            await materialIndentRequestPage.validateMIRDetails(materialIndentRequestId, MIRDetails.pjoNumber, MIRDetails.priority, requestedBy);
             await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
             await materialIndentRequestPage.managerApprovesMaterialRequestAndValidateAPI(200);
             // improper status code
@@ -263,7 +263,7 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
             await materialIndentRequestPage.search(materialIndentRequestId);
             await expect(materialIndentRequestPage.status('New Request'), "Status text does not match").toBeVisible();
             await materialIndentRequestPage.clickViewIcon();
-            await ppjoPage.validateSampleDetails(materialIndentRequestId, MIRDetails.pjoNumber, materialIndentRequestId, requestedBy);
+            await materialIndentRequestPage.validateMIRDetails(materialIndentRequestId, MIRDetails.pjoNumber, requestedBy);
             await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
             await expect(materialIndentRequestPage.status('Out Of Stock'), "Stock status text does not match").toBeVisible();
             await expect(materialIndentRequestPage.issuingQuantity, 'Issuing quantity field is not disabled for Out Of Stock materials').toBeDisabled();
@@ -325,7 +325,7 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
             await procurementPage.search(poNumber);
             await expect(materialIndentRequestPage.status('Active'), 'PO status does not match').toBeVisible();
             await procurementPage.clickViewIcon();
-            await ppjoPage.validateSampleDetails(prId, MIRDetails.vendor, MIRDetails.orderType, MIRDetails.vendor);
+            await materialIndentRequestPage.validateMIRDetails(prId, MIRDetails.vendor, MIRDetails.orderType);
             await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
         });
 
@@ -338,7 +338,7 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
             await expect(grnEntryPage.status('Not Started'), 'QC status does not match').toBeVisible();
             await expect(grnEntryPage.status('Submitted'), 'GRN status does not match').toBeVisible();
             await grnEntryPage.clickViewIcon();
-            await ppjoPage.validateSampleDetails(grnNumber, MIRDetails.vendor, poNumber, 'Not Started');
+            await materialIndentRequestPage.validateMIRDetails(grnNumber, MIRDetails.vendor, poNumber, 'Not Started');
             await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
         });
 
@@ -372,7 +372,7 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
             await materialIndentRequestPage.search(materialIndentRequestId);
             await expect(materialIndentRequestPage.status('New Request'), "Status text does not match").toBeVisible();
             await materialIndentRequestPage.clickViewIcon();
-            await ppjoPage.validateSampleDetails(materialIndentRequestId, MIRDetails.pjoNumber, materialIndentRequestId, requestedBy);
+            await materialIndentRequestPage.validateMIRDetails(materialIndentRequestId, MIRDetails.pjoNumber, requestedBy);
             await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
             await expect(materialIndentRequestPage.status('Partially Available'), "Stock status text does not match").toBeVisible();
             await materialIndentRequestPage.enterIssueQuantity(MIRDetails.quantity, MIRDetails.putAwayQuantity);

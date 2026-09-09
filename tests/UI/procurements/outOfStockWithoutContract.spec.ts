@@ -52,7 +52,7 @@ test.describe('Material Indent and Material Issue For Out of Stock Raw Material 
         await salesEnquiryAPI.dispose();
     });
 
-    test('Verify an out of stock material with no contract is procured through a vendor quotation and issued after put away', async ({ salesEnquiryAPI, stockViewAPI, putAwayPage, grnEntryPage, procurementPage, prRequestPage, modules, materialIndentRequestPage, ppjoPage, vendorRegistrationPage }) => {
+    test('Verify an out of stock material with no contract is procured through a vendor quotation and issued after put away', async ({ salesEnquiryAPI, stockViewAPI, putAwayPage, grnEntryPage, procurementPage, prRequestPage, modules, materialIndentRequestPage, vendorRegistrationPage }) => {
         let prId: string;
         let poNumber: string;
         let grnNumber: string;
@@ -78,7 +78,7 @@ test.describe('Material Indent and Material Issue For Out of Stock Raw Material 
             await expect(materialIndentRequestPage.status(MIRDetails.priority), "Priority level text does not match").toBeVisible();
             await expect(materialIndentRequestPage.status('New Request'), "MIR status text does not match").toBeVisible();
             await materialIndentRequestPage.clickViewIcon();
-            await ppjoPage.validateSampleDetails(materialIndentRequestId, MIRDetails.pjoNumber, MIRDetails.priority, requestedBy);
+            await materialIndentRequestPage.validateMIRDetails(materialIndentRequestId, MIRDetails.pjoNumber, MIRDetails.priority, requestedBy);
             await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
             await materialIndentRequestPage.managerApprovesMaterialRequestAndValidateAPI(200);
 
@@ -100,7 +100,7 @@ test.describe('Material Indent and Material Issue For Out of Stock Raw Material 
             await materialIndentRequestPage.search(materialIndentRequestId);
             await expect(materialIndentRequestPage.status('New Request'), "Status text does not match").toBeVisible();
             await materialIndentRequestPage.clickViewIcon();
-            await ppjoPage.validateSampleDetails(materialIndentRequestId, MIRDetails.pjoNumber, materialIndentRequestId, requestedBy);
+            await materialIndentRequestPage.validateMIRDetails(materialIndentRequestId, MIRDetails.pjoNumber, requestedBy);
             await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
             await expect(materialIndentRequestPage.status('Out Of Stock'), "Stock status text does not match").toBeVisible();
             await expect(materialIndentRequestPage.issuingQuantity, 'Issuing quantity field is not disabled for Out Of Stock materials').toBeDisabled();
@@ -221,7 +221,7 @@ test.describe('Material Indent and Material Issue For Out of Stock Raw Material 
             await expect(grnEntryPage.status('Not Started'), 'QC status does not match').toBeVisible();
             await expect(grnEntryPage.status('Submitted'), 'GRN status does not match').toBeVisible();
             await grnEntryPage.clickViewIcon();
-            await ppjoPage.validateSampleDetails(grnNumber, MIRDetails.tempVendorName, poNumber, 'Not Started');
+            await materialIndentRequestPage.validateMIRDetails(grnNumber, MIRDetails.tempVendorName, poNumber, 'Not Started');
             await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
             const employeeName = await salesEnquiryAPI.getRandomEmployeeName();
             await grnEntryPage.startQC('All Quantity', MIRDetails.quantity, MIRDetails.qcFailedQuantity, employeeName, 'Pass', 'Pass', 'Pass');
@@ -251,7 +251,7 @@ test.describe('Material Indent and Material Issue For Out of Stock Raw Material 
             await materialIndentRequestPage.search(materialIndentRequestId);
             await expect(materialIndentRequestPage.status('New Request'), "Status text does not match").toBeVisible();
             await materialIndentRequestPage.clickViewIcon();
-            await ppjoPage.validateSampleDetails(materialIndentRequestId, MIRDetails.pjoNumber, materialIndentRequestId, requestedBy);
+            await materialIndentRequestPage.validateMIRDetails(materialIndentRequestId, MIRDetails.pjoNumber, requestedBy);
             await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
             await expect(materialIndentRequestPage.status('Partially Available'), "Stock status text does not match").toBeVisible();
             await materialIndentRequestPage.enterIssueQuantity(MIRDetails.quantity, MIRDetails.putAwayQuantity);
