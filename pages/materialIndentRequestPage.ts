@@ -26,6 +26,7 @@ export class MaterialIndentRequestPage extends BasePage {
     private readonly employeeTxtBx: Locator;
     private readonly pjoTextBx: Locator;
     private readonly addSparePartsBtn: Locator;
+    private readonly sparePartsPendingQty: Locator;
     constructor(public readonly page: Page) {
         super(page);
         this.createButton = this.page.getByRole('button', { name: 'Create plus icon' });
@@ -51,6 +52,7 @@ export class MaterialIndentRequestPage extends BasePage {
         this.employeeTxtBx = this.page.getByRole('combobox', { name: 'Employee & Name*' });
         this.pjoTextBx = this.page.getByRole('combobox', { name: 'PJO Number' });
         this.addSparePartsBtn = this.page.getByRole('button', { name: 'Add Parts plus icon' });
+        this.sparePartsPendingQty = this.page.locator('//td[@data-app-table-col="9"]');
     }
 
     private async selectFromDropdown(dropdownName: string, value: string) {
@@ -172,5 +174,28 @@ export class MaterialIndentRequestPage extends BasePage {
         const currentQuantity = await this.page.locator('//td[@data-app-table-col="3"]//span').innerText();
         return parseFloat(currentQuantity);
     }
+    @step()
+    async enterSparePartsIssueQuantity(requestedQuantity: string, quantity: string) {
+        const requested = parseInt(requestedQuantity);
+        const issued = parseInt(quantity);
+        const finalPendingQuantity = requested - issued;
+        expect(await this.sparePartsPendingQty.innerText(), "Pending quantity does not match expected value").toBe(requestedQuantity);
+        await this.issuingQuantity.fill(quantity);
+        expect(await this.sparePartsPendingQty.innerText(), "Pending quantity does not match expected value").toBe(`${finalPendingQuantity}`);
+    }
 
+    @step()
+    async validateMIRDetails(detail1: string, detail2: string, detail3?: string, detail4?: string) {
+        await this.page.waitForLoadState('domcontentloaded');
+        await this.page.waitForTimeout(2000);
+        await expect(this.page.locator('//div[@class="p-[18px] undefined"]').first(), `Sample details do not contain enquiry id: ${detail1}`).toContainText(detail1);
+        const sampleDetails = await this.page.locator('//div[@class="p-[18px] undefined"]').first().innerText();
+        expect(sampleDetails, `Sample details do not contain document name: ${detail2}`).toContain(detail2);
+        if (detail3 !== undefined) {
+            expect(sampleDetails, "Sample details do not contain detail3: 1").toContain(detail3);
+        }
+        if (detail4 !== undefined) {
+            expect(sampleDetails, "Sample details do not contain detail4: Sample detail4").toContain(detail4);
+        }
+    }
 }
