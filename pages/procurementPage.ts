@@ -50,6 +50,7 @@ export class ProcurementPage extends BasePage {
     public readonly performanceColumn: Locator;
     public readonly vendorPerformanceTxtBx: Locator;
     private readonly historyButton: Locator;
+    private readonly submitBtn: Locator;
 
     // Dynamic locators
     private readonly rowByText: (text: string) => Locator;
@@ -108,6 +109,7 @@ export class ProcurementPage extends BasePage {
         this.vendorManagerApprovalBtn = this.page.getByRole('button', { name: 'Approve', exact: true });
         this.vendorPerformanceTxtBx = this.page.getByRole('textbox', { name: 'Vendor Performance Score' });
         this.historyButton = this.page.getByRole('button', { name: 'history_icon History' });
+        this.submitBtn = this.page.getByRole('button', { name: 'Submit', exact: true });
 
         // Dynamic locators initialization
         this.rowByText = (text: string) => this.page.getByRole('row', { name: text });
@@ -358,8 +360,9 @@ export class ProcurementPage extends BasePage {
 
     @step()
     async submitForFinalApprovalAndValidateAPI(statusCode: number) {
-        const responsePromise = this.page.waitForResponse('**/vendorQuoteComparison/updateVendorQuotationAward');
         await this.submitForFinalApprovalBtn.click();
+        const responsePromise = this.page.waitForResponse('**/vendorQuoteComparison/updateVendorQuotationAward');
+        await this.submitBtn.click();
         const response = await responsePromise;
         expect(response.status(), `Submit For Final Approval API status code mismatch. Expected ${statusCode}, received ${response.status()}`).toBe(statusCode);
         console.log('Verified Submit For Final Approval API with status code:', response.status());
