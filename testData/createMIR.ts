@@ -5,6 +5,7 @@ export type CreateMIRData = {
   priority: string;
   pjoNumber: string;
   material: string;
+  uom: string;
   quantity: string;
   remarks: string;
   vendor: string;
@@ -48,6 +49,7 @@ export const getMIRDetails = (): CreateMIRData => {
     priority: `${RandomDataGenerator.generatePriority()}`,
     pjoNumber: '802600615',
     material: 'WIRE - SINGLE STRAND 2 CORE',
+    uom: 'Each',
     quantity: `${requestedQuantity}`,
     remarks: 'Add Material Test Remarks',
     vendor: '',

@@ -33,6 +33,7 @@ import { QuotationAPI } from "../API/quotationAPI";
 import { InvoiceRequestAPI } from "../API/invoiceRequestAPI";
 import { SalesOrderAPI } from "../API/salesOrderAPI";
 import { MaterialIndentRequestAPI } from "../API/materialIndentRequestAPI";
+import { ContractQuoteAPI } from "../API/contractQuoteAPI";
 import { ApiLogger } from "../utils/apiLogger";
 
 type baseFixtures = {
@@ -70,6 +71,7 @@ type baseFixtures = {
   invoiceRequestAPI: InvoiceRequestAPI;
   salesOrderAPI: SalesOrderAPI;
   materialIndentRequestAPI: MaterialIndentRequestAPI;
+  contractQuoteAPI: ContractQuoteAPI;
 };
 
 export const test = base.extend<baseFixtures>({
@@ -177,6 +179,9 @@ export const test = base.extend<baseFixtures>({
   },
   materialIndentRequestAPI: async ({ request }, use) => {
     await use(new MaterialIndentRequestAPI(request));
+  },
+  contractQuoteAPI: async ({ request }, use) => {
+    await use(new ContractQuoteAPI(request));
   },
 });
 

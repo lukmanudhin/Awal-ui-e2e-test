@@ -1,5 +1,7 @@
 import { ENV } from "../../../utils/ENV";
 import { getMIRDetails, type CreateMIRData } from "../../../testData/createMIR";
+import { getMaterialPayload } from "../../../API-payloads/createMaterialPayload";
+import { type SeededContractMaterial } from "../../../API/contractQuoteAPI";
 import { test, expect } from "../../../fixtures/baseFixtures";
 
 test.describe('Material Indent and Material Issue End-to-End Scenario For Spare Parts Out of Stock With Active Contract', () => {
@@ -9,22 +11,41 @@ test.describe('Material Indent and Material Issue End-to-End Scenario For Spare 
     let materialIndentRequestExtId: string;
     let accessToken: string;
     let requestedBy: string;
-    let putAwayDone = false;
+    let createdMaterialId: string;
+    let contractSeed: SeededContractMaterial | null;
 
-    test.beforeEach('Setup', async ({ page, loginPage, homePage, salesEnquiryAPI, stockViewAPI }) => {
+    test.beforeEach('Setup', async ({ page, loginPage, homePage, salesEnquiryAPI, createMaterialAPI, contractQuoteAPI }) => {
         MIRDetails = getMIRDetails();
         MIRDetails.requisitionType = 'Spare Parts';
         materialIndentRequestId = '';
         materialIndentRequestExtId = '';
+        createdMaterialId = '';
+        contractSeed = null;
 
-        await test.step('Find an out of stock raw material that has an active contract', async () => {
+        await test.step('Create a spare part and put it under an active contract', async () => {
             accessToken = await salesEnquiryAPI.getAccessToken(`${ENV.EMAIL_ID}`, `${ENV.PASSWORD}`);
             requestedBy = await salesEnquiryAPI.getLoggedInUserName(accessToken);
-            const material = await stockViewAPI.getOutOfStockMaterialWithActiveContract(accessToken, 'SpareParts');
-            console.log(material);
-            expect(material, 'No out-of-stock raw material with an active contract was found').not.toBeNull();
-            MIRDetails.material = material!.materialName;
-            MIRDetails.vendor = material!.vendorName;
+
+            const uomId = await contractQuoteAPI.getUomId(accessToken, MIRDetails.uom);
+            const materialPayload = getMaterialPayload('sparePart', uomId);
+            createdMaterialId = await createMaterialAPI.createMaterial(accessToken, materialPayload);
+            MIRDetails.material = materialPayload.materialName;
+            console.log(`Spare part created: "${materialPayload.materialName}"`);
+
+            contractSeed = await contractQuoteAPI.createActiveContractForMaterial(accessToken, {
+                materialName: materialPayload.materialName,
+                requisitionType: MIRDetails.requisitionType,
+                uomId,
+                vendorName: MIRDetails.vendorQuotationVendor,
+                pjoNumber: MIRDetails.pjoNumber,
+                shipTo: MIRDetails.shipTo,
+                quantity: MIRDetails.quantity,
+                unitPrice: MIRDetails.unitPrice,
+                paymentTerms: MIRDetails.paymentTerms,
+                shipmentMode: MIRDetails.shipmentMode,
+                breakdownType: MIRDetails.breakDownType,
+            });
+            MIRDetails.vendor = contractSeed.vendorName;
         });
 
         await test.step('Login and navigate to Sales Enquiry', async () => {
@@ -37,11 +58,12 @@ test.describe('Material Indent and Material Issue End-to-End Scenario For Spare 
         });
     });
 
-    test.afterEach('Teardown', async ({ page, salesEnquiryAPI, materialIndentRequestAPI }, testInfo) => {
-        if (testInfo.status !== 'passed' && putAwayDone) {
-            await materialIndentRequestAPI.issueAvailableMaterialForMIR(accessToken, materialIndentRequestId);
-        }
+    test.afterEach('Teardown', async ({ page, salesEnquiryAPI, materialIndentRequestAPI, createMaterialAPI, contractQuoteAPI }) => {
         await materialIndentRequestAPI.deleteMIRIfCreated(accessToken, materialIndentRequestExtId);
+        await contractQuoteAPI.deleteSeededContractIfCreated(accessToken, contractSeed);
+        if (createdMaterialId) {
+            await createMaterialAPI.deleteMaterial(accessToken, createdMaterialId);
+        }
         await page.close();
         await salesEnquiryAPI.dispose();
     });
@@ -190,7 +212,6 @@ test.describe('Material Indent and Material Issue End-to-End Scenario For Spare 
             await putAwayPage.enterPutAwayDetails(MIRDetails.warehouse, MIRDetails.conversionUnit, MIRDetails.row, MIRDetails.rack, MIRDetails.shelf, MIRDetails.putAwayQuantity);
             await putAwayPage.submitPutAwayAndValidateAPI(201);
             await expect(putAwayPage.successMessage('Data created successfully'), 'Data created succesfully success message does not match').toHaveText('Data created successfully');
-            putAwayDone = true;
         });
 
         await test.step('Verify the stock is updated after put away', async () => {

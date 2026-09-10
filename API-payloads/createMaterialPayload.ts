@@ -8,7 +8,7 @@ const MATERIAL_TYPES: Record<MaterialType, { materialTypeId: number; description
     sparePart: { materialTypeId: 83, description: 'spare part material' },
 };
 
-export const getMaterialPayload = (materialType: MaterialType = 'raw') => ({
+export const getMaterialPayload = (materialType: MaterialType = 'raw', inventoryUomId: number | null = null) => ({
     materialCode: "",
     materialName: RandomDataGenerator.getRandomMaterialName(),
     description: MATERIAL_TYPES[materialType].description,
@@ -16,7 +16,7 @@ export const getMaterialPayload = (materialType: MaterialType = 'raw') => ({
     materialCategoryId: 76,
     materialTypeId: MATERIAL_TYPES[materialType].materialTypeId,
     purchaseUomId: null,
-    inventoryUomId: null,
+    inventoryUomId,
     minimumOrderQuantity: 0,
     materialColorId: 0,
     materialFinishId: 0,
