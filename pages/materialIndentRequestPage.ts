@@ -1,6 +1,7 @@
 import { Page, Locator, expect } from "@playwright/test";
 import { BasePage, step } from "./basePage";
 import { CreateMIRData } from "../testData/createMIR";
+import { Utils } from "../utils/utils";
 
 export class MaterialIndentRequestPage extends BasePage {
     private readonly createButton: Locator;
@@ -172,7 +173,7 @@ export class MaterialIndentRequestPage extends BasePage {
     @step()
     async getMaterialCurrentQuatity() {
         const currentQuantity = await this.page.locator('//td[@data-app-table-col="3"]//span').innerText();
-        return parseFloat(currentQuantity);
+        return Utils.getNumberFromFormattedValue(currentQuantity);
     }
     @step()
     async enterSparePartsIssueQuantity(requestedQuantity: string, quantity: string) {

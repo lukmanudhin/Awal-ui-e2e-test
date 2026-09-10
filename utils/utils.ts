@@ -7,6 +7,11 @@ export class Utils {
         return parseFloat(String(price)).toLocaleString('en-US')
     }
 
+    static getNumberFromFormattedValue(value: string | number | null | undefined) {
+        const parsed = parseFloat(String(value ?? '').replace(/,/g, ''));
+        return Number.isNaN(parsed) ? 0 : parsed;
+    }
+
     static getCurrencyName(currencyCode: string) {
         const currencyMap: { [key: string]: string } = {
             'BHD': 'Bahrain Dinar',

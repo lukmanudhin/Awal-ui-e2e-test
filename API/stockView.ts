@@ -1,5 +1,6 @@
 import { APIRequestContext, expect } from "@playwright/test";
 import { ENV } from "../utils/ENV";
+import { Utils } from "../utils/utils";
 
 const PROCUREMENT_API_BASE = `https://procurement-api-${ENV.ENV_API}.colanapps.in/api/v1`;
 
@@ -26,7 +27,7 @@ export class StockViewAPI {
 
         // 4. Reduce array using your exact keys: 'currentQuantity' and 'materialName'
         const highestStockItem = stockItems.reduce((max, item) =>
-            Number(item.currentQuantity) > Number(max.currentQuantity) ? item : max
+            Utils.getNumberFromFormattedValue(item.currentQuantity) > Utils.getNumberFromFormattedValue(max.currentQuantity) ? item : max
             , stockItems[0]);
 
         // 5. Output the calculated winner
@@ -37,7 +38,7 @@ export class StockViewAPI {
 
         // Basic check to ensure valid parsing
         expect(highestStockItem.materialName, "Material name is not defined").toBeDefined();
-        expect(Number(highestStockItem.currentQuantity), "Highest stock item quantity is not greater than 0").toBeGreaterThan(0);
+        expect(Utils.getNumberFromFormattedValue(highestStockItem.currentQuantity), "Highest stock item quantity is not greater than 0").toBeGreaterThan(0);
         return highestStockItem.materialName;
     }
 
@@ -293,7 +294,7 @@ export class StockViewAPI {
         const matchingRows = materials.filter((m: any) => m.materialName === materialName);
         expect(matchingRows.length > 0, `No stock view record found for material: ${materialName}`).toBeTruthy();
 
-        const currentQuantity = matchingRows.reduce((total: number, m: any) => total + Number(m.currentQuantity), 0);
+        const currentQuantity = matchingRows.reduce((total: number, m: any) => total + Utils.getNumberFromFormattedValue(m.currentQuantity), 0);
         const stockStatus = currentQuantity > 0 ? 'InStock' : 'OutOfStock';
 
         return { currentQuantity, stockStatus };
