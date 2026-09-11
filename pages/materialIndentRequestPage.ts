@@ -28,7 +28,6 @@ export class MaterialIndentRequestPage extends BasePage {
     private readonly pjoTextBx: Locator;
     private readonly addSparePartsBtn: Locator;
     private readonly sparePartsPendingQty: Locator;
-    private readonly rejectBtn: Locator;
     private readonly reasonTxtBx: Locator;
     constructor(public readonly page: Page) {
         super(page);
@@ -56,7 +55,6 @@ export class MaterialIndentRequestPage extends BasePage {
         this.pjoTextBx = this.page.getByRole('combobox', { name: 'PJO Number' });
         this.addSparePartsBtn = this.page.getByRole('button', { name: 'Add Parts plus icon' });
         this.sparePartsPendingQty = this.page.locator('//td[@data-app-table-col="9"]');
-        this.rejectBtn = this.page.getByRole('button', { name: 'Reject' });
         this.reasonTxtBx = this.page.getByRole('textbox', { name: 'Reason for Rejection' });
     }
 
@@ -206,10 +204,10 @@ export class MaterialIndentRequestPage extends BasePage {
 
     @step()
     async managerRejectsMIRAndValidateAPI(statusCode: number) {
-        await this.rejectBtn.click();
+        await this.rejectButton.click();
         await this.reasonTxtBx.fill('MIR Manager Rejects MIR E2E Test');
         const responsePromise = this.page.waitForResponse('**/mirManager/update');
-        await this.rejectBtn.nth(1).click();
+        await this.rejectButton.nth(1).click();
         const response = await responsePromise;
         expect(response.status(), `Reject Material Indent Request status code mismatch. Expected ${statusCode}, received ${response.status()}`).toBe(statusCode);
         console.log('Verified material indent request rejected API with status code:', response.status());
