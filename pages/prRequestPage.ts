@@ -7,6 +7,7 @@ export class PRRequestPage extends BasePage {
     private readonly submitForApprovalButton: Locator;
     private readonly approveButton: Locator;
     private readonly confirmButton: Locator;
+    private readonly reasonTxtBx: Locator;
     constructor(public readonly page: Page) {
         super(page);
         this.selectAllChkBx = this.page.locator('#select-all');
@@ -14,6 +15,7 @@ export class PRRequestPage extends BasePage {
         this.submitForApprovalButton = this.page.getByRole('button', { name: 'Submit For Approval' });
         this.approveButton = this.page.getByRole('button', { name: 'Approve' });
         this.confirmButton = this.page.getByRole('button', { name: 'Confirm' });
+        this.reasonTxtBx = this.page.getByRole('textbox', { name: 'Reason for Rejection' });
     }
     @step()
     async createPRRequestAndValidateAPI(statusCode: number) {
@@ -50,4 +52,16 @@ export class PRRequestPage extends BasePage {
         await this.page.locator('(//span[text()="PR to PO"])[2]').click();
         await this.page.waitForLoadState('domcontentloaded');
     }
+
+    @step()
+    async rejectPRRequestAndValidateAPI(statusCode: number) {
+        await this.rejectButton.click();
+        await this.reasonTxtBx.fill('PR Manager Rejects PR E2E Test');
+        const responsePromise = this.page.waitForResponse('**/purchaseRequisitionManager/update');
+        await this.rejectButton.nth(1).click();
+        const response = await responsePromise;
+        expect(response.status(), `Reject PR Request API status code mismatch. Expected ${statusCode}, received ${response.status()}`).toBe(statusCode);
+        console.log('PR rejected successfully');
+        console.log(`Verified PR rejected API with status code:`, response.status());
+    }    
 }
