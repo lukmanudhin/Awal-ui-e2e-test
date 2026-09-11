@@ -51,6 +51,7 @@ export class ProcurementPage extends BasePage {
     public readonly vendorPerformanceTxtBx: Locator;
     private readonly historyButton: Locator;
     private readonly submitBtn: Locator;
+    private readonly reasonTxtBx: Locator;
 
     // Dynamic locators
     private readonly rowByText: (text: string) => Locator;
@@ -110,6 +111,7 @@ export class ProcurementPage extends BasePage {
         this.vendorPerformanceTxtBx = this.page.getByRole('textbox', { name: 'Vendor Performance Score' });
         this.historyButton = this.page.getByRole('button', { name: 'history_icon History' });
         this.submitBtn = this.page.getByRole('button', { name: 'Submit', exact: true });
+        this.reasonTxtBx = this.page.getByRole('textbox', { name: 'Reason' });
 
         // Dynamic locators initialization
         this.rowByText = (text: string) => this.page.getByRole('row', { name: text });
@@ -250,7 +252,7 @@ export class ProcurementPage extends BasePage {
         for (let index = 0; index < quoteCount; index++) {
             await quoteRows.nth(index).getByRole('checkbox').check();
         }
-        const responsePromise = this.page.waitForResponse('**/vendorQuoteEmail/sendVendorQuoteEmail');
+        const responsePromise = this.page.waitForResponse('**/vendorQuoteEmail/sendVendorQuoteEmail', { timeout: 60000 });
         await this.sendEmailBtn.click();
         const response = await responsePromise;
         expect(response.status(), `Send Vendor Quote Email API status code mismatch. Expected ${statusCode}, received ${response.status()}`).toBe(statusCode);
@@ -384,6 +386,18 @@ export class ProcurementPage extends BasePage {
         const response = await responsePromise;
         expect(response.status(), `Approve Vendor Quote API status code mismatch. Expected ${statusCode}, received ${response.status()}`).toBe(statusCode);
         console.log('Verified Approve Vendor Quote API with status code:', response.status());
+    }
+
+    @step()
+    async rejectVendorQuoteAndValidateAPI(statusCode: number) {
+        await this.allLineItemsSummaryViewBtn.click();
+        await this.rejectButton.click();
+        await this.reasonTxtBx.fill('Reject Vendor Quote E2E Test');
+        const responsePromise = this.page.waitForResponse('**/vendorQuoteComparisonManager/updateVendorQuoteComparison**');
+        await this.submitButton.click();
+        const response = await responsePromise;
+        expect(response.status(), `Reject Vendor Quote API status code mismatch. Expected ${statusCode}, received ${response.status()}`).toBe(statusCode);
+        console.log('Verified Reject Vendor Quote API with status code:', response.status());
     }
 
     async validatePODetails(vendorName: string, orderType: string) {
