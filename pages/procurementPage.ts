@@ -146,6 +146,11 @@ export class ProcurementPage extends BasePage {
         await this.yesButton.click();
     }
 
+    async rejectPurchaseOrder() {
+        await this.rejectButton.click();
+        await this.yesButton.click();
+    }
+
     async createPOAndValidateAPI(statusCode: number) {
         await this.createPOButton.click();
         const responsePromise = this.page.waitForResponse('**/purchaseOrders/createPurchaseOrderProcess');
