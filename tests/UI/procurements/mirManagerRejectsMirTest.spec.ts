@@ -29,7 +29,7 @@ test.describe('Material Indent Request Manager Rejects MIR End-to-End Scenarios'
         await salesEnquiryAPI.dispose();
     });
 
-    test('Verify Material Indent Request is successfully created, approved by manager, and material is issued', async ({ modules, materialIndentRequestPage }) => {
+    test('Verify Material Indent Request is successfully created and rejected by manager', async ({ modules, materialIndentRequestPage }) => {
 
         await test.step('Create a new material indent request', async () => {
             await modules.goToModule({ module: 'Store', subModule: 'Material Indent Request' });
