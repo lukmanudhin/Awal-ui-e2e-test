@@ -148,11 +148,11 @@ test.describe.serial('Verify Discount Request flow of Sales Enquiry (Request Nor
         await test.step('Verify that packing labour is added and the packing summary is saved successfully', async () => {
             const totalMetricCost = await costEstimationPage.getTotalLabourCost();
             await costEstimationPage.clickNextButton();
-            const [totalHours, hourlyRate] = await costEstimationPage.addLabour('Packing', '2', '2', '2');
+            const [totalHours, hourlyRate] = await costEstimationPage.addLabour('Packaging', '2', '2', '2');
             await costEstimationPage.validateAddPackingLabourAPI(201);
             await expect(costEstimationPage.successMessage('BOL created successfully'), 'Add PackingLabour success message does not match').toContainText('BOL created successfully');
             expect(await page.locator('//tr').count(), 'Labour not added').toBeLessThanOrEqual(3);
-            await costEstimationPage.validateBOLTable('Packing', totalHours, hourlyRate, '2', '2', '2');
+            await costEstimationPage.validateBOLTable('Packaging', totalHours, hourlyRate, '2', '2', '2');
             const totalLabourCost = await costEstimationPage.getTotalLabourCost();
             await costEstimationPage.clickNextButton();
             const costSummary = totalMetricCost + totalLabourCost;
