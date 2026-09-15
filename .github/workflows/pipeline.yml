@@ -66,8 +66,8 @@ jobs:
           PASSWORD: ${{ secrets.PASSWORD }}
           # BASE_URL: ${{ vars.BASE_URL }}
           # ENV_API: ${{ vars.ENV_API }}
-        # run: npx playwright test tests/UI/sales tests/API
-        run: npx playwright test salesEnquirySample.spec.ts
+        run: npx playwright test tests/UI/sales tests/API
+        # run: npx playwright test salesEnquirySample.spec.ts
 
       # Guarantee this exists even if 0 tests ran or the run crashed early,
       # so the Allure generate step never fails on a missing directory.
