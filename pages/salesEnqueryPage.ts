@@ -142,6 +142,7 @@ export class SalesEnquiryPage extends BasePage {
     }
     @step()
     async enterCustomerName(data: SalesEnquiryData) {
+        await this.page.waitForTimeout(7000);
         await this.customerNameTextBox.waitFor({ state: 'visible', timeout: 30000 });
         await expect(this.customerNameTextBox).toBeEnabled({ timeout: 5000 });
         await this.customerNameTextBox.fill(data.customerName);
