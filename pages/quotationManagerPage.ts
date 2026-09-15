@@ -71,8 +71,8 @@ export class QuotationManagerPage extends BasePage {
     }
     @step()
     async validateEnquiryDetails(data: SalesEnquiryData) {
-        await expect(this.page.locator('//div[@class="grid grid-cols-2 mb-3 text-black-10"]/div[1]'), `View sales enquiry details do not contain customer name: ${data.customerName}`).toContainText(data.customerName);
-        const detailsText = await this.page.locator('//div[@class="grid grid-cols-2 mb-3 text-black-10"]/div[1]').innerText();
+        await expect(this.page.locator('//div[@class="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-0 mb-3 text-black-10"]'), `View sales enquiry details do not contain customer name: ${data.customerName}`).toContainText(data.customerName);
+        const detailsText = await this.page.locator('//div[@class="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-0 mb-3 text-black-10"]').innerText();
         console.log(`✓ Customer Name displayed: ${data.customerName}`);
 
         // Validate country
