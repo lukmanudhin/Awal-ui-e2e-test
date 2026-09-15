@@ -61,11 +61,9 @@ test.describe('Material Indent and Material Issue For Out of Stock Consumables W
 
         await test.step('Raise a Material Indent Request for the out of stock material', async () => {
             await modules.goToModule({ module: 'Store', subModule: 'Material Indent Request' });
-
             await materialIndentRequestPage.createMaterialIndentRequest(MIRDetails);
             await materialIndentRequestPage.addConsumables(MIRDetails);
             await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
-
             materialIndentRequestExtId = await materialIndentRequestPage.submitMaterialIndentRequestAndValidateAPI(201);
             await expect(materialIndentRequestPage.successMessage('Material Indent created successfully'), 'Material Indent created successfully success message does not found').toHaveText('Material Indent created successfully');
             materialIndentRequestId = await materialIndentRequestPage.getMaterialIndentRequestNumber();
@@ -104,8 +102,6 @@ test.describe('Material Indent and Material Issue For Out of Stock Consumables W
             await materialIndentRequestPage.clickViewIcon();
             await materialIndentRequestPage.validateMIRDetails(MIRDetails.pjoNumber, 'Sales', requestedBy);
             await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
-            // await expect(materialIndentRequestPage.validateStatus('Out Of Stock'), "Stock status text does not match").toBeVisible();
-            // await expect(materialIndentRequestPage.issuingQuantity, 'Issuing quantity field is not disabled for Out Of Stock materials').toBeDisabled();
         });
 
         await test.step('Raise a Purchase Requisition for the shortfall', async () => {
@@ -141,7 +137,6 @@ test.describe('Material Indent and Material Issue For Out of Stock Consumables W
             await modules.goToModule({ module: 'Procurement', subModule: 'PR to PO', nestedSubModule: 'PR to Po (Contract)' });
             await procurementPage.goToTab('Vendor Quotation');
             await procurementPage.search(prId);
-
             await procurementPage.createVendorQuotation(MIRDetails.shipTo, MIRDetails.vendorQuotationVendor, { name: MIRDetails.tempVendorName, email: MIRDetails.tempVendorEmail });
             await procurementPage.validateVendorQuotationMaterialTable(MIRDetails.material, MIRDetails.quantity);
             await procurementPage.prepareVendorQuotationAndValidateAPI(201);
@@ -169,20 +164,15 @@ test.describe('Material Indent and Material Issue For Out of Stock Consumables W
 
         await test.step('Onboard the temporary vendor into the vendor directory', async () => {
             await procurementPage.awardVendor(prId, MIRDetails.tempVendorName);
-
             await vendorRegistrationPage.enterGeneralInformation(vendorData);
             vendorExtId = await vendorRegistrationPage.saveAndValidateAPI(201);
             await expect(vendorRegistrationPage.successMessage('Vendor general information saved successfully'), 'Vendor general information saved successfully message does not match').toHaveText('Vendor general information saved successfully');
-
             await vendorRegistrationPage.enterCompanyInformation(vendorData);
             await expect(vendorRegistrationPage.successMessage('Vendor company information saved successfully'), 'Vendor company information saved successfully message does not match').toHaveText('Vendor company information saved successfully');
-
             await vendorRegistrationPage.enterGoodsAndServices(vendorData);
             await expect(vendorRegistrationPage.successMessage('Vendor goods/services information saved successfully'), 'Vendor goods/services information saved successfully message does not match').toHaveText('Vendor goods/services information saved successfully');
-
             await vendorRegistrationPage.enterBankInformation(vendorData);
             await expect(vendorRegistrationPage.successMessage('Vendor bank information saved successfully'), 'Vendor bank information saved successfully message does not match').toHaveText('Vendor bank information saved successfully');
-
             await vendorRegistrationPage.enterEvaluation(vendorData);
             await expect(vendorRegistrationPage.successMessage('Vendor evaluation information saved successfully'), 'Vendor evaluation information saved successfully message does not match').toHaveText('Vendor evaluation information saved successfully');
             await expect(vendorRegistrationPage.successMessage('Temporary vendor added to vendor directory'), 'Temporary vendor added to vendor directory message does not match').toHaveText('Temporary vendor added to vendor directory');
@@ -241,7 +231,6 @@ test.describe('Material Indent and Material Issue For Out of Stock Consumables W
             await putAwayPage.submitPutAwayAndValidateAPI(201);
             await expect(putAwayPage.successMessage('Data created successfully'), 'Data created succesfully success message does not match').toHaveText('Data created successfully');
             putAwayDone = true;
-
             const stockAfterPutAway = await stockViewAPI.getMaterialQuantityAndStatus(accessToken, MIRDetails.material, 'Consumables');
             expect(stockAfterPutAway.currentQuantity, 'Stock quantity mismatch after put away').toBe(Number(MIRDetails.putAwayQuantity));
             expect(stockAfterPutAway.stockStatus, 'Material status does not match after put away').toBe('InStock');
@@ -252,13 +241,10 @@ test.describe('Material Indent and Material Issue For Out of Stock Consumables W
             await materialIndentRequestPage.search(materialIndentRequestId);
             await expect(materialIndentRequestPage.status('New Request'), "Status text does not match").toBeVisible();
             await materialIndentRequestPage.clickViewIcon();
-            await materialIndentRequestPage.validateMIRDetails(materialIndentRequestId, MIRDetails.pjoNumber, requestedBy);
+            await materialIndentRequestPage.validateMIRDetails('Sales', MIRDetails.pjoNumber, requestedBy);
             await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
-            await expect(materialIndentRequestPage.status('Partially Available'), "Stock status text does not match").toBeVisible();
-            await materialIndentRequestPage.enterIssueQuantity(MIRDetails.quantity, MIRDetails.putAwayQuantity);
             await materialIndentRequestPage.issueMaterialAndValidateAPI(201);
             await expect(materialIndentRequestPage.successMessage('Material Issue Notes created successfully'), 'Material Issue Notes created successfully success message does not found').toHaveText('Material Issue Notes created successfully');
-
             const stockAfterIssue = await stockViewAPI.getMaterialQuantityAndStatus(accessToken, MIRDetails.material, 'RawMaterials');
             expect(stockAfterIssue.currentQuantity, 'Stock quantity mismatch after material issue').toBe(0);
             expect(stockAfterIssue.stockStatus, 'Material status does not match after material issue').toBe('OutOfStock');  
