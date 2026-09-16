@@ -239,6 +239,7 @@ export class PPJOPage extends BasePage {
     async addNewSampleRequest(fileName: string, quantity: string, description: string) {
         await this.addSampleButton.click();
         await expect(this.banner, "Banner does not contain New Sample Request").toContainText('New Sample Request');
+        await this.selectOptionFromDropdown('Cost Borne By*', 'Customer');
         await this.uploadFile('test_Documents', fileName);
         await expect(this.attachedDocument(fileName), `${fileName} is not visible in View Attached Documents`).toBeVisible();
         await this.quantityTextBox.fill(quantity);

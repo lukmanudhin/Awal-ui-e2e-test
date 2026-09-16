@@ -231,7 +231,7 @@ export class CostEstimationPage extends BasePage {
         this.backArrowIcon = this.page.getByRole('img', { name: 'back arrow' });
         this.viewAttachmentsButton = this.page.getByRole('button', { name: 'view View Attachment' });
         this.deliveryPeriod = this.page.getByRole('spinbutton', { name: 'Delivery Period*' });
-        this.warrantyPeriod = this.page.getByRole('spinbutton', { name: 'Warranty Period*' });
+        this.warrantyPeriod = this.page.getByRole('spinbutton', { name: 'Warranty Period' });
         this.unitCostValue = this.page.locator('//td[@data-app-table-col="6"]//div').first();
         this.includePriceBtn = this.page.getByRole('button', { name: 'Include Price' });
         this.addMaterialBtn = this.page.getByRole('button', { name: 'Add Materials plus-blue-icon' });
@@ -400,9 +400,9 @@ export class CostEstimationPage extends BasePage {
         await this.sizeTxtBx.fill(boqData.size);
         await this.page.mouse.wheel(0, 500);
         await this.quantityTxtBx.fill(boqData.quantity);
-        await this.selectFromDropdown('Delivery Type*', boqData.deliveryType);
+        await this.selectFromDropdown('Delivery Type', boqData.deliveryType);
         await this.deliveryPeriod.fill(boqData.deliveryPeriod);
-        await this.selectFromDropdown('Warranty Type*', boqData.warrantyType);
+        await this.selectFromDropdown('Warranty Type', boqData.warrantyType);
         await this.warrantyPeriod.fill(boqData.warrantyPeriod);
     }
     @step()
