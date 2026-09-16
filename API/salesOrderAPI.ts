@@ -30,6 +30,7 @@ export class SalesOrderAPI {
 
     async createSalesOrder(accessToken: string, quotationExtId: string, customerId: number, customerName: string, deliveryPhone: string, deliveryLocation: string, dateIso: string) {
         const filePath = path.join(process.cwd(), 'test_Documents', 'Test_Document.pdf');
+        const browserDate = new Date(dateIso).toUTCString();
         const response = await this.request.post(
             `${SALES_API_BASE}/SalesOrder/createSalesOrder`,
             {
@@ -37,34 +38,39 @@ export class SalesOrderAPI {
                 multipart: {
                     quotationExtId,
                     customerId: `${customerId}`,
-                    customerName,
+                    accountExecuteId: '0',
+                    salesOrderAmount: '449.856',
                     salesOrderSourceTypeId: '675',
                     quotationConfirmation: '538',
                     purchaseOrder: '543',
                     attachments: '553',
+                    prRequired: '545',
+                    isFullySubContracter: 'false',
+                    finalQaQcPassed: '549',
+                    inspectionReport: '0',
+                    modeOfDelivery: '556',
+                    installationId: '1200',
                     isAdvancePaymentApplied: 'true',
                     isRetentionApplied: 'true',
                     isAcceptPartialInvoice: 'true',
+                    isStockReserved: 'true',
+                    dnDeliveryNote: 'true',
+                    overtimeConsidered: 'true',
+                    deliveryNoteWithGoods: 'true',
                     salesChecklistRemarks: 'Sales Checklist Remarks',
-                    modeOfDelivery: '556',
                     deliveryCustomerName: customerName,
                     deliveryPhone,
                     deliveryLocation,
-                    deliveryNoteWithGoods: 'true',
                     deliveryRemarks: 'Delivery Remarks',
-                    inductionDate: dateIso,
-                    deliveryDate: dateIso,
-                    prRequired: '545',
-                    finalQaQcPassed: '549',
-                    dnDeliveryNote: 'true',
-                    overtimeConsidered: 'true',
+                    inductionDate: browserDate,
+                    deliveryDate: browserDate,
                     productionRemarks: 'Production Remarks',
-                    purchaseOrderDocuments: {
+                    PurchaseOrderDocuments: {
                         name: 'Test_Document.pdf',
                         mimeType: 'application/pdf',
                         buffer: fs.readFileSync(filePath),
                     },
-                    manufacturingDrawing: {
+                    ManufacturingDrawing: {
                         name: 'Test_Document.pdf',
                         mimeType: 'application/pdf',
                         buffer: fs.readFileSync(filePath),
