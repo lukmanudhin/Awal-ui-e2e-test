@@ -29,6 +29,7 @@ export class SalesReturnPage extends BasePage {
     private readonly confirmYesButton: Locator;
     private readonly closeRemarks: Locator;
     private readonly qcFormBtn: Locator;
+    private readonly historyBtn: Locator;
 
     constructor(public readonly page: Page) {
         super(page);
@@ -58,6 +59,7 @@ export class SalesReturnPage extends BasePage {
         this.confirmYesButton = this.page.getByRole('button', { name: 'Yes' });
         this.closeRemarks = this.page.getByRole('textbox', { name: 'Final Remarks' });
         this.qcFormBtn = this.page.getByRole('button', { name: 'QC Form' });
+        this.historyBtn = this.page.getByRole('button', { name: 'History history-blue' });
     }
 
     @step()
@@ -185,5 +187,9 @@ export class SalesReturnPage extends BasePage {
         await this.approveButton.click();
         await this.confirmYesButton.click();
         await this.page.waitForLoadState('domcontentloaded');
+    }
+
+    async goToHistory() {
+        await this.historyBtn.click();
     }
 }

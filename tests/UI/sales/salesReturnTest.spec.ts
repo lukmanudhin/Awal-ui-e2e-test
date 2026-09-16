@@ -75,7 +75,7 @@ test.describe('Sales Return E2E Test', () => {
         await expect(salesReturnPage.status('Pending For Approval'), "Sales return status does not match").toBeVisible();
         await salesReturnPage.approveBankPaymentVoucher();
 
-        await page.getByRole('button', { name: 'History history-blue' }).click();
+        await salesReturnPage.goToHistory();
         await salesReturnPage.search(salesReturnNumber);
         await expect(salesReturnPage.status('Finance Completed'), "Sales return status does not match").toBeVisible();
 
