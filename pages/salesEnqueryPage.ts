@@ -417,6 +417,9 @@ export class SalesEnquiryPage extends BasePage {
         await expect(this.email2, "Email 2 value mismatch in edit sales enquiry form").toHaveValue(data.email2);
         await expect(this.websiteTextBox, "Website value mismatch in edit sales enquiry form").toHaveValue(data.website);
         await expect(this.pOBoxTextBox, "P.O. Box value mismatch in edit sales enquiry form").toHaveValue(data.poBox);
+        await expect(this.countryDropdown, "Country value mismatch in edit sales enquiry form").toHaveValue(data.country);
+        await expect(this.stateDropdown, "State value mismatch in edit sales enquiry form").toHaveValue(data.state);
+        await expect(this.cityDropdown, "City value mismatch in edit sales enquiry form").toHaveValue(data.city);
         await expect(this.projectNameTextBox, "Project Name value mismatch in edit sales enquiry form").toHaveValue(data.projectName);
         await expect(this.projectModeRadio(data.projectMode), `Project Mode option mismatch in edit sales enquiry form: ${data.projectMode}`).toBeChecked();
         await expect(this.signageTypeRadio(data.signageType), `Signage Type option mismatch in edit sales enquiry form: ${data.signageType}`).toBeChecked();
@@ -496,19 +499,25 @@ export class SalesEnquiryPage extends BasePage {
         await expect(this.pOBoxTextBox, "P.O. Box value mismatch while updating sales enquiry").toHaveValue(data.poBox);
 
         // Country dropdown
-        await this.countryDropdown.clear();
-        await this.countryDropdown.pressSequentially(data.country);
-        await this.countryOption(data.country).click();
+        if (await this.countryDropdown.inputValue() !== data.country) {
+            await this.countryDropdown.clear();
+            await this.countryDropdown.pressSequentially(data.country);
+            await this.countryOption(data.country).click();
+        }
 
         // State dropdown
-        await this.stateDropdown.clear();
-        await this.stateDropdown.pressSequentially(data.state);
-        await this.stateOption(data.state).click();
+        if (await this.stateDropdown.inputValue() !== data.state) {
+            await this.stateDropdown.clear();
+            await this.stateDropdown.pressSequentially(data.state);
+            await this.stateOption(data.state).click();
+        }
 
         // City dropdown
-        await this.cityDropdown.clear();
-        await this.cityDropdown.pressSequentially(data.city);
-        await this.cityOption(data.city).click();
+        if (await this.cityDropdown.inputValue() !== data.city) {
+            await this.cityDropdown.clear();
+            await this.cityDropdown.pressSequentially(data.city);
+            await this.cityOption(data.city).click();
+        }
 
         // Project details
         await this.projectNameTextBox.fill(data.projectName);
