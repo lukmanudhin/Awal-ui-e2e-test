@@ -23,6 +23,8 @@ jobs:
   test:
     timeout-minutes: 120
     runs-on: ubuntu-latest
+    env:
+      ENV: qa
     steps:
       # Artifact storage is capped per-account/repo. This workflow uploads a
       # 400+ file HTML report on every run (3x/day schedule + every push/PR),
