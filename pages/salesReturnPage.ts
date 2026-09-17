@@ -184,6 +184,7 @@ export class SalesReturnPage extends BasePage {
     async approveBankPaymentVoucher() {
         await this.eyeIcon.waitFor({ state: 'visible' });
         await this.clickViewIcon();
+        await this.waitForTableToLoad();
         await this.approveButton.click();
         await this.confirmYesButton.click();
         await this.page.waitForLoadState('domcontentloaded');
