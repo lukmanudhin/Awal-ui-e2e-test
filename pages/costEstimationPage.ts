@@ -330,6 +330,7 @@ export class CostEstimationPage extends BasePage {
         //     await target.waitFor({ state: 'visible', timeout: 2_000 });
         // }, `View button at index ${count} was not visible after scrolling`).toPass({ timeout: 15_000 });
         await this.page.keyboard.press('End');
+        await this.page.waitForTimeout(350);
         await this.viewIcon.nth(count).focus();
         await this.viewIcon.nth(count).click();
         // await this.page.waitForTimeout(500);
