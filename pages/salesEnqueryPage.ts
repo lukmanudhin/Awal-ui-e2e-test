@@ -433,6 +433,21 @@ export class SalesEnquiryPage extends BasePage {
         await expect(this.wallTextBox, "Wall finishing details value mismatch in edit sales enquiry form").toHaveValue(data.wall);
         await expect(this.equipmentProvidedByTxtbx, "Equipment Provided By value mismatch in edit sales enquiry form").toHaveValue(data.equipmentProvidedBy);
         await expect(this.powerSupplyTxtBx, "Power Supply value mismatch in edit sales enquiry form").toHaveValue(data.powerSupply);
+        await expect(this.permission(data.permission), `Permission required option mismatch in edit sales enquiry form: ${data.permission}`).toBeChecked();
+
+        await this.productDropdown.click();
+        for (const productName of data.product) {
+            await expect(this.productOption(productName).getByRole('checkbox'), `Product is not selected in edit sales enquiry form: ${productName}`).toBeChecked();
+        }
+        await this.productDropdown.press('Escape');
+
+        await expect(this.payTermsDropdown, "Payment Terms value mismatch in edit sales enquiry form").toHaveValue(data.paymentTerms);
+        await expect(this.currencyDropdown, "Currency value mismatch in edit sales enquiry form").toHaveValue(data.currency);
+        await expect(this.supplyTypeDropdown, "Supply Type value mismatch in edit sales enquiry form").toHaveValue(data.supplyType);
+
+        const expectedDatePattern = new RegExp(`\\b${data.date}\\b.*${new Date().getFullYear()}`);
+        await expect(this.calenderBtn, "Requested delivery date mismatch in edit sales enquiry form").toHaveAttribute('aria-label', expectedDatePattern);
+        await expect(this.updatePricingCalenderBtn, "Pricing date mismatch in edit sales enquiry form").toHaveAttribute('aria-label', expectedDatePattern);
     }
     @step()
     async clickCreateEnquiryButton() {
