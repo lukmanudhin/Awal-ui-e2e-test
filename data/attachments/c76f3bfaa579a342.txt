@@ -1,0 +1,2 @@
+→ PUT https://sales-api-dev.colanapps.in/api/transaction/v1/SalesOrder/salesOrderPendingApproval
+← PUT https://sales-api-dev.colanapps.in/api/transaction/v1/SalesOrder/salesOrderPendingApproval 200 OK (287ms)

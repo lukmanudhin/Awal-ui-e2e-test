@@ -1,0 +1,20 @@
+Login successfull
+Verified sales enquiry creation API with status code: 201
+Sales enquiry created successfully for customer: Byron Rutherford
+Embroidery and Tailoring created successfully
+Verified embroidery creation API with status code: 201
+ATM products created successfully
+Verified ATM products API with status code: 201
+Acrylic product created successfully
+Verified acrylic product creation API with status code: 201
+→ POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser
+← POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser 200 OK (947ms)
+→ DELETE https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiry/delete/67edd525-55ad-4c85-b956-0ac9b9dd0395
+← DELETE https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiry/delete/67edd525-55ad-4c85-b956-0ac9b9dd0395 200 OK (849ms)
+----------------------Delete Sales Enquiry API Response---------------------
+API Response: {
+  result: true,
+  statusCode: 200,
+  success: true,
+  message: 'Data deleted successfully'
+}

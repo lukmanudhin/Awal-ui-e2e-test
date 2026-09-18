@@ -1,0 +1,10 @@
+✓ Customer Name displayed: EQ10108
+✓ Customer Name displayed: Sandra Mosciski
+✓ Project Name displayed: Sales Enquiry Test
+✓ Country displayed: China
+✓ State displayed: Guangdong Province
+✓ City displayed: Guangdong
+✓ Payment Terms displayed: 100 % Advance Full Payment
+✓ Mobile Number displayed: 9088841378
+✓ Email displayed: Megan_King78@gmail.com
+All validation checks passed for view cost estimation details

@@ -1,0 +1,9 @@
+✓ Customer Name displayed: Sandra Mosciski
+✓ Country displayed: China
+✓ State displayed: Guangdong Province
+✓ City displayed: Guangdong
+✓ Mobile Number displayed: 9088841378
+✓ Email displayed: Megan_King78@gmail.com
+All validation checks passed for view enquiry details
+Quotation approved successfully
+Verified quotation approval API with status code: 200

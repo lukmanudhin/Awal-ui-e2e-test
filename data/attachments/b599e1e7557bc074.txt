@@ -1,0 +1,9 @@
+→ POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser
+← POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser 200 OK (845ms)
+Login successfull
+Verified create Sales Return API with status code: 201
+Sent to QC successfully
+Verified send to QC API with status code: 200
+→ DELETE https://sales-api-dev.colanapps.in/api/v1/salesReturn/deleteSalesReturn/a691d98c-6675-4035-bb37-796e951ddc7f
+← DELETE https://sales-api-dev.colanapps.in/api/v1/salesReturn/deleteSalesReturn/a691d98c-6675-4035-bb37-796e951ddc7f 200 OK (902ms)
+Sales return a691d98c-6675-4035-bb37-796e951ddc7f deleted successfully

@@ -1,0 +1,3 @@
+----------------------Delete Sales Enquiry API Response---------------------
+→ DELETE https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiry/delete/380750a5-5737-4d8f-b982-6753b3c21a27
+← DELETE https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiry/delete/380750a5-5737-4d8f-b982-6753b3c21a27 200 OK (269ms)

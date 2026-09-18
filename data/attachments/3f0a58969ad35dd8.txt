@@ -1,0 +1,57 @@
+→ POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser
+← POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser 200 OK (284ms)
+→ GET https://procurement-api-dev.colanapps.in/api/v1/stockView/getAllStockView?PageNumber=1&PageSize=10&subStore=RawMaterials&materialStatus=InStock
+← GET https://procurement-api-dev.colanapps.in/api/v1/stockView/getAllStockView?PageNumber=1&PageSize=10&subStore=RawMaterials&materialStatus=InStock 200 OK (877ms)
+{
+  result: {
+    data: [
+      [Object], [Object],
+      [Object], [Object],
+      [Object], [Object],
+      [Object], [Object],
+      [Object], [Object]
+    ],
+    totalRecords: 72,
+    pageNumber: 1,
+    pageSize: 10,
+    pageInfo: 'Showing 1 to 10 of 72 entries'
+  },
+  statusCode: 200,
+  success: true,
+  message: 'Data fetched successfully',
+  errors: null
+}
+====================================
+Highest Stock Material: WIRE FOR LED SIGN BLACK
+Quantity Available: 15,890
+====================================
+→ POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser
+← POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser 200 OK (279ms)
+→ GET https://core-api-dev.colanapps.in/api/v1/employeeMaster/getAllEmployeeSearch?search=
+← GET https://core-api-dev.colanapps.in/api/v1/employeeMaster/getAllEmployeeSearch?search= 200 OK (1705ms)
+Site Visitor (fetched dynamically via API): EMP00405 - Younis
+Login successfull
+Lead created successfully
+Verified Create Lead API with status code: 201
+Create Trading successfully
+Verified Create Trading API with status code: 201
+Create Trading Order successfully
+Verified Create Trading Order API with status code: 200
+Request Approval successfully
+Verified Request Approval API with status code: 200
+Request Approval successfully
+Verified Request Approval API with status code: 200
+Generate Invoice successfully
+Verified Generate Invoice API with status code: 200
+→ POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser
+← POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser 200 OK (285ms)
+→ DELETE https://sales-api-dev.colanapps.in/api/transaction/v1/quickLeads/deleteLeadById/1774667f-d668-46f5-ab65-404a1d6f0ad3
+← DELETE https://sales-api-dev.colanapps.in/api/transaction/v1/quickLeads/deleteLeadById/1774667f-d668-46f5-ab65-404a1d6f0ad3 200 OK (295ms)
+----------------------Delete Lead API Response---------------------
+API Response: {
+  result: true,
+  statusCode: 200,
+  success: true,
+  message: 'Data deleted successfully'
+}
+Lead for Max Walker deleted successfully

@@ -1,0 +1,26 @@
+Login successfull
+Verified sales enquiry creation API with status code: 201
+Sales enquiry created successfully for customer: Adalberto McGlynn
+Acrylic product created successfully
+Verified acrylic product creation API with status code: 201
+Request Artwork API Verified with status code: 201
+Request AutoCAD API Verified with status code: 201
+→ POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser
+← POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser 200 OK (297ms)
+→ GET https://core-api-dev.colanapps.in/api/v1/employeeMaster/getAllEmployeeSearch?search=
+← GET https://core-api-dev.colanapps.in/api/v1/employeeMaster/getAllEmployeeSearch?search= 200 OK (1576ms)
+Site Visitor (fetched dynamically via API): EMP00454 - Adil
+Request Site Visit API Verified with status code: 201
+Request Procurement API Verified with status code: 201
+Request Estimation API Verified with status code: 201
+→ POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser
+← POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser 200 OK (296ms)
+→ DELETE https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiry/delete/84ab8760-1798-4ff7-8784-23580e165274
+← DELETE https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiry/delete/84ab8760-1798-4ff7-8784-23580e165274 200 OK (870ms)
+----------------------Delete Sales Enquiry API Response---------------------
+API Response: {
+  result: true,
+  statusCode: 200,
+  success: true,
+  message: 'Data deleted successfully'
+}

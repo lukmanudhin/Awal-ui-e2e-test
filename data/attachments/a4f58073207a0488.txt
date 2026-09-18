@@ -1,0 +1,2 @@
+→ PUT https://sales-api-dev.colanapps.in/api/transaction/v1/SalesOrder/updateSalesChecklistStatus
+← PUT https://sales-api-dev.colanapps.in/api/transaction/v1/SalesOrder/updateSalesChecklistStatus 200 OK (367ms)

@@ -1,0 +1,6 @@
+Test Start Time:  18/9/2026, 8:35:53 pm
+→ POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser
+← POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser 200 OK (281ms)
+→ POST https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiry/upsertSalesEnquiry
+← POST https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiry/upsertSalesEnquiry 201 Created (268ms)
+Created Sales Enquiry extId: 4da5cc5e-5f6c-4d32-807b-9eb69a26bdeb

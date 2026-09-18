@@ -1,0 +1,41 @@
+Login successfull
+Verified sales enquiry creation API with status code: 201
+Sales enquiry created successfully for customer: Missouri Leffler
+Acrylic product created successfully
+Verified acrylic product creation API with status code: 201
+Request Artwork API Verified with status code: 201
+Request AutoCAD API Verified with status code: 201
+→ POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser
+← POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser 200 OK (900ms)
+→ GET https://core-api-dev.colanapps.in/api/v1/employeeMaster/getAllEmployeeSearch?search=
+← GET https://core-api-dev.colanapps.in/api/v1/employeeMaster/getAllEmployeeSearch?search= 200 OK (1790ms)
+Site Visitor (fetched dynamically via API): EMP00165 - Sridhar R
+Request Site Visit API Verified with status code: 201
+Request Procurement API Verified with status code: 201
+Request Estimation API Verified with status code: 201
+Enquiry found in Estimation - Request (Normal)
+BOQ added successfully
+Verified BOQ API with status code: 201
+Consumables added successfully
+Verified Consumables API with status code: 200
+BOM added successfully
+Verified BOM API with status code: 201
+Labour and Costing updated successfully
+Verified Labour and Costing API with status code: 200
+Labour and Costing updated successfully
+Verified Labour and Costing API with status code: 200
+Labour and Costing updated successfully
+Verified Labour and Costing API with status code: 200
+Labour and Costing updated successfully
+Verified Labour and Costing API with status code: 200
+→ POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser
+← POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser 200 OK (864ms)
+→ DELETE https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiry/delete/6e7a1fbd-32da-432a-bf5b-aa6cc6ec40ee
+← DELETE https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiry/delete/6e7a1fbd-32da-432a-bf5b-aa6cc6ec40ee 200 OK (791ms)
+----------------------Delete Sales Enquiry API Response---------------------
+API Response: {
+  result: true,
+  statusCode: 200,
+  success: true,
+  message: 'Data deleted successfully'
+}

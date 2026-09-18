@@ -1,0 +1,2 @@
+→ POST https://sales-api-dev.colanapps.in/api/transaction/v1/Quotation/quotationManagerApprove
+← POST https://sales-api-dev.colanapps.in/api/transaction/v1/Quotation/quotationManagerApprove 200 OK (265ms)

@@ -1,0 +1,15 @@
+✓ Customer Name displayed: Leonard Goodwin
+✓ Project Name displayed: Sales Enquiry Test
+✓ Country displayed: China
+✓ State displayed: Guangdong Province
+✓ City displayed: Guangdong
+✓ Mobile Number displayed: 3697440185
+✓ Email displayed: Lazaro75@gmail.com
+All validation checks passed for view enquiry details
+----------------------Delete Sales Enquiry API Response---------------------
+API Response: {
+  result: true,
+  statusCode: 200,
+  success: true,
+  message: 'Data deleted successfully'
+}
