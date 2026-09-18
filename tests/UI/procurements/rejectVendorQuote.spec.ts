@@ -14,6 +14,9 @@ test.describe('Material Indent and Material Issue For Out of Stock Raw Material 
     let requestedBy: string;
     let createdMaterialId: string;
     let vendorExtId: string;
+    let prId: string;
+    let prExtId: string;
+    let poNumber: string;
     let putAwayDone = false;
 
     test.beforeEach('Setup', async ({ page, loginPage, homePage, salesEnquiryAPI, createMaterialAPI }) => {
@@ -22,6 +25,10 @@ test.describe('Material Indent and Material Issue For Out of Stock Raw Material 
         materialIndentRequestId = '';
         materialIndentRequestExtId = '';
         createdMaterialId = '';
+        vendorExtId = '';
+        prId = '';
+        prExtId = '';
+        poNumber = '';
         accessToken = await salesEnquiryAPI.getAccessToken(`${ENV.EMAIL_ID}`, `${ENV.PASSWORD}`);
         vendorData.evaluatorName = await salesEnquiryAPI.getRandomEmployeeName();
         requestedBy = await salesEnquiryAPI.getLoggedInUserName(accessToken);
@@ -47,13 +54,14 @@ test.describe('Material Indent and Material Issue For Out of Stock Raw Material 
             await createMaterialAPI.deleteMaterial(accessToken, createdMaterialId);
         }
         await createMaterialAPI.deleteVendorIfCreated(accessToken, vendorExtId);
+        await materialIndentRequestAPI.deletePOIfCreated(accessToken, poNumber);
+        await materialIndentRequestAPI.deletePRIfCreated(accessToken, prId, prExtId);
         await materialIndentRequestAPI.deleteMIRIfCreated(accessToken, materialIndentRequestExtId);
         await page.close();
         await salesEnquiryAPI.dispose();
     });
 
-    test('Verify an out of stock material with no contract is procured through a vendor quotation and issued after put away', async ({ procurementPage, prRequestPage, modules, materialIndentRequestPage, vendorRegistrationPage }) => {
-        let prId: string;
+    test('Verify an out of stock material with no contract is procured through a vendor quotation and issued after put away', async ({ materialIndentRequestAPI, procurementPage, prRequestPage, modules, materialIndentRequestPage, vendorRegistrationPage }) => {
 
         await test.step('Raise a Material Indent Request for the out of stock material', async () => {
             await modules.goToModule({ module: 'Store', subModule: 'Material Indent Request' });
@@ -114,6 +122,7 @@ test.describe('Material Indent and Material Issue For Out of Stock Raw Material 
         await test.step('Approve the Purchase Requisition as the manager', async () => {
             await modules.goToModule({ subModule: 'PR Request Manager' });
             prId = await prRequestPage.searchPR(MIRDetails.material);
+            prExtId = await materialIndentRequestAPI.getPurchaseRequisitionExtId(accessToken, prId);
             console.log(`PR ID: ${prId}`);
             await prRequestPage.search(prId);
             await expect(prRequestPage.status('Out Of Stock'), 'Stock status does not match').toBeVisible();

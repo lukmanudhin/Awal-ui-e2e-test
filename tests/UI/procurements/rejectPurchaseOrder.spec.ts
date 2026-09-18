@@ -8,11 +8,17 @@ test.describe('Purchase Order Rejection End-to-End Scenarios', () => {
     let materialIndentRequestId: string;
     let accessToken: string;
     let requestedBy: string;
+    let prId: string;
+    let prExtId: string;
+    let poNumber: string;
     let putAwayDone = false;
 
     test.beforeEach('Setup', async ({ page, loginPage, homePage, salesEnquiryAPI, stockViewAPI }) => {
         MIRDetails = getMIRDetails();
         materialIndentRequestId = '';
+        prId = '';
+        prExtId = '';
+        poNumber = '';
 
         await test.step('Find an out of stock raw material that has an active contract', async () => {
             accessToken = await salesEnquiryAPI.getAccessToken(`${ENV.EMAIL_ID}`, `${ENV.PASSWORD}`);
@@ -38,13 +44,14 @@ test.describe('Purchase Order Rejection End-to-End Scenarios', () => {
         if (testInfo.status !== 'passed' && putAwayDone) {
             await materialIndentRequestAPI.issueAvailableMaterialForMIR(accessToken, materialIndentRequestId);
         }
+        await materialIndentRequestAPI.deletePOIfCreated(accessToken, poNumber);
+        await materialIndentRequestAPI.deletePRIfCreated(accessToken, prId, prExtId);
         await page.close();
         await salesEnquiryAPI.dispose();
     });
 
-    test('Verify Purchase Order is Rejected Successfully', async ({ procurementPage, prRequestPage, modules, materialIndentRequestPage }) => {
-        let prId: string;
-        
+    test('Verify Purchase Order is Rejected Successfully', async ({ materialIndentRequestAPI, procurementPage, prRequestPage, modules, materialIndentRequestPage }) => {
+
         await test.step('Create a material indent request for the out of stock material', async () => {
             await modules.goToModule({ module: 'Store', subModule: 'Material Indent Request' });
             await materialIndentRequestPage.createMaterialIndentRequest(MIRDetails);
@@ -104,6 +111,7 @@ test.describe('Purchase Order Rejection End-to-End Scenarios', () => {
         await test.step('PR manager approves the purchase requisition', async () => {
             await modules.goToModule({ subModule: 'PR Request Manager' });
             prId = await prRequestPage.searchPR(MIRDetails.material);
+            prExtId = await materialIndentRequestAPI.getPurchaseRequisitionExtId(accessToken, prId);
             console.log(`PR ID: ${prId}`);
             await prRequestPage.search(prId);
             await expect(prRequestPage.status('Out Of Stock'), 'Stock status does not match').toBeVisible();

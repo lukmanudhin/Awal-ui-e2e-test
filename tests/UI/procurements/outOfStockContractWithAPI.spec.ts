@@ -8,11 +8,17 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
     let materialIndentRequestId: string;
     let accessToken: string;
     let requestedBy: string;
+    let prId: string;
+    let prExtId: string;
+    let poNumber: string;
     let putAwayDone = false;
 
     test.beforeEach('Setup', async ({ page, loginPage, homePage, salesEnquiryAPI, stockViewAPI }) => {
         MIRDetails = getMIRDetails();
         materialIndentRequestId = '';
+        prId = '';
+        prExtId = '';
+        poNumber = '';
 
         await test.step('Find an out of stock raw material that has an active contract', async () => {
             accessToken = await salesEnquiryAPI.getAccessToken(`${ENV.EMAIL_ID}`, `${ENV.PASSWORD}`);
@@ -38,13 +44,13 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
         if (testInfo.status !== 'passed' && putAwayDone) {
             await materialIndentRequestAPI.issueAvailableMaterialForMIR(accessToken, materialIndentRequestId);
         }
+        await materialIndentRequestAPI.deletePOIfCreated(accessToken, poNumber);
+        await materialIndentRequestAPI.deletePRIfCreated(accessToken, prId, prExtId);
         await page.close();
         await salesEnquiryAPI.dispose();
     });
 
-    test('Verify Material Indent Request is successfully created, approved by manager, and material is issued with Random Quantity', async ({ salesEnquiryAPI, stockViewAPI, putAwayPage, grnEntryPage, procurementPage, prRequestPage, modules, materialIndentRequestPage }) => {
-        let prId: string;
-        let poNumber: string;
+    test('Verify Material Indent Request is successfully created, approved by manager, and material is issued with Random Quantity', async ({ salesEnquiryAPI, stockViewAPI, putAwayPage, grnEntryPage, procurementPage, prRequestPage, modules, materialIndentRequestPage, materialIndentRequestAPI }) => {
         let grnNumber: string;
 
         await test.step('Create a material indent request for the out of stock material', async () => {
@@ -106,6 +112,7 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
         await test.step('PR manager approves the purchase requisition', async () => {
             await modules.goToModule({ subModule: 'PR Request Manager' });
             prId = await prRequestPage.searchPR(MIRDetails.material);
+            prExtId = await materialIndentRequestAPI.getPurchaseRequisitionExtId(accessToken, prId);
             console.log(`PR ID: ${prId}`);
             await prRequestPage.search(prId);
             await expect(prRequestPage.status('Out Of Stock'), 'Stock status does not match').toBeVisible();
@@ -215,9 +222,7 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
         });
     });
 
-    test('Verify Material Indent Request is successfully created, approved by manager, and material is issued with All Quantity', async ({ salesEnquiryAPI, stockViewAPI, putAwayPage, grnEntryPage, procurementPage, prRequestPage, modules, materialIndentRequestPage }) => {
-        let prId: string;
-        let poNumber: string;
+    test('Verify Material Indent Request is successfully created, approved by manager, and material is issued with All Quantity', async ({ salesEnquiryAPI, stockViewAPI, putAwayPage, grnEntryPage, procurementPage, prRequestPage, modules, materialIndentRequestPage, materialIndentRequestAPI }) => {
         let grnNumber: string;
 
         await test.step('Create a material indent request for the out of stock material', async () => {
@@ -280,6 +285,7 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
             await modules.goToModule({ subModule: 'PR Request Manager' });
             prId = await prRequestPage.searchPR(MIRDetails.material);
             console.log(`PR ID: ${prId}`);
+            prExtId = await materialIndentRequestAPI.getPurchaseRequisitionExtId(accessToken, prId);
             await prRequestPage.search(prId);
             await expect(prRequestPage.status('Out Of Stock'), 'Stock status does not match').toBeVisible();
             await expect(prRequestPage.status('PO Pending'), "PR status text does not match").toBeVisible();

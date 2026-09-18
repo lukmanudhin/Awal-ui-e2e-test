@@ -13,12 +13,18 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
     let requestedBy: string;
     let createdMaterialId: string;
     let contractSeed: SeededContractMaterial | null;
+    let prId: string;
+    let prExtId: string;
+    let poNumber: string;
 
     test.beforeEach('Setup', async ({ page, loginPage, homePage, salesEnquiryAPI, createMaterialAPI, contractQuoteAPI }) => {
         MIRDetails = getMIRDetails();
         materialIndentRequestId = '';
         materialIndentRequestExtId = '';
         createdMaterialId = '';
+        prId = '';
+        prExtId = '';
+        poNumber = '';
         contractSeed = null;
 
         await test.step('Create a raw material and put it under an active contract', async () => {
@@ -57,6 +63,8 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
     });
 
     test.afterEach('Teardown', async ({ page, salesEnquiryAPI, materialIndentRequestAPI, createMaterialAPI, contractQuoteAPI }) => {
+        await materialIndentRequestAPI.deletePOIfCreated(accessToken, poNumber);
+        await materialIndentRequestAPI.deletePRIfCreated(accessToken, prId, prExtId);
         await materialIndentRequestAPI.deleteMIRIfCreated(accessToken, materialIndentRequestExtId);
         await contractQuoteAPI.deleteSeededContractIfCreated(accessToken, contractSeed);
         if (createdMaterialId) {
@@ -66,9 +74,7 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
         await salesEnquiryAPI.dispose();
     });
 
-    test('Verify Material Indent Request is successfully created, approved by manager, and material is issued with Random Quantity', async ({ salesEnquiryAPI, stockViewAPI, putAwayPage, grnEntryPage, procurementPage, prRequestPage, modules, materialIndentRequestPage }) => {
-        let prId: string;
-        let poNumber: string;
+    test('Verify Material Indent Request is successfully created, approved by manager, and material is issued with Random Quantity', async ({ materialIndentRequestAPI, salesEnquiryAPI, stockViewAPI, putAwayPage, grnEntryPage, procurementPage, prRequestPage, modules, materialIndentRequestPage }) => {
         let grnNumber: string;
 
         await test.step('Create a material indent request for the out of stock material', async () => {
@@ -130,6 +136,7 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
         await test.step('PR manager approves the purchase requisition', async () => {
             await modules.goToModule({ subModule: 'PR Request Manager' });
             prId = await prRequestPage.searchPR(MIRDetails.material);
+            prExtId = await materialIndentRequestAPI.getPurchaseRequisitionExtId(accessToken, prId);
             console.log(`PR ID: ${prId}`);
             await prRequestPage.search(prId);
             await expect(prRequestPage.status('Out Of Stock'), 'Stock status does not match').toBeVisible();
@@ -239,9 +246,7 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
         });
     });
 
-    test('Verify Material Indent Request is successfully created, approved by manager, and material is issued with All Quantity', async ({ salesEnquiryAPI, stockViewAPI, putAwayPage, grnEntryPage, procurementPage, prRequestPage, modules, materialIndentRequestPage }) => {
-        let prId: string;
-        let poNumber: string;
+    test('Verify Material Indent Request is successfully created, approved by manager, and material is issued with All Quantity', async ({ materialIndentRequestAPI, salesEnquiryAPI, stockViewAPI, putAwayPage, grnEntryPage, procurementPage, prRequestPage, modules, materialIndentRequestPage }) => {
         let grnNumber: string;
 
         await test.step('Create a material indent request for the out of stock material', async () => {
@@ -303,6 +308,7 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
         await test.step('PR manager approves the purchase requisition', async () => {
             await modules.goToModule({ subModule: 'PR Request Manager' });
             prId = await prRequestPage.searchPR(MIRDetails.material);
+            prExtId = await materialIndentRequestAPI.getPurchaseRequisitionExtId(accessToken, prId);
             console.log(`PR ID: ${prId}`);
             await prRequestPage.search(prId);
             await expect(prRequestPage.status('Out Of Stock'), 'Stock status does not match').toBeVisible();

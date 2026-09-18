@@ -7,6 +7,13 @@ export class MaterialIndentRequestAPI {
     constructor(private request: APIRequestContext) {
     }
 
+    private headers(accessToken: string) {
+        return {
+            'Authorization': `Bearer ${accessToken}`,
+            'x-auth-token': accessToken,
+        };
+    }
+
     async deleteMIR(accessToken: string, mirId: string) {
         const response = await this.request.delete(`${PROCUREMENT_API_BASE}/materialIndentRequest/deleteMIR/${mirId}`, {
             headers: {
@@ -32,10 +39,7 @@ export class MaterialIndentRequestAPI {
 
         try {
             const response = await this.request.delete(`${PROCUREMENT_API_BASE}/materialIndentRequest/deleteMIR/${mirExtId}`, {
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`,
-                    'x-auth-token': accessToken,
-                }
+                headers: this.headers(accessToken)
             });
             console.log(`Cleanup: deleted material indent request ${mirExtId}, status code ${response.status()}`);
         } catch (error) {
@@ -43,13 +47,82 @@ export class MaterialIndentRequestAPI {
         }
     }
 
+    async getPurchaseRequisitionExtId(accessToken: string, prNumber: string) {
+        if (!prNumber) return '';
+
+        const listEndpoints = [
+            `${PROCUREMENT_API_BASE}/purchaseRequisitionManager/getAllPurchaseRequisitionManager?pageNumber=1&pageSize=10&search=${encodeURIComponent(prNumber)}&filter=`,
+            `${PROCUREMENT_API_BASE}/purchaseRequisition/getAllPurchaseRequisition?pageNumber=1&pageSize=10&search=${encodeURIComponent(prNumber)}&filter=`,
+            `${PROCUREMENT_API_BASE}/purchaseRequestSheet/getAllPurchaseRequestSheet?pageNumber=1&pageSize=10&search=${encodeURIComponent(prNumber)}&filter=`,
+        ];
+
+        for (const endpoint of listEndpoints) {
+            const response = await this.request.get(endpoint, {
+                headers: this.headers(accessToken),
+            });
+            if (response.status() !== 200) continue;
+
+            const body = await response.json();
+            const purchaseRequisitions = body?.result?.data ?? body?.result ?? [];
+            const purchaseRequisition = (Array.isArray(purchaseRequisitions) ? purchaseRequisitions : [])
+                .find((record: any) => record.prNo === prNumber);
+            const prExtId = purchaseRequisition?.extId;
+
+            if (prExtId) return prExtId as string;
+        }
+
+        return '';
+    }
+
+    async deletePRIfCreated(accessToken: string, prNumber: string, prExtId = '') {
+        if (!prNumber && !prExtId) return;
+
+        try {
+            const extId = prExtId || await this.getPurchaseRequisitionExtId(accessToken, prNumber);
+            if (!extId) {
+                console.log(`Cleanup: purchase requisition ${prNumber} was not found, nothing to delete`);
+                return;
+            }
+            const deleteResponse = await this.request.delete(`${PROCUREMENT_API_BASE}/purchaseRequisitionManager/deletePr/${extId}`, {
+                headers: this.headers(accessToken),
+            });
+            console.log(`Cleanup: deleted purchase requisition ${prNumber || extId} (${extId}), status code ${deleteResponse.status()}`);
+        } catch (error) {
+            console.log(`Cleanup: failed to delete purchase requisition ${prNumber || prExtId} -`, error);
+        }
+    }
+
+    async deletePOIfCreated(accessToken: string, poNumber: string) {
+        if (!poNumber) return;
+
+        try {
+            const response = await this.request.get(`${PROCUREMENT_API_BASE}/purchaseOrders/getAllPO?pageNumber=1&pageSize=10&search=${encodeURIComponent(poNumber)}&filter=`, {
+                headers: this.headers(accessToken),
+            });
+            if (response.status() !== 200) {
+                console.log(`Cleanup: failed to search purchase order ${poNumber}, status code ${response.status()}`);
+                return;
+            }
+
+            const body = await response.json();
+            const purchaseOrder = (body?.result?.data ?? []).find((record: any) => record.poNumber === poNumber);
+            const poExtId = purchaseOrder?.extId;
+
+            if (!poExtId) {
+                console.log(`Cleanup: purchase order ${poNumber} was not found, nothing to delete`);
+                return;
+            }
+
+            console.log(`Cleanup: purchase order ${poNumber} resolved to ${poExtId}, but procurement swagger exposes no PO delete endpoint`);
+        } catch (error) {
+            console.log(`Cleanup: failed to clean up purchase order ${poNumber} -`, error);
+        }
+    }
+
     async issueAvailableMaterialForMIR(accessToken: string, mirNumber: string) {
         if (!mirNumber) return;
 
-        const headers = {
-            'Authorization': `Bearer ${accessToken}`,
-            'x-auth-token': accessToken,
-        };
+        const headers = this.headers(accessToken);
 
         const listResponse = await this.request.get(`${PROCUREMENT_API_BASE}/materialIssueNote/getAllPendingMaterial/?PageNumber=1&PageSize=10&Search=${mirNumber}&Filter=`, { headers });
         expect(listResponse.status(), `Failed to get pending material issue list through API, status code: ${listResponse.status()}`).toBe(200);

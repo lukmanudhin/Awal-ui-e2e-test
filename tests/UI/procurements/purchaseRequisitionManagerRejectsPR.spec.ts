@@ -13,6 +13,8 @@ test.describe('Purchase Requisition Manager Rejects PR End-to-End Scenarios', ()
     let accessToken: string;
     let requestedBy: string;
     let createdMaterialId: string;
+    let prId: string;
+    let prExtId: string;
 
     test.beforeEach('Setup', async ({ page, loginPage, homePage, salesEnquiryAPI, createMaterialAPI }) => {
         MIRDetails = getMIRDetails();
@@ -20,6 +22,8 @@ test.describe('Purchase Requisition Manager Rejects PR End-to-End Scenarios', ()
         materialIndentRequestId = '';
         materialIndentRequestExtId = '';
         createdMaterialId = '';
+        prId = '';
+        prExtId = '';
         accessToken = await salesEnquiryAPI.getAccessToken(`${ENV.EMAIL_ID}`, `${ENV.PASSWORD}`);
         vendorData.evaluatorName = await salesEnquiryAPI.getRandomEmployeeName();
         requestedBy = await salesEnquiryAPI.getLoggedInUserName(accessToken);
@@ -41,12 +45,13 @@ test.describe('Purchase Requisition Manager Rejects PR End-to-End Scenarios', ()
         if (createdMaterialId) {
             await createMaterialAPI.deleteMaterial(accessToken, createdMaterialId);
         }
+        await materialIndentRequestAPI.deletePRIfCreated(accessToken, prId, prExtId);
         await materialIndentRequestAPI.deleteMIRIfCreated(accessToken, materialIndentRequestExtId);
         await page.close();
         await salesEnquiryAPI.dispose();
     });
 
-    test('Verify Purchase Requisition Manager Rejects PR', async ({ prRequestPage, modules, materialIndentRequestPage }) => {
+    test('Verify Purchase Requisition Manager Rejects PR', async ({ materialIndentRequestAPI, prRequestPage, modules, materialIndentRequestPage }) => {
         let prId: string;
 
         await test.step('Raise a Material Indent Request for the out of stock material', async () => {
@@ -109,13 +114,14 @@ test.describe('Purchase Requisition Manager Rejects PR End-to-End Scenarios', ()
             await modules.goToModule({ subModule: 'PR Request Manager' });
             prId = await prRequestPage.searchPR(MIRDetails.material);
             console.log(`PR ID: ${prId}`);
+            prExtId = await materialIndentRequestAPI.getPurchaseRequisitionExtId(accessToken, prId);
             await prRequestPage.search(prId);
             await expect(prRequestPage.status('Out Of Stock'), 'Stock status does not match').toBeVisible();
             await expect(prRequestPage.status('PO Pending'), "PR status text does not match").toBeVisible();
             await prRequestPage.clickViewIcon();
             await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
             await prRequestPage.rejectPRRequestAndValidateAPI(200);
-            await expect(prRequestPage.successMessage('Purchase requisition rejected successfully'), 'Purchase requisition rejected successfully success message does not found').toHaveText('Purchase requisition rejected successfully');        
+            await expect(prRequestPage.successMessage('Purchase requisition rejected successfully'), 'Purchase requisition rejected successfully success message does not found').toHaveText('Purchase requisition rejected successfully');
         });
     });
 });
