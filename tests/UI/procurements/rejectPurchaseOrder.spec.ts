@@ -148,6 +148,7 @@ test.describe('Purchase Order Rejection End-to-End Scenarios', () => {
             await procurementPage.selectVendor(MIRDetails.vendor);
             await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
             await procurementPage.rejectPurchaseOrder();
+            // a invalid pop up is displayed
             // No success message or confirmation as PO rejected
         });
     });
