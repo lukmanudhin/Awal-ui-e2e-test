@@ -316,7 +316,7 @@ test.describe.serial('Verify Sales Order Manager Rejects the Checklist', () => {
         await test.step('Verify Sales Checklist Rejected by Manager status is reflected in sales enquiry', async () => {
             await modules.goToModule({ module: 'Sales', subModule: 'Sales Enquiry' });
             await salesEnquiryPage.search(enquiryId);
-            await expect(salesEnquiryPage.status('Sales Checklist Rejected by Manager'), "Sales order rejected status does not match in sales enquiry").toBeVisible();
+            await expect(salesEnquiryPage.status('Sales Checklist Rejected By Manager'), "Sales order rejected status does not match in sales enquiry").toBeVisible();
         });
     });
 });
