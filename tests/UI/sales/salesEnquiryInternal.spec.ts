@@ -122,7 +122,7 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Internal)', () =
         await expect(page, "Sales Enquiry list page was not opened after going back from PPJO").toHaveURL(`${ENV.BASE_URL}/sales/internal-request`);
         await salesEnquiryPage.search(enquiryId);
         await salesEnquiryPage.validateCustomerStatus(createEnquiryData.customerName, 'Pending From Estimation');
-        await salesEnquiryPage.validateCustomerPPJOColumn(createEnquiryData.customerName, ['Artwork', 'AutoCAD', 'Estimation', 'Procurement', 'Site Visit']);
+        await salesEnquiryPage.validateCustomerPPJOColumn(createEnquiryData.customerName, ['Artwork', 'Autocad', 'Estimation', 'Procurement', 'Site Visit']);
     });
 
     test('Verify that the estimation request is displayed in the Estimation - Request (Internal) list', async () => {
@@ -331,7 +331,7 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Internal)', () =
         await modules.goToModule({ subModule: 'Quotation' });
         await quotationManagerPage.search(enquiryId);
         referenceNumber = await quotationManagerPage.getQuotationNumber();
-        await expect(quotationManagerPage.status('Quotation - Approved by Manager'), 'Quotation status does not match').toBeVisible();
+        await expect(quotationManagerPage.status('Quotation Approved By Manager'), 'Quotation status does not match').toBeVisible();
         await quotationManagerPage.clickViewIcon();
         await quotationManagerPage.validateEnquiryDetails(createEnquiryData);
         await ppjoPage.validateBOQDetailsTable(addBOQData);
@@ -359,7 +359,7 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Internal)', () =
     test('Verify that the sales order is submitted for approval and the status is updated to Pending Sales Order Approval', async () => {
         await modules.goToModule({ subModule: 'Sales Order' });
         await salesOrderManagerPage.search(enquiryId);
-        await expect(salesOrderManagerPage.status('Sales Checklist Approved by Manager'), "Sales order status does not match").toBeVisible();
+        await expect(salesOrderManagerPage.status('Sales Checklist Approved By Manager'), "Sales order status does not match").toBeVisible();
         await salesOrderManagerPage.clickViewIcon();
         await salesOrderManagerPage.validateSalesOrderDetails(createEnquiryData);
         await ppjoPage.validateBOQDetailsTable(addBOQData);
@@ -383,7 +383,7 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Internal)', () =
     test('Verify Sales Enquiry status is updated to Sales Order Approved by Manager', async () => {
         await modules.goToModule({ subModule: 'Internal Requests' });
         await salesEnquiryPage.search(enquiryId);
-        await expect(salesEnquiryPage.status('Sales Order Approved by Manager'), "Sales order approved status does not match in sales enquiry").toBeVisible();
+        await expect(salesEnquiryPage.status('Sales Order Approved By Manager'), "Sales order approved status does not match in sales enquiry").toBeVisible();
         await salesEnquiryPage.clickViewIcon();
         await salesEnquiryPage.goToTab('Quotation');
         await expect(salesEnquiryPage.enquiryId, "Enquiry ID does not match").toHaveText(enquiryId);

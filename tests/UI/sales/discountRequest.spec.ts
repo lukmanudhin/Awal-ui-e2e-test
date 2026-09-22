@@ -248,7 +248,7 @@ test.describe.serial('Verify Discount Request flow of Sales Enquiry (Request Nor
         await test.step('Quotation: Verify Quotation Under Consideration flow of Sales Enquiry (Request Normal)', async () => {
             await modules.goToModule({ subModule: 'Quotation' });
             await quotationManagerPage.search(enquiryId);
-            await expect(quotationManagerPage.status('Quotation - Approved by Manager'), 'Quotation status does not match').toBeVisible();
+            await expect(quotationManagerPage.status('Quotation Approved By Manager'), 'Quotation status does not match').toBeVisible();
             await quotationManagerPage.clickViewIcon();
             // await expect(quotationManagerPage.deliveryDate(createEnquiryData.date), "Delivery date is not updated in quotation manager").toContainText(`${createEnquiryData.date}`);
             await quotationManagerPage.sendToCustomerAndValidateAPI(200);
@@ -419,7 +419,7 @@ test.describe.serial('Verify Discount Request flow of Sales Enquiry (Request Nor
         await test.step('Quotation: Verify send quotation to customer and advance invoice request is submitted successfully', async () => {
             await modules.goToModule({ subModule: 'Quotation' });
             await quotationManagerPage.search(enquiryId);
-            await expect(quotationManagerPage.status('Quotation - Approved by Manager'), 'Quotation status does not match').toBeVisible();
+            await expect(quotationManagerPage.status('Quotation Approved By Manager'), 'Quotation status does not match').toBeVisible();
             await quotationManagerPage.clickViewIcon();
             await quotationManagerPage.validateEnquiryDetails(createEnquiryData);
             await ppjoPage.validateBOQDetailsTable(addBOQData);
@@ -500,7 +500,7 @@ test.describe.serial('Verify Discount Request flow of Sales Enquiry (Request Nor
         await test.step('Verify that the sales order is submitted for approval and the status is updated to Pending Sales Order Approval', async () => {
             await modules.goToModule({ subModule: 'Sales Order' });
             await salesOrderManagerPage.search(enquiryId);
-            await expect(salesOrderManagerPage.status('Sales Checklist Approved by Manager'), "Sales order status does not match").toBeVisible();
+            await expect(salesOrderManagerPage.status('Sales Checklist Approved By Manager'), "Sales order status does not match").toBeVisible();
             await salesOrderManagerPage.clickViewIcon();
             await salesOrderManagerPage.validateSalesOrderDetails(createEnquiryData);
             await ppjoPage.validateBOQDetailsTable(addBOQData);
@@ -524,7 +524,7 @@ test.describe.serial('Verify Discount Request flow of Sales Enquiry (Request Nor
         await test.step('Verify Sales Enquiry status is updated to Sales Order Approved by Manager', async () => {
             await modules.goToModule({ subModule: 'Sales Enquiry' });
             await salesEnquiryPage.search(enquiryId);
-            await expect(salesEnquiryPage.status('Sales Order Approved by Manager'), "Sales order approved status does not match in sales enquiry").toBeVisible();
+            await expect(salesEnquiryPage.status('Sales Order Approved By Manager'), "Sales order approved status does not match in sales enquiry").toBeVisible();
             await salesEnquiryPage.clickViewIcon();
             await salesEnquiryPage.goToTab('Quotation');
             await expect(salesEnquiryPage.enquiryId, "Enquiry ID does not match").toHaveText(enquiryId);

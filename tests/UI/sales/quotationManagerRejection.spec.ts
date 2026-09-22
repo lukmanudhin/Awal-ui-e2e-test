@@ -249,7 +249,7 @@ test.describe.serial('Verify E2E Quotation Manager Rejection flow of Sales Enqui
         await test.step('Verify Quotation - Rejected by Manager status is reflected in sales enquiry', async () => {
             await modules.goToModule({ module: 'Sales', subModule: 'Sales Enquiry' });
             await salesEnquiryPage.search(enquiryId);
-            await expect(salesEnquiryPage.status('Quotation - Rejected by Manager'), "Quotation Rejected by Manager status does not match in sales enquiry").toBeVisible();
+            await expect(salesEnquiryPage.status('Quotation Rejected By Manager'), "Quotation Rejected by Manager status does not match in sales enquiry").toBeVisible();
         });
     });
 });

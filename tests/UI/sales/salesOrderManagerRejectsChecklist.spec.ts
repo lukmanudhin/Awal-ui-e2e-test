@@ -250,7 +250,7 @@ test.describe.serial('Verify Sales Order Manager rejects the sales order', () =>
         await test.step('Quotation: Verify send quotation to customer and advance invoice request is submitted successfully', async () => {
             await modules.goToModule({ subModule: 'Quotation' });
             await quotationManagerPage.search(enquiryId);
-            await expect(quotationManagerPage.status('Quotation - Approved by Manager'), 'Quotation status does not match').toBeVisible();
+            await expect(quotationManagerPage.status('Quotation Approved By Manager'), 'Quotation status does not match').toBeVisible();
             await quotationManagerPage.clickViewIcon();
             await ppjoPage.validateBOQDetailsTable(addBOQData);
             // await expect(quotationManagerPage.deliveryDate(createEnquiryData.date), "Delivery date is not updated in quotation manager").toContainText(`${createEnquiryData.date}`);
@@ -316,7 +316,7 @@ test.describe.serial('Verify Sales Order Manager rejects the sales order', () =>
         await test.step('Verify that the sales order is submitted for approval and the status is updated to Pending Sales Order Approval', async () => {
             await modules.goToModule({ subModule: 'Sales Order' });
             await salesOrderManagerPage.search(enquiryId);
-            await expect(salesOrderManagerPage.status('Sales Checklist Approved by Manager'), "Sales order status does not match").toBeVisible();
+            await expect(salesOrderManagerPage.status('Sales Checklist Approved By Manager'), "Sales order status does not match").toBeVisible();
             await salesOrderManagerPage.clickViewIcon();
             await salesOrderManagerPage.sendSalesOrderForApprovalAndValidateAPI(200);
             await expect(salesOrderManagerPage.successMessage('Sales Order sent for approval successfully'), "Sales order sent for approval message does not match").toContainText('Sales Order sent for approval successfully');

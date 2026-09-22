@@ -252,7 +252,7 @@ test.describe.serial('Verify Invoice Register is rejected by the Manager', () =>
         await test.step('Quotation: Verify send quotation to customer and advance invoice request is submitted successfully', async () => {
             await modules.goToModule({ subModule: 'Quotation' });
             await quotationManagerPage.search(enquiryId);
-            await expect(quotationManagerPage.status('Quotation - Approved by Manager'), 'Quotation status does not match').toBeVisible();
+            await expect(quotationManagerPage.status('Quotation Approved By Manager'), 'Quotation status does not match').toBeVisible();
             await quotationManagerPage.clickViewIcon();
             // await expect(quotationManagerPage.deliveryDate(createEnquiryData.date), "Delivery date is not updated in quotation manager").toContainText(`${createEnquiryData.date}`);
             await quotationManagerPage.sendToCustomerAndValidateAPI(200);

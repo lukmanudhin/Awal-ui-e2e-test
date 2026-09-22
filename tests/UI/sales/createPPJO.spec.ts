@@ -63,6 +63,6 @@ test.describe('Create PPJO', () => {
         await expect(page, "Sales Enquiry list page was not opened after going back from PPJO").toHaveURL(`${ENV.BASE_URL}/sales/sales-enquiry`);
         await salesEnquiryPage.search(createEnquiryData.customerName);
         await salesEnquiryPage.validateCustomerStatus(createEnquiryData.customerName, 'Pending From Estimation');
-        await salesEnquiryPage.validateCustomerPPJOColumn(createEnquiryData.customerName, ['Artwork', 'AutoCAD', 'Estimation', 'Procurement', 'Site Visit']);
+        await salesEnquiryPage.validateCustomerPPJOColumn(createEnquiryData.customerName, ['Artwork', 'Autocad', 'Estimation', 'Procurement', 'Site Visit']);
     });
 });

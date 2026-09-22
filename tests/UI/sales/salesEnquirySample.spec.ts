@@ -316,7 +316,7 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Sample)', () => 
         await salesEnquiryPage.validateViewEnquiryDetails(createEnquiryData);
         await ppjoPage.clickSampleButton();
         await ppjoPage.goToTab('New Sample Request');
-        await expect(requestNormalPage.status('Quotation - Approved by Manager'), "Quotation Pending status does not match in sales enquiry").toBeVisible();
+        await expect(requestNormalPage.status('Quotation Approved By Manager'), "Quotation Pending status does not match in sales enquiry").toBeVisible();
         await ppjoPage.clickViewIcon();
         await ppjoPage.validateSampleDetails(enquiryId, 'Test_Document.pdf', '17', 'New Sample Request');
         await quotationManagerPage.generateChecklist(createEnquiryData);
@@ -340,7 +340,7 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Sample)', () => 
         await modules.goToModule({ subModule: 'Sales Order' });
         await salesOrderManagerPage.search(enquiryId);
         salesOrderId = await salesOrderManagerPage.getSalesOrderId();
-        await expect(salesOrderManagerPage.status('Sales Checklist Approved by Manager'), "Sales order status does not match").toBeVisible();
+        await expect(salesOrderManagerPage.status('Sales Checklist Approved By Manager'), "Sales order status does not match").toBeVisible();
         await salesOrderManagerPage.clickViewIcon();
         await salesOrderManagerPage.validateSalesOrderDetails(createEnquiryData);
         await ppjoPage.validateBOQDetailsTable(addBOQData);
@@ -370,7 +370,7 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Sample)', () => 
         await salesEnquiryPage.validateViewEnquiryDetails(createEnquiryData);
         await ppjoPage.clickSampleButton();
         await ppjoPage.goToTab('New Sample Request');
-        await expect(requestNormalPage.status('Sales Order Approved by Manager'), "Quotation Pending status does not match in sales enquiry").toBeVisible();
+        await expect(requestNormalPage.status('Sales Order Approved By Manager'), "Quotation Pending status does not match in sales enquiry").toBeVisible();
         await ppjoPage.clickViewIcon();
         await ppjoPage.validateSampleDetails(enquiryId, 'Test_Document.pdf', '17', 'New Sample Request');
         await quotationManagerPage.validateExistingDataInSalesOrderChecklist(createEnquiryData);
