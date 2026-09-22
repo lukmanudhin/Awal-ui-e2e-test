@@ -179,14 +179,21 @@ test.describe('Material Indent and Material Issue End-to-End Scenario For Spare 
             await expect(procurementPage.successMessage('Purchase order created successfully'), 'Purchase order created successfully success message does not match').toHaveText('Purchase order created successfully')
         });
 
-        await test.step('Verify the created purchase order is Active', async () => {
-            await modules.goToModule({ nestedSubModule: 'View PO' });
+        await test.step('Verify purchase order is Approved', async () => {
+            await modules.goToModule({ nestedSubModule: 'PO Approval' });
             poNumber = await procurementPage.getPONumber();
             await procurementPage.search(poNumber);
-            await expect(materialIndentRequestPage.status('Active'), 'PO status does not match').toBeVisible();
             await procurementPage.clickViewIcon();
             await materialIndentRequestPage.validateMIRDetails(prId, MIRDetails.vendor, MIRDetails.orderType);
             await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
+            await materialIndentRequestPage.approvePO();
+            await expect(materialIndentRequestPage.successMessage('Purchase order approved successfully'), 'Purchase order approved successfully message does not match').toHaveText('Purchase order approved successfully');
+        });
+
+        await test.step('Verify the created purchase order Approved is reflected in the history', async () => {
+            await materialIndentRequestPage.goToHistory();
+            await materialIndentRequestPage.search(poNumber);
+            await expect(materialIndentRequestPage.status('PO Approved'), 'PO status does not match').toBeVisible();
         });
 
         await test.step('Create the GRN entry for the purchase order', async () => {

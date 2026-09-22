@@ -29,6 +29,8 @@ export class MaterialIndentRequestPage extends BasePage {
     private readonly addSparePartsBtn: Locator;
     private readonly sparePartsPendingQty: Locator;
     private readonly reasonTxtBx: Locator;
+    private readonly cancelPOIcon: Locator;
+    public readonly cancelPOButton: Locator;
     constructor(public readonly page: Page) {
         super(page);
         this.createButton = this.page.getByRole('button', { name: 'Create plus icon' });
@@ -41,7 +43,7 @@ export class MaterialIndentRequestPage extends BasePage {
         this.submitButton = this.page.getByRole('button', { name: 'Submit' });
         this.yesButton = this.page.getByRole('button', { name: 'Yes' });
         this.approveButton = this.page.getByRole('button', { name: 'Approve' });
-        this.historyButton = this.page.getByRole('button', { name: 'History filter' });
+        this.historyButton = this.page.getByRole('button', { name: 'History filter' }).or(this.page.getByRole('button', { name: 'History history' }));
         this.dropDown = (name: string) => this.page.getByRole('combobox', { name: `${name}` });
         this.dropDownOption = (name: string) => this.page.getByRole('option', { name: `${name}`, exact: true });
         this.pendingQuantity = this.page.locator('//td[@data-app-table-col="8"]');
@@ -56,6 +58,8 @@ export class MaterialIndentRequestPage extends BasePage {
         this.addSparePartsBtn = this.page.getByRole('button', { name: 'Add Parts plus icon' });
         this.sparePartsPendingQty = this.page.locator('//td[@data-app-table-col="9"]');
         this.reasonTxtBx = this.page.getByRole('textbox', { name: 'Reason for Rejection' });
+        this.cancelPOIcon = this.page.locator('//img[contains(@src,"light_red_cancel-outline-rounded")]').first();
+        this.cancelPOButton = this.page.getByRole('button', { name: 'Cancel Purchase Order' });
     }
 
     private async selectFromDropdown(dropdownName: string, value: string) {
@@ -212,4 +216,19 @@ export class MaterialIndentRequestPage extends BasePage {
         expect(response.status(), `Reject Material Indent Request status code mismatch. Expected ${statusCode}, received ${response.status()}`).toBe(statusCode);
         console.log('Verified material indent request rejected API with status code:', response.status());
     }
+
+    async approvePO() {
+        await this.approveButton.click();
+        await this.yesButton.click();
+    }
+
+    async clickCancelPO(){
+        await this.cancelPOIcon.click();
+    }
+
+    async validateCancelPOButtonToBeEnabled() {
+        await expect(this.cancelPOButton, 'PO cancel button is not Enabled').toBeEnabled();
+        await this.page.getByRole('button', { name: 'close' }).click();
+    }
+            
 }

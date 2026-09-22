@@ -201,14 +201,21 @@ test.describe('Material Indent and Material Issue For Out of Stock Consumables W
             await expect(procurementPage.successMessage('Data updated successfully'), 'Data updated successfully message does not match').toHaveText('Data updated successfully');
         });
 
-        await test.step('Verify the Purchase Order raised for the awarded vendor', async () => {
-            await modules.goToModule({ nestedSubModule: 'View PO' });
+        await test.step('Verify purchase order is Approved', async () => {
+            await modules.goToModule({ nestedSubModule: 'PO Approval' });
             poNumber = await procurementPage.getPONumber();
             await procurementPage.search(poNumber);
-            await expect(materialIndentRequestPage.status('Active'), 'View PO status does not match').toBeVisible();
             await procurementPage.clickViewIcon();
+            await materialIndentRequestPage.validateMIRDetails(prId, MIRDetails.vendor, MIRDetails.orderType);
             await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
-            await procurementPage.validatePODetails(MIRDetails.tempVendorName, MIRDetails.orderType);
+            await materialIndentRequestPage.approvePO();
+            await expect(materialIndentRequestPage.successMessage('Purchase order approved successfully'), 'Purchase order approved successfully message does not match').toHaveText('Purchase order approved successfully');
+        });
+
+        await test.step('Verify the created purchase order Approved is reflected in the history', async () => {
+            await materialIndentRequestPage.goToHistory();
+            await materialIndentRequestPage.search(poNumber);
+            await expect(materialIndentRequestPage.status('PO Approved'), 'PO status does not match').toBeVisible();
         });
 
         await test.step('Receive the material against the Purchase Order and complete QC', async () => {
