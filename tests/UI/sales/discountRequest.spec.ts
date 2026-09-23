@@ -256,13 +256,13 @@ test.describe.serial('Verify Discount Request flow of Sales Enquiry (Request Nor
             await quotationManagerPage.setQuotationStatus('Discount Request');
             await expect(quotationManagerPage.successMessage('Discount request submitted successfully'), "Discount request submitted successfully message does not match").toHaveText('Discount request submitted successfully');
             await quotationManagerPage.search(enquiryId);
-            await expect(quotationManagerPage.status('Customer - Discount Request'), 'Quotation status does not match').toBeVisible();
+            await expect(quotationManagerPage.status('Customer Discount Request'), 'Quotation status does not match').toBeVisible();
         });
 
         await test.step('Verify Customer - Discount Request status is reflected in Estimation - Request (Normal)', async () => {
             await modules.goToModule({ module: 'Estimation', subModule: 'Request (Normal)' });
             await requestNormalPage.search(enquiryId);
-            await expect(requestNormalPage.status('Customer - Discount Request'), "Quotation status does not match in Estimation - Request (Normal)").toBeVisible();
+            await expect(requestNormalPage.status('Customer Discount Request'), "Quotation status does not match in Estimation - Request (Normal)").toBeVisible();
         });
 
         //----------------------------

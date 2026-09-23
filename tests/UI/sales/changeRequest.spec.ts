@@ -253,16 +253,16 @@ test.describe.serial('Verify Change Request flow of Sales Enquiry (Request Norma
             // await expect(quotationManagerPage.deliveryDate(createEnquiryData.date), "Delivery date is not updated in quotation manager").toContainText(`${createEnquiryData.date}`);
             await quotationManagerPage.sendToCustomerAndValidateAPI(200);
             await expect(quotationManagerPage.successMessage('Quotation sent to customer successfully'), "Quotation sent to customer success message does not match").toContainText('Quotation sent to customer successfully');
-            await quotationManagerPage.setQuotationStatus('Requested Changes');
+            await quotationManagerPage.setQuotationStatus('Request Changes');
             await expect(quotationManagerPage.successMessage('Change request submitted successfully'), "Change request submitted successfully message does not match").toHaveText('Change request submitted successfully');
             await quotationManagerPage.search(enquiryId);
-            await expect(quotationManagerPage.status('Customer - Change Request'), 'Quotation status does not match').toBeVisible();
+            await expect(quotationManagerPage.status('Customer Change Request'), 'Quotation status does not match').toBeVisible();
         });
 
         await test.step('Verify Customer - Discount Request status is reflected in Estimation - Request (Normal)', async () => {
             await modules.goToModule({ module: 'Estimation', subModule: 'Request (Normal)' });
             await requestNormalPage.search(enquiryId);
-            await expect(requestNormalPage.status('Customer - Change Request'), "Quotation status does not match in Estimation - Request (Normal)").toBeVisible();
+            await expect(requestNormalPage.status('Customer Change Request'), "Quotation status does not match in Estimation - Request (Normal)").toBeVisible();
         });
 
         //----------------------------

@@ -127,7 +127,7 @@ export class QuotationManagerPage extends BasePage {
                 await this.enterCustomerApprovalAttachment();
                 await this.validateQuotationApprovalAPI(201);
                 break;
-            case 'Requested Changes':
+            case 'Request Changes':
                 await this.enterChangeRequestDetails();
                 break;
             case 'Discount Request':
