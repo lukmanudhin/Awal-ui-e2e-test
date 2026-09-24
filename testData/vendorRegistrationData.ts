@@ -10,6 +10,7 @@ export type VendorRegistrationData = {
   webAddress: string;
   facebookLink: string;
   instagramLink: string;
+  preferredCurrency: string;
   flatNo: string;
   building: string;
   block: string;
@@ -76,6 +77,7 @@ export const getVendorRegistrationData = (): VendorRegistrationData => ({
   webAddress: 'https://demo.com',
   facebookLink: 'facebook.com',
   instagramLink: 'instagram.com',
+  preferredCurrency: `${RandomDataGenerator.getCurrency()}`,
   flatNo: '2',
   building: 'Building',
   block: 'Block',

@@ -15,6 +15,7 @@ export class GRNEntryPage extends BasePage {
     private readonly failedQuantity: Locator;
     private readonly submitButton: Locator;
     public readonly qcCheckButton: Locator;
+    private readonly selectAllChkBx: Locator;
     constructor(public readonly page: Page) {
         super(page);
         this.createGRNButton = this.page.getByRole('button', { name: 'Create GRN plus icon' });
@@ -30,6 +31,7 @@ export class GRNEntryPage extends BasePage {
         this.failedQuantity = this.page.getByRole('spinbutton', { name: 'Failed Quantity' });
         this.submitButton = this.page.getByRole('button', { name: 'Submit' });
         this.qcCheckButton = this.page.getByRole('button', { name: 'QC check' });
+        this.selectAllChkBx = this.page.locator('#select-all');
     }
     async createGRNEntry(vendorName: string, poNumber: string, currentQty: string, remarks: string, deliveryNote: string, invoiceNumber: string, status?: string) {
         await this.createGRNButton.click();
@@ -48,6 +50,7 @@ export class GRNEntryPage extends BasePage {
         const fileName = 'Test_Document.pdf';
         await this.uploadFile('test_Documents', fileName);
         await this.uploadFile('test_Documents', fileName, 1);
+        await this.selectAllChkBx.check();
         if (status)
             await this.saveAsDraftButton.click();
         else {

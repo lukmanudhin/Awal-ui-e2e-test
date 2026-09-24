@@ -19,7 +19,7 @@ test.describe('Material Indent and Material Issue For Out of Stock Spare Parts W
     let poNumber: string;
     let putAwayDone = false;
 
-    test.beforeEach('Setup', async ({ page, loginPage, homePage, salesEnquiryAPI, createMaterialAPI }) => {
+    test.beforeEach('Setup', async ({ page, loginPage, homePage, salesEnquiryAPI, createMaterialAPI, contractQuoteAPI }) => {
         MIRDetails = getMIRDetails();
         vendorData = getVendorRegistrationData();
         materialIndentRequestId = '';
@@ -35,7 +35,8 @@ test.describe('Material Indent and Material Issue For Out of Stock Spare Parts W
         requestedBy = await salesEnquiryAPI.getLoggedInUserName(accessToken);
         vendorData.companyName = MIRDetails.tempVendorName;
         MIRDetails.requisitionType = 'Spare Parts';
-        const materialPayload = getMaterialPayload('sparePart');
+        const uomId = await contractQuoteAPI.getUomId(accessToken, MIRDetails.uom);
+        const materialPayload = getMaterialPayload('sparePart', uomId);
         createdMaterialId = await createMaterialAPI.createMaterial(accessToken, materialPayload);
         MIRDetails.material = materialPayload.materialName;
         console.log(`Material created: "${materialPayload.materialName}"`);
@@ -257,7 +258,7 @@ test.describe('Material Indent and Material Issue For Out of Stock Spare Parts W
             await expect(putAwayPage.successMessage('Data created successfully'), 'Data created succesfully success message does not match').toHaveText('Data created successfully');
             putAwayDone = true;
 
-            const stockAfterPutAway = await stockViewAPI.getMaterialQuantityAndStatus(accessToken, MIRDetails.material, 'Consumables');
+            const stockAfterPutAway = await stockViewAPI.getMaterialQuantityAndStatus(accessToken, MIRDetails.material, 'SpareParts');
             expect(stockAfterPutAway.currentQuantity, 'Stock quantity mismatch after put away').toBe(Number(MIRDetails.putAwayQuantity));
             expect(stockAfterPutAway.stockStatus, 'Material status does not match after put away').toBe('InStock');
         });
@@ -267,16 +268,16 @@ test.describe('Material Indent and Material Issue For Out of Stock Spare Parts W
             await materialIndentRequestPage.search(materialIndentRequestId);
             await expect(materialIndentRequestPage.status('New Request'), "Status text does not match").toBeVisible();
             await materialIndentRequestPage.clickViewIcon();
-            await materialIndentRequestPage.validateMIRDetails(materialIndentRequestId, MIRDetails.pjoNumber, requestedBy);
+            await materialIndentRequestPage.validateMIRDetails(MIRDetails.requisitionType, requestedBy, 'Spare Parts');
             await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
             await expect(materialIndentRequestPage.status('Partially Available'), "Stock status text does not match").toBeVisible();
-            await materialIndentRequestPage.enterIssueQuantity(MIRDetails.quantity, MIRDetails.putAwayQuantity);
+            await materialIndentRequestPage.enterSparePartsIssueQuantity(MIRDetails.quantity, MIRDetails.putAwayQuantity);
             await materialIndentRequestPage.issueMaterialAndValidateAPI(201);
             await expect(materialIndentRequestPage.successMessage('Material Issue Notes created successfully'), 'Material Issue Notes created successfully success message does not found').toHaveText('Material Issue Notes created successfully');
 
-            const stockAfterIssue = await stockViewAPI.getMaterialQuantityAndStatus(accessToken, MIRDetails.material, 'RawMaterials');
+            const stockAfterIssue = await stockViewAPI.getMaterialQuantityAndStatus(accessToken, MIRDetails.material, 'SpareParts');
             expect(stockAfterIssue.currentQuantity, 'Stock quantity mismatch after material issue').toBe(0);
-            expect(stockAfterIssue.stockStatus, 'Material status does not match after material issue').toBe('OutOfStock');  
+            expect(stockAfterIssue.stockStatus, 'Material status does not match after material issue').toBe('OutOfStock');
         });
     });
 });

@@ -49,7 +49,7 @@ export const getMIRDetails = (): CreateMIRData => {
     priority: `${RandomDataGenerator.generatePriority()}`,
     pjoNumber: '802600615',
     material: 'WIRE - SINGLE STRAND 2 CORE',
-    uom: 'Each',
+    uom: 'Bag',
     quantity: `${requestedQuantity}`,
     remarks: 'Add Material Test Remarks',
     vendor: '',

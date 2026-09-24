@@ -19,7 +19,7 @@ test.describe('Material Indent and Material Issue For Out of Stock Raw Material 
     let poNumber: string;
     let putAwayDone = false;
 
-    test.beforeEach('Setup', async ({ page, loginPage, homePage, salesEnquiryAPI, createMaterialAPI }) => {
+    test.beforeEach('Setup', async ({ page, loginPage, homePage, salesEnquiryAPI, createMaterialAPI, contractQuoteAPI }) => {
         MIRDetails = getMIRDetails();
         vendorData = getVendorRegistrationData();
         materialIndentRequestId = '';
@@ -34,7 +34,8 @@ test.describe('Material Indent and Material Issue For Out of Stock Raw Material 
         vendorData.evaluatorName = await salesEnquiryAPI.getRandomEmployeeName();
         requestedBy = await salesEnquiryAPI.getLoggedInUserName(accessToken);
         vendorData.companyName = MIRDetails.tempVendorName;
-        const materialPayload = getMaterialPayload();
+        const uomId = await contractQuoteAPI.getUomId(accessToken, MIRDetails.uom);
+        const materialPayload = getMaterialPayload('raw', uomId);
         createdMaterialId = await createMaterialAPI.createMaterial(accessToken, materialPayload);
         MIRDetails.material = materialPayload.materialName;
         console.log(`Material created: "${materialPayload.materialName}"`);

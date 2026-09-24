@@ -133,6 +133,7 @@ export class VendorRegistrationPage extends BasePage {
         await this.webAddressTxtBx.fill(vendorData.webAddress);
         await this.facebookLinkTxtBx.fill(vendorData.facebookLink);
         await this.instagramLinkTxtBx.fill(vendorData.instagramLink);
+        await this.selectOptionFromDropdown('Preferred Currency*', vendorData.preferredCurrency);
         await this.flatNoTxtBx.fill(vendorData.flatNo);
         await this.buildingTxtBx.fill(vendorData.building);
         await this.blockTxtBx.fill(vendorData.block);

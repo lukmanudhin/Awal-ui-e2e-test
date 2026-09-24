@@ -212,6 +212,7 @@ test.describe('Material Indent and Material Issue For Out of Stock Raw Material 
         await test.step('Verify vendor quote is rejected', async () => {
             await procurementPage.goToHistory();
             await procurementPage.search(MIRDetails.tempVendorName);
+            // search not functioning
             await expect(procurementPage.status('Rejected'), 'Status does not match').toBeVisible();
         });
     });

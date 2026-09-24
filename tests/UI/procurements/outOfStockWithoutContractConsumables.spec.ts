@@ -19,7 +19,7 @@ test.describe('Material Indent and Material Issue For Out of Stock Consumables W
     let poNumber: string;
     let putAwayDone = false;
 
-    test.beforeEach('Setup', async ({ page, loginPage, homePage, salesEnquiryAPI, createMaterialAPI }) => {
+    test.beforeEach('Setup', async ({ page, loginPage, homePage, salesEnquiryAPI, createMaterialAPI, contractQuoteAPI }) => {
         MIRDetails = getMIRDetails();
         vendorData = getVendorRegistrationData();
         materialIndentRequestId = '';
@@ -35,7 +35,8 @@ test.describe('Material Indent and Material Issue For Out of Stock Consumables W
         requestedBy = await salesEnquiryAPI.getLoggedInUserName(accessToken);
         vendorData.companyName = MIRDetails.tempVendorName;
         MIRDetails.requisitionType = 'Consumables';
-        const materialPayload = getMaterialPayload('consumable');
+        const uomId = await contractQuoteAPI.getUomId(accessToken, MIRDetails.uom);
+        const materialPayload = getMaterialPayload('consumable', uomId);
         createdMaterialId = await createMaterialAPI.createMaterial(accessToken, materialPayload);
         MIRDetails.material = materialPayload.materialName;
         console.log(`Material created: "${materialPayload.materialName}"`);
@@ -260,9 +261,9 @@ test.describe('Material Indent and Material Issue For Out of Stock Consumables W
             await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
             await materialIndentRequestPage.issueMaterialAndValidateAPI(201);
             await expect(materialIndentRequestPage.successMessage('Material Issue Notes created successfully'), 'Material Issue Notes created successfully success message does not found').toHaveText('Material Issue Notes created successfully');
-            const stockAfterIssue = await stockViewAPI.getMaterialQuantityAndStatus(accessToken, MIRDetails.material, 'RawMaterials');
+            const stockAfterIssue = await stockViewAPI.getMaterialQuantityAndStatus(accessToken, MIRDetails.material, 'Consumables');
             expect(stockAfterIssue.currentQuantity, 'Stock quantity mismatch after material issue').toBe(0);
-            expect(stockAfterIssue.stockStatus, 'Material status does not match after material issue').toBe('OutOfStock');  
+            expect(stockAfterIssue.stockStatus, 'Material status does not match after material issue').toBe('OutOfStock');
         });
     });
 });
