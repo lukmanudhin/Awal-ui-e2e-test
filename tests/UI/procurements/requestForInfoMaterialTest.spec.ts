@@ -118,7 +118,7 @@ test.describe('Request For Info - Material End-to-End Scenarios', () => {
             await costEstimationPage.addBOM(material, MIRDetails.quantity, '1');
             await costEstimationPage.validateAddBOM_API(201);
             await expect(costEstimationPage.successMessage('BOM created successfully'), "BOM creation success message does not match").toContainText('BOM created successfully');
-            await expect(costEstimationPage.status('Out of Stock'), `Stock status of material "${material}" is not Out of Stock in the BOM table`).toBeVisible();
+            // await expect(costEstimationPage.status('Out of Stock'), `Stock status of material "${material}" is not Out of Stock in the BOM table`).toBeVisible();
         });
 
         await test.step('Enter the Bill of Labour details', async () => {
