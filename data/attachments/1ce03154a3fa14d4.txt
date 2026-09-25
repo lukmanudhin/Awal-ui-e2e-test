@@ -1,0 +1,2 @@
+Sales order check list approved successfully
+Verified approve sales order check list API with status code: 200

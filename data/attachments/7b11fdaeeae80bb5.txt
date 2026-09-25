@@ -1,0 +1,9 @@
+✓ Customer Name displayed: Milton Legros-Lindgren
+✓ Country displayed: China
+✓ State displayed: Guangdong Province
+✓ City displayed: Guangdong
+✓ Mobile Number displayed: 6628677005
+✓ Email displayed: Dameon.McLaughlin60@gmail.com
+All validation checks passed for view enquiry details
+Quotation approved successfully
+Verified quotation approval API with status code: 200

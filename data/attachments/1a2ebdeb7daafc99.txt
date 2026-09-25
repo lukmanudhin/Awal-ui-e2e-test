@@ -1,0 +1,5 @@
+→ GET https://sales-api-dev.colanapps.in/api/transaction/v1/SalesOrder/getPrepopulateValues
+← GET https://sales-api-dev.colanapps.in/api/transaction/v1/SalesOrder/getPrepopulateValues?quotationExtId=0232e7ad-7571-45b9-aaa8-2562dde1ef42 200 OK (299ms)
+→ POST https://sales-api-dev.colanapps.in/api/transaction/v1/SalesOrder/createSalesOrder
+← POST https://sales-api-dev.colanapps.in/api/transaction/v1/SalesOrder/createSalesOrder 201 Created (827ms)
+Created salesOrderExtId: 632376fe-0483-402d-9fb9-45024bac8f36

@@ -1,0 +1,2 @@
+→ POST https://sales-api-dev.colanapps.in/api/transaction/v1/Quotation/sendToCustomer
+← POST https://sales-api-dev.colanapps.in/api/transaction/v1/Quotation/sendToCustomer 200 OK (327ms)

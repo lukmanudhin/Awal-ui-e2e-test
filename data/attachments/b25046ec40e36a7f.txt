@@ -1,0 +1,2 @@
+→ PUT https://estimation-api-dev.colanapps.in/api/v1/bom/updateConsumableByEstimationDetailId
+← PUT https://estimation-api-dev.colanapps.in/api/v1/bom/updateConsumableByEstimationDetailId 200 OK (346ms)

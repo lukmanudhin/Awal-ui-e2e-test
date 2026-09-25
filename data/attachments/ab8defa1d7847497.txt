@@ -1,0 +1,13 @@
+✓ Customer Name displayed: Santino Homenick
+✓ Country displayed: China
+✓ State displayed: Guangdong Province
+✓ City displayed: Guangdong
+✓ Mobile Number displayed: 3399994942
+✓ Email displayed: Kayla_Grimes@yahoo.com
+All validation checks passed for view enquiry details
+Quotation sent to customer successfully
+Verified send to customer API with status code: 200
+Quotation approved successfully
+Verified quotation approval API with status code: 201
+Advance invoice sent successfully
+Verified send advance invoice API with status code: 201

@@ -1,0 +1,57 @@
+→ POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser
+← POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser 200 OK (299ms)
+→ GET https://procurement-api-dev.colanapps.in/api/v1/stockView/getAllStockView?PageNumber=1&PageSize=10&subStore=RawMaterials&materialStatus=InStock
+← GET https://procurement-api-dev.colanapps.in/api/v1/stockView/getAllStockView?PageNumber=1&PageSize=10&subStore=RawMaterials&materialStatus=InStock 200 OK (959ms)
+{
+  result: {
+    data: [
+      [Object], [Object],
+      [Object], [Object],
+      [Object], [Object],
+      [Object], [Object],
+      [Object], [Object]
+    ],
+    totalRecords: 69,
+    pageNumber: 1,
+    pageSize: 10,
+    pageInfo: 'Showing 1 to 10 of 69 entries'
+  },
+  statusCode: 200,
+  success: true,
+  message: 'Data fetched successfully',
+  errors: null
+}
+====================================
+Highest Stock Material: CAST ACRYLIC SHEET 8'x4'x4MM M-402
+Quantity Available: 35,000
+====================================
+→ POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser
+← POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser 200 OK (298ms)
+→ GET https://core-api-dev.colanapps.in/api/v1/employeeMaster/getAllEmployeeSearch?search=
+← GET https://core-api-dev.colanapps.in/api/v1/employeeMaster/getAllEmployeeSearch?search= 200 OK (1825ms)
+Site Visitor (fetched dynamically via API): EMP00748 - Shameem
+Login successfull
+Lead created successfully
+Verified Create Lead API with status code: 201
+Create Trading successfully
+Verified Create Trading API with status code: 201
+Create Trading Order successfully
+Verified Create Trading Order API with status code: 200
+Request Approval successfully
+Verified Request Approval API with status code: 200
+Request Approval successfully
+Verified Request Approval API with status code: 200
+Generate Invoice successfully
+Verified Generate Invoice API with status code: 200
+→ POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser
+← POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser 200 OK (305ms)
+→ DELETE https://sales-api-dev.colanapps.in/api/transaction/v1/quickLeads/deleteLeadById/93d80a2b-b199-4f9b-b039-6bd8c37fbb46
+← DELETE https://sales-api-dev.colanapps.in/api/transaction/v1/quickLeads/deleteLeadById/93d80a2b-b199-4f9b-b039-6bd8c37fbb46 200 OK (289ms)
+----------------------Delete Lead API Response---------------------
+API Response: {
+  result: true,
+  statusCode: 200,
+  success: true,
+  message: 'Data deleted successfully'
+}
+Lead for Grady Nienow deleted successfully

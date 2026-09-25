@@ -1,0 +1,3 @@
+→ POST https://sales-api-dev.colanapps.in/api/transaction/v1/Quotation/GenerateQuotation
+← POST https://sales-api-dev.colanapps.in/api/transaction/v1/Quotation/GenerateQuotation 201 Created (800ms)
+Created quotationExtId: 0232e7ad-7571-45b9-aaa8-2562dde1ef42

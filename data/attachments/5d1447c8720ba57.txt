@@ -1,0 +1,186 @@
+Login successfull
+Verified sales enquiry creation API with status code: 201
+Sales enquiry created successfully for customer: Kristina Legros
+Acrylic product created successfully
+Verified acrylic product creation API with status code: 201
+Request Artwork API Verified with status code: 201
+Request AutoCAD API Verified with status code: 201
+→ POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser
+← POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser 200 OK (877ms)
+→ GET https://core-api-dev.colanapps.in/api/v1/employeeMaster/getAllEmployeeSearch?search=
+← GET https://core-api-dev.colanapps.in/api/v1/employeeMaster/getAllEmployeeSearch?search= 200 OK (2079ms)
+Site Visitor (fetched dynamically via API): EMP00333 - dhana d
+Request Site Visit API Verified with status code: 201
+Request Procurement API Verified with status code: 201
+Request Estimation API Verified with status code: 201
+Enquiry found in Estimation - Request (Normal)
+BOQ added successfully
+Verified BOQ API with status code: 201
+Consumables added successfully
+Verified Consumables API with status code: 200
+BOM added successfully
+Verified BOM API with status code: 201
+Labour and Costing updated successfully
+Verified Labour and Costing API with status code: 200
+Labour and Costing updated successfully
+Verified Labour and Costing API with status code: 200
+Labour and Costing updated successfully
+Verified Labour and Costing API with status code: 200
+Labour and Costing updated successfully
+Verified Labour and Costing API with status code: 200
+Summary created successfully
+Verified Summary API with status code: 201
+Packing created successfully
+Verified Packing API with status code: 201
+Consumables added successfully
+Verified Consumables API with status code: 200
+BOM added successfully
+Verified BOM API with status code: 201
+Packing Labour added successfully
+Verified Packing Labour API with status code: 201
+Summary created successfully
+Verified Summary API with status code: 201
+Cost Distribution created successfully
+Verified Cost Distribution API with status code: 201
+Summary calculated successfully
+Verified Calculate Summary API with status code: 200
+Price Indication Slip saved successfully
+Verified Save Price Indication Slip API with status code: 200
+Submitted for approval successfully
+Verified Submit for approval API with status code: 200
+Cost Estimation viewed successfully
+Verified View Cost Estimation API with status code: 200
+Cost Estimation approved successfully
+Verified Approve Cost Estimation API with status code: 200
+Cost Estimation submitted to sales successfully
+Verified Submit to Sales API with status code: 200
+Generate Quotation API Verified with status code: 201
+Quotation submitted for approval successfully
+Verified Submit Quotation for approval API with status code: 200
+Quotation approved successfully
+Verified quotation approval API with status code: 200
+Quotation sent to customer successfully
+Verified send to customer API with status code: 200
+✓ Customer Name displayed: EQ10690
+✓ Customer Name displayed: Kristina Legros
+✓ Project Name displayed: Sales Enquiry Test
+✓ Country displayed: China
+✓ State displayed: Guangdong Province
+✓ City displayed: Guangdong
+✓ Payment Terms displayed: 100 % Advance Full Payment
+✓ Mobile Number displayed: 5673251630
+✓ Email displayed: Suzanne97@hotmail.com
+All validation checks passed for view cost estimation details
+BOQ added successfully
+Verified BOQ API with status code: 201
+Consumables added successfully
+Verified Consumables API with status code: 200
+BOM added successfully
+Verified BOM API with status code: 201
+Labour and Costing updated successfully
+Verified Labour and Costing API with status code: 200
+Labour and Costing updated successfully
+Verified Labour and Costing API with status code: 200
+Labour and Costing updated successfully
+Verified Labour and Costing API with status code: 200
+Labour and Costing updated successfully
+Verified Labour and Costing API with status code: 200
+Summary created successfully
+Verified Summary API with status code: 201
+Cost Distribution created successfully
+Verified Cost Distribution API with status code: 201
+Summary calculated successfully
+Verified Calculate Summary API with status code: 200
+Price Indication Slip saved successfully
+Verified Save Price Indication Slip API with status code: 200
+Submitted for approval successfully
+Verified Submit for approval API with status code: 200
+Cost Estimation viewed successfully
+Verified View Cost Estimation API with status code: 200
+Cost Estimation approved successfully
+Verified Approve Cost Estimation API with status code: 200
+Cost Estimation submitted to sales successfully
+Verified Submit to Sales API with status code: 200
+✓ Customer Name displayed: Kristina Legros
+✓ Project Name displayed: Sales Enquiry Test
+✓ Country displayed: China
+✓ State displayed: Guangdong Province
+✓ City displayed: Guangdong
+✓ Mobile Number displayed: 5673251630
+✓ Email displayed: Suzanne97@hotmail.com
+All validation checks passed for view enquiry details
+✓ Customer Name displayed: Kristina Legros
+✓ Project Name displayed: Sales Enquiry Test
+✓ Country displayed: China
+✓ State displayed: Guangdong Province
+✓ City displayed: Guangdong
+✓ Mobile Number displayed: 5673251630
+✓ Email displayed: Suzanne97@hotmail.com
+All validation checks passed for view enquiry details
+Generate Quotation API Verified with status code: 201
+Quotation submitted for approval successfully
+Verified Submit Quotation for approval API with status code: 200
+✓ Customer Name displayed: Kristina Legros
+✓ Country displayed: China
+✓ State displayed: Guangdong Province
+✓ City displayed: Guangdong
+✓ Mobile Number displayed: 5673251630
+✓ Email displayed: Suzanne97@hotmail.com
+All validation checks passed for view enquiry details
+Quotation approved successfully
+Verified quotation approval API with status code: 200
+✓ Customer Name displayed: Kristina Legros
+✓ Country displayed: China
+✓ State displayed: Guangdong Province
+✓ City displayed: Guangdong
+✓ Mobile Number displayed: 5673251630
+✓ Email displayed: Suzanne97@hotmail.com
+All validation checks passed for view enquiry details
+Quotation sent to customer successfully
+Verified send to customer API with status code: 200
+Quotation approved successfully
+Verified quotation approval API with status code: 201
+Advance invoice sent successfully
+Verified send advance invoice API with status code: 201
+✓ Customer Name displayed in Invoice Request: Kristina Legros
+✓ Road displayed in Invoice Request: Delores Lock
+Invoice created successfully
+✓ Customer Name displayed in Invoice Request: Kristina Legros
+✓ Road displayed in Invoice Request: Delores Lock
+✓ Customer Name displayed in Invoice Request: Kristina Legros
+✓ Road displayed in Invoice Request: Delores Lock
+Invoice request approved successfully
+Invoice request acknowledged successfully
+✓ Customer Name displayed: Kristina Legros
+✓ Country displayed: China
+✓ State displayed: Guangdong Province
+✓ City displayed: Guangdong
+✓ Mobile Number displayed: 5673251630
+✓ Email displayed: Suzanne97@hotmail.com
+All validation checks passed for view enquiry details
+View advance invoice API validated successfully
+Check list submitted successfully
+Verified submit check list API with status code: 201
+Sales order check list approved successfully
+Verified approve sales order check list API with status code: 200
+✓ Customer Name displayed in Sales Order Manager: Kristina Legros
+✓ Project Name displayed in Sales Order Manager: Sales Enquiry Test
+✓ Email displayed in Sales Order Manager: Suzanne97@hotmail.com
+Sales order sent for approval successfully
+Verified send sales order for approval API with status code: 200
+✓ Customer Name displayed in Sales Order Manager: Kristina Legros
+✓ Project Name displayed in Sales Order Manager: Sales Enquiry Test
+✓ Email displayed in Sales Order Manager: Suzanne97@hotmail.com
+Sales order approved successfully
+Verified approve sales order API with status code: 200
+→ POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser
+← POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser 200 OK (1261ms)
+→ DELETE https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiry/delete/6fd2b575-5907-410b-9779-6c43f6ebb297
+← DELETE https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiry/delete/6fd2b575-5907-410b-9779-6c43f6ebb297 200 OK (999ms)
+----------------------Delete Sales Enquiry API Response---------------------
+API Response: {
+  result: true,
+  statusCode: 200,
+  success: true,
+  message: 'Data deleted successfully'
+}

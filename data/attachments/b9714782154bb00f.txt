@@ -1,0 +1,21 @@
+Login successfull
+Verified sales enquiry creation API with status code: 201
+Sales enquiry created successfully for customer: Micheal Rau
+Acrylic product created successfully
+Verified acrylic product creation API with status code: 201
+Verified Add to Pipeline API with status code: 201
+Verified Pipeline notes API with status code: 200
+Verified Pipeline meeting API with status code: 200
+Verified Pipeline email API with status code: 200
+Verified Pipeline file upload API with status code: 200
+→ POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser
+← POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser 200 OK (957ms)
+→ DELETE https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiry/delete/21f91f9a-05b6-4087-b746-77b29fdfc954
+← DELETE https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiry/delete/21f91f9a-05b6-4087-b746-77b29fdfc954 200 OK (296ms)
+----------------------Delete Sales Enquiry API Response---------------------
+API Response: {
+  result: true,
+  statusCode: 200,
+  success: true,
+  message: 'Data deleted successfully'
+}

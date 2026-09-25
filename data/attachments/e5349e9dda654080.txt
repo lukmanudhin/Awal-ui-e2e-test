@@ -1,0 +1,26 @@
+Login successfull
+Verified sales enquiry creation API with status code: 201
+Sales enquiry created successfully for customer: Anderson Franecki
+Acrylic product created successfully
+Verified acrylic product creation API with status code: 201
+Sales enquiry details fetched successfully
+Verified view sales enquiry API with status code: 200
+✓ Customer Name displayed: Anderson Franecki
+✓ Project Name displayed: Sales Enquiry Test
+✓ Country displayed: China
+✓ State displayed: Guangdong Province
+✓ City displayed: Guangdong
+✓ Mobile Number displayed: 2459391003
+✓ Email displayed: Edmund_Ullrich14@gmail.com
+All validation checks passed for view enquiry details
+→ POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser
+← POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser 200 OK (306ms)
+→ DELETE https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiry/delete/3ac2813f-1d18-493b-85ec-78de66bc24ed
+← DELETE https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiry/delete/3ac2813f-1d18-493b-85ec-78de66bc24ed 200 OK (318ms)
+----------------------Delete Sales Enquiry API Response---------------------
+API Response: {
+  result: true,
+  statusCode: 200,
+  success: true,
+  message: 'Data deleted successfully'
+}

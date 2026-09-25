@@ -1,0 +1,5 @@
+✓ Customer Name displayed in Sales Order Manager: Santino Homenick
+✓ Project Name displayed in Sales Order Manager: Sales Enquiry Test
+✓ Email displayed in Sales Order Manager: Kayla_Grimes@yahoo.com
+Sales order sent for approval successfully
+Verified send sales order for approval API with status code: 200

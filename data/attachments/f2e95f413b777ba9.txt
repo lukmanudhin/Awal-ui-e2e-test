@@ -1,0 +1,4 @@
+Verified sales enquiry creation API with status code: 201
+Sales enquiry created successfully for customer: Milton Legros-Lindgren
+Acrylic product created successfully
+Verified acrylic product creation API with status code: 201

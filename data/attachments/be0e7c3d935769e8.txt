@@ -1,0 +1,2 @@
+→ POST https://finance-api-dev.colanapps.in/api/invoiceRegister/updateManagerApproval
+← POST https://finance-api-dev.colanapps.in/api/invoiceRegister/updateManagerApproval 200 OK (330ms)

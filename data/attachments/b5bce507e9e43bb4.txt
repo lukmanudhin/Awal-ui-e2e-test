@@ -1,0 +1,16 @@
+✓ Customer Name displayed: EQ10707
+✓ Customer Name displayed: Sue Rice
+✓ Project Name displayed: Sales Enquiry Test
+✓ Country displayed: China
+✓ State displayed: Guangdong Province
+✓ City displayed: Guangdong
+✓ Payment Terms displayed: 100 % Advance Full Payment
+✓ Mobile Number displayed: 2412908147
+✓ Email displayed: Jenna41@yahoo.com
+All validation checks passed for view cost estimation details
+Cost Estimation viewed successfully
+Verified View Cost Estimation API with status code: 200
+Cost Estimation approved successfully
+Verified Approve Cost Estimation API with status code: 200
+Cost Estimation submitted to sales successfully
+Verified Submit to Sales API with status code: 200

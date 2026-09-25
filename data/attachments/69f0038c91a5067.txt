@@ -1,0 +1,8 @@
+Login successfull
+Verified sales enquiry creation API with status code: 201
+Sales enquiry created successfully for customer: Edgar Kertzmann
+Acrylic product created successfully
+Verified acrylic product creation API with status code: 201
+Sales enquiry deleted successfully
+Verified sales enquiry deletion API with status code: 200
+Sales enquiry for Edgar Kertzmann deleted successfully

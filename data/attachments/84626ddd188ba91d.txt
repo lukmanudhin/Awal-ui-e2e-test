@@ -1,0 +1,10 @@
+✓ Customer Name displayed: EQ10708
+✓ Customer Name displayed: Milton Legros-Lindgren
+✓ Project Name displayed: Sales Enquiry Test
+✓ Country displayed: China
+✓ State displayed: Guangdong Province
+✓ City displayed: Guangdong
+✓ Payment Terms displayed: 100 % Advance Full Payment
+✓ Mobile Number displayed: 6628677005
+✓ Email displayed: Dameon.McLaughlin60@gmail.com
+All validation checks passed for view cost estimation details

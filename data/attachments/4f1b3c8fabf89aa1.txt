@@ -1,0 +1,10 @@
+✓ Customer Name displayed: EQ10705
+✓ Customer Name displayed: EMP164-Praveeen Kumar
+✓ Project Name displayed: Sales Enquiry Test
+✓ Country displayed: China
+✓ State displayed: Guangdong Province
+✓ City displayed: Guangdong
+✓ Payment Terms displayed: 100 % Advance Full Payment
+✓ Mobile Number displayed: 9718109823
+✓ Email displayed: Eliezer81@yahoo.com
+All validation checks passed for view cost estimation details

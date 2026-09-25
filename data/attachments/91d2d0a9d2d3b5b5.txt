@@ -1,0 +1,10 @@
+✓ Customer Name displayed: EQ10706
+✓ Customer Name displayed: Santino Homenick
+✓ Project Name displayed: Sales Enquiry Test
+✓ Country displayed: China
+✓ State displayed: Guangdong Province
+✓ City displayed: Guangdong
+✓ Payment Terms displayed: 100 % Advance Full Payment
+✓ Mobile Number displayed: 3399994942
+✓ Email displayed: Kayla_Grimes@yahoo.com
+All validation checks passed for view cost estimation details

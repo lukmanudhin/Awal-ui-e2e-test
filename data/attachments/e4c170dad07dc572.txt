@@ -1,0 +1,27 @@
+✓ Customer Name displayed: EMP164-Praveeen Kumar
+✓ Project Name displayed: Sales Enquiry Test
+✓ Country displayed: China
+✓ State displayed: Guangdong Province
+✓ City displayed: Guangdong
+✓ Mobile Number displayed: 9718109823
+✓ Email displayed: Eliezer81@yahoo.com
+All validation checks passed for view enquiry details
+✓ Customer Name displayed: EMP164-Praveeen Kumar
+✓ Project Name displayed: Sales Enquiry Test
+✓ Country displayed: China
+✓ State displayed: Guangdong Province
+✓ City displayed: Guangdong
+✓ Mobile Number displayed: 9718109823
+✓ Email displayed: Eliezer81@yahoo.com
+All validation checks passed for view enquiry details
+✓ Customer Name displayed: EMP164-Praveeen Kumar
+✓ Project Name displayed: Sales Enquiry Test
+✓ Country displayed: China
+✓ State displayed: Guangdong Province
+✓ City displayed: Guangdong
+✓ Mobile Number displayed: 9718109823
+✓ Email displayed: Eliezer81@yahoo.com
+All validation checks passed for view enquiry details
+Generate Quotation API Verified with status code: 201
+Quotation submitted for approval successfully
+Verified Submit Quotation for approval API with status code: 200
