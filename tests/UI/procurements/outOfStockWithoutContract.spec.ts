@@ -52,11 +52,11 @@ test.describe('Material Indent and Material Issue For Out of Stock Raw Material 
         if (testInfo.status !== 'passed' && putAwayDone) {
             await materialIndentRequestAPI.issueAvailableMaterialForMIR(accessToken, materialIndentRequestId);
         }
+        await materialIndentRequestAPI.deletePOIfCreated(accessToken, poNumber);
         if (createdMaterialId) {
             await createMaterialAPI.deleteMaterial(accessToken, createdMaterialId);
         }
         await createMaterialAPI.deleteVendorIfCreated(accessToken, vendorExtId);
-        await materialIndentRequestAPI.deletePOIfCreated(accessToken, poNumber);
         await materialIndentRequestAPI.deletePRIfCreated(accessToken, prId, prExtId);
         await materialIndentRequestAPI.deleteMIRIfCreated(accessToken, materialIndentRequestExtId);
         await page.close();

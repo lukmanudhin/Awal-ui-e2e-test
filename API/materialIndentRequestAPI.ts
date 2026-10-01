@@ -92,32 +92,47 @@ export class MaterialIndentRequestAPI {
         }
     }
 
-    async deletePOIfCreated(accessToken: string, poNumber: string) {
-        if (!poNumber) return;
+    async getPoExtId(accessToken: string, poNumber: string) {
+        const response = await this.request.get(`${PROCUREMENT_API_BASE}/poApproval/getAllPOApproval?pageNumber=1&pageSize=10&search=${poNumber}&filter=`, {
+            headers: {
+                Accept: 'application/json',
+                Authorization: `Bearer ${accessToken}`
+            },
+        });
 
-        try {
-            const response = await this.request.get(`${PROCUREMENT_API_BASE}/purchaseOrders/getAllPO?pageNumber=1&pageSize=10&search=${encodeURIComponent(poNumber)}&filter=`, {
-                headers: this.headers(accessToken),
-            });
-            if (response.status() !== 200) {
-                console.log(`Cleanup: failed to search purchase order ${poNumber}, status code ${response.status()}`);
-                return;
-            }
-
-            const body = await response.json();
-            const purchaseOrder = (body?.result?.data ?? []).find((record: any) => record.poNumber === poNumber);
-            const poExtId = purchaseOrder?.extId;
-
-            if (!poExtId) {
-                console.log(`Cleanup: purchase order ${poNumber} was not found, nothing to delete`);
-                return;
-            }
-
-            console.log(`Cleanup: purchase order ${poNumber} resolved to ${poExtId}, but procurement swagger exposes no PO delete endpoint`);
-        } catch (error) {
-            console.log(`Cleanup: failed to clean up purchase order ${poNumber} -`, error);
+        if (!response.ok()) {
+            throw new Error(`Get PO ExtId API failed: ${response.status()} ${await response.text()}`);
         }
+
+        const body = await response.json();
+        const po = body.result.data.find(
+            (item: { poNumber: string; extId: string }) => item.poNumber === poNumber,
+        );
+
+        if (!po) {
+            throw new Error(`PO not found: ${poNumber}`);
+        }
+
+        return po.extId;
     }
+
+    async deletePOIfCreated(accessToken: string, poNumber: string) {
+        const poExtId = await this.getPoExtId(accessToken, poNumber);
+        const deleteResponse = await this.request.delete(`${PROCUREMENT_API_BASE}/purchaseOrders/deletePO?extId=${poExtId}`, {
+            headers: {
+                ...this.headers(accessToken),
+                accept: '*/*',
+            },
+        });
+        if (deleteResponse.status() === 200) {
+            console.log(`Cleanup: deleted purchase order ${poNumber} (${poExtId}), status code ${deleteResponse.status()}`);
+            return;
+        }
+
+        const deleteBody = await deleteResponse.text();
+        console.log(`Cleanup: failed to delete purchase order ${poNumber} (${poExtId}), status code ${deleteResponse.status()}, body ${deleteBody.slice(0, 500)}`);
+    }
+
 
     async issueAvailableMaterialForMIR(accessToken: string, mirNumber: string) {
         if (!mirNumber) return;
