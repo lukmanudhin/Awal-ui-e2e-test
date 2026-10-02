@@ -1,0 +1,6 @@
+Consumables added successfully
+Verified Consumables API with status code: 200
+BOM added successfully
+Verified BOM API with status code: 201
+BOL added successfully
+Verified Add BOL API with status code: 201

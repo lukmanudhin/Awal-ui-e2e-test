@@ -1,0 +1,9 @@
+✓ Customer Name displayed: Jordan Gibson
+✓ Country displayed: China
+✓ State displayed: Guangdong Province
+✓ City displayed: Guangdong
+✓ Mobile Number displayed: 5368745484
+✓ Email displayed: Sam.Luettgen@yahoo.com
+All validation checks passed for view enquiry details
+Quotation approved successfully
+Verified quotation approval API with status code: 200

@@ -1,0 +1,15 @@
+✓ Customer Name displayed: Jordan Gibson
+✓ Project Name displayed: Sales Enquiry Test
+✓ Country displayed: China
+✓ State displayed: Guangdong Province
+✓ City displayed: Guangdong
+✓ Mobile Number displayed: 5368745484
+✓ Email displayed: Sam.Luettgen@yahoo.com
+All validation checks passed for view enquiry details
+----------------------Delete Sales Enquiry API Response---------------------
+API Response: {
+  result: true,
+  statusCode: 200,
+  success: true,
+  message: 'Data deleted successfully'
+}

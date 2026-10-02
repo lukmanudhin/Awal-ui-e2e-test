@@ -1,0 +1,4 @@
+→ PUT https://sales-api-dev.colanapps.in/api/transaction/v1/SalesOrder/updateSalesOrderStatus
+← PUT https://sales-api-dev.colanapps.in/api/transaction/v1/SalesOrder/updateSalesOrderStatus 200 OK (393ms)
+→ DELETE https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiry/delete/bd1c443b-fc82-4e67-99aa-b2a1f7cbb4fc
+← DELETE https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiry/delete/bd1c443b-fc82-4e67-99aa-b2a1f7cbb4fc 200 OK (311ms)

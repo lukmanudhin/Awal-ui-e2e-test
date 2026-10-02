@@ -1,0 +1,6 @@
+Packing created successfully
+Verified Packing API with status code: 201
+Consumables added successfully
+Verified Consumables API with status code: 200
+BOM added successfully
+Verified BOM API with status code: 201

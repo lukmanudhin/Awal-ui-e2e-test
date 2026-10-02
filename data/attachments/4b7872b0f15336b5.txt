@@ -1,0 +1,7 @@
+----------------------Delete Sales Enquiry API Response---------------------
+API Response: {
+  result: true,
+  statusCode: 200,
+  success: true,
+  message: 'Data deleted successfully'
+}

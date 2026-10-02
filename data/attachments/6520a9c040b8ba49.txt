@@ -1,0 +1,20 @@
+Login successfull
+Verified sales enquiry creation API with status code: 201
+Sales enquiry created successfully for customer: Clint Leuschke
+Embroidery and Tailoring created successfully
+Verified embroidery creation API with status code: 201
+ATM products created successfully
+Verified ATM products API with status code: 201
+Acrylic product created successfully
+Verified acrylic product creation API with status code: 201
+→ POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser
+← POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser 200 OK (906ms)
+→ DELETE https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiry/delete/45569f04-a4e0-4122-b88b-95763a8bd45f
+← DELETE https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiry/delete/45569f04-a4e0-4122-b88b-95763a8bd45f 200 OK (904ms)
+----------------------Delete Sales Enquiry API Response---------------------
+API Response: {
+  result: true,
+  statusCode: 200,
+  success: true,
+  message: 'Data deleted successfully'
+}

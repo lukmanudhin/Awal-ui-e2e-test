@@ -1,0 +1,10 @@
+✓ Customer Name displayed: EQ11042
+✓ Customer Name displayed: Jordan Gibson
+✓ Project Name displayed: Sales Enquiry Test
+✓ Country displayed: China
+✓ State displayed: Guangdong Province
+✓ City displayed: Guangdong
+✓ Payment Terms displayed: 100 % Advance Full Payment
+✓ Mobile Number displayed: 5368745484
+✓ Email displayed: Sam.Luettgen@yahoo.com
+All validation checks passed for view cost estimation details

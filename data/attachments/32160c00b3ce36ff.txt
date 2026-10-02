@@ -1,0 +1,3 @@
+→ GET https://sales-api-dev.colanapps.in/api/transaction/v1/ppjo/getPpjoByReferenceId
+← GET https://sales-api-dev.colanapps.in/api/transaction/v1/ppjo/getPpjoByReferenceId?referenceId=bd1c443b-fc82-4e67-99aa-b2a1f7cbb4fc&referenceType=SalesEnquiry 200 OK (325ms)
+Resolved ppjoId: 8048 ppjoNumber: 112606494 salesEnquiryId: 11021

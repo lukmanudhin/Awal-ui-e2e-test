@@ -1,0 +1,19 @@
+✓ Customer Name displayed: Jordan Gibson
+✓ Project Name displayed: Sales Enquiry Test
+✓ Country displayed: China
+✓ State displayed: Guangdong Province
+✓ City displayed: Guangdong
+✓ Mobile Number displayed: 5368745484
+✓ Email displayed: Sam.Luettgen@yahoo.com
+All validation checks passed for view enquiry details
+✓ Customer Name displayed: Jordan Gibson
+✓ Project Name displayed: Sales Enquiry Test
+✓ Country displayed: China
+✓ State displayed: Guangdong Province
+✓ City displayed: Guangdong
+✓ Mobile Number displayed: 5368745484
+✓ Email displayed: Sam.Luettgen@yahoo.com
+All validation checks passed for view enquiry details
+Generate Quotation API Verified with status code: 201
+Quotation submitted for approval successfully
+Verified Submit Quotation for approval API with status code: 200

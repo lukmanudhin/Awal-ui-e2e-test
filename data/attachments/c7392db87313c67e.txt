@@ -1,0 +1,9 @@
+✓ Customer Name displayed: Tom Thiel
+✓ Country displayed: China
+✓ State displayed: Guangdong Province
+✓ City displayed: Guangdong
+✓ Mobile Number displayed: 4777977162
+✓ Email displayed: Karlee64@hotmail.com
+All validation checks passed for view enquiry details
+Quotation approved successfully
+Verified quotation approval API with status code: 200
