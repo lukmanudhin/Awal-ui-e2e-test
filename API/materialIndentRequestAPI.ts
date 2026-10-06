@@ -93,44 +93,58 @@ export class MaterialIndentRequestAPI {
     }
 
     async getPoExtId(accessToken: string, poNumber: string) {
-        const response = await this.request.get(`${PROCUREMENT_API_BASE}/poApproval/getAllPOApproval?pageNumber=1&pageSize=10&search=${poNumber}&filter=`, {
-            headers: {
-                Accept: 'application/json',
-                Authorization: `Bearer ${accessToken}`
-            },
-        });
+        if (!poNumber?.trim()) return '';
 
-        if (!response.ok()) {
-            throw new Error(`Get PO ExtId API failed: ${response.status()} ${await response.text()}`);
+        // Pending orders stay on the approval list. After approval they move to getAllPO.
+        const listEndpoints = [
+            `${PROCUREMENT_API_BASE}/purchaseOrders/getAllPO?pageNumber=1&pageSize=10&search=${encodeURIComponent(poNumber)}&filter=`,
+            `${PROCUREMENT_API_BASE}/poApproval/getAllPOApproval?pageNumber=1&pageSize=10&search=${encodeURIComponent(poNumber)}&filter=`,
+        ];
+
+        for (const endpoint of listEndpoints) {
+            const response = await this.request.get(endpoint, {
+                headers: this.headers(accessToken),
+            });
+            if (!response.ok()) continue;
+
+            const body = await response.json();
+            const records = body?.result?.data ?? [];
+            const po = (Array.isArray(records) ? records : []).find(
+                (item: { poNumber: string; extId: string }) => item.poNumber === poNumber,
+            );
+            if (po?.extId) return po.extId as string;
         }
 
-        const body = await response.json();
-        const po = body.result.data.find(
-            (item: { poNumber: string; extId: string }) => item.poNumber === poNumber,
-        );
-
-        if (!po) {
-            throw new Error(`PO not found: ${poNumber}`);
-        }
-
-        return po.extId;
+        return '';
     }
 
     async deletePOIfCreated(accessToken: string, poNumber: string) {
-        const poExtId = await this.getPoExtId(accessToken, poNumber);
-        const deleteResponse = await this.request.delete(`${PROCUREMENT_API_BASE}/purchaseOrders/deletePO?extId=${poExtId}`, {
-            headers: {
-                ...this.headers(accessToken),
-                accept: '*/*',
-            },
-        });
-        if (deleteResponse.status() === 200) {
-            console.log(`Cleanup: deleted purchase order ${poNumber} (${poExtId}), status code ${deleteResponse.status()}`);
-            return;
-        }
+        const normalizedPoNumber = poNumber?.trim();
+        if (!normalizedPoNumber) return;
 
-        const deleteBody = await deleteResponse.text();
-        console.log(`Cleanup: failed to delete purchase order ${poNumber} (${poExtId}), status code ${deleteResponse.status()}, body ${deleteBody.slice(0, 500)}`);
+        try {
+            const poExtId = await this.getPoExtId(accessToken, normalizedPoNumber);
+            if (!poExtId) {
+                console.log(`Cleanup: purchase order ${normalizedPoNumber} was not found, nothing to delete`);
+                return;
+            }
+
+            const deleteResponse = await this.request.delete(`${PROCUREMENT_API_BASE}/purchaseOrders/deletePO?extId=${poExtId}`, {
+                headers: {
+                    ...this.headers(accessToken),
+                    accept: '*/*',
+                },
+            });
+            if (deleteResponse.status() === 200) {
+                console.log(`Cleanup: deleted purchase order ${normalizedPoNumber} (${poExtId}), status code ${deleteResponse.status()}`);
+                return;
+            }
+
+            const deleteBody = await deleteResponse.text();
+            console.log(`Cleanup: failed to delete purchase order ${normalizedPoNumber} (${poExtId}), status code ${deleteResponse.status()}, body ${deleteBody.slice(0, 500)}`);
+        } catch (error) {
+            console.log(`Cleanup: failed to clean up purchase order ${normalizedPoNumber} -`, error);
+        }
     }
 
 
