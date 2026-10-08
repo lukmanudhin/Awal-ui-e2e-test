@@ -35,6 +35,7 @@ import { SalesOrderAPI } from "../API/salesOrderAPI";
 import { MaterialIndentRequestAPI } from "../API/materialIndentRequestAPI";
 import { ContractQuoteAPI } from "../API/contractQuoteAPI";
 import { ApiLogger } from "../utils/apiLogger";
+import { CustomerComplaintPage } from "../pages/customerComplaintPage";
 
 type baseFixtures = {
   loginPage: LoginPage;
@@ -72,6 +73,7 @@ type baseFixtures = {
   salesOrderAPI: SalesOrderAPI;
   materialIndentRequestAPI: MaterialIndentRequestAPI;
   contractQuoteAPI: ContractQuoteAPI;
+  customerComplaintPage: CustomerComplaintPage;
 };
 
 export const test = base.extend<baseFixtures>({
@@ -182,6 +184,9 @@ export const test = base.extend<baseFixtures>({
   },
   contractQuoteAPI: async ({ request }, use) => {
     await use(new ContractQuoteAPI(request));
+  },
+  customerComplaintPage: async ({ page }, use) => {
+    await use(new CustomerComplaintPage(page));
   },
 });
 
