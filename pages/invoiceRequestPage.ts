@@ -71,6 +71,10 @@ export class InvoiceRequestPage extends BasePage {
         await this.selectDate(date + 2, 0);
     }
     @step()
+    async selectNetDueDate(date: number) {
+        await this.selectDate(date + 3, 1);
+    }
+    @step()
     async createInvoiceAndValidateAPI(statusCode: number) {
         const responsePromise = this.page.waitForResponse('**/InvoiceRequest/Create');
         await this.clickCreateInvoiceBtn();

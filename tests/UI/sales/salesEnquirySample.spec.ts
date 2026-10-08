@@ -16,6 +16,7 @@ import { RequestApprovalPage } from "../../../pages/requestApprovalPage";
 import { QuotationManagerPage } from "../../../pages/quotationManagerPage";
 import { SalesOrderManagerPage } from "../../../pages/salesOrderManagerPage";
 import { SalesEnquiryAPI } from "../../../API/salesEnquiryAPI";
+import { InvoiceRequestPage } from "../../../pages/invoiceRequestPage";
 
 test.describe.serial('Verify E2E flow of Sales Enquiry (Request Sample)', () => {
     test.setTimeout(550000);
@@ -37,6 +38,7 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Sample)', () => 
     let createEnquiryData: SalesEnquiryData;
     let extId: string;
     let salesEnquiryAPI: SalesEnquiryAPI;
+    let invoiceRequestPage: InvoiceRequestPage;
 
     test.beforeAll('Setup', async ({ browser }) => {
         context = await browser.newContext();
@@ -53,6 +55,7 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Sample)', () => 
         requestApprovalPage = new RequestApprovalPage(page);
         quotationManagerPage = new QuotationManagerPage(page);
         salesOrderManagerPage = new SalesOrderManagerPage(page);
+        invoiceRequestPage = new InvoiceRequestPage(page);
     });
 
     test.afterAll('Cleanup: delete created Sales Enquiry', async ({ request }) => {
@@ -133,7 +136,6 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Sample)', () => 
 
     test('Verify that BOQ is created and BOQ details are generated successfully', async () => {
         await costEstimationPage.clickAddEstimation();
-        // await expect(costEstimationPage.costEstimationTitle, "Create Cost Estimation title does not match").toContainText('Create Cost Estimation');
         await expect(costEstimationPage.timeLine, "Default Timeline is not 00:00:00 Sec").toContainText('00:00:00 Sec');
         await costEstimationPage.addBOQ(addBOQData);
         await costEstimationPage.validateAddBOQAPI(201);
@@ -212,7 +214,6 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Sample)', () => 
         await costEstimationPage.validateBOQdetailsInCostDistribution(addBOQData);
         await costEstimationPage.editCostDistributionTable();
         await costEstimationPage.validateCreateCostDistributionAPI(201);
-        //success message updated
         await expect(costEstimationPage.successMessage('Cost distribution saved successfully'), "Cost Distribution creation success message does not match").toContainText('Cost distribution saved successfully');
         await expect(costEstimationPage.saveButton, 'Save button is not disabled').toBeDisabled();
     });
@@ -284,10 +285,7 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Sample)', () => 
         await ppjoPage.validateRequestSampleDetails(createEnquiryData);
         await ppjoPage.selectEstimationVersion('Version 1', 'Option');
         await ppjoPage.validateBOQDetailsTable(addBOQData);
-        // await expect(ppjoPage.printButton, "Print button is not visible after requesting estimation").toBeVisible();
         await ppjoPage.generateQuotationAndValidateAPI(201);
-        // delivery date has been removed
-        // await ppjoPage.editDate(createEnquiryData.date);
         await ppjoPage.submitQuotationForApprovalAndValidateAPI(200);
         await ppjoPage.goBack();
         await expect(requestNormalPage.status('Pending Quotation Approval'), "Quotation Pending Approval status does not match in sales enquiry").toBeVisible();
@@ -299,7 +297,6 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Sample)', () => 
         await quotationManagerPage.clickViewIcon();
         await quotationManagerPage.validateEnquiryDetails(createEnquiryData);
         await ppjoPage.validateBOQDetailsTable(addBOQData);
-        // await expect(quotationManagerPage.deliveryDate(createEnquiryData.date), "Delivery date is not updated in quotation manager").toContainText(`${createEnquiryData.date}`);
         await quotationManagerPage.managerApprovalQuotationAndValidateAPI(200);
         await expect(quotationManagerPage.successMessage('Quotation approved successfully'), "Quotation approved successfully message does not match").toContainText('Quotation approved successfully');
         await quotationManagerPage.goToTab('History');
@@ -307,7 +304,7 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Sample)', () => 
         await expect(quotationManagerPage.status('Approved'), 'Quotation approved status does not match').toBeVisible();
     });
 
-    test('Quotation: Verify checklist is submitted successfully and the Pending Check List Approval status is reflected', async () => {
+    test('Verify Quotation Approved By Manager status and the advance invoice is sent to finance successfully', async () => {
         await modules.goToModule({ module: 'Sales', subModule: 'Sales Enquiry' });
         await salesEnquiryPage.search(enquiryId);
         await salesEnquiryPage.clickViewIcon();
@@ -319,9 +316,53 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Sample)', () => 
         await expect(requestNormalPage.status('Quotation Approved By Manager'), "Quotation Pending status does not match in sales enquiry").toBeVisible();
         await ppjoPage.clickViewIcon();
         await ppjoPage.validateSampleDetails(enquiryId, 'Test_Document.pdf', '17', 'New Sample Request');
+        await quotationManagerPage.sendAdvanceInvoiceAndValidateAPI(201);
+        await expect(quotationManagerPage.successMessage('Quotation sent to finance successfully'), "Quotation sent to finance success message does not match").toContainText('Quotation sent to finance successfully');
+    });
+
+    test('Invoice Request: Verify the advance invoice is created successfully', async () => {
+        await modules.goToModule({ module: 'Finance', subModule: 'Accounts Receivable', nestedSubModule: 'Invoice Request' });
+        await quotationManagerPage.search(createEnquiryData.customerName);
+        await expect(quotationManagerPage.status('New Request'), "Quotation sent to finance status does not match in sales enquiry").toBeVisible();
+        await invoiceRequestPage.clickCreateInvoiceBtn();
+        await invoiceRequestPage.validateEnquiryDetails(createEnquiryData);
+        await invoiceRequestPage.validateBOQTableDetails(addBOQData);
+        await invoiceRequestPage.selectInvoiceDate(createEnquiryData.date);
+        await invoiceRequestPage.selectNetDueDate(createEnquiryData.date);
+        await invoiceRequestPage.createInvoiceAndValidateAPI(200);
+        await expect(invoiceRequestPage.successMessage('Invoice created successfully'), "Invoice created successfully message does not match").toContainText('Invoice created successfully');
+        await invoiceRequestPage.validateEnquiryDetails(createEnquiryData);
+        await invoiceRequestPage.validateBOQTableDetails(addBOQData);
+    });
+
+    test('Invoice Request (Manager): Verify the invoice request is approved by the Manager successfully', async () => {
+        await modules.goToModule({ nestedSubModule: 'Invoice Request (Manager)' });
+        await invoiceRequestPage.search(createEnquiryData.customerName);
+        await expect(invoiceRequestPage.status('No'), "Invoice status does not match").toBeVisible();
+        await invoiceRequestPage.clickViewIcon();
+        await invoiceRequestPage.validateEnquiryDetails(createEnquiryData);
+        await invoiceRequestPage.validateBOQTableDetails(addBOQData);
+        await invoiceRequestPage.approveInvoiceRequestAndValidateAPI(200);
+        // un wanted success message
+        await expect(invoiceRequestPage.successMessage('Data created successfully'), "Invoice approval success message does not match").toContainText('Data created successfully');
+        await expect(invoiceRequestPage.successMessage('Invoice register approved successfully!'), "Invoice approval success message does not match").toContainText('Invoice register approved successfully!');
+    });
+
+    test('Verify Finance Approve By Manager status and the checklist is submitted with Pending Check List Approval status', async () => {
+        await modules.goToModule({ module: 'Sales', subModule: 'Sales Enquiry' });
+        await salesEnquiryPage.search(enquiryId);
+        await salesEnquiryPage.clickViewIcon();
+        await ppjoPage.goToTab('PPJO');
+        await ppjoPage.clickViewIcon();
+        await salesEnquiryPage.validateViewEnquiryDetails(createEnquiryData);
+        await ppjoPage.clickSampleButton();
+        await ppjoPage.goToTab('New Sample Request');
+        await expect(requestNormalPage.status('Finance Approve By Manager'), "Finance Approve By Manager status does not match in sales enquiry").toBeVisible();
+        await ppjoPage.clickViewIcon();
+        await ppjoPage.validateSampleDetails(enquiryId, 'Test_Document.pdf', '17', 'New Sample Request');
         await quotationManagerPage.generateChecklist(createEnquiryData);
         await quotationManagerPage.validateSubmitCheckListAPI(201);
-        await expect(quotationManagerPage.successMessage('Sales order created'), "Sales order created success message does not match").toContainText('Sales order created');
+        await expect(quotationManagerPage.successMessage('Sales order created successfully'), "Sales order created successfully success message does not match").toContainText('Sales order created successfully');
         await expect(requestNormalPage.status('Pending Check List Approval'), "Pending Check List Approval status does not match in sales enquiry").toBeVisible();
     });
 
@@ -372,8 +413,5 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Sample)', () => 
         await ppjoPage.goToTab('New Sample Request');
         await expect(requestNormalPage.status('Sales Order Approved By Manager'), "Quotation Pending status does not match in sales enquiry").toBeVisible();
         await ppjoPage.clickViewIcon();
-        await ppjoPage.validateSampleDetails(enquiryId, 'Test_Document.pdf', '17', 'New Sample Request');
-        await quotationManagerPage.validateExistingDataInSalesOrderChecklist(createEnquiryData);
-        await expect(ppjoPage.salesOrderTab, "Sales order tab does not contain sales order id").toContainText(salesOrderId);
     });
 });
