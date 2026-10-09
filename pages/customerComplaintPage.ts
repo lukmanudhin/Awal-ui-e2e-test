@@ -9,6 +9,7 @@ export class CustomerComplaintPage extends BasePage {
     private readonly detailOfComplaintsTxtBx: Locator;
     private readonly proposedActionTxtBx: Locator;
     private readonly submitForApprovalButton: Locator;
+    private readonly addBtn: Locator;
 
     constructor(public readonly page: Page) {
         super(page);
@@ -18,9 +19,11 @@ export class CustomerComplaintPage extends BasePage {
         this.detailOfComplaintsTxtBx = this.page.locator('#detailOfComplaint');
         this.proposedActionTxtBx = this.page.locator('#proposedCorrectiveAction');
         this.submitForApprovalButton = this.page.getByRole('button', { name: 'Save and Submit for approval' });
+        this.addBtn = this.page.getByRole('button', { name: 'Add Add' });
     }
     @step()
     async submitComplaintRegistrationForm(data: CustomerComplaintData) {
+        await this.addBtn.click();
         await this.selectDate(data.date);
         await this.selectDate(data.date+1, 1);
         await this.selectOptionFromDropdown('Customer*', data.customer);
@@ -36,9 +39,9 @@ export class CustomerComplaintPage extends BasePage {
         await this.proposedActionTxtBx.fill('Test');
         await this.selectOptionFromDropdown('For Further Investigation By*', 'IT Support');
         await this.selectOptionFromDropdown('Assigned To*', 'Janaki');
-        await this.selectOptionFromDropdown('Investigated / Proposed By', 'Praveeen Kumar');
+        // await this.selectOptionFromDropdown('Investigated / Proposed By', 'Praveeen Kumar');
         await this.selectOptionFromDropdown('Approved By*', 'Vignesh M MERN');
-        await this.selectDate(data.date+2, 2);
+        await this.selectDate(data.date+2, 4);
         await this.submitForApprovalButton.click();
     }
 }

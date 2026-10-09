@@ -18,7 +18,7 @@ test.describe('Verify Customer Complaint E2E Flow', () => {
         });
     });
 
-    test.afterEach('Delete Sales Enquiry', async ({ salesEnquiryAPI, page }) => {
+    test.afterEach('Delete Sales Enquiry', async ({ page }) => {
         await page.close();
     });
     test('test', async ({ customerComplaintPage }) => {
