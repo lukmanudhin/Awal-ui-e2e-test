@@ -172,7 +172,7 @@ test.describe('Verify E2E flow of Social Media', () => {
         await costEstimationPage.goToTab('Summary');
         await costEstimationPage.validateEnquiryDetailsInSummary(createEnquiryData);
         await costEstimationPage.validateEnquiryDetailsInSummaryTable(addBOQData);
-        await costEstimationPage.editSummary(createEnquiryData, 'VAT 10% (Sales)', 'VAT 10% (Sales)', '4');
+        await costEstimationPage.editSummary(createEnquiryData, 'VAT ZERO', 'VAT 10% (Sales)', '4');
         await costEstimationPage.validateCalculateSummaryAPI(200);
         await expect(costEstimationPage.successMessage('Summary with incentive saved'), "Summary saved successfully message does not match").toContainText('Summary with incentive saved');
 
