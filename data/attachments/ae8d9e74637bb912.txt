@@ -1,0 +1,49 @@
+→ POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser
+← POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser 200 OK (857ms)
+→ GET https://procurement-api-dev.colanapps.in/api/v1/stockView/getAllStockView?PageNumber=1&PageSize=10&subStore=RawMaterials&materialStatus=InStock
+← GET https://procurement-api-dev.colanapps.in/api/v1/stockView/getAllStockView?PageNumber=1&PageSize=10&subStore=RawMaterials&materialStatus=InStock 200 OK (858ms)
+{
+  result: {
+    data: [
+      [Object], [Object],
+      [Object], [Object],
+      [Object], [Object],
+      [Object], [Object],
+      [Object], [Object]
+    ],
+    totalRecords: 70,
+    pageNumber: 1,
+    pageSize: 10,
+    pageInfo: 'Showing 1 to 10 of 70 entries'
+  },
+  statusCode: 200,
+  success: true,
+  message: 'Data fetched successfully',
+  errors: null
+}
+====================================
+Highest Stock Material: 3M IJ170CV3 WHT W/COMPLY 54"X50YDS
+Quantity Available: 42,994
+====================================
+Login successfull
+Verified sales enquiry creation API with status code: 201
+Sales enquiry created successfully for customer: Brad Sawayn
+Acrylic product created successfully
+Verified acrylic product creation API with status code: 201
+Create order successfully
+Verified Create order API with status code: 200
+Request Approved successfully
+Verified Request Approval API with status code: 200
+Approve Invoice successfully
+Verified Approve Invoice API with status code: 200
+Generate Invoice successfully
+Verified Generate Invoice API with status code: 200
+→ DELETE https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiry/delete/2c64952b-99f2-4cfe-b80d-7560b29133ca
+← DELETE https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiry/delete/2c64952b-99f2-4cfe-b80d-7560b29133ca 200 OK (965ms)
+----------------------Delete Sales Enquiry API Response---------------------
+API Response: {
+  result: true,
+  statusCode: 200,
+  success: true,
+  message: 'Data deleted successfully'
+}

@@ -1,0 +1,11 @@
+Consumables added successfully
+Verified Consumables API with status code: 200
+BOM added successfully
+Verified BOM API with status code: 201
+----------------------Delete Sales Enquiry API Response---------------------
+API Response: {
+  result: true,
+  statusCode: 200,
+  success: true,
+  message: 'Data deleted successfully'
+}

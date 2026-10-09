@@ -1,0 +1,10 @@
+✓ Customer Name displayed: EQ11448
+✓ Customer Name displayed: Shirley Prosacco
+✓ Project Name displayed: Sales Enquiry Test
+✓ Country displayed: China
+✓ State displayed: Guangdong Province
+✓ City displayed: Guangdong
+✓ Payment Terms displayed: 100 % Advance Full Payment
+✓ Mobile Number displayed: 7108446701
+✓ Email displayed: Erin_Homenick@yahoo.com
+All validation checks passed for view cost estimation details

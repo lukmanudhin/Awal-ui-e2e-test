@@ -1,0 +1,5 @@
+→ GET https://finance-api-dev.colanapps.in/api/InvoiceRequest/GetAllInvoiceRequest
+← GET https://finance-api-dev.colanapps.in/api/InvoiceRequest/GetAllInvoiceRequest?pageNumber=1&pageSize=10&Search=Pedro+Corwin 200 OK (1022ms)
+→ POST https://finance-api-dev.colanapps.in/api/InvoiceRequest/Create
+← POST https://finance-api-dev.colanapps.in/api/InvoiceRequest/Create 200 OK (267ms)
+Resolved invoiceExtId: d05b2db7-3fbd-445f-917d-0596da8e13e1

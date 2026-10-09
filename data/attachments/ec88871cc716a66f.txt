@@ -1,0 +1,6 @@
+----------------------Edit Sales Enquiry API Response-------------------------
+→ POST https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiry/upsertSalesEnquiry
+← POST https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiry/upsertSalesEnquiry 200 OK (271ms)
+----------------------View Updated Sales Enquiry API Response------------------------
+→ GET https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiry/getEnquiryDetails?enquiryExtId=dce3d517-7b2d-4ce7-891e-2ef642d93685
+← GET https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiry/getEnquiryDetails?enquiryExtId=dce3d517-7b2d-4ce7-891e-2ef642d93685 200 OK (252ms)
