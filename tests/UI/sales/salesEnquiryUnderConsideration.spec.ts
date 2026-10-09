@@ -178,7 +178,7 @@ test.describe.serial('Verify Quotation Under Consideration flow of Sales Enquiry
 
         await test.step('Summary: Verify that the incentive summary is calculated and saved successfully', async () => {
             await costEstimationPage.goToTab('Summary');
-            await costEstimationPage.editSummary(createEnquiryData, 'VAT ZERO', 'VAT 10% (Sales)', '4');
+            await costEstimationPage.editSummary(createEnquiryData, 'VAT ZERO SALES', 'VAT 10% (Sales)', '4');
             await costEstimationPage.validateCalculateSummaryAPI(200);
             await expect(costEstimationPage.successMessage('Summary with incentive saved'), "Summary saved successfully message does not match").toContainText('Summary with incentive saved');
         });
