@@ -122,7 +122,7 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Internal)', () =
         await expect(page, "Sales Enquiry list page was not opened after going back from PPJO").toHaveURL(`${ENV.BASE_URL}/sales/internal-request`);
         await salesEnquiryPage.search(enquiryId);
         await salesEnquiryPage.validateCustomerStatus(createEnquiryData.customerName, 'Pending From Estimation');
-        await salesEnquiryPage.validateCustomerPPJOColumn(createEnquiryData.customerName, ['Artwork', 'Autocad', 'Estimation', 'Procurement', 'Site Visit']);
+        await salesEnquiryPage.validateCustomerPPJOColumn(createEnquiryData.customerName, ['Artwork', 'Auto Cad', 'Estimation', 'Procurement', 'Site Visit']);
     });
 
     test('Verify that the estimation request is displayed in the Estimation - Request (Internal) list', async () => {

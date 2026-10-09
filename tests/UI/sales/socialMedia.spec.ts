@@ -73,7 +73,7 @@ test.describe('Verify E2E flow of Social Media', () => {
         // await expect(page, "Sales Enquiry list page was not opened after going back from PPJO").toHaveURL(`${ENV.BASE_URL}/sales/sales-enquiry`);
         enquiryId = await salesEnquiryPage.search(createEnquiryData.customerName);
         await salesEnquiryPage.validateCustomerStatus(createEnquiryData.customerName, 'Pending From Estimation');
-        await salesEnquiryPage.validateCustomerPPJOColumn(createEnquiryData.customerName, ['Artwork', 'Autocad', 'Estimation', 'Procurement', 'Site Visit']);
+        await salesEnquiryPage.validateCustomerPPJOColumn(createEnquiryData.customerName, ['Artwork', 'Auto Cad', 'Estimation', 'Procurement', 'Site Visit']);
 
         await modules.goToModule({ module: 'Estimation', subModule: 'Request (Normal)' });
         const enqId = await salesEnquiryPage.search(enquiryId);
