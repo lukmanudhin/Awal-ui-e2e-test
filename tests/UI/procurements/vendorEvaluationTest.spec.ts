@@ -131,7 +131,7 @@ test.describe('Vendor Evaluation End-to-End Scenarios for an Out of Stock Raw Ma
             await prRequestPage.clickViewIcon();
             await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
             await prRequestPage.approvePRRequestAndValidateAPI(200);
-            await expect(prRequestPage.successMessage('Purchase requisition approved successfully'), 'Purchase requisition approved successfully success message does not found').toHaveText('Purchase requisition approved successfully');;
+            await expect(prRequestPage.successMessage('Purchase requisition approved successfully'), 'Purchase requisition approved successfully success message does not found').toHaveText('Purchase requisition approved successfully');
         });
 
         await test.step('Verify the approved Purchase Requisition in the Purchase Request Sheet', async () => {
