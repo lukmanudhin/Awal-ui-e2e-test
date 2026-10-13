@@ -388,10 +388,26 @@ export class CostEstimationPage extends BasePage {
         await this.page.waitForLoadState('domcontentloaded');
     }
     @step()
-    async addBOQ(boqData: BOQData) {
+    async openNewBOQForm() {
         await this.addBOQBtn.click();
         await this.createNewBOQBtn.click();
         await expect(this.banner, "Add BOQ banner text does not match").toContainText('Add BOQ');
+    }
+    @step()
+    async validateAddBOQNotTriggeredAPI() {
+        await this.clickAndValidateAPINotTriggered(this.saveButton, 'boq/createBoq', 'Add BOQ');
+    }
+    @step()
+    async validateAddBOMNotTriggeredAPI() {
+        await this.clickAndValidateAPINotTriggered(this.addItemBtn, 'bom/createEstimationBom', 'Add BOM');
+    }
+    @step()
+    async validateConsumablesNotTriggeredAPI() {
+        await this.clickAndValidateAPINotTriggered(this.saveButton, 'bom/updateConsumableByEstimationDetailId', 'Add Consumables');
+    }
+    @step()
+    async addBOQ(boqData: BOQData) {
+        await this.openNewBOQForm();
         await this.finishedProductDropdown.fill(boqData.finishedProduct);
         await this.finishedProductOption.click();
         await this.signCodeTxtBx.fill(boqData.signCode);

@@ -320,6 +320,10 @@ export class SalesEnquiryPage extends BasePage {
         return extId;
     }
     @step()
+    async validateCreateSalesEnquiryNotTriggeredAPI(enquiryType: string) {
+        await this.clickAndValidateAPINotTriggered(this.enquiryButton(enquiryType), 'salesEnquiry/upsertSalesEnquiry', 'Create sales enquiry');
+    }
+    @step()
     async validateDeleteSalesEnquiryAPI(statusCode: number) {
         await this.deleteButton.click();
         const responsePromise = this.page.waitForResponse('**/salesEnquiry/delete/**');

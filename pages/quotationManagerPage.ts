@@ -120,8 +120,26 @@ export class QuotationManagerPage extends BasePage {
         console.log(`Verified send to customer API with status code:`, response.status());
     }
     @step()
-    async setQuotationStatus(status: string) {
+    async selectQuotationStatus(status: string) {
         await this.quotationStatusCheckBox(status).click();
+    }
+    // Submits the customer response form for the selected status without filling it in
+    @step()
+    async validateQuotationResponseNotTriggeredAPI(status: string) {
+        await this.clickAndValidateAPINotTriggered(this.submitButton, 'Quotation/', `Quotation customer response (${status})`);
+    }
+    @step()
+    async validateRequestChangesNotTriggeredAPI() {
+        await this.clickAndValidateAPINotTriggered(this.reEstimationButton, 'Quotation/', 'Quotation request changes');
+    }
+    @step()
+    async managerRejectsQuotationWithoutReasonAndValidateNotTriggeredAPI() {
+        await this.rejectButton.click();
+        await this.clickAndValidateAPINotTriggered(this.yesButton, 'Quotation/quotationManagerApprove', 'Quotation Manager Rejection');
+    }
+    @step()
+    async setQuotationStatus(status: string) {
+        await this.selectQuotationStatus(status);
         switch (status) {
             case 'Approved':
                 await this.enterCustomerApprovalAttachment();
@@ -258,6 +276,13 @@ export class QuotationManagerPage extends BasePage {
         await this.enterDeliveryInstallationDetails(data, 'Delivery Only', 'YES', 'Delivery Remarks', 'Priority Installation');
         await this.enterProductionChecklist(data.date, 'Material', 'Yes', 'YES', 'YES', 'Production Remarks');
         // await this.submitCheckListButton.click();
+    }
+    // Opens the sales order checklist form without filling any of its fields
+    @step()
+    async openSalesOrderChecklist() {
+        await expect(this.generateCheckListButton, "Generate Check List button is not visible").toBeVisible();
+        await this.generateCheckListButton.click();
+        await expect(this.submitCheckListButton, "Submit Check List button is not visible").toBeVisible();
     }
     @step()
     async validateSubmitCheckListAPI(statusCode: number) {

@@ -112,6 +112,14 @@ export class InvoiceRequestPage extends BasePage {
         await expect(this.attachedDocument(fileName), `${fileName} is not visible in View Attached Documents`).toBeVisible();
     }
     @step()
+    async openAcknowledgement() {
+        await this.acknowledgeIcon.click();
+    }
+    @step()
+    async validateAcknowledgementNotTriggeredAPI() {
+        await this.clickAndValidateAPINotTriggered(this.uploadButton, 'invoiceRegister/acknowledgeFileUpload', 'Acknowledge invoice request');
+    }
+    @step()
     async validateAcknowledgementAPI(statusCode: number) {
         const responsePromise = this.page.waitForResponse('**/invoiceRegister/acknowledgeFileUpload');
         await this.uploadButton.click();
