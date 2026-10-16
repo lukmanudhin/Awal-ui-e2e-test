@@ -283,7 +283,7 @@ test.describe('Verify E2E flow of Social Media', () => {
         await invoiceRequestPage.validateEnquiryDetails(createEnquiryData);
         await invoiceRequestPage.validateBOQTableDetails(addBOQData);
         await invoiceRequestPage.approveInvoiceRequestAndValidateAPI(200);
-        await expect(invoiceRequestPage.successMessage('Data created successfully'), "Invoice approval success message does not match").toContainText('Data created successfully');
+        await expect(invoiceRequestPage.successMessage('Invoice register approved successfully!'), "Invoice approval success message does not match").toContainText('Invoice register approved successfully!');
         await modules.goToModule({ nestedSubModule: 'Invoice Register' });
         await invoiceRequestPage.search(createEnquiryData.customerName);
         await expect(invoiceRequestPage.status('Approved'), "Invoice status does not match").toBeVisible();

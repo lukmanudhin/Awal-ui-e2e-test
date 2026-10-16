@@ -348,8 +348,6 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Sample)', () => 
         await invoiceRequestPage.validateEnquiryDetails(createEnquiryData);
         await invoiceRequestPage.validateBOQTableDetails(addBOQData);
         await invoiceRequestPage.approveInvoiceRequestAndValidateAPI(200);
-        // un wanted success message
-        await expect(invoiceRequestPage.successMessage('Data created successfully'), "Invoice approval success message does not match").toContainText('Data created successfully');
         await expect(invoiceRequestPage.successMessage('Invoice register approved successfully!'), "Invoice approval success message does not match").toContainText('Invoice register approved successfully!');
     });
 
