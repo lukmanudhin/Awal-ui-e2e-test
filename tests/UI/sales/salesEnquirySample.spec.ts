@@ -80,7 +80,7 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Sample)', () => 
         await salesEnquiryPage.enterCustomerName(createEnquiryData);
         await salesEnquiryPage.createSalesEnquiry(createEnquiryData);
         extId = await salesEnquiryPage.validateCreateSalesEnquiryAPI(201, "Create Enquiry");
-        await expect(productsPage.successMessage('Sales enquiry upserted successfully'), "Sales enquiry success message does not match").toHaveText('Sales enquiry upserted successfully');
+        await expect(productsPage.successMessage('Sales enquiry saved successfully'), "Sales enquiry success message does not match").toHaveText('Sales enquiry saved successfully');
         console.log(`Sales enquiry created successfully for customer: ${createEnquiryData.customerName}`);
         await productsPage.validateProductTabsListed(createEnquiryData.product);
         await productsPage.enterAndSaveAllSelectedProductDetails(createEnquiryData.product);
