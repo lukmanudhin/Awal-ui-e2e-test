@@ -1,0 +1,13 @@
+Login successfull
+Verified sales enquiry creation API with status code: 201
+→ POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser
+← POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser 200 OK (1139ms)
+→ DELETE https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiry/delete/4c474826-1f23-4048-85de-2e1c5e96d472
+← DELETE https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiry/delete/4c474826-1f23-4048-85de-2e1c5e96d472 200 OK (851ms)
+----------------------Delete Sales Enquiry API Response---------------------
+API Response: {
+  result: true,
+  statusCode: 200,
+  success: true,
+  message: 'Data deleted successfully'
+}

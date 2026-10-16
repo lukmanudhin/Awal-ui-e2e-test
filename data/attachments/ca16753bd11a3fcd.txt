@@ -1,0 +1,3 @@
+----------------------View Sales Enquiry API Response------------------------
+→ GET https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiry/getEnquiryDetails?enquiryExtId=029ed3cf-480f-46ff-9374-0b6b8a18e578
+← GET https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiry/getEnquiryDetails?enquiryExtId=029ed3cf-480f-46ff-9374-0b6b8a18e578 200 OK (285ms)

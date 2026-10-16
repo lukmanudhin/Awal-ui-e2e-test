@@ -1,0 +1,6 @@
+→ POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser
+← POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser 200 OK (980ms)
+→ GET https://core-api-dev.colanapps.in/api/v1/employeeMaster/getAllEmployeeSearch?search=
+← GET https://core-api-dev.colanapps.in/api/v1/employeeMaster/getAllEmployeeSearch?search= 200 OK (2200ms)
+Site Visitor (fetched dynamically via API): EMP00718 - Sudarsan
+Login successfull
