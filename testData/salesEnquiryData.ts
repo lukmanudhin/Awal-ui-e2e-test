@@ -42,6 +42,11 @@ export type SalesEnquiryData = {
   currency: string;
   supplyType: string;
   socialMedia: string;
+  estimatorName: string;
+  projectManagerName: string;
+  materialWithStock: string;
+  materialWithoutStock: string;
+  quantity: string;
 };
 
 export const getCreateEnquiryData = (): SalesEnquiryData => ({
@@ -83,8 +88,13 @@ export const getCreateEnquiryData = (): SalesEnquiryData => ({
   date: RandomDataGenerator.getCurrentDay(),
   paymentTerms: '100 % Advance Full Payment',
   currency: `${RandomDataGenerator.getCurrency()}`,
-  supplyType: `${RandomDataGenerator.getSupplyType()}`, 
+  supplyType: `${RandomDataGenerator.getSupplyType()}`,
   socialMedia: `${RandomDataGenerator.getSocialMedia()}`,
+  estimatorName: 'harish Sahadevan',
+  projectManagerName: 'EMP00275 - DEVAKI NARAYANAN',
+  materialWithStock: '',
+  materialWithoutStock: '',
+  quantity: '5',
 });
 
 export const editEnquiryData: SalesEnquiryData = {
@@ -126,6 +136,11 @@ export const editEnquiryData: SalesEnquiryData = {
   date: RandomDataGenerator.getCurrentDay(),
   paymentTerms: '100 % Advance Full Payment',
   currency: `${RandomDataGenerator.getCurrency()}`,
-  supplyType: `${RandomDataGenerator.getSupplyType()}`, 
+  supplyType: `${RandomDataGenerator.getSupplyType()}`,
   socialMedia: `${RandomDataGenerator.getSocialMedia()}`,
+  estimatorName: 'harish Sahadevan',
+  projectManagerName: 'EMP00275 - DEVAKI NARAYANAN',
+  materialWithStock: '',
+  materialWithoutStock: '',
+  quantity: '5',
 };

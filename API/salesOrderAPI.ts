@@ -5,6 +5,21 @@ import { ENV } from "../utils/ENV";
 
 const SALES_API_BASE = `https://sales-api-${ENV.ENV_API}.colanapps.in/api/transaction/v1`;
 
+// Lookup ids of the sales order checklist options selected in the Generate Check List form
+export type SalesOrderChecklistOptions = {
+    attachments: string;      // Sales checklist attachment type
+    prRequired: string[];     // PR Required checkboxes
+    modeOfDelivery: string;   // Delivery & Installation radio
+    installationId: string;   // Installation type
+};
+
+export const DEFAULT_CHECKLIST_OPTIONS: SalesOrderChecklistOptions = {
+    attachments: '554',                 // Approved Artwork
+    prRequired: ['545', '546'],        // Material + Services / Sub-Contract Charges
+    modeOfDelivery: '557',             // Delivery & Installation
+    installationId: '1202',            // MOW Installation
+};
+
 export class SalesOrderAPI {
     constructor(private request: APIRequestContext) {
     }
@@ -28,7 +43,20 @@ export class SalesOrderAPI {
         return await response.json();
     }
 
-    async createSalesOrder(accessToken: string, quotationExtId: string, customerId: number, customerName: string, deliveryPhone: string, deliveryLocation: string, dateIso: string) {
+    // Lists the "New Request" tab of the Sales Order list; each row carries salesOrderExtId and the human readable salesOrderNumber
+    async getAllSalesOrder(accessToken: string, search: string) {
+        const response = await this.request.get(
+            `${SALES_API_BASE}/SalesOrder/getAllSalesOrder`,
+            {
+                headers: this.headers(accessToken),
+                params: { TabType: 'New Request', PageNumber: 1, PageSize: 10, Search: search, Filter: '' }
+            }
+        );
+        expect(response.status(), `Failed to get sales order list through API, status code: ${response.status()}`).toBe(200);
+        return await response.json();
+    }
+
+    async createSalesOrder(accessToken: string, quotationExtId: string, customerId: number, customerName: string, deliveryPhone: string, deliveryLocation: string, dateIso: string, checklist: SalesOrderChecklistOptions = DEFAULT_CHECKLIST_OPTIONS) {
         const filePath = path.join(process.cwd(), 'test_Documents', 'Test_Document.pdf');
         const browserDate = new Date(dateIso).toUTCString();
         const response = await this.request.post(
@@ -43,13 +71,13 @@ export class SalesOrderAPI {
                     salesOrderSourceTypeId: '675',
                     quotationConfirmation: '538',
                     purchaseOrder: '543',
-                    attachments: '553',
-                    prRequired: '545',
+                    attachments: checklist.attachments,
+                    ...Object.fromEntries(checklist.prRequired.map((id, index) => [`prRequired[${index}]`, id])),
                     isFullySubContracter: 'false',
                     finalQaQcPassed: '549',
                     inspectionReport: '0',
-                    modeOfDelivery: '556',
-                    installationId: '1200',
+                    modeOfDelivery: checklist.modeOfDelivery,
+                    installationId: checklist.installationId,
                     isAdvancePaymentApplied: 'true',
                     isRetentionApplied: 'true',
                     isAcceptPartialInvoice: 'true',

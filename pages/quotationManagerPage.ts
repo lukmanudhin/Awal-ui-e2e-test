@@ -261,6 +261,8 @@ export class QuotationManagerPage extends BasePage {
         await expect(this.attachedDocument(fileName).nth(1), `${fileName} is not visible in View Attached Documents`).toBeVisible();
 
         await this.checkBox(PR_Required).check();
+        await this.checkBox('Services / Sub-Contract Charges').check();
+        await this.radioButton('Partial Subcontractor Service').check();
         await this.radioButton(qa_passed).check();
         await this.checkBox(deliveryNote).first().check();
         await this.checkBox(overtimeConsidered).nth(1).check();
@@ -272,8 +274,8 @@ export class QuotationManagerPage extends BasePage {
         if (await this.generateCheckListButton.isVisible()) {
             await this.generateCheckListButton.click();
         }
-        await this.enterSalesChecklist('Email', 'Photocopy', 'Site Photo', 'Yes', 'Yes', 'Yes', 'Yes', 'Sales Checklist Remarks');
-        await this.enterDeliveryInstallationDetails(data, 'Delivery Only', 'YES', 'Delivery Remarks', 'Priority Installation');
+        await this.enterSalesChecklist('Email', 'Photocopy', 'Approved Artwork', 'Yes', 'Yes', 'Yes', 'Yes', 'Sales Checklist Remarks');
+        await this.enterDeliveryInstallationDetails(data, 'Delivery & Installation', 'YES', 'Delivery Remarks', 'MOW Installation');
         await this.enterProductionChecklist(data.date, 'Material', 'Yes', 'YES', 'YES', 'Production Remarks');
         // await this.submitCheckListButton.click();
     }
@@ -300,7 +302,7 @@ export class QuotationManagerPage extends BasePage {
         await expect(this.radioButton('Photocopy'), "'Photocopy' radio button is not checked").toBeChecked();
         const fileName = 'Test_Document.pdf';
         await expect(this.attachedDocument(fileName).first(), `${fileName} is not visible in View Attached Documents`).toBeVisible();
-        await expect(this.radioButton('Site Photo'), "'Site Photo' radio button is not checked").toBeChecked();
+        await expect(this.radioButton('Approved Artwork'), "'Site Photo' radio button is not checked").toBeChecked();
         await expect(this.checkBox('Yes').first(), "'Yes' checkbox is not checked").toBeChecked();
         await expect(this.checkBox('Yes').nth(1), "'Yes' checkbox is not checked").toBeChecked();
         await expect(this.checkBox('Yes').nth(2), "'Yes' checkbox is not checked").toBeChecked();
@@ -308,7 +310,7 @@ export class QuotationManagerPage extends BasePage {
         await expect(this.salesCheckListRemarks, "Sales check list remarks value does not match").toHaveValue('Sales Checklist Remarks');
 
         //---------------Delivery & Installation-----------------
-        await expect(this.radioButton('Delivery Only'), "'Delivery Only' radio button is not checked").toBeChecked();
+        await expect(this.radioButton('Delivery & Installation'), "'Delivery Only' radio button is not checked").toBeChecked();
         await expect(this.customerNameTxtBx, "Customer name text box value does not match").toHaveValue(data.customerName);
         await expect(this.phoneTxtBx, "Phone text box value does not match").toHaveValue(data.mobileNumber1);
         await expect(this.locationTxtBx, "Location text box value does not match").toHaveValue(data.city);

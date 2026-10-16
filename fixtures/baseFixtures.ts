@@ -36,6 +36,9 @@ import { MaterialIndentRequestAPI } from "../API/materialIndentRequestAPI";
 import { ContractQuoteAPI } from "../API/contractQuoteAPI";
 import { ApiLogger } from "../utils/apiLogger";
 import { CustomerComplaintPage } from "../pages/customerComplaintPage";
+import { ProductionSalesOrderPage } from "../pages/productionSalesOrderPage";
+import { MRPPage } from "../pages/mrpPage";
+import { ProductionJobOrderPage } from "../pages/productionJobOrderPage";
 
 type baseFixtures = {
   loginPage: LoginPage;
@@ -74,6 +77,9 @@ type baseFixtures = {
   materialIndentRequestAPI: MaterialIndentRequestAPI;
   contractQuoteAPI: ContractQuoteAPI;
   customerComplaintPage: CustomerComplaintPage;
+  productionSalesOrderPage: ProductionSalesOrderPage;
+  mrpPage: MRPPage;
+  productionJobOrderPage: ProductionJobOrderPage;
 };
 
 export const test = base.extend<baseFixtures>({
@@ -187,6 +193,15 @@ export const test = base.extend<baseFixtures>({
   },
   customerComplaintPage: async ({ page }, use) => {
     await use(new CustomerComplaintPage(page));
+  },
+  productionSalesOrderPage: async ({ page }, use) => {
+    await use(new ProductionSalesOrderPage(page));
+  },
+  mrpPage: async ({ page }, use) => {
+    await use(new MRPPage(page));
+  },
+  productionJobOrderPage: async ({ page }, use) => {
+    await use(new ProductionJobOrderPage(page));
   },
 });
 

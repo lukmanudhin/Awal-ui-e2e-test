@@ -408,8 +408,7 @@ export class CostEstimationPage extends BasePage {
     @step()
     async addBOQ(boqData: BOQData) {
         await this.openNewBOQForm();
-        await this.finishedProductDropdown.fill(boqData.finishedProduct);
-        await this.finishedProductOption.click();
+        await this.selectOptionFromDropdown('Finished product*', boqData.finishedProduct);
         await this.signCodeTxtBx.fill(boqData.signCode);
         await this.signTypeTxtBx.fill(boqData.signType);
         await this.signNameTxtBx.fill(boqData.signName);

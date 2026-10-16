@@ -676,4 +676,8 @@ export class SalesEnquiryPage extends BasePage {
         const enquiryId = await this.enquiryIdCell.textContent();
         return enquiryId || '';
     }
+
+    async getSalesOrderId(){
+        return this.page.locator('//td[@data-app-table-col="3"]//div').first().textContent();
+    }
 }

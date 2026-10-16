@@ -6,6 +6,7 @@ export class RequestNormalPage extends BasePage {
     private readonly costEstimationButton: Locator;
     public readonly costEstimationTitle: Locator;
     public readonly requestNormalTab: Locator;
+    private readonly yesBtn: Locator;
 
     // Dynamic locators
     private readonly customerRow: (name: string) => Locator;
@@ -14,6 +15,7 @@ export class RequestNormalPage extends BasePage {
         this.costEstimationButton = this.page.locator('//span[text()="Generate Cost Estimation"]');
         this.costEstimationTitle = this.page.getByRole('heading');
         this.requestNormalTab = this.page.getByRole('tab', { name: 'Request (Normal)' });
+        this.yesBtn = this.page.getByRole('button', { name: 'Yes' });
 
         // Dynamic locators initialization
         this.customerRow = (name: string) => this.page.getByRole('row').filter({ hasText: name }).first();
@@ -27,5 +29,15 @@ export class RequestNormalPage extends BasePage {
     @step()
     async clickGenerateCostEstimation() {
         await this.scrollUntilElementVisibleAndClick(this.costEstimationButton);
+    }
+
+    async selectEstimator(estimatorName: string) {
+        await this.selectOptionFromDropdown('Select Estimator', estimatorName);
+        await this.yesBtn.click();
+    }
+
+    async selectProjectManager(projectManagerName: string) {
+        await this.selectOptionFromDropdown('Select Project Manager', projectManagerName);
+        await this.yesBtn.click();
     }
 }
