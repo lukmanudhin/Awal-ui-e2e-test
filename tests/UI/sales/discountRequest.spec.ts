@@ -112,13 +112,11 @@ test.describe.serial('Verify Discount Request flow of Sales Enquiry (Request Nor
             await costEstimationPage.validateAddBOM_API(201);
             await expect(costEstimationPage.successMessage('BOM created successfully'), "BOM creation success message does not match").toContainText('BOM created successfully');
             await costEstimationPage.goToTab('BOL - Bill of Labour');
-            await costEstimationPage.editBOLDepartment('Design Studio', '4', '3', '2', '1');
+            await costEstimationPage.editBOLDepartment('Cutting', '4', '3', '2', '1');
             await costEstimationPage.validateLabourAndCostingAPI(200);
-            await costEstimationPage.editBOLDepartment('Welding', '4', '3', '2', '1');
+            await costEstimationPage.editBOLDepartment('Electrical', '4', '3', '2', '1');
             await costEstimationPage.validateLabourAndCostingAPI(200);
-            await costEstimationPage.editBOLDepartment('Vinyl Graphics & Application', '5', '6', '7', '3');
-            await costEstimationPage.validateLabourAndCostingAPI(200);
-            await costEstimationPage.editBOLDepartment('Plotter Cutting', '4', '3', '2', '1');
+            await costEstimationPage.editBOLDepartment('Metal Fabrication', '5', '6', '7', '3');
             await costEstimationPage.validateLabourAndCostingAPI(200);
         });
 
@@ -194,7 +192,7 @@ test.describe.serial('Verify Discount Request flow of Sales Enquiry (Request Nor
         });
 
         await test.step('Verify estimation status in Request Normal is updated to Pending For Approval after submission', async () => {
-            await modules.goToModule({ subModule: 'Request (Normal)' }); 
+            await modules.goToModule({ subModule: 'Request (Normal)' });
             await salesEnquiryPage.search(enquiryId);
             await expect(requestNormalPage.status('Pending For Approval'), "Pending For Approval status does not match").toBeVisible();
         });
@@ -300,13 +298,11 @@ test.describe.serial('Verify Discount Request flow of Sales Enquiry (Request Nor
             await costEstimationPage.validateAddBOM_API(201);
             await expect(costEstimationPage.successMessage('BOM created successfully'), "BOM creation success message does not match").toContainText('BOM created successfully');
             await costEstimationPage.goToTab('BOL - Bill of Labour');
-            await costEstimationPage.editBOLDepartment('Design Studio', '4', '3', '2', '1');
+            await costEstimationPage.editBOLDepartment('Cutting', '4', '3', '2', '1');
             await costEstimationPage.validateLabourAndCostingAPI(200);
-            await costEstimationPage.editBOLDepartment('Welding', '4', '3', '2', '1');
+            await costEstimationPage.editBOLDepartment('Electrical', '4', '3', '2', '1');
             await costEstimationPage.validateLabourAndCostingAPI(200);
-            await costEstimationPage.editBOLDepartment('Vinyl Graphics & Application', '5', '6', '7', '3');
-            await costEstimationPage.validateLabourAndCostingAPI(200);
-            await costEstimationPage.editBOLDepartment('Plotter Cutting', '4', '3', '2', '1');
+            await costEstimationPage.editBOLDepartment('Metal Fabrication', '5', '6', '7', '3');
             await costEstimationPage.validateLabourAndCostingAPI(200);
         });
 
