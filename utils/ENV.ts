@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 dotenv.config({
-  path: `./env/.env.${(process.env.ENV || process.env.NODE_ENV)?.trim().toLowerCase() || "qa"}`,
+  path: `./env/.env.${(process.env.ENV || process.env.NODE_ENV)?.trim().toLowerCase() || "stage"}`,
   debug: true,
   override: true,
 });
