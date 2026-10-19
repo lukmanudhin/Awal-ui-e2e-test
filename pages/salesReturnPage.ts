@@ -86,6 +86,8 @@ export class SalesReturnPage extends BasePage {
 
     @step()
     async addSalesReturnDetails(data: SalesReturnData) {
+        await this.page.waitForTimeout(1000);
+        await this.eyeIcon.focus();
         await this.eyeIcon.click();
         await this.quantityInput.fill(data.quantity);
         await this.salesReturnReasonInput.fill(data.reason);

@@ -320,6 +320,10 @@ export class SalesEnquiryPage extends BasePage {
         return extId;
     }
     @step()
+    async validateCreateSalesEnquiryNotTriggeredAPI(enquiryType: string) {
+        await this.clickAndValidateAPINotTriggered(this.enquiryButton(enquiryType), 'salesEnquiry/upsertSalesEnquiry', 'Create sales enquiry');
+    }
+    @step()
     async validateDeleteSalesEnquiryAPI(statusCode: number) {
         await this.deleteButton.click();
         const responsePromise = this.page.waitForResponse('**/salesEnquiry/delete/**');
@@ -671,5 +675,9 @@ export class SalesEnquiryPage extends BasePage {
         await expect(this.createdSalesEnquiry(customerName).first(), `Sales enquiry is not visible for customer: ${customerName}`).toBeVisible();
         const enquiryId = await this.enquiryIdCell.textContent();
         return enquiryId || '';
+    }
+
+    async getSalesOrderId(){
+        return this.page.locator('//td[@data-app-table-col="3"]//div').first().textContent();
     }
 }

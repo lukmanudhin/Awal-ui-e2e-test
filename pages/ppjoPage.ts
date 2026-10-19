@@ -3,6 +3,7 @@ import { BasePage, step } from "./basePage";
 import { SalesEnquiryData } from "../testData/salesEnquiryData";
 // import * as path from "path";
 import { BOQData } from "../testData/addBoqData";
+import { PPJORequestDetails } from "../testData/salesEnquiryEdgeCaseData";
 import { Utils } from "../utils/utils";
 
 
@@ -138,6 +139,11 @@ export class PPJOPage extends BasePage {
     }
 
     private async submitPPJODocumentRequest(buttonName: string, description: string, quantity: string) {
+        await this.fillPPJODocumentRequest(buttonName, { attachFile: true, quantity, description });
+    }
+
+    // Fills the document-based request modal; every part is optional so negative specs can leave fields out.
+    private async fillPPJODocumentRequest(buttonName: string, details: PPJORequestDetails) {
         const fileName = 'Test_Document.pdf';
         // const filePath = path.join(process.cwd(), 'test_Documents', fileName);
 
@@ -149,10 +155,29 @@ export class PPJOPage extends BasePage {
         // ]);
 
         // await fileChooser.setFiles(filePath);
-        await this.uploadFile('test_Documents', fileName);
-        await expect(this.attachedDocument(fileName), `${fileName} is not visible in View Attached Documents`).toBeVisible();
-        await this.quantityTextBox.fill(quantity);
-        await this.descriptionEditor.fill(description);
+        if (details.attachFile) {
+            await this.uploadFile('test_Documents', fileName);
+            await expect(this.attachedDocument(fileName), `${fileName} is not visible in View Attached Documents`).toBeVisible();
+        }
+        if (details.quantity) {
+            await this.quantityTextBox.fill(details.quantity);
+        }
+        if (details.description) {
+            await this.descriptionEditor.fill(details.description);
+        }
+    }
+    @step()
+    async enterArtworkRequestDetails(details: PPJORequestDetails) {
+        await this.fillPPJODocumentRequest('Request Artwork', details);
+    }
+    @step()
+    async openSiteVisitRequest() {
+        await this.requestSiteVisitBtn.click();
+        await expect(this.modalTitle('Request Site Visit'), "Request Site Visit modal is not visible").toBeVisible();
+    }
+    @step()
+    async validatePPJONotTriggeredAPI(requestType: string) {
+        await this.clickAndValidateAPINotTriggered(this.saveButton, 'ppjo/createPpjo', requestType);
     }
     @step()
     async validatePPJOAPI(statusCode: number, requestType: string) {

@@ -2,7 +2,6 @@ import { expect } from "@playwright/test";
 import { test } from "../../../fixtures/baseFixtures";
 import { ENV } from "../../../utils/ENV";
 import { CreditControlData, FinanceAssesmentData, getCreditControlData, getFinanceAssesmentData, getSalesAssesmentData, SalesAssesmentData } from "../../../testData/creditControlData";
-import { SalesOrderAPI } from "../../../API/salesOrderAPI";
 
 test.describe('Credit Control Test E2E Flow', () => {
     let creditControlData: CreditControlData;
@@ -41,7 +40,7 @@ test.describe('Credit Control Test E2E Flow', () => {
         await creditControlPage.search(creditControlData.customer);
         let applicationNumber = await creditControlPage.getApplicationNumber();
         await creditControlPage.search(applicationNumber);
-        await expect(creditControlPage.status('PendingFromSales'), 'Credit Status does not match').toBeVisible();
+        await expect(creditControlPage.status('Pending From Sales'), 'Credit Status does not match').toBeVisible();
         await modules.goToModule({ module: 'Sales', subModule: 'Credit Control' });
         await creditControlPage.search(applicationNumber);
         await expect(salesEnquiryPage.status('New Request'), 'Credit Status does not match').toBeVisible();

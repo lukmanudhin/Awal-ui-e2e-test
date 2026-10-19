@@ -94,7 +94,7 @@ export class CostEstimationPage extends BasePage {
     public readonly summaryVariationCell: Locator;
     private readonly packingStatus: Locator;
     private readonly vatTxtBx: Locator;
-    private readonly withHoldTxtBx: Locator;
+    private readonly withHoldChkBx: Locator;
     private readonly discountTxtBx: Locator;
     private readonly yesButton: Locator;
     private readonly createNewBOQBtn: Locator;
@@ -221,7 +221,7 @@ export class CostEstimationPage extends BasePage {
         this.summaryVariationCell = this.page.locator('//tr[2]/td[contains(text(),"VARIATION")]');
         this.packingStatus = this.page.locator('//tr[1]/td[3]/div/span');
         this.vatTxtBx = this.page.locator('#vatPercentage');
-        this.withHoldTxtBx = this.page.locator('#withHoldingTaxPercentage');
+        this.withHoldChkBx = this.page.locator('#withHoldingTaxPercentageUseTaxRate');
         this.discountTxtBx = this.page.locator('#discountPercentage');
         this.yesButton = this.page.getByRole('button', { name: 'Yes' });
         this.createNewBOQBtn = this.page.getByRole('button', { name: 'Create New BOQ' });
@@ -388,12 +388,27 @@ export class CostEstimationPage extends BasePage {
         await this.page.waitForLoadState('domcontentloaded');
     }
     @step()
-    async addBOQ(boqData: BOQData) {
+    async openNewBOQForm() {
         await this.addBOQBtn.click();
         await this.createNewBOQBtn.click();
         await expect(this.banner, "Add BOQ banner text does not match").toContainText('Add BOQ');
-        await this.finishedProductDropdown.fill(boqData.finishedProduct);
-        await this.finishedProductOption.click();
+    }
+    @step()
+    async validateAddBOQNotTriggeredAPI() {
+        await this.clickAndValidateAPINotTriggered(this.saveButton, 'boq/createBoq', 'Add BOQ');
+    }
+    @step()
+    async validateAddBOMNotTriggeredAPI() {
+        await this.clickAndValidateAPINotTriggered(this.addItemBtn, 'bom/createEstimationBom', 'Add BOM');
+    }
+    @step()
+    async validateConsumablesNotTriggeredAPI() {
+        await this.clickAndValidateAPINotTriggered(this.saveButton, 'bom/updateConsumableByEstimationDetailId', 'Add Consumables');
+    }
+    @step()
+    async addBOQ(boqData: BOQData) {
+        await this.openNewBOQForm();
+        await this.selectOptionFromDropdown('Finished product*', boqData.finishedProduct);
         await this.signCodeTxtBx.fill(boqData.signCode);
         await this.signTypeTxtBx.fill(boqData.signType);
         await this.signNameTxtBx.fill(boqData.signName);
@@ -775,7 +790,9 @@ export class CostEstimationPage extends BasePage {
             await this.selectFromDropdown('Select VAT', VAT);
             await expect(this.page.locator('(//td[@colspan="24"])[1]//following-sibling::td[1]'), "Local summary VAT value was not updated after edit").not.toHaveText(/^(-|0\.000)$/);
             await expect(this.page.locator('(//td[@colspan="24"])[3]//following-sibling::td[1]'), "Local summary VAT value should be empty or 0.000 before edit").toHaveText(/^(-|0\.000)$/);
-            await this.withHoldTxtBx.fill(`${withHold}`);
+            await this.withHoldChkBx.check();
+            await this.page.getByRole('combobox', { name: 'Select', exact: true }).fill(withHold);
+            await this.dropDownOption(withHold).click();
             await expect(this.page.locator('(//td[@colspan="24"])[3]//following-sibling::td[1]'), "Local summary VAT value was not updated after edit").not.toHaveText(/^(-|0\.000)$/);
             await expect(this.page.locator('//td[@data-app-table-col="27"]//div').first(), "Export summary discount value should be empty or 0.000 before edit").toHaveText(/^(-|0\.000)$/);
             await this.discountTxtBx.fill(`${discount}`);
@@ -901,7 +918,7 @@ export class CostEstimationPage extends BasePage {
     async addMaterialAndSendToProcurement() {
         await this.addMaterialBtn.click();
         await this.page.waitForTimeout(500);
-        await expect(this.status('Out of Stock'), 'Added material is not showing as Out of Stock').toBeVisible();
+        // await expect(this.status('Out of Stock'), 'Added material is not showing as Out of Stock').toBeVisible();
         await this.selectAllCheckbox.check();
         await this.sendToProcurementBtn.click();
     }

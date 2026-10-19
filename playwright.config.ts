@@ -7,7 +7,7 @@ import path from 'path';
  */
 // Determine which environment to use
 // Load environment file based on ENV variable
-const environment = (process.env.ENV || 'qa').trim();
+const environment = (process.env.ENV || 'stage').trim();
 dotenv.config({ path: path.resolve(__dirname, `env/.env.${environment}`) });
 
 /**
@@ -42,7 +42,7 @@ export default defineConfig({
     /* Base URL to use in actions like `await page.goto('')`. */
     // baseURL: 'http://localhost:3000',
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: process.env.CI ? 'retain-on-failure' : 'retain-on-failure',
+    trace: process.env.CI ? 'retain-on-failure' : 'off',
     screenshot: 'only-on-failure',
     video: process.env.CI ? 'off' : 'off',
 

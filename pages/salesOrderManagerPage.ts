@@ -88,6 +88,16 @@ export class SalesOrderManagerPage extends BasePage {
         console.log(`Verified Reject sales order check list API with status code:`, response.status());
     }
     @step()
+    async rejectSalesOrderCheckListWithoutReasonAndValidateNotTriggeredAPI() {
+        await this.rejectButton.click();
+        await this.clickAndValidateAPINotTriggered(this.yesButton, 'SalesOrder/updateSalesChecklistStatus', 'Reject sales order check list');
+    }
+    @step()
+    async rejectSalesOrderWithoutReasonAndValidateNotTriggeredAPI() {
+        await this.rejectButton.click();
+        await this.clickAndValidateAPINotTriggered(this.yesButton, 'SalesOrder/updateSalesOrderStatus', 'Reject sales order');
+    }
+    @step()
     async rejectSalesOrderAndValidateAPI(statusCode: number) {
         await this.rejectButton.click();
         await this.reasonTextBox.fill('Sales order rejected Manager Test');

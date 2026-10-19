@@ -1,4 +1,4 @@
-import { Page, Locator, expect, test } from "@playwright/test";
+import { Page, Locator, Request, expect, test } from "@playwright/test";
 import * as path from "path";
 
 export function step(stepName?: string) {
@@ -232,5 +232,20 @@ export class BasePage {
     async clickEditIcon() {
         await this.editIcon.click();
         await this.page.waitForLoadState('domcontentloaded');
+    }
+
+    protected async clickAndValidateAPINotTriggered(element: Locator, endpoint: string, apiName: string) {
+        let requestSent = false;
+        const onRequest = (request: Request) => {
+            if (request.method() !== 'GET' && request.url().includes(endpoint)) {
+                requestSent = true;
+            }
+        };
+        this.page.on('request', onRequest);
+        await element.click();
+        await this.page.waitForTimeout(2000);
+        this.page.off('request', onRequest);
+        expect(requestSent, `${apiName} API was triggered even though the form has validation errors`).toBe(false);
+        console.log(`Verified ${apiName} API was not triggered for invalid input`);
     }
 }

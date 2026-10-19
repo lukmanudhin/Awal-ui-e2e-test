@@ -82,7 +82,7 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Normal)', () => 
         await salesEnquiryPage.enterCustomerName(createEnquiryData);
         await salesEnquiryPage.createSalesEnquiry(createEnquiryData);
         extId = await salesEnquiryPage.validateCreateSalesEnquiryAPI(201, "Create Enquiry");
-        await expect(productsPage.successMessage('Sales enquiry upserted successfully'), "Sales enquiry success message does not match").toHaveText('Sales enquiry upserted successfully');
+        await expect(productsPage.successMessage('Sales enquiry saved successfully'), "Sales enquiry success message does not match").toHaveText('Sales enquiry saved successfully');
         console.log(`Sales enquiry created successfully for customer: ${createEnquiryData.customerName}`);
         await productsPage.validateProductTabsListed(createEnquiryData.product);
         await productsPage.enterAndSaveAllSelectedProductDetails(createEnquiryData.product);
@@ -123,7 +123,7 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Normal)', () => 
         await expect(page, "Sales Enquiry list page was not opened after going back from PPJO").toHaveURL(`${ENV.BASE_URL}/sales/sales-enquiry`);
         enquiryId = await salesEnquiryPage.search(createEnquiryData.customerName);
         await salesEnquiryPage.validateCustomerStatus(createEnquiryData.customerName, 'Pending From Estimation');
-        await salesEnquiryPage.validateCustomerPPJOColumn(createEnquiryData.customerName, ['Artwork', 'Autocad', 'Estimation', 'Procurement', 'Site Visit']);
+        await salesEnquiryPage.validateCustomerPPJOColumn(createEnquiryData.customerName, ['Artwork', 'Auto Cad', 'Estimation', 'Procurement', 'Site Visit']);
     });
 
     test('Verify that the estimation request is displayed in the Estimation - Request (Normal) list', async () => {
@@ -151,7 +151,7 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Normal)', () => 
         await expect(costEstimationPage.timeLine, "Default Timeline is not 00:00:00 Sec").toContainText('00:00:00 Sec');
         await costEstimationPage.addBOQ(addBOQData);
         await costEstimationPage.validateAddBOQAPI(201);
-        await expect(costEstimationPage.successMessage('BOQ created successfully'), "BOQ creation success message does not match").toContainText('BOQ created successfully');
+        await expect(costEstimationPage.successMessage('BOQ created successfully'), "BOQ creation success message does not match").toContainText('BOQ created successfully'); 
         await expect(costEstimationPage.timeLine, "Timeline is not updated").not.toContainText('00:00:00 Sec');
         await expect(costEstimationPage.submitApprovalButton, "Submit for approval button is not disabled").toBeDisabled();
         await costEstimationPage.validateBOQDetailsTable(addBOQData);
@@ -170,13 +170,11 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Normal)', () => 
         await costEstimationPage.validateAddBOM_API(201);
         await expect(costEstimationPage.successMessage('BOM created successfully'), "BOM creation success message does not match").toContainText('BOM created successfully');
         await costEstimationPage.goToTab('BOL - Bill of Labour');
-        await costEstimationPage.editBOLDepartment('Design Studio', '4', '3', '2', '1');
+        await costEstimationPage.editBOLDepartment('Cutting', '4', '3', '2', '1');
         await costEstimationPage.validateLabourAndCostingAPI(200);
-        await costEstimationPage.editBOLDepartment('Welding', '4', '3', '2', '1');
+        await costEstimationPage.editBOLDepartment('Electrical', '4', '3', '2', '1');
         await costEstimationPage.validateLabourAndCostingAPI(200);
-        await costEstimationPage.editBOLDepartment('Vinyl Graphics & Application', '5', '6', '7', '3');
-        await costEstimationPage.validateLabourAndCostingAPI(200);
-        await costEstimationPage.editBOLDepartment('Plotter Cutting', '4', '3', '2', '1');
+        await costEstimationPage.editBOLDepartment('Metal Fabrication', '5', '6', '7', '3');
         await costEstimationPage.validateLabourAndCostingAPI(200);
     });
 
@@ -240,7 +238,7 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Normal)', () => 
         await costEstimationPage.goToTab('Summary');
         await costEstimationPage.validateEnquiryDetailsInSummary(createEnquiryData);
         await costEstimationPage.validateEnquiryDetailsInSummaryTable(addBOQData);
-        await costEstimationPage.editSummary(createEnquiryData, 'VAT 10% (Sales)', '2', '4');
+        await costEstimationPage.editSummary(createEnquiryData, 'Sales Tax', 'VAT 12% (Sales)', '4');
         await costEstimationPage.validateCalculateSummaryAPI(200);
         await expect(costEstimationPage.successMessage('Summary with incentive saved'), "Summary saved successfully message does not match").toContainText('Summary with incentive saved');
     });
@@ -367,7 +365,7 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Normal)', () => 
         await invoiceRequestPage.validateEnquiryDetails(createEnquiryData);
         await invoiceRequestPage.validateBOQTableDetails(addBOQData);
         await invoiceRequestPage.approveInvoiceRequestAndValidateAPI(200);
-        await expect(invoiceRequestPage.successMessage('Data created successfully'), "Invoice approval success message does not match").toContainText('Data created successfully');
+        await expect(invoiceRequestPage.successMessage('Invoice register approved successfully!'), "Invoice approval success message does not match").toContainText('Invoice register approved successfully!');
         await modules.goToModule({ nestedSubModule: 'Invoice Register' });
         await invoiceRequestPage.search(createEnquiryData.customerName);
         await expect(invoiceRequestPage.status('Approved'), "Invoice status does not match").toBeVisible();

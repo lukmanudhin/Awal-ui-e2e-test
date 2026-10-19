@@ -41,6 +41,7 @@ export class VendorRegistrationPage extends BasePage {
     private readonly bankAccountNumberTxtBx: Locator;
     private readonly faxNumberTxtBx: Locator;
     private readonly creditLimitAmountTxtBx: Locator;
+    private readonly creditDaysTxtBx: Locator;
     private readonly ibanTxtBx: Locator;
     private readonly swiftCodeTxtBx: Locator;
     private readonly routingBankDetailsTxtBx: Locator;
@@ -99,6 +100,7 @@ export class VendorRegistrationPage extends BasePage {
         this.bankAccountNumberTxtBx = this.page.getByRole('textbox', { name: 'Bank Account Number*', exact: true });
         this.faxNumberTxtBx = this.page.getByRole('textbox', { name: 'Fax Number' });
         this.creditLimitAmountTxtBx = this.page.getByRole('textbox', { name: 'Credit Limit Amount*' });
+        this.creditDaysTxtBx = this.page.getByRole('textbox', { name: 'Credit Days*' });
         this.ibanTxtBx = this.page.getByRole('textbox', { name: 'International Bank Account' });
         this.swiftCodeTxtBx = this.page.getByRole('textbox', { name: 'Swift/Bank Identifier Code' });
         this.routingBankDetailsTxtBx = this.page.getByRole('textbox', { name: 'Routing Bank Details(if' });
@@ -151,7 +153,9 @@ export class VendorRegistrationPage extends BasePage {
         await this.designation2TxtBx.fill(vendorData.designation2);
         await this.phoneNumber2TxtBx.fill(vendorData.phoneNumber2);
         await this.contactEmail2TxtBx.fill(vendorData.contactEmail2);
-        // await this.saveVendorStep();
+        await this.selectOptionFromDropdown('Payment Terms', vendorData.paymentTerms);
+        await this.creditLimitAmountTxtBx.fill(vendorData.creditLimitAmount);
+        await this.creditDaysTxtBx.fill(vendorData.creditDays);
     }
 
     @step()
