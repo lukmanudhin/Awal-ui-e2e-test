@@ -282,8 +282,6 @@ test.describe.serial('Verify Invoice Register is rejected by the Manager', () =>
             await expect(invoiceRequestPage.status('No'), "Invoice status does not match").toBeVisible();
             await invoiceRequestPage.clickViewIcon();
             await invoiceRequestPage.notApproveInvoiceRegisterAndValidateAPI(200);
-            //unwanted success message
-            await expect(invoiceRequestPage.successMessage('Data created successfully'), "Invoice approval success message does not match").toContainText('Data created successfully');
             await expect(invoiceRequestPage.successMessage('Invoice register not approved'), "Invoice register not approved success message does not match").toContainText('Invoice register not approved');
             await invoiceRequestPage.goToTab('History');
             await invoiceRequestPage.search(createEnquiryData.customerName);
