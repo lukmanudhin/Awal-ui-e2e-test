@@ -175,7 +175,7 @@ test.describe.serial('Verify E2E Estimation Rejection flow of Sales Enquiry (Req
 
         await test.step('Summary: Verify that the incentive summary is calculated and saved successfully', async () => {
             await costEstimationPage.goToTab('Summary');
-            await costEstimationPage.editSummary(createEnquiryData, 'Sales VAT', 'Purchase VAT', '4');
+            await costEstimationPage.editSummary(createEnquiryData, 'Sales Tax', 'VAT 12% (Sales)', '4');
             await costEstimationPage.validateCalculateSummaryAPI(200);
             await expect(costEstimationPage.successMessage('Summary with incentive saved'), "Summary saved successfully message does not match").toContainText('Summary with incentive saved');
         });
