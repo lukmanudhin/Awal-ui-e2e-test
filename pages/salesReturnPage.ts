@@ -43,7 +43,7 @@ export class SalesReturnPage extends BasePage {
         this.saveButton = this.page.getByRole('button', { name: 'Save' });
         this.sentToQCButton = this.page.getByRole('button', { name: 'Sent To qc' });
         this.startQCButton = this.page.getByRole('button', { name: 'Start QC' }).first();
-        this.failedQuantityInput = this.page.getByRole('spinbutton', { name: 'Failed Quantity' });
+        this.failedQuantityInput = this.page.getByRole('spinbutton', { name: 'Rejected Quantity' });
         this.qcRemarkInput = this.page.getByRole('textbox', { name: 'QC Remark*' });
         this.submitQCButton = this.page.getByRole('button', { name: 'Submit QC' });
         this.sendToFinanceButton = this.page.getByRole('button', { name: 'Send to Finance' });
