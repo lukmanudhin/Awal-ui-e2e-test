@@ -52,6 +52,7 @@ test.describe('Sales Return E2E Test', () => {
         await salesReturnPage.submitQCInspectionForm(salesReturnData);
         await expect(salesReturnPage.successMessage('QC Inspected successfully'), "QC Inspected success message does not match").toHaveText('QC Inspected successfully');
         await salesReturnPage.submitToQCAndValidateAPI(200);
+        await expect(salesReturnPage.successMessage('Sales return QC completed successfully'), "QC Inspected success message does not match").toHaveText('Sales return QC completed successfully');
         await salesReturnPage.search(salesReturnNumber);
         await expect(salesReturnPage.status('Qc Completed'), "Sales return status does not match").toBeVisible();
 
