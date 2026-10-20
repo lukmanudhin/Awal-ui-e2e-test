@@ -405,7 +405,7 @@ export class SalesEnquiryPage extends BasePage {
         await this.page.waitForLoadState('domcontentloaded');
     }
     @step()
-    async validateExistingDataIsVisibleInEditEnquiry(data: SalesEnquiryData) {
+    async validateExistingDataIsVisibleInEditEnquiry(data: SalesEnquiryData, pricingDate: number = data.date) {
         await expect(this.customerNameTextBox, "Customer Name value mismatch in edit sales enquiry form").toHaveValue(data.customerName);
         await expect(this.flatOrVillaTextBox, "Flat / Villa value mismatch in edit sales enquiry form").toHaveValue(data.flatOrVilla);
         await expect(this.buildingTextBox, "Building value mismatch in edit sales enquiry form").toHaveValue(data.building);
@@ -451,7 +451,8 @@ export class SalesEnquiryPage extends BasePage {
 
         const expectedDatePattern = new RegExp(`\\b${data.date}\\b.*${new Date().getFullYear()}`);
         await expect(this.calenderBtn, "Requested delivery date mismatch in edit sales enquiry form").toHaveAttribute('aria-label', expectedDatePattern);
-        await expect(this.updatePricingCalenderBtn, "Pricing date mismatch in edit sales enquiry form").toHaveAttribute('aria-label', expectedDatePattern);
+        const expectedPricingDatePattern = new RegExp(`\\b${pricingDate}\\b.*${new Date().getFullYear()}`);
+        await expect(this.updatePricingCalenderBtn, "Pricing date mismatch in edit sales enquiry form").toHaveAttribute('aria-label', expectedPricingDatePattern);
     }
     @step()
     async clickCreateEnquiryButton() {
@@ -466,6 +467,12 @@ export class SalesEnquiryPage extends BasePage {
         await this.internalRequestBtn.click();
         await this.page.waitForLoadState('domcontentloaded');
         await this.page.waitForTimeout(1000);
+    }
+
+    @step()
+    async updateProjectName(projectName: string) {
+        await this.projectNameTextBox.fill(projectName);
+        await expect(this.projectNameTextBox, "Project Name value mismatch while updating sales enquiry").toHaveValue(projectName);
     }
 
     @step()
@@ -584,6 +591,9 @@ export class SalesEnquiryPage extends BasePage {
         await this.powerSupplyTxtBx.fill(data.powerSupply);
         await expect(this.powerSupplyTxtBx, "Power Supply value mismatch while updating sales enquiry").toHaveValue(data.powerSupply);
 
+        await this.permission(data.permission).check();
+        await expect(this.permission(data.permission), `Permission option was not selected while updating sales enquiry: ${data.permission}`).toBeChecked();
+
         // Product dropdown
         await this.productDropdown.click();
         await this.uncheckAllCheckbox();
@@ -600,7 +610,7 @@ export class SalesEnquiryPage extends BasePage {
         // Payment terms
         await this.payTermsDropdown.clear();
         await this.payTermsDropdown.fill(data.paymentTerms);
-        await this.payTermsOption(data.paymentTerms).click();
+        await this.page.getByRole('option', { name: data.paymentTerms }).click();
 
         // Currency
         await this.currencyDropdown.click();
