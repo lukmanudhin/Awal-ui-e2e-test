@@ -604,7 +604,7 @@ export class SalesEnquiryPage extends BasePage {
         // Calendar - delivery date
         // await this.calenderBtn.click();
         // await this.dateOption(`${data.date}`).click();
-        await this.selectDate(data.date);
+        await this.selectDate(data.date+1);
 
 
         // Payment terms
@@ -627,7 +627,7 @@ export class SalesEnquiryPage extends BasePage {
         // await this.updatePricingCalenderBtn.click();
         // await expect(this.dateOption(`${data.date}`), `Pricing date option is not visible while updating sales enquiry: ${data.date}`).toBeVisible();
         // await this.dateOption(`${data.date}`).click();
-        await this.selectDate(data.date, 1);
+        await this.selectDate(data.date+2, 1);
     }
     @step()
     async clickCreatePPJO() {

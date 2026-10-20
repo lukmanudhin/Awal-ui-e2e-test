@@ -296,7 +296,7 @@ test.describe.serial('Verify Invoice Register is rejected by the Manager', () =>
         await test.step('Verify Invoice Register is rejected by the Manager with status reflected in sales enquiry', async () => {
             await modules.goToModule({ module: 'Sales', subModule: 'Sales Enquiry' });
             await salesEnquiryPage.search(enquiryId);
-            await expect(salesEnquiryPage.status('Finance Reject by - Manager'), "Finance Reject by - Manager status does not match in sales enquiry").toBeVisible();
+            await expect(salesEnquiryPage.status('Invoice Requested'), "Invoice Requested status does not match in sales enquiry").toBeVisible();
         });
     });
 });

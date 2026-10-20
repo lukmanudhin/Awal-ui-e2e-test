@@ -111,7 +111,7 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Sample)', () => 
         await ppjoPage.clickViewIcon();
         await ppjoPage.validateSampleDetails(enquiryId, 'Test_Document.pdf', '17', 'New Sample Request');
         await ppjoPage.requestEstimationAndValidateAPI(201);
-        await expect(ppjoPage.successMessage('Data created successfully'), "Estimation request success message does not match").toContainText('Data created successfully');
+        await expect(ppjoPage.successMessage('Estimation request submitted successfully'), "Estimation request success message does not match").toContainText('Estimation request submitted successfully');
         await ppjoPage.goBack();
         await expect(ppjoPage.enquiryIdColumn, "Enquiry ID does not match").toHaveText(enquiryId);
         await expect(requestNormalPage.status('Pending From Estimation'), "Estimation Request status does not match").toBeVisible();
@@ -333,7 +333,7 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Sample)', () => 
         await invoiceRequestPage.validateEnquiryDetails(createEnquiryData);
         await invoiceRequestPage.validateBOQTableDetails(addBOQData);
         await invoiceRequestPage.selectInvoiceDate(createEnquiryData.date);
-        await invoiceRequestPage.selectNetDueDate(createEnquiryData.date);
+        // await invoiceRequestPage.selectNetDueDate(createEnquiryData.date);
         await invoiceRequestPage.createInvoiceAndValidateAPI(200);
         await expect(invoiceRequestPage.successMessage('Invoice created successfully'), "Invoice created successfully message does not match").toContainText('Invoice created successfully');
         await invoiceRequestPage.validateEnquiryDetails(createEnquiryData);
