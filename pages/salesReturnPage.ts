@@ -86,7 +86,10 @@ export class SalesReturnPage extends BasePage {
 
     @step()
     async addSalesReturnDetails(data: SalesReturnData) {
-        await this.eyeIcon.click();
+        await expect(async () => {
+            await this.eyeIcon.click({ force: true });
+            await expect(this.quantityInput, 'Clicking the eye icon did not open the sales return details form').toBeVisible({ timeout: 2000 });
+        }).toPass({ timeout: 20000, intervals: [500, 1000, 2000] });
         await this.quantityInput.fill(data.quantity);
         await this.salesReturnReasonInput.fill(data.reason);
         await this.remarksInput.fill(data.remarks);
