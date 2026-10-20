@@ -8,6 +8,10 @@ export class PRRequestPage extends BasePage {
     private readonly approveButton: Locator;
     private readonly confirmButton: Locator;
     private readonly reasonTxtBx: Locator;
+    public readonly purchaseRequestSheetTitle: Locator;
+    public readonly poPendingStatus: Locator;
+    public readonly outOfStockStatus: Locator;
+    private readonly viewMoreLink: Locator;
     constructor(public readonly page: Page) {
         super(page);
         this.selectAllChkBx = this.page.locator('#select-all');
@@ -16,7 +20,20 @@ export class PRRequestPage extends BasePage {
         this.approveButton = this.page.getByRole('button', { name: 'Approve' });
         this.confirmButton = this.page.getByRole('button', { name: 'Confirm' });
         this.reasonTxtBx = this.page.getByRole('textbox', { name: 'Reason for Rejection' });
+        this.purchaseRequestSheetTitle = this.page.getByRole('heading', { name: 'Purchase Request Sheet' });
+        this.poPendingStatus = this.page.getByText('PO Pending').first();
+        this.outOfStockStatus = this.page.getByText('Out Of Stock').first();
+        this.viewMoreLink = this.page.getByText('View More').first();
     }
+    // The sheet truncates long material names, so expand them (when truncated) before checking the full name
+    @step()
+    async validateRaisedMaterial(name: string) {
+        if (await this.viewMoreLink.isVisible()) {
+            await this.viewMoreLink.click();
+        }
+        await expect(this.page.getByText(name).first(), `PR is not raised for the material without stock: ${name}`).toBeVisible();
+    }
+
     @step()
     async createPRRequestAndValidateAPI(statusCode: number) {
         await this.selectAllChkBx.check();

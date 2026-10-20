@@ -57,6 +57,7 @@ export type VendorRegistrationData = {
   bankTelephoneNumber: string;
   faxNumber: string;
   creditLimitAmount: string;
+  creditDays: string;
   paymentTerms: string;
   ibanNumber: string;
   swiftCode: string;
@@ -110,7 +111,7 @@ export const getVendorRegistrationData = (): VendorRegistrationData => ({
   companyDescription: 'Vendor Creation',
   requestType: 'Product',
   productType: 'Raw Materials',
-  goodsDescription: 'Temp Vendor Des',
+  goodsDescription: 'Temp Vendor Description',
   // One value per year column shown on the Goods & Services step
   totalSales: ['4', '5', '7'],
   totalExportSales: ['2', '4', '8'],
@@ -123,6 +124,7 @@ export const getVendorRegistrationData = (): VendorRegistrationData => ({
   bankTelephoneNumber: `${RandomDataGenerator.getPhoneNumber()}`,
   faxNumber: '8966',
   creditLimitAmount: '34',
+  creditDays: '25',
   paymentTerms: '% Advance Full Payment',
   ibanNumber: `${RandomDataGenerator.getNumber(100000000, 999999999)}`,
   swiftCode: '2324',

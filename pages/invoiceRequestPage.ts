@@ -71,6 +71,10 @@ export class InvoiceRequestPage extends BasePage {
         await this.selectDate(date + 2, 0);
     }
     @step()
+    async selectNetDueDate(date: number) {
+        await this.selectDate(date + 3, 1);
+    }
+    @step()
     async createInvoiceAndValidateAPI(statusCode: number) {
         const responsePromise = this.page.waitForResponse('**/InvoiceRequest/Create');
         await this.clickCreateInvoiceBtn();
@@ -106,6 +110,14 @@ export class InvoiceRequestPage extends BasePage {
         ]);
         await fileChooser.setFiles(filePath);
         await expect(this.attachedDocument(fileName), `${fileName} is not visible in View Attached Documents`).toBeVisible();
+    }
+    @step()
+    async openAcknowledgement() {
+        await this.acknowledgeIcon.click();
+    }
+    @step()
+    async validateAcknowledgementNotTriggeredAPI() {
+        await this.clickAndValidateAPINotTriggered(this.uploadButton, 'invoiceRegister/acknowledgeFileUpload', 'Acknowledge invoice request');
     }
     @step()
     async validateAcknowledgementAPI(statusCode: number) {

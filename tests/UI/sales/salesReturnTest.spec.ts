@@ -28,7 +28,7 @@ test.describe('Sales Return E2E Test', () => {
     test('Verify sales return lifecycle through QC, Finance approval and case closure', async ({ page, modules, homePage, salesReturnPage }) => {
         // const leadNumber = 'LN01046';
         // const leadNumber = 'LN00003';
-        const leadNumber = process.env.ENV === 'qa' ? 'LN01046' : 'LN00003';
+        const leadNumber = process.env.ENV === 'stage' ? 'LN00003' : 'LN01046';
         const voucherData = getBankPaymentVoucherData();
         const salesReturnData = getSalesReturnData();
 

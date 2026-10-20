@@ -81,7 +81,7 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Internal)', () =
         createEnquiryData.product = ['Acrylic Products'];
         await salesEnquiryPage.createSalesEnquiry(createEnquiryData);
         extId = await salesEnquiryPage.validateCreateSalesEnquiryAPI(201, "Create Enquiry");
-        await expect(productsPage.successMessage('Sales enquiry upserted successfully'), "Sales enquiry success message does not match").toHaveText('Sales enquiry upserted successfully');
+        await expect(productsPage.successMessage('Sales enquiry saved successfully'), "Sales enquiry success message does not match").toHaveText('Sales enquiry saved successfully');
         console.log(`Sales enquiry created successfully for customer: ${createEnquiryData.customerName}`);
         await productsPage.validateProductTabsListed(createEnquiryData.product);
         await productsPage.enterAndSaveAllSelectedProductDetails(createEnquiryData.product);
@@ -122,7 +122,7 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Internal)', () =
         await expect(page, "Sales Enquiry list page was not opened after going back from PPJO").toHaveURL(`${ENV.BASE_URL}/sales/internal-request`);
         await salesEnquiryPage.search(enquiryId);
         await salesEnquiryPage.validateCustomerStatus(createEnquiryData.customerName, 'Pending From Estimation');
-        await salesEnquiryPage.validateCustomerPPJOColumn(createEnquiryData.customerName, ['Artwork', 'Autocad', 'Estimation', 'Procurement', 'Site Visit']);
+        await salesEnquiryPage.validateCustomerPPJOColumn(createEnquiryData.customerName, ['Artwork', 'Auto Cad', 'Estimation', 'Procurement', 'Site Visit']);
     });
 
     test('Verify that the estimation request is displayed in the Estimation - Request (Internal) list', async () => {
@@ -239,7 +239,7 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Internal)', () =
         await costEstimationPage.goToTab('Summary');
         await costEstimationPage.validateEnquiryDetailsInSummary(createEnquiryData);
         await costEstimationPage.validateEnquiryDetailsInSummaryTable(addBOQData);
-        await costEstimationPage.editSummary(createEnquiryData, 'VAT 10% (Sales)', '2', '4');
+        await costEstimationPage.editSummary(createEnquiryData, 'Sales VAT', 'Purchase VAT', '4');
         await costEstimationPage.validateCalculateSummaryAPI(200);
         await expect(costEstimationPage.successMessage('Summary with incentive saved'), "Summary saved successfully message does not match").toContainText('Summary with incentive saved');
     });

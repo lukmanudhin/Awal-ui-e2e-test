@@ -42,6 +42,11 @@ export type SalesEnquiryData = {
   currency: string;
   supplyType: string;
   socialMedia: string;
+  estimatorName: string;
+  projectManagerName: string;
+  materialWithStock: string;
+  materialWithoutStock: string;
+  quantity: string;
 };
 
 export const getCreateEnquiryData = (): SalesEnquiryData => ({
@@ -83,8 +88,13 @@ export const getCreateEnquiryData = (): SalesEnquiryData => ({
   date: RandomDataGenerator.getCurrentDay(),
   paymentTerms: '100 % Advance Full Payment',
   currency: `${RandomDataGenerator.getCurrency()}`,
-  supplyType: `${RandomDataGenerator.getSupplyType()}`, 
+  supplyType: `${RandomDataGenerator.getSupplyType()}`,
   socialMedia: `${RandomDataGenerator.getSocialMedia()}`,
+  estimatorName: 'harish Sahadevan',
+  projectManagerName: 'EMP00275 - DEVAKI NARAYANAN',
+  materialWithStock: '',
+  materialWithoutStock: '',
+  quantity: '5',
 });
 
 export const editEnquiryData: SalesEnquiryData = {
@@ -126,6 +136,43 @@ export const editEnquiryData: SalesEnquiryData = {
   date: RandomDataGenerator.getCurrentDay(),
   paymentTerms: '100 % Advance Full Payment',
   currency: `${RandomDataGenerator.getCurrency()}`,
-  supplyType: `${RandomDataGenerator.getSupplyType()}`, 
+  supplyType: `${RandomDataGenerator.getSupplyType()}`,
   socialMedia: `${RandomDataGenerator.getSocialMedia()}`,
+  estimatorName: 'harish Sahadevan',
+  projectManagerName: 'EMP00275 - DEVAKI NARAYANAN',
+  materialWithStock: '',
+  materialWithoutStock: '',
+  quantity: '5',
+};
+export type AcrylicProductData = {
+  material: string;
+  illumination: string;
+  mounting: string;
+  length: string;
+  height: string;
+  width: string;
+  tombstoneLength: string;
+  tombstoneHeight: string;
+  tombstoneWidth: string;
+};
+
+export type EmbroideryProductData = {
+  category: string;
+  material: string;
+  tailoring: string;
+};
+
+export type ProductDetailsData = {
+  acrylic: AcrylicProductData;
+  embroidery: EmbroideryProductData;
+};
+
+export const createProductDetails: ProductDetailsData = {
+  acrylic: { material: 'Acrylic', illumination: 'LED Strip', mounting: 'Bolts', length: '5', height: '5', width: '5', tombstoneLength: '5', tombstoneHeight: '5', tombstoneWidth: '5' },
+  embroidery: { category: 'Badges', material: 'Pin', tailoring: 'Nylon' },
+};
+
+export const editProductDetails: ProductDetailsData = {
+  acrylic: { material: 'Acrylic', illumination: 'LED Strip', mounting: 'Bolts', length: '3', height: '4', width: '6', tombstoneLength: '7', tombstoneHeight: '8', tombstoneWidth: '9' },
+  embroidery: { category: 'Flag', material: 'Magnetic', tailoring: 'External' },
 };

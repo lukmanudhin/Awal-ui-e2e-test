@@ -1,5 +1,6 @@
 import { Page, Locator, expect } from "@playwright/test";
 import { BasePage, step } from "./basePage";
+import { createProductDetails, type AcrylicProductData, type EmbroideryProductData, type ProductDetailsData } from "../testData/salesEnquiryData";
 
 export class ProductsPage extends BasePage {
     public readonly productTab: Locator;
@@ -74,41 +75,41 @@ export class ProductsPage extends BasePage {
         this.radioButton = (name: string) => this.page.locator('label').filter({ hasText: `${name}` }).first();
     }
     @step()
-    async enterEmbroidingDetails(category: string, material: string, tailoring: string) {
+    async enterEmbroidingDetails(data: EmbroideryProductData) {
         await this.categoryDropdown.click();
         await this.uncheckAllCheckbox();
-        await this.optionCheckBox(category).click();
+        await this.optionCheckBox(data.category).click();
         await this.page.keyboard.press('Tab');
         await this.materialDropdown.click();
         await this.uncheckAllCheckbox();
-        await this.optionCheckBox(material).click();
+        await this.optionCheckBox(data.material).click();
         await this.page.keyboard.press('Tab');
         await this.tailoringDropdown.click();
         await this.uncheckAllCheckbox();
-        await this.optionCheckBox(tailoring).click();
+        await this.optionCheckBox(data.tailoring).click();
         await this.page.keyboard.press('Tab');
     }
     @step()
-    async enterAcrylicProductDetails(material: string, illumination: string, mounting: string, length: string, height: string, width: string) {
+    async enterAcrylicProductDetails(data: AcrylicProductData) {
         await this.lengthTextBox.clear();
-        await this.lengthTextBox.fill(length);
+        await this.lengthTextBox.fill(data.length);
         await this.heightTextBox.clear();
-        await this.heightTextBox.fill(height);
+        await this.heightTextBox.fill(data.height);
         await this.widthTextBox.clear();
-        await this.widthTextBox.fill(width);
+        await this.widthTextBox.fill(data.width);
         await this.materialDropDown.click();
         await this.uncheckAllCheckbox();
-        await this.optionCheckBox(material).click();
+        await this.optionCheckBox(data.material).click();
         await this.page.keyboard.press('Tab');
         await this.illuminationDropDown.click();
         await this.uncheckAllCheckbox();
-        await this.optionCheckBox(illumination).click();
+        await this.optionCheckBox(data.illumination).click();
         await this.page.keyboard.press('Tab');
         await this.mountingDropDown.click();
         await this.uncheckAllCheckbox();
-        await this.optionCheckBox(mounting).click();
+        await this.optionCheckBox(data.mounting).click();
         await this.page.keyboard.press('Tab');
-        await this.enterTombStoneDetails('5', '5', '5');
+        await this.enterTombStoneDetails(data.tombstoneLength, data.tombstoneHeight, data.tombstoneWidth);
     }
 
     private async enterTombStoneDetails(length: string, height: string, width: string) {
@@ -201,7 +202,7 @@ export class ProductsPage extends BasePage {
         await this.validateProductAPIAndPopup('upsertPvcProducts', statusCode, this.pvcSuccessMessage, 'PVC products');
     }
     @step()
-    async enterAndSaveAllSelectedProductDetails(productNames: string[]) {
+    async enterAndSaveAllSelectedProductDetails(productNames: string[], details: ProductDetailsData = createProductDetails) {
         if (productNames.includes('Signage')) {
             await this.enterSignageDetails();
             await this.validateCreateSignageAPI(201);
@@ -209,7 +210,7 @@ export class ProductsPage extends BasePage {
 
         if (productNames.includes('Embroidery & Tailoring')) {
             await this.openProductTab('Embroidery & Tailoring');
-            await this.enterEmbroidingDetails("Badges", "Pin", "Nylon");
+            await this.enterEmbroidingDetails(details.embroidery);
             await this.validateCreateEmbroideryAPI(201);
             await expect(this.embriodSuccessMessage, "Embroidery success message does not match").toHaveText('Embroidery tailoring created successfully');
         }
@@ -221,7 +222,7 @@ export class ProductsPage extends BasePage {
 
         if (productNames.includes('Acrylic Products')) {
             await this.openProductTab('Acrylic Products');
-            await this.enterAcrylicProductDetails("Acrylic", "LED Strip", "Bolts", '5', '5', '5');
+            await this.enterAcrylicProductDetails(details.acrylic);
             await this.validateCreateAcrylicProductAPI(201);
             await expect(this.acrylicSuccessMessage, "Acrylic products success message does not match").toHaveText('Acrylic products created successfully');
         }
@@ -243,7 +244,7 @@ export class ProductsPage extends BasePage {
     }
 
     @step()
-    async editProductDetails(productNames: string[]) {
+    async editProductDetails(productNames: string[], details: ProductDetailsData) {
         if (productNames.includes('Signage')) {
             await this.enterSignageDetails();
             await this.validateCreateSignageAPI(201);
@@ -251,7 +252,7 @@ export class ProductsPage extends BasePage {
 
         if (productNames.includes('Embroidery & Tailoring')) {
             await this.openProductTab('Embroidery & Tailoring');
-            await this.enterEmbroidingDetails("Flag", "Pin", "Nylon");
+            await this.enterEmbroidingDetails(details.embroidery);
             await this.validateCreateEmbroideryAPI(201);
             await expect(this.embriodSuccessMessage, "Embroidery success message does not match").toHaveText('Embroidery tailoring created successfully');
         }
@@ -263,7 +264,7 @@ export class ProductsPage extends BasePage {
 
         if (productNames.includes('Acrylic Products')) {
             await this.openProductTab('Acrylic Products');
-            await this.enterAcrylicProductDetails("Acrylic", "LED Strip", "Bolts", '3', '3', '3');
+            await this.enterAcrylicProductDetails(details.acrylic);
             await this.validateCreateAcrylicProductAPI(201);
             await expect(this.acrylicSuccessMessage, "Acrylic products success message does not match").toHaveText('Acrylic products created successfully');
         }
@@ -284,6 +285,39 @@ export class ProductsPage extends BasePage {
         }
     }
 
+
+    // Soft assertions so every mismatching product field is reported in one run
+    // Multi-select values render as chips beside the combobox input, never as the input's value
+    private selectedChips(dropdownName: string): Locator {
+        return this.page.locator('.MuiAutocomplete-root').filter({ has: this.dropDown(dropdownName) });
+    }
+
+    @step()
+    async validateExistingProductDetailsArePrefilled(productNames: string[], details: ProductDetailsData) {
+        if (productNames.includes('Acrylic Products')) {
+            const acrylic = details.acrylic;
+            await this.openProductTab('Acrylic Products');
+            await expect.soft(this.lengthTextBox, "Acrylic length is not prefilled with the saved value").toHaveValue(acrylic.length);
+            await expect.soft(this.heightTextBox, "Acrylic height is not prefilled with the saved value").toHaveValue(acrylic.height);
+            await expect.soft(this.widthTextBox, "Acrylic width is not prefilled with the saved value").toHaveValue(acrylic.width);
+            await expect.soft(this.selectedChips('Material And Finish'), "Acrylic material is not prefilled with the saved value").toContainText(acrylic.material);
+            await expect.soft(this.selectedChips('Illumination Options'), "Acrylic illumination is not prefilled with the saved value").toContainText(acrylic.illumination);
+            await expect.soft(this.selectedChips('Mounting Options'), "Acrylic mounting is not prefilled with the saved value").toContainText(acrylic.mounting);
+            await expect.soft(this.tombStoneLength, "Acrylic tombstone length is not prefilled with the saved value").toHaveValue(acrylic.tombstoneLength);
+            await expect.soft(this.tombStoneHeight, "Acrylic tombstone height is not prefilled with the saved value").toHaveValue(acrylic.tombstoneHeight);
+            await expect.soft(this.tombStoneWidth, "Acrylic tombstone width is not prefilled with the saved value").toHaveValue(acrylic.tombstoneWidth);
+            console.log('Verified acrylic product details are prefilled');
+        }
+
+        if (productNames.includes('Embroidery & Tailoring')) {
+            const embroidery = details.embroidery;
+            await this.openProductTab('Embroidery & Tailoring');
+            await expect.soft(this.selectedChips('Category'), "Embroidery category is not prefilled with the saved value").toContainText(embroidery.category);
+            await expect.soft(this.selectedChips('Material / Finish'), "Embroidery material is not prefilled with the saved value").toContainText(embroidery.material);
+            await expect.soft(this.selectedChips('Tailoring Options'), "Embroidery tailoring is not prefilled with the saved value").toContainText(embroidery.tailoring);
+            console.log('Verified embroidery and tailoring details are prefilled');
+        }
+    }
 
     private async selectFromDropdown(dropdownName: string, value: string) {
         await this.dropDown(dropdownName).clear();

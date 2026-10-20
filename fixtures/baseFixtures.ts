@@ -35,6 +35,12 @@ import { SalesOrderAPI } from "../API/salesOrderAPI";
 import { MaterialIndentRequestAPI } from "../API/materialIndentRequestAPI";
 import { ContractQuoteAPI } from "../API/contractQuoteAPI";
 import { ApiLogger } from "../utils/apiLogger";
+import { CustomerComplaintPage } from "../pages/customerComplaintPage";
+import { ProductionSalesOrderPage } from "../pages/productionSalesOrderPage";
+import { MRPPage } from "../pages/mrpPage";
+import { ProductionJobOrderPage } from "../pages/productionJobOrderPage";
+import { MobileSession } from "../utils/mobileSession";
+import { MobileLoginPage } from "../pages/mobile/mobileLoginPage";
 
 type baseFixtures = {
   loginPage: LoginPage;
@@ -72,6 +78,12 @@ type baseFixtures = {
   salesOrderAPI: SalesOrderAPI;
   materialIndentRequestAPI: MaterialIndentRequestAPI;
   contractQuoteAPI: ContractQuoteAPI;
+  customerComplaintPage: CustomerComplaintPage;
+  productionSalesOrderPage: ProductionSalesOrderPage;
+  mrpPage: MRPPage;
+  productionJobOrderPage: ProductionJobOrderPage;
+  mobileSession: MobileSession;
+  mobileLoginPage: MobileLoginPage;
 };
 
 export const test = base.extend<baseFixtures>({
@@ -182,6 +194,27 @@ export const test = base.extend<baseFixtures>({
   },
   contractQuoteAPI: async ({ request }, use) => {
     await use(new ContractQuoteAPI(request));
+  },
+  customerComplaintPage: async ({ page }, use) => {
+    await use(new CustomerComplaintPage(page));
+  },
+  productionSalesOrderPage: async ({ page }, use) => {
+    await use(new ProductionSalesOrderPage(page));
+  },
+  mrpPage: async ({ page }, use) => {
+    await use(new MRPPage(page));
+  },
+  productionJobOrderPage: async ({ page }, use) => {
+    await use(new ProductionJobOrderPage(page));
+  },
+  // Not connected until a mobile page calls launch, and always closed after the test
+  mobileSession: async ({}, use) => {
+    const mobileSession = new MobileSession();
+    await use(mobileSession);
+    await mobileSession.quit();
+  },
+  mobileLoginPage: async ({ mobileSession }, use) => {
+    await use(new MobileLoginPage(mobileSession));
   },
 });
 

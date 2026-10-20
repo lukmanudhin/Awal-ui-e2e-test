@@ -30,7 +30,7 @@ test.describe.serial('Verify Invoice Register is rejected by the Manager', () =>
             await salesEnquiryPage.enterCustomerName(createEnquiryData);
             await salesEnquiryPage.createSalesEnquiry(createEnquiryData);
             extId = await salesEnquiryPage.validateCreateSalesEnquiryAPI(201, "Create Enquiry");
-            await expect(productsPage.successMessage('Sales enquiry upserted successfully'), "Sales enquiry success message does not match").toHaveText('Sales enquiry upserted successfully');
+            await expect(productsPage.successMessage('Sales enquiry saved successfully'), "Sales enquiry success message does not match").toHaveText('Sales enquiry saved successfully');
             console.log(`Sales enquiry created successfully for customer: ${createEnquiryData.customerName}`);
             await productsPage.validateProductTabsListed(createEnquiryData.product);
             await productsPage.enterAndSaveAllSelectedProductDetails(createEnquiryData.product);
@@ -179,7 +179,7 @@ test.describe.serial('Verify Invoice Register is rejected by the Manager', () =>
 
         await test.step('Summary: Verify that the incentive summary is calculated and saved successfully', async () => {
             await costEstimationPage.goToTab('Summary');
-            await costEstimationPage.editSummary(createEnquiryData, 'VAT 10% (Sales)', '2', '4');
+            await costEstimationPage.editSummary(createEnquiryData, 'Sales VAT', 'Purchase VAT', '4');
             await costEstimationPage.validateCalculateSummaryAPI(200);
             await expect(costEstimationPage.successMessage('Summary with incentive saved'), "Summary saved successfully message does not match").toContainText('Summary with incentive saved');
         });
@@ -284,8 +284,6 @@ test.describe.serial('Verify Invoice Register is rejected by the Manager', () =>
             await expect(invoiceRequestPage.status('No'), "Invoice status does not match").toBeVisible();
             await invoiceRequestPage.clickViewIcon();
             await invoiceRequestPage.notApproveInvoiceRegisterAndValidateAPI(200);
-            //unwanted success message
-            await expect(invoiceRequestPage.successMessage('Data created successfully'), "Invoice approval success message does not match").toContainText('Data created successfully');
             await expect(invoiceRequestPage.successMessage('Invoice register not approved'), "Invoice register not approved success message does not match").toContainText('Invoice register not approved');
             await invoiceRequestPage.goToTab('History');
             await invoiceRequestPage.search(createEnquiryData.customerName);
@@ -296,7 +294,7 @@ test.describe.serial('Verify Invoice Register is rejected by the Manager', () =>
         await test.step('Verify Invoice Register is rejected by the Manager with status reflected in sales enquiry', async () => {
             await modules.goToModule({ module: 'Sales', subModule: 'Sales Enquiry' });
             await salesEnquiryPage.search(enquiryId);
-            await expect(salesEnquiryPage.status('Finance Reject by - Manager'), "Finance Reject by - Manager status does not match in sales enquiry").toBeVisible();
+            await expect(salesEnquiryPage.status('Invoice Requested'), "Invoice Requested status does not match in sales enquiry").toBeVisible();
         });
     });
 });

@@ -30,7 +30,7 @@ test.describe.serial('Verify Discount Request flow of Sales Enquiry (Request Nor
             await salesEnquiryPage.enterCustomerName(createEnquiryData);
             await salesEnquiryPage.createSalesEnquiry(createEnquiryData);
             extId = await salesEnquiryPage.validateCreateSalesEnquiryAPI(201, "Create Enquiry");
-            await expect(productsPage.successMessage('Sales enquiry upserted successfully'), "Sales enquiry success message does not match").toHaveText('Sales enquiry upserted successfully');
+            await expect(productsPage.successMessage('Sales enquiry saved successfully'), "Sales enquiry success message does not match").toHaveText('Sales enquiry saved successfully');
             console.log(`Sales enquiry created successfully for customer: ${createEnquiryData.customerName}`);
             await productsPage.validateProductTabsListed(createEnquiryData.product);
             await productsPage.enterAndSaveAllSelectedProductDetails(createEnquiryData.product);
@@ -178,7 +178,7 @@ test.describe.serial('Verify Discount Request flow of Sales Enquiry (Request Nor
 
         await test.step('Summary: Verify that the incentive summary is calculated and saved successfully', async () => {
             await costEstimationPage.goToTab('Summary');
-            await costEstimationPage.editSummary(createEnquiryData, 'VAT 10% (Sales)', '2', '4');
+            await costEstimationPage.editSummary(createEnquiryData, 'Sales VAT', 'Purchase VAT', '4');
             await costEstimationPage.validateCalculateSummaryAPI(200);
             await expect(costEstimationPage.successMessage('Summary with incentive saved'), "Summary saved successfully message does not match").toContainText('Summary with incentive saved');
         });
@@ -335,7 +335,7 @@ test.describe.serial('Verify Discount Request flow of Sales Enquiry (Request Nor
             await costEstimationPage.goToTab('Summary');
             await costEstimationPage.validateEnquiryDetailsInSummary(createEnquiryData);
             await costEstimationPage.validateEnquiryDetailsInSummaryTable(addBOQData);
-            await costEstimationPage.editSummary(createEnquiryData, 'VAT 10% (Sales)', '2', '7');
+            await costEstimationPage.editSummary(createEnquiryData, 'Sales VAT', 'Purchase VAT', '4');
             await costEstimationPage.validateCalculateSummaryAPI(200);
             await expect(costEstimationPage.successMessage('Summary with incentive saved'), "Summary saved successfully message does not match").toContainText('Summary with incentive saved');
         });
@@ -458,7 +458,7 @@ test.describe.serial('Verify Discount Request flow of Sales Enquiry (Request Nor
             await invoiceRequestPage.validateEnquiryDetails(createEnquiryData);
             await invoiceRequestPage.validateBOQTableDetails(addBOQData);
             await invoiceRequestPage.approveInvoiceRequestAndValidateAPI(200);
-            await expect(invoiceRequestPage.successMessage('Data created successfully'), "Invoice approval success message does not match").toContainText('Data created successfully');
+            await expect(invoiceRequestPage.successMessage('Invoice register approved successfully!'), "Invoice approval success message does not match").toContainText('Invoice register approved successfully!');
             await modules.goToModule({ nestedSubModule: 'Invoice Register' });
             await invoiceRequestPage.search(createEnquiryData.customerName);
             await expect(invoiceRequestPage.status('Approved'), "Invoice status does not match").toBeVisible();
