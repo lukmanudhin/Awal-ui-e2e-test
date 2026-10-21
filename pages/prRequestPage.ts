@@ -12,6 +12,7 @@ export class PRRequestPage extends BasePage {
     public readonly poPendingStatus: Locator;
     public readonly outOfStockStatus: Locator;
     private readonly viewMoreLink: Locator;
+    private readonly prNumberCell: Locator;
     constructor(public readonly page: Page) {
         super(page);
         this.selectAllChkBx = this.page.locator('#select-all');
@@ -24,10 +25,12 @@ export class PRRequestPage extends BasePage {
         this.poPendingStatus = this.page.getByText('PO Pending').first();
         this.outOfStockStatus = this.page.getByText('Out Of Stock').first();
         this.viewMoreLink = this.page.getByText('View More').first();
+        this.prNumberCell = this.page.getByText(/^PR\d+$/).first();
     }
     // The sheet truncates long material names, so expand them (when truncated) before checking the full name
     @step()
     async validateRaisedMaterial(name: string) {
+        await expect(this.prNumberCell, 'Purchase request is not listed in the Purchase Request Sheet').toBeVisible();
         if (await this.viewMoreLink.isVisible()) {
             await this.viewMoreLink.click();
         }

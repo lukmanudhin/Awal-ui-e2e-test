@@ -1,6 +1,7 @@
 import { Page, Locator, expect } from "@playwright/test";
 import { BasePage, step } from "./basePage";
 import { BOQData } from "../testData/addBoqData";
+import { ProductionData } from "../testData/productionData";
 
 export class ProductionSalesOrderPage extends BasePage {
     public readonly quotationSection: Locator;
@@ -12,6 +13,16 @@ export class ProductionSalesOrderPage extends BasePage {
     private readonly productionEngineerDropdown: Locator;
     private readonly productionEngineerOptions: Locator;
     private readonly yesButton: Locator;
+    private readonly checkedChecklistInputs: Locator;
+    private readonly salesChecklistRemarksTextBox: Locator;
+    private readonly productionRemarksTextBox: Locator;
+    private readonly deliveryRemarksTextBox: Locator;
+    private readonly deliveryCustomerNameTextBox: Locator;
+    private readonly deliveryPhoneTextBox: Locator;
+    private readonly deliveryLocationTextBox: Locator;
+    private readonly installationCategoryTextBox: Locator;
+    private readonly inductionDateTextBox: Locator;
+    private readonly deliveryDateTextBox: Locator;
 
     constructor(public readonly page: Page) {
         super(page);
@@ -24,6 +35,16 @@ export class ProductionSalesOrderPage extends BasePage {
         this.productionEngineerDropdown = this.page.getByRole('button', { name: 'Open' });
         this.productionEngineerOptions = this.page.getByRole('option');
         this.yesButton = this.page.getByRole('button', { name: 'Yes' });
+        this.checkedChecklistInputs = this.mainContent.locator('input:checked');
+        this.salesChecklistRemarksTextBox = this.page.locator('#remarks');
+        this.productionRemarksTextBox = this.page.locator('#productionRemarks');
+        this.deliveryRemarksTextBox = this.page.locator('#deliveryRemarks');
+        this.deliveryCustomerNameTextBox = this.page.locator('#deliveryCustomerName');
+        this.deliveryPhoneTextBox = this.page.locator('#deliveryPhone');
+        this.deliveryLocationTextBox = this.page.locator('#deliveryLocation');
+        this.installationCategoryTextBox = this.page.locator('#installationId');
+        this.inductionDateTextBox = this.page.locator('input[name="inductionDate"]');
+        this.deliveryDateTextBox = this.page.locator('input[name="deliveryDate"]');
     }
 
     @step()
@@ -39,6 +60,33 @@ export class ProductionSalesOrderPage extends BasePage {
         }
     }
 
+    // Header of the check list: customer name, sales order number and currency
+    @step()
+    async validateCheckListHeader(details: string[]) {
+        for (const detail of details) {
+            await expect(this.mainContent, `Sales order check list header does not contain: ${detail}`).toContainText(detail);
+        }
+    }
+
+    // The check list is read only here, so every value must match what was submitted while creating the sales order
+    @step()
+    async validatePrefilledCheckList(data: ProductionData, customerName: string, mobileNumber: string) {
+        await expect.poll(
+            async () => this.checkedChecklistInputs.evaluateAll(inputs => inputs.map(input => input.closest('label, div')?.textContent?.trim() ?? '')),
+            { message: 'Selected options of the sales order check list do not match' }
+        ).toEqual(data.checkedChecklistOptions);
+        await expect(this.salesChecklistRemarksTextBox, 'Sales checklist remarks do not match').toHaveValue(data.salesChecklistRemarks);
+        await expect(this.productionRemarksTextBox, 'Production remarks do not match').toHaveValue(data.productionRemarks);
+        await expect(this.deliveryRemarksTextBox, 'Delivery remarks do not match').toHaveValue(data.deliveryRemarks);
+        await expect(this.deliveryCustomerNameTextBox, 'Delivery customer name does not match').toHaveValue(customerName);
+        await expect(this.deliveryPhoneTextBox, 'Delivery phone does not match').toHaveValue(mobileNumber);
+        await expect(this.deliveryLocationTextBox, 'Delivery location does not match').toHaveValue(data.deliveryLocation);
+        await expect(this.installationCategoryTextBox, 'Installation category does not match').toHaveValue(data.installationCategory);
+        await expect(this.inductionDateTextBox, 'Induction date is not prefilled').toHaveValue(/^\d{2}\/\d{2}\/\d{4}$/);
+        await expect(this.deliveryDateTextBox, 'Delivery date is not prefilled').toHaveValue(/^\d{2}\/\d{2}\/\d{4}$/);
+        console.log('Verified prefilled sales order check list details');
+    }
+
     @step()
     async clickBackArrow() {
         await this.backArrow.click();
@@ -52,8 +100,13 @@ export class ProductionSalesOrderPage extends BasePage {
     }
 
     @step()
-    async validateBOMDetails(data: BOQData, materials: string[]) {
-        await expect(this.mainContent, 'BOM sign details do not match').toContainText(`Sign Code-${data.signCode}Sign Type-${data.signType}Sign Name-${data.signName}Description-${data.description}Size-${data.size}Quantity-${data.quantity}`);
+    async validateBOQDetails(data: BOQData) {
+        await expect(this.mainContent, 'BOQ product name does not match').toContainText(`Product Name - ${data.signName}`);
+        await expect(this.mainContent, 'BOQ details do not match').toContainText(`Sign Code-${data.signCode}Sign Type-${data.signType}Sign Name-${data.signName}Description-${data.description}Size-${data.size}Quantity-${data.quantity}`);
+    }
+
+    @step()
+    async validateBOMDetails(materials: string[]) {
         for (const material of materials) {
             await expect(this.mainContent, `BOM does not contain material: ${material}`).toContainText(material);
         }

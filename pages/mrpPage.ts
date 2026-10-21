@@ -21,6 +21,7 @@ export class MRPPage extends BasePage {
 
     // Dynamic locators
     private readonly pjoNumberCell: (salesOrderId: string) => Locator;
+    private readonly materialRow: (material: string) => Locator;
 
     constructor(public readonly page: Page) {
         super(page);
@@ -41,6 +42,7 @@ export class MRPPage extends BasePage {
         this.expandButton = this.page.getByRole('button', { name: 'Expand' });
 
         // Dynamic locators initialization
+        this.materialRow = (material: string) => this.page.getByRole('row').filter({ hasText: material });
         this.pjoNumberCell = (salesOrderId: string) => this.page.locator('table table tbody tr').filter({ hasText: salesOrderId }).getByRole('cell').nth(4);
     }
 
@@ -60,6 +62,13 @@ export class MRPPage extends BasePage {
     }
 
     @step()
+    async validateSelectedSalesOrderDetails(details: string[]) {
+        for (const detail of details) {
+            await expect(this.mainContent, `Selected sales order table does not contain: ${detail}`).toContainText(detail);
+        }
+    }
+
+    @step()
     async enterPJOQuantity(quantity: string) {
         await this.plannedQuantityTextBox.first().fill(quantity);
     }
@@ -67,6 +76,13 @@ export class MRPPage extends BasePage {
     @step()
     async viewStockDetails() {
         await this.viewStockDetailsButton.click();
+    }
+
+    // Out of stock materials are highlighted in yellow, available materials stay white
+    @step()
+    async validateStockHighlight(outOfStockMaterial: string, availableMaterial: string) {
+        await expect(this.materialRow(outOfStockMaterial), `Out of stock material is not highlighted in yellow: ${outOfStockMaterial}`).toHaveCSS('background-color', 'rgb(255, 249, 193)');
+        await expect(this.materialRow(availableMaterial), `Available material should not be highlighted: ${availableMaterial}`).toHaveCSS('background-color', 'rgb(255, 255, 255)');
     }
 
     @step()
@@ -84,6 +100,11 @@ export class MRPPage extends BasePage {
         await expect(this.prRaisedLink, 'PR Raised link is not visible after the MRP run').toBeVisible();
     }
 
+    @step()
+    async validatePRRaisedLink() {
+        await expect(this.prRaisedLink, 'PR Raised is not a hyperlink to the purchase request sheet').toHaveAttribute('href', /purchase-request-sheet\?PRIds=/);
+    }
+
     // Opens the purchase request sheet that the MRP run raised, which opens in a new tab
     @step()
     async openRaisedPRSheet() {
@@ -99,10 +120,44 @@ export class MRPPage extends BasePage {
         await this.viewReportButton.click();
     }
 
+    // Required stock is fully free for the available material, the shortage stays pending for the out of stock material
+    @step()
+    async validateMRPResultsSummary(availableMaterial: string, outOfStockMaterial: string) {
+        const availableCells = this.materialRow(availableMaterial).getByRole('cell');
+        const outOfStockCells = this.materialRow(outOfStockMaterial).getByRole('cell');
+        await expect(availableCells.nth(-3), 'Pending quantity of the available material should be 0').toHaveText('0');
+        await expect(outOfStockCells.nth(-4), 'Free stock of the out of stock material should be 0').toHaveText('0');
+        const requiredStock = (await outOfStockCells.nth(-6).innerText()).trim();
+        await expect(outOfStockCells.nth(-3), 'Pending quantity of the out of stock material does not match its required stock').toHaveText(requiredStock);
+        console.log('Verified MRP results summary');
+    }
+
     @step()
     async startAllocationProcess() {
         await this.startAllocationButton.click();
         await this.viewReportButton.waitFor({ state: 'visible', timeout: 60000 });
+    }
+
+    @step()
+    async validateAllocationProcessCompleted(itemCount: number) {
+        await expect(this.mainContent, 'Allocation process did not complete').toContainText(`100% Completed (${itemCount} of ${itemCount} items Processed)`);
+    }
+
+    // The available material is fully allocated, the out of stock material is not allocated and its whole requirement stays pending
+    @step()
+    async validateAllocatedMaterialsReport(details: string[], availableMaterial: string, outOfStockMaterial: string) {
+        for (const detail of details) {
+            await expect(this.mainContent, `Allocated materials report does not contain: ${detail}`).toContainText(detail);
+        }
+        const availableCells = this.materialRow(availableMaterial).getByRole('cell');
+        const outOfStockCells = this.materialRow(outOfStockMaterial).getByRole('cell');
+        const availableRequired = (await availableCells.nth(-5).innerText()).trim();
+        const outOfStockRequired = (await outOfStockCells.nth(-5).innerText()).trim();
+        await expect(availableCells.nth(-4), 'Allocated quantity of the available material does not match its required quantity').toHaveText(availableRequired);
+        await expect(availableCells.nth(-3), 'Pending quantity of the available material should be 0').toHaveText('0');
+        await expect(outOfStockCells.nth(-4), 'Allocated quantity of the out of stock material should be 0').toHaveText('0');
+        await expect(outOfStockCells.nth(-3), 'Pending quantity of the out of stock material does not match its required quantity').toHaveText(outOfStockRequired);
+        console.log('Verified allocated materials report');
     }
 
     @step()

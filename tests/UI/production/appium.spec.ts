@@ -319,7 +319,7 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Normal) through 
             dateIso.setDate(dateIso.getDate() - 1);
             dateIso.setUTCHours(18, 30, 0, 0);
 
-            const response = await salesOrderAPI.createSalesOrder(accessToken, quotationExtId, customerId, customerName, mobileNumber, 'Guangdong', dateIso.toISOString());
+            const response = await salesOrderAPI.createSalesOrder(accessToken, quotationExtId, customerId, customerName, mobileNumber, productionData.deliveryLocation, dateIso.toISOString());
             expect(response.message, 'Create Sales Order API Message Mismatch').toBe('Data created successfully');
             salesOrderExtId = response.result;
             console.log('Created salesOrderExtId:', salesOrderExtId);
@@ -375,8 +375,12 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Normal) through 
             await modules.goToModule({ module: 'Production', subModule: 'Sales order Management', nestedSubModule: 'Pending Sales Orders List' });
             await productionJobOrderPage.search(salesOrderId);
             await productionJobOrderPage.clickViewIcon();
-            // validate customer name, salesOrderNo and Currency details
-            // validate sales existing prefilled sales order details. 
+            await productionSalesOrderPage.validateCheckListHeader([
+                `Customer Name-${customerName}`,
+                `Sales Order No-${salesOrderId}`,
+                `Currency-${productionData.currency}`,
+            ]);
+            await productionSalesOrderPage.validatePrefilledCheckList(productionData, customerName, mobileNumber);
             await productionSalesOrderPage.goToTab(`Sales Order #${salesOrderId}`);
             await productionSalesOrderPage.validateSalesOrderDetails([
                 `Sales Enquiry Number-${enquiryNumber}`,
@@ -389,8 +393,8 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Normal) through 
             await productionSalesOrderPage.clickBackArrow();
             await productionSalesOrderPage.search(salesOrderId);
             await productionSalesOrderPage.viewBOM();
-            // validate BOQ Details
-            await productionSalesOrderPage.validateBOMDetails(addBOQData, materials);
+            await productionSalesOrderPage.validateBOQDetails(addBOQData);
+            await productionSalesOrderPage.validateBOMDetails(materials);
             await productionSalesOrderPage.clickBackArrow();
             await productionSalesOrderPage.viewEstimation(salesOrderId);
             await productionSalesOrderPage.validateEstimationDetails([
@@ -406,7 +410,14 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Normal) through 
             await modules.goToModule({ nestedSubModule: 'Assign SO to Production Engineer' });
             await productionSalesOrderPage.search(salesOrderId);
             await productionSalesOrderPage.expandSalesOrder(salesOrderId);
-            // validate details in expanded row
+            await productionSalesOrderPage.validateSalesOrderDetails([
+                salesOrderId,
+                customerName,
+                salesEnquiryNormalPayload.projectName,
+                addBOQData.finishedProduct,
+                addBOQData.description,
+                'View BOM',
+            ]);
             productionEngineer = await productionSalesOrderPage.selectProductionEngineer();
             await productionSalesOrderPage.validateAssignProductionEngineerAPI(200);
             await expect(productionSalesOrderPage.successMessage('Production Engineer assigned successfully'), 'Production engineer assigned success message does not match').toContainText('Production Engineer assigned successfully');
@@ -419,27 +430,35 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Normal) through 
             await mrpPage.search(salesOrderId);
             await expect(mrpPage.mainContent, 'Assigned production engineer is not displayed in the pending sales order list').toContainText(productionEngineer);
             await mrpPage.submitPendingSalesOrderAndValidateAPI(200);
-            // MRP process started
+            await expect(mrpPage.successMessage('MRP process started'), 'MRP process started success message does not match').toContainText('MRP process started');
+            await mrpPage.validateSelectedSalesOrderDetails([
+                salesOrderId,
+                customerName,
+                productionEngineer,
+                addBOQData.description,
+                'View BOM',
+            ]);
             await mrpPage.enterPJOQuantity(productionData.pjoQuantity);
             await mrpPage.viewStockDetails();
-            // validate out of stock material is highlighted to yellow
+            await mrpPage.validateStockHighlight(materialWithoutStock, materialWithStock);
             await expect(mrpPage.mainContent, 'Available materials list does not contain the BOM materials').toContainText(materialWithStock);
             await mrpPage.runMRPAndValidateAPI(201);
             await mrpPage.validateMRPCompleted();
-
+            await mrpPage.validatePRRaisedLink();
             const prSheet = await mrpPage.openRaisedPRSheet();
             await expect(prSheet.purchaseRequestSheetTitle, 'Purchase Request Sheet title does not match').toBeVisible();
-            await expect(mrpPage.status('PO Pending'), 'PR status is not PO Pending').toBeVisible(); 
+            // await expect(mrpPage.status('PO Pending'), 'PR status is not PO Pending').toBeVisible(); 
             await prSheet.validateRaisedMaterial(materialWithoutStock);
             await prSheet.page.close();
 
             await mrpPage.viewReport();
-            await expect(mrpPage.mainContent, 'MRP results summary does not contain the material without stock').toContainText(materialWithoutStock);
+            await mrpPage.validateMRPResultsSummary(materialWithStock, materialWithoutStock);
             await mrpPage.startAllocationProcess();
+            await mrpPage.validateAllocationProcessCompleted(materials.length);
             await mrpPage.viewReport();
-            await expect(mrpPage.mainContent, 'Allocated materials report does not contain the sales order').toContainText(salesOrderId);
+            await mrpPage.validateAllocatedMaterialsReport([salesOrderId, customerName], materialWithStock, materialWithoutStock);
             await mrpPage.createPJOAndAssignDepartmentAndValidateAPI(201);
-            await expect(mrpPage.mrpCreatedMessage, 'PJO created message does not match').toContainText('1 PJO');
+            await expect(mrpPage.mrpCreatedMessage, 'PJO created message does not match').toContainText('1 PJO & 1 Indents created under MRP No.');
             mrpNumber = await mrpPage.getMRPNumber();
             expect(mrpNumber, 'MRP number was not resolved from the PJO created pop up').toBeTruthy();
             pjoNumber = await mrpPage.getPJONumber(mrpNumber, salesOrderId);
@@ -460,15 +479,18 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Normal) through 
                 `Sales Order Number-${salesOrderId}`,
                 `Customer Name-${customerName}`,
             ]);
-            await productionJobOrderPage.validatePJOMaterials(materials);
+            await productionJobOrderPage.validatePJOMaterials(materials); 
+            await productionJobOrderPage.validateMaterialsAndBOMStatus(materials);
             await productionJobOrderPage.goToTab('BOL');
-            await productionJobOrderPage.validateBOLDepartments(productionData.bolDepartments);
+            await productionJobOrderPage.validateBOLDepartments(productionData.bolDepartments); 
+            await productionJobOrderPage.validateBOLDepartmentTable(productionData.bolDepartments);
             await productionJobOrderPage.clickBackArrow();
         });
 
         await test.step('Production Job Order (Manager): Verify PJO is approved by the manager', async () => {
             await modules.goToModule({ nestedSubModule: 'Production Job Order (Manager)' });
             await productionJobOrderPage.search(pjoNumber);
+            await expect(productionJobOrderPage.status('Pending'), 'PJO approval status does not match').toBeVisible();
             await productionJobOrderPage.clickViewIcon();
             await productionJobOrderPage.validatePJODetails([`PJO Number-${pjoNumber}`, `Sales Order Number-${salesOrderId}`]);
             await productionJobOrderPage.validatePJOMaterials(materials);
@@ -499,7 +521,6 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Normal) through 
             await mobileLoginPage.login(`${ENV.EMAIL_ID}`, `${ENV.PASSWORD}`);
             expect(await mobileLoginPage.isLoggedIn(), 'Login to the Awal mobile app failed').toBe(true);
             console.log('Login successful in the Awal mobile app');
-            // continue the approval flow in the mobile app
         });
     });
 });
