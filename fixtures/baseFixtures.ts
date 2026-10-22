@@ -41,6 +41,7 @@ import { MRPPage } from "../pages/mrpPage";
 import { ProductionJobOrderPage } from "../pages/productionJobOrderPage";
 import { MobileSession } from "../utils/mobileSession";
 import { MobileLoginPage } from "../pages/mobile/mobileLoginPage";
+import { MobileTaskManagementPage } from "../pages/mobile/mobileTaskManagementPage";
 
 type baseFixtures = {
   loginPage: LoginPage;
@@ -84,6 +85,7 @@ type baseFixtures = {
   productionJobOrderPage: ProductionJobOrderPage;
   mobileSession: MobileSession;
   mobileLoginPage: MobileLoginPage;
+  mobileTaskManagementPage: MobileTaskManagementPage;
 };
 
 export const test = base.extend<baseFixtures>({
@@ -215,6 +217,9 @@ export const test = base.extend<baseFixtures>({
   },
   mobileLoginPage: async ({ mobileSession }, use) => {
     await use(new MobileLoginPage(mobileSession));
+  },
+  mobileTaskManagementPage: async ({ mobileSession }, use) => {
+    await use(new MobileTaskManagementPage(mobileSession));
   },
 });
 

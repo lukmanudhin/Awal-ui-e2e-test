@@ -8,6 +8,8 @@ export class MobileLoginPage extends MobileBasePage {
   // The field's text turns into dots once typed, so it is located by its hint
   private readonly passwordField = '//android.widget.EditText[@hint="Enter Your Password"]';
   private readonly signInButton = "~Sign In";
+  private readonly module = (name: string): string => `//android.widget.TextView[@text="${name}"]`;
+  private readonly text = (name: string): string => `//android.widget.TextView[@text="${name}"]`;
 
   constructor(session: MobileSession) {
     super(session);
@@ -26,9 +28,9 @@ export class MobileLoginPage extends MobileBasePage {
   async login(emailId: string, password: string) {
     await this.type(this.emailField, emailId);
     // The keyboard opened by the email field covers the password field
-    await this.hideKeyboard();
+    await this.hideKeyboard(this.welcomeText);
     await this.type(this.passwordField, password);
-    await this.hideKeyboard();
+    await this.hideKeyboard(this.welcomeText);
     await this.tap(this.signInButton);
   }
 
@@ -36,5 +38,13 @@ export class MobileLoginPage extends MobileBasePage {
   // used for this, its label is replaced by a spinner while the login request is running.
   async isLoggedIn(timeout = 60000): Promise<boolean> {
     return this.isNotDisplayed(this.welcomeText, timeout);
+  }
+
+  async goToModule(name: string) {
+    await this.tap(this.module(name));
+  }
+
+  async isScreenTextDisplayed(name: string, timeout?: number) {
+    return this.isDisplayed(this.text(name), timeout);
   }
 }

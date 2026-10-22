@@ -2,6 +2,8 @@ export type ProductionData = {
   salesOrderStatus: string;
   pjoQuantity: string;
   bolDepartments: string[];
+  // Employee assigned to the Design Studio department in the mobile app
+  designStudioEmployee: string;
   pjoApprovalStatus: string;
   pjoApprovedStatus: string;
   currency: string;
@@ -18,6 +20,7 @@ export const getProductionData = (): ProductionData => ({
   salesOrderStatus: 'Sales Order Approved by Manager',
   pjoQuantity: '1',
   bolDepartments: ['Design Studio', 'Vinyl Graphics & Application'],
+  designStudioEmployee: 'Sanjay Preeth',
   pjoApprovalStatus: 'Pending',
   pjoApprovedStatus: 'Approved',
   currency: 'SAR',

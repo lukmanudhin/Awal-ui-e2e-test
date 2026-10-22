@@ -28,6 +28,8 @@ export class MobileSession {
       logLevel: "warn",
       connectionRetryCount: 1,
       connectionRetryTimeout: 600000,
+      // Poll slower than the 500ms default, every find is a request to the UiAutomator2 server on the slow emulator
+      waitforInterval: 1000,
       capabilities: {
         platformName: "Android",
         "appium:automationName": "UiAutomator2",
@@ -44,6 +46,10 @@ export class MobileSession {
         "appium:adbExecTimeout": 180000,
         "appium:androidInstallTimeout": 300000,
         "appium:appWaitDuration": 60000,
+        // The React Native app keeps animating (spinners), so UiAutomator2 would wait for an "idle" screen on every command
+        // and overload the emulator until its server crashes
+        "appium:settings[waitForIdleTimeout]": 0,
+        "appium:disableWindowAnimation": true,
         ...(ENV.ANDROID_UDID ? { "appium:udid": ENV.ANDROID_UDID } : {}),
       },
     });
