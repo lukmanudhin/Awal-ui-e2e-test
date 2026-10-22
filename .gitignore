@@ -19,6 +19,7 @@ env/
 .claude
 .agents
 .gitlab-ci.yml
+app/
 
 # Logs
 *.log
