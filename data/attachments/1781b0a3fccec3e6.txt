@@ -1,0 +1,2 @@
+Test Start Time:  23/10/2026, 9:20:47 pm
+→ POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser

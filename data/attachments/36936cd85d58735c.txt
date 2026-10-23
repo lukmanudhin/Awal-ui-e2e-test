@@ -1,0 +1,5 @@
+✓ Customer Name displayed in Invoice Request: Ottilie Steuber
+✓ Road displayed in Invoice Request: N Union Street
+Invoice created successfully
+✓ Customer Name displayed in Invoice Request: Ottilie Steuber
+✓ Road displayed in Invoice Request: N Union Street

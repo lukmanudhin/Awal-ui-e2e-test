@@ -1,0 +1,11 @@
+Login successfull
+Verified sales enquiry creation API with status code: 201
+Sales enquiry created successfully for customer: Bria Bergstrom
+Acrylic product created successfully
+Verified acrylic product creation API with status code: 201
+Verified Add to Pipeline API with status code: 201
+Verified Pipeline notes API with status code: 200
+Verified Pipeline meeting API with status code: 200
+Verified Pipeline email API with status code: 200
+Verified Pipeline file upload API with status code: 200
+→ POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser

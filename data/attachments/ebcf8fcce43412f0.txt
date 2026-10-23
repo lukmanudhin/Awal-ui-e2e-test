@@ -1,0 +1,10 @@
+✓ Customer Name displayed: EQ12879
+✓ Customer Name displayed: Ottilie Steuber
+✓ Project Name displayed: Sales Enquiry Test
+✓ Country displayed: China
+✓ State displayed: Guangdong Province
+✓ City displayed: Guangdong
+✓ Payment Terms displayed: 100 % Advance Full Payment
+✓ Mobile Number displayed: 5086283889
+✓ Email displayed: Jaydon_Hermiston82@yahoo.com
+All validation checks passed for view cost estimation details

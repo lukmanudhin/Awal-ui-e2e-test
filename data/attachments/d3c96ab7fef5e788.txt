@@ -1,0 +1,30 @@
+Login successfull
+Verified sales enquiry creation API with status code: 201
+Sales enquiry created successfully for customer: Sheryl Jakubowski
+Embroidery and Tailoring created successfully
+Verified embroidery creation API with status code: 201
+Acrylic product created successfully
+Verified acrylic product creation API with status code: 201
+Updating sales enquiry customer: Durward Fadel
+Verified sales enquiry creation API with status code: 200
+Verified acrylic product details are prefilled
+Verified embroidery and tailoring details are prefilled
+Embroidery and Tailoring created successfully
+Verified embroidery creation API with status code: 201
+Acrylic product created successfully
+Verified acrylic product creation API with status code: 201
+Verified sales enquiry creation API with status code: 200
+Verified acrylic product details are prefilled
+Verified embroidery and tailoring details are prefilled
+Sales enquiry details fetched successfully
+Verified view sales enquiry API with status code: 200
+✓ Customer Name displayed: Durward Fadel
+✓ Project Name displayed: Sales Enquiry Test Updated
+✓ Country displayed: China
+✓ State displayed: Guangdong Province
+✓ City displayed: Guangdong
+✓ Mobile Number displayed: 5019338582
+✓ Email displayed: Colleen_Prosacco24@gmail.com
+All validation checks passed for view enquiry details
+Sales enquiry updated successfully for customer: Durward Fadel
+→ POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser

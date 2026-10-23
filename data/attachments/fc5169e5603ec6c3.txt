@@ -1,0 +1,10 @@
+✓ Customer Name displayed: EQ12880
+✓ Customer Name displayed: Clint Becker
+✓ Project Name displayed: Sales Enquiry Test
+✓ Country displayed: China
+✓ State displayed: Guangdong Province
+✓ City displayed: Guangdong
+✓ Payment Terms displayed: 100 % Advance Full Payment
+✓ Mobile Number displayed: 1431031861
+✓ Email displayed: Lynda28@yahoo.com
+All validation checks passed for view cost estimation details

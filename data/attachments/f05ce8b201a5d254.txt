@@ -1,0 +1,8 @@
+✓ Customer Name displayed: Clint Becker
+✓ Project Name displayed: Sales Enquiry Test
+✓ Country displayed: China
+✓ State displayed: Guangdong Province
+✓ City displayed: Guangdong
+✓ Mobile Number displayed: 1431031861
+✓ Email displayed: Lynda28@yahoo.com
+All validation checks passed for view enquiry details

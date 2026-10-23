@@ -1,0 +1,1 @@
+→ POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser

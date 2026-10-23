@@ -1,0 +1,5 @@
+✓ Customer Name displayed in Invoice Request: Clint Becker
+✓ Road displayed in Invoice Request: Beahan Forge
+Invoice created successfully
+✓ Customer Name displayed in Invoice Request: Clint Becker
+✓ Road displayed in Invoice Request: Beahan Forge

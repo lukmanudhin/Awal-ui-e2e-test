@@ -1,0 +1,19 @@
+✓ Customer Name displayed: Clint Becker
+✓ Project Name displayed: Sales Enquiry Test
+✓ Country displayed: China
+✓ State displayed: Guangdong Province
+✓ City displayed: Guangdong
+✓ Mobile Number displayed: 1431031861
+✓ Email displayed: Lynda28@yahoo.com
+All validation checks passed for view enquiry details
+✓ Customer Name displayed: Clint Becker
+✓ Project Name displayed: Sales Enquiry Test
+✓ Country displayed: China
+✓ State displayed: Guangdong Province
+✓ City displayed: Guangdong
+✓ Mobile Number displayed: 1431031861
+✓ Email displayed: Lynda28@yahoo.com
+All validation checks passed for view enquiry details
+Generate Quotation API Verified with status code: 201
+Quotation submitted for approval successfully
+Verified Submit Quotation for approval API with status code: 200

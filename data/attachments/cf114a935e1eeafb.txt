@@ -1,0 +1,4 @@
+Price Indication Slip saved successfully
+Verified Save Price Indication Slip API with status code: 200
+Submitted for approval successfully
+Verified Submit for approval API with status code: 200
