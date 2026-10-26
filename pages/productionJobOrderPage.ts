@@ -1,5 +1,6 @@
 import { Page, Locator, expect } from "@playwright/test";
 import { BasePage, step } from "./basePage";
+import { ProductionData } from "../testData/productionData";
 
 export class ProductionJobOrderPage extends BasePage {
     public readonly mainContent: Locator;
@@ -11,7 +12,7 @@ export class ProductionJobOrderPage extends BasePage {
 
     // Dynamic locators
     private readonly tableRow: (text: string) => Locator;
-
+    private readonly expandButton: (department: string) => Locator;
     constructor(public readonly page: Page) {
         super(page);
         this.mainContent = this.page.getByRole('main');
@@ -23,6 +24,7 @@ export class ProductionJobOrderPage extends BasePage {
 
         // Dynamic locators initialization
         this.tableRow = (text: string) => this.page.getByRole('row').filter({ hasText: text });
+        this.expandButton = (department: string) => this.page.locator(`//span[text()="${department}"]//preceding-sibling::button`)
     }
 
     @step()
@@ -93,5 +95,32 @@ export class ProductionJobOrderPage extends BasePage {
     async validateTaskProgress(departmentCount: number) {
         await expect(this.runningStatus, `Expected ${departmentCount} departments to be Running`).toHaveCount(departmentCount);
         await expect(this.pendingStatus, `Expected ${departmentCount} departments to have a Pending status`).toHaveCount(departmentCount);
+    }
+
+    @step()
+    async expandDepartment(department: string) {
+        const button = this.expandButton(department);
+        await expect
+            .poll(
+                async () => {
+                    if (await button.isVisible()) {
+                        return true;
+                    }
+                    await this.page.reload();
+                    return false;
+                },
+                {
+                    message: `Expand button for "${department}" was not visible after refreshing`,
+                    intervals: [1_000, 2_000, 5_000],
+                    timeout: 60_000,
+                }
+            )
+            .toBe(true);
+        await button.click();
+    }
+
+    async validateDepartmentTaskProgressTable(employeeName: string) {
+        const tableData = await this.page.locator('(//div[@class="w-full rounded-[6px] overflow-hidden !border !border-gray-200"])[2]').innerText();
+        expect(tableData).toContain(employeeName);
     }
 }

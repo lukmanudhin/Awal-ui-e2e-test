@@ -390,7 +390,8 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Normal) through 
             await productionSalesOrderPage.search(salesOrderId);
             await productionSalesOrderPage.viewBOM();
             // validate BOQ Details
-            await productionSalesOrderPage.validateBOMDetails(addBOQData, materials);
+            await productionSalesOrderPage.validateBOQDetails(addBOQData);
+            await productionSalesOrderPage.validateBOMDetails(materials);
             await productionSalesOrderPage.clickBackArrow();
             await productionSalesOrderPage.viewEstimation(salesOrderId);
             await productionSalesOrderPage.validateEstimationDetails([
