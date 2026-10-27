@@ -28,6 +28,7 @@ import { CreditControlPage } from "../pages/creditControlPage";
 import { SalesReturnPage } from "../pages/salesReturnPage";
 import { SalesReturnAPI } from "../API/salesReturnAPI";
 import { PPJOAPI } from "../API/ppjoAPI";
+import { PjoTaskProcessAPI } from "../API/pjoTaskProcessAPI";
 import { EstimationAPI } from "../API/estimationAPI";
 import { QuotationAPI } from "../API/quotationAPI";
 import { InvoiceRequestAPI } from "../API/invoiceRequestAPI";
@@ -73,6 +74,7 @@ type baseFixtures = {
   salesReturnPage: SalesReturnPage;
   salesReturnAPI: SalesReturnAPI;
   ppjoAPI: PPJOAPI;
+  pjoTaskProcessAPI: PjoTaskProcessAPI;
   estimationAPI: EstimationAPI;
   quotationAPI: QuotationAPI;
   invoiceRequestAPI: InvoiceRequestAPI;
@@ -178,6 +180,9 @@ export const test = base.extend<baseFixtures>({
   },
   ppjoAPI: async ({ request }, use) => {
     await use(new PPJOAPI(request));
+  },
+  pjoTaskProcessAPI: async ({ request }, use) => {
+    await use(new PjoTaskProcessAPI(request));
   },
   estimationAPI: async ({ request }, use) => {
     await use(new EstimationAPI(request));
