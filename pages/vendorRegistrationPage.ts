@@ -190,8 +190,9 @@ export class VendorRegistrationPage extends BasePage {
 
     @step()
     async enterGoodsAndServices(vendorData: VendorRegistrationData) {
-        await this.selectOptionFromDropdown('Request Type', vendorData.requestType );
-        await this.selectOptionFromDropdown('Product Type', vendorData.productType);
+        await this.page.getByRole('combobox', { name: 'Select', exact: true }).click();
+        await this.page.getByRole('option', { name: vendorData.requestType }).click();
+        await this.selectOptionFromDropdown('Select Product Type', vendorData.productType);
         await this.goodsDescriptionTxtBx.fill(vendorData.goodsDescription);
         for (const [index, sales] of vendorData.totalSales.entries()) {
             await this.totalSalesTxtBx(index).fill(sales);
@@ -212,8 +213,6 @@ export class VendorRegistrationPage extends BasePage {
         await this.selectOptionFromDropdown('Account Currency', vendorData.accountCurrency);
         await this.telephoneNumberTxtBx.fill(vendorData.bankTelephoneNumber);
         await this.faxNumberTxtBx.fill(vendorData.faxNumber);
-        await this.creditLimitAmountTxtBx.fill(vendorData.creditLimitAmount);
-        await this.selectOptionFromDropdown('Payment Terms', vendorData.paymentTerms);
         await this.uploadFile('test_Documents', 'Test_Document.pdf');
         await this.ibanTxtBx.fill(vendorData.ibanNumber);
         await this.swiftCodeTxtBx.fill(vendorData.swiftCode);
