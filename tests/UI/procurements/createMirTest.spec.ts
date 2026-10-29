@@ -62,8 +62,7 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
             await materialIndentRequestPage.validateMIRDetails(materialIndentRequestId, MIRDetails.pjoNumber, MIRDetails.priority, MIRDetails.employeeName);
             await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
             await materialIndentRequestPage.managerApprovesMaterialRequestAndValidateAPI(200);
-            // improper status code
-            await expect(materialIndentRequestPage.successMessage('Material Indent Requets approved successfully'), 'Material Indent Requets approved successfully success message does not found').toHaveText('Material Indent Requets approved successfully');
+            await expect(materialIndentRequestPage.successMessage('Material Indent Request approved successfully'), 'Material Indent Request approved successfully success message does not found').toHaveText('Material Indent Request approved successfully');
             await materialIndentRequestPage.goToHistory();
             await materialIndentRequestPage.search(materialIndentRequestId);
             await expect(materialIndentRequestPage.status('Approved'), "Priority level text does not match").toBeVisible();
@@ -132,8 +131,7 @@ test.describe('Material Indent and Material Issue End-to-End Scenarios', () => {
             await materialIndentRequestPage.validateMIRDetails(materialIndentRequestId, MIRDetails.pjoNumber, MIRDetails.priority, MIRDetails.employeeName);
             await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
             await materialIndentRequestPage.managerApprovesMaterialRequestAndValidateAPI(200);
-            // improper status code
-            await expect(materialIndentRequestPage.successMessage('Material Indent Requets approved successfully'), 'Material Indent Requets approved successfully success message does not found').toHaveText('Material Indent Requets approved successfully');
+            await expect(materialIndentRequestPage.successMessage('Material Indent Request approved successfully'), 'Material Indent Request approved successfully success message does not found').toHaveText('Material Indent Request approved successfully');
             await materialIndentRequestPage.goToHistory();
             await materialIndentRequestPage.search(materialIndentRequestId);
             await expect(materialIndentRequestPage.status('Approved'), "Priority level text does not match").toBeVisible();

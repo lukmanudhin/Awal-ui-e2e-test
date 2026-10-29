@@ -37,7 +37,7 @@ test.describe('Material Indent and Material Issue For Out of Stock Raw Material 
         const uomId = await contractQuoteAPI.getUomId(accessToken, MIRDetails.uom);
         const materialPayload = getMaterialPayload('raw', uomId);
         createdMaterialId = await createMaterialAPI.createMaterial(accessToken, materialPayload);
-        MIRDetails.material = materialPayload.materialName;
+        MIRDetails.material = materialPayload.materialName;;
         console.log(`Material created: "${materialPayload.materialName}"`);
 
         await loginPage.launchAwalWebsite();
@@ -92,7 +92,7 @@ test.describe('Material Indent and Material Issue For Out of Stock Raw Material 
             await materialIndentRequestPage.managerApprovesMaterialRequestAndValidateAPI(200);
 
             // improper status code
-            await expect(materialIndentRequestPage.successMessage('Material Indent Requets approved successfully'), 'Material Indent Requets approved successfully success message does not found').toHaveText('Material Indent Requets approved successfully');
+            await expect(materialIndentRequestPage.successMessage('Material Indent Request approved successfully'), 'Material Indent Request approved successfully success message does not found').toHaveText('Material Indent Request approved successfully');
             await materialIndentRequestPage.goToHistory();
             await materialIndentRequestPage.search(materialIndentRequestId);
             await expect(materialIndentRequestPage.status('Approved'), "Priority level text does not match").toBeVisible();
@@ -198,7 +198,7 @@ test.describe('Material Indent and Material Issue For Out of Stock Raw Material 
         });
 
         await test.step('Award the onboarded vendor and submit the quote for final approval', async () => {
-            await procurementPage.awardVendor(prId, MIRDetails.tempVendorName);
+            await procurementPage.awardVendor(prId, MIRDetails.vendorQuotationVendor);
             await procurementPage.submitForFinalApprovalAndValidateAPI(200);
             await expect(procurementPage.successMessage('Vendor quotation award updated successfully'), 'Vendor quotation award updated successfully message does not match').toHaveText('Vendor quotation award updated successfully');
         });

@@ -60,8 +60,7 @@ test.describe('Verify Material Indent Life Cycle With Multiple Partial Issues E2
             await materialIndentRequestPage.validateMIRDetails(materialIndentRequestId, MIRDetails.pjoNumber, MIRDetails.priority, requestedBy);
             await materialIndentRequestPage.validateMaterialInformationTable(MIRDetails);
             await materialIndentRequestPage.managerApprovesMaterialRequestAndValidateAPI(200);
-            // improper status code
-            await expect(materialIndentRequestPage.successMessage('Material Indent Requets approved successfully'), 'Material Indent Requets approved successfully success message does not found').toHaveText('Material Indent Requets approved successfully');
+            await expect(materialIndentRequestPage.successMessage('Material Indent Request approved successfully'), 'Material Indent Request approved successfully success message does not found').toHaveText('Material Indent Request approved successfully');
         });
 
         await test.step('Verify the approval is reflected in history and in the indent request list', async () => {
