@@ -119,6 +119,20 @@ export class ProductionJobOrderPage extends BasePage {
         await button.click();
     }
 
+    // Department progress table: employee, verifying QC and the Completed QC status / department status of the department
+    @step()
+    async validateDepartmentCompleted(department: string, employeeName: string, qcEmployee: string) {
+        const departmentRow = this.tableRow(department).first();
+        await expect(departmentRow, `Employee ${employeeName} is not displayed for department: ${department}`).toContainText(employeeName);
+        await expect(departmentRow, `QC employee ${qcEmployee} is not displayed as verifier for department: ${department}`).toContainText(qcEmployee);
+        await expect(departmentRow.getByRole('cell', { name: 'Completed', exact: true }), `QC status and status are not Completed for department: ${department}`).toHaveCount(2);
+    }
+
+    @step()
+    async validateProgressPercentage(percentage: string) {
+        await expect(this.mainContent, `PJO progress does not show ${percentage}`).toContainText(percentage);
+    }
+
     async validateDepartmentTaskProgressTable(employeeName: string) {
         const tableData = await this.page.locator('(//div[@class="w-full rounded-[6px] overflow-hidden !border !border-gray-200"])[2]').innerText();
         expect(tableData).toContain(employeeName);

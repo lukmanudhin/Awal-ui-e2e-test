@@ -362,7 +362,7 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Normal) through 
         });
     });
 
-    test('Verify the sales order is processed in Production through MRP, PJO creation and PJO approval', async ({ modules, productionSalesOrderPage, mrpPage, productionJobOrderPage, salesOrderManagerPage, quotationManagerPage, invoiceRequestPage, pjoTaskProcessAPI }) => {
+    test('Verify the sales order is processed in Production through MRP, PJO creation and PJO approval', async ({ modules, productionSalesOrderPage, mrpPage, productionJobOrderPage, departmentAssignmentCompletionPage, qcTaskRequestsPage, invoiceRequestPage, pjoTaskProcessAPI }) => {
         expect(salesOrderId, 'Sales Order Id was not created in the beforeEach hook').toBeTruthy();
         console.log('Sales Order Id:', salesOrderId);
         const projectManagerDisplayName = projectManagerName.split(' - ').pop() || projectManagerName;
@@ -511,6 +511,7 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Normal) through 
                 `Customer-${customerName}`,
                 `Quantity-${productionData.pjoQuantity}`,
             ]);
+            await productionJobOrderPage.validateProgressPercentage('0%');
             await productionJobOrderPage.validateTaskProgress(productionData.bolDepartments.length);
             console.log(`PJO ${pjoNumber} is approved and in progress`);
         });
@@ -559,6 +560,68 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Normal) through 
             await expect(productionJobOrderPage.status('Running'), 'PJO approved status does not match').toBeVisible();
             await productionJobOrderPage.validateDepartmentTaskProgressTable(productionData.designStudioEmployee);
             await productionJobOrderPage.expandDepartment('Design Studio');
+        });
+
+        await test.step('Department Assignment Completion: Verify the design file is uploaded and the Design Studio task is completed', async () => {
+            await modules.goToModule({ nestedSubModule: 'Department Assignment Completion' });
+            await departmentAssignmentCompletionPage.search(pjoNumber);
+            await expect(departmentAssignmentCompletionPage.status(productionData.departmentTaskPendingStatus), 'Department task status is not Pending').toBeVisible();
+            await departmentAssignmentCompletionPage.openDepartmentTask('Design Studio', pjoNumber);
+            await departmentAssignmentCompletionPage.validateDepartmentTaskDetails([
+                `PJO Number-${pjoNumber}`,
+                `PJO Quantity-${productionData.pjoQuantity}`,
+                'Department-Design Studio',
+                `Sales Order Number-${salesOrderId}`,
+                `Employee Name-${productionData.designStudioEmployee}`,
+            ]);
+            await departmentAssignmentCompletionPage.uploadDesignFile(productionData.uploadFolder, productionData.uploadFileName);
+            await departmentAssignmentCompletionPage.validateCompleteDepartmentTaskAPI(201);
+            await expect(departmentAssignmentCompletionPage.successMessage('Department assignment completion created successfully'), 'Department assignment completion success message does not match').toContainText('Department assignment completion created successfully');
+            await departmentAssignmentCompletionPage.search(pjoNumber);
+            await expect(departmentAssignmentCompletionPage.status(productionData.departmentTaskCompletedStatus), 'Department task status is not Completed').toBeVisible();
+            console.log(`Design Studio task of PJO ${pjoNumber} is completed from the Department Assignment Completion`);
+        });
+
+        await test.step('QC Task Requests: Verify the QC employee is assigned and the QC of the Design Studio task is submitted', async () => {
+            await modules.goToModule({ subModule: 'Quality Control', nestedSubModule: 'QC Task Requests' });
+            await qcTaskRequestsPage.search(pjoNumber);
+            await expect(qcTaskRequestsPage.status(productionData.qcTaskInProgressStatus), 'QC task status is not In Progress').toBeVisible();
+            await qcTaskRequestsPage.validateAssignQCAPI(productionData.qcEmployee, 200);
+            await expect(qcTaskRequestsPage.successMessage('Assigned QC updated successfully'), 'Assigned QC success message does not match').toContainText('Assigned QC updated successfully');
+            await qcTaskRequestsPage.clickViewIcon();
+            await qcTaskRequestsPage.validateQCTaskDetails([
+                `PJO Number-${pjoNumber}`,
+                `PJO Quantity-${productionData.pjoQuantity}`,
+                'Department-Design Studio',
+                `Project Name-${salesEnquiryNormalPayload.projectName}`,
+                `Sales Order Number-${salesOrderId}`,
+                `Status-${productionData.qcTaskInProgressStatus}`,
+                `Assigned Production Engineer-${productionEngineer}`,
+                `Assigned QC-${productionData.qcEmployee}`,
+            ]);
+            await qcTaskRequestsPage.clickStartQC();
+            await qcTaskRequestsPage.validateQCTaskDetails([
+                `Product Name-${addBOQData.description}`,
+                `Product Description-${addBOQData.signName}`,
+                `Reference Documents${productionData.uploadFileName}`,
+            ]);
+            await qcTaskRequestsPage.enterQCTestDetails(productionData);
+            await qcTaskRequestsPage.saveQCTest();
+            await qcTaskRequestsPage.enterNonConformityDetails(productionData);
+            await qcTaskRequestsPage.validateSubmitQCAPI(201);
+            await qcTaskRequestsPage.search(pjoNumber);
+            await expect(qcTaskRequestsPage.status(productionData.qcTaskCompletedStatus), 'QC task status is not Completed').toBeVisible();
+            console.log(`QC of the Design Studio task of PJO ${pjoNumber} is completed by ${productionData.qcEmployee}`);
+        });
+
+        await test.step('PJO Progress & Status Tracking: Verify the Design Studio department is completed and verified by QC', async () => {
+            await modules.goToModule({ nestedSubModule: 'PJO Progress & Status Tracking' });
+            await productionJobOrderPage.search(pjoNumber);
+            await expect(productionJobOrderPage.status(productionData.pjoApprovedStatus), 'PJO approved status does not match').toBeVisible();
+            await productionJobOrderPage.clickViewIcon();
+            await productionJobOrderPage.validateDepartmentCompleted('Design Studio', productionData.designStudioEmployee, productionData.qcEmployee);
+            await productionJobOrderPage.validateProgressPercentage(productionData.pjoProgressPercentage);
+            console.log(`PJO ${pjoNumber} progress is ${productionData.pjoProgressPercentage} after the Design Studio task is completed`);
         });
     });
 });

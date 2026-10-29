@@ -40,6 +40,8 @@ import { CustomerComplaintPage } from "../pages/customerComplaintPage";
 import { ProductionSalesOrderPage } from "../pages/productionSalesOrderPage";
 import { MRPPage } from "../pages/mrpPage";
 import { ProductionJobOrderPage } from "../pages/productionJobOrderPage";
+import { DepartmentAssignmentCompletionPage } from "../pages/departmentAssignmentCompletionPage";
+import { QCTaskRequestsPage } from "../pages/qcTaskRequestsPage";
 import { MobileSession } from "../utils/mobileSession";
 import { MobileLoginPage } from "../pages/mobile/mobileLoginPage";
 import { MobileTaskManagementPage } from "../pages/mobile/mobileTaskManagementPage";
@@ -85,6 +87,8 @@ type baseFixtures = {
   productionSalesOrderPage: ProductionSalesOrderPage;
   mrpPage: MRPPage;
   productionJobOrderPage: ProductionJobOrderPage;
+  departmentAssignmentCompletionPage: DepartmentAssignmentCompletionPage;
+  qcTaskRequestsPage: QCTaskRequestsPage;
   mobileSession: MobileSession;
   mobileLoginPage: MobileLoginPage;
   mobileTaskManagementPage: MobileTaskManagementPage;
@@ -213,6 +217,12 @@ export const test = base.extend<baseFixtures>({
   },
   productionJobOrderPage: async ({ page }, use) => {
     await use(new ProductionJobOrderPage(page));
+  },
+  departmentAssignmentCompletionPage: async ({ page }, use) => {
+    await use(new DepartmentAssignmentCompletionPage(page));
+  },
+  qcTaskRequestsPage: async ({ page }, use) => {
+    await use(new QCTaskRequestsPage(page));
   },
   // Not connected until a mobile page calls launch, and always closed after the test
   mobileSession: async ({}, use) => {

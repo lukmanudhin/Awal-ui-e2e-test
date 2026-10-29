@@ -37,7 +37,7 @@ test.describe('Material Indent and Material Issue For Out of Stock Raw Material 
         const uomId = await contractQuoteAPI.getUomId(accessToken, MIRDetails.uom);
         const materialPayload = getMaterialPayload('raw', uomId);
         createdMaterialId = await createMaterialAPI.createMaterial(accessToken, materialPayload);
-        MIRDetails.material = materialPayload.materialName;;
+        MIRDetails.material = materialPayload.materialName;
         console.log(`Material created: "${materialPayload.materialName}"`);
 
         await loginPage.launchAwalWebsite();

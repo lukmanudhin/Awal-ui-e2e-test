@@ -12,6 +12,25 @@ export type ProductionData = {
   productionRemarks: string;
   deliveryRemarks: string;
   installationCategory: string;
+  // QC employee who is assigned to the QC task of the PJO
+  qcEmployee: string;
+  departmentTaskPendingStatus: string;
+  departmentTaskCompletedStatus: string;
+  qcTaskInProgressStatus: string;
+  qcTaskCompletedStatus: string;
+  qcTestType: string;
+  qcTestDescription: string;
+  qcTestCriteria: string;
+  qcExpectedResult: string;
+  qcActualResult: string;
+  qcAcceptedQuantity: string;
+  qcRejectedQuantity: string;
+  nonConformityDetails: string;
+  // File uploaded as the design file and as the non conformity attachment
+  uploadFolder: string;
+  uploadFileName: string;
+  // Progress of the PJO once the first of its two departments is completed and QC passed
+  pjoProgressPercentage: string;
   // Options that are selected in the sales order check list, in the order they appear on the form
   checkedChecklistOptions: string[];
 };
@@ -23,6 +42,22 @@ export const getProductionData = (): ProductionData => ({
   designStudioEmployee: 'Sanjay Preeth',
   pjoApprovalStatus: 'Pending',
   pjoApprovedStatus: 'Approved',
+  qcEmployee: 'Yoganath raja',
+  departmentTaskPendingStatus: 'Pending',
+  departmentTaskCompletedStatus: 'Completed',
+  qcTaskInProgressStatus: 'In Progress',
+  qcTaskCompletedStatus: 'Completed',
+  qcTestType: 'Machine Testing',
+  qcTestDescription: 'QC E2E Test Description',
+  qcTestCriteria: 'Test Criteria',
+  qcExpectedResult: '5',
+  qcActualResult: '5',
+  qcAcceptedQuantity: '1',
+  qcRejectedQuantity: '0',
+  nonConformityDetails: 'Details of non confirmation QC Task E2E Test',
+  uploadFolder: 'test_Documents',
+  uploadFileName: 'Test_Document.pdf',
+  pjoProgressPercentage: '50%',
   currency: 'SAR',
   deliveryLocation: 'Guangdong',
   salesChecklistRemarks: 'Sales Checklist Remarks',
