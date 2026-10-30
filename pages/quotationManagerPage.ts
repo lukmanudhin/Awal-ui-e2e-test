@@ -245,7 +245,7 @@ export class QuotationManagerPage extends BasePage {
         // await this.calenderBtn.first().click();
         // await this.dateOption(`${date}`).click();
         await this.selectDate(date);
-        await this.page.waitForTimeout(500);
+        await expect(this.page.locator('//div[@class="MuiPickersFadeTransitionGroup-root css-1h73gvd"]'), 'Calendar popup did not close after selecting the date').toBeHidden();
 
         // await this.calenderBtn.nth(1).click();
         // await this.dateOption(`${date}`).click();
