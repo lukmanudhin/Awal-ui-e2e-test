@@ -142,7 +142,6 @@ export class SalesEnquiryPage extends BasePage {
     }
     @step()
     async enterCustomerName(data: SalesEnquiryData) {
-        await this.page.waitForTimeout(7000);
         await this.customerNameTextBox.waitFor({ state: 'visible', timeout: 30000 });
         await expect(this.customerNameTextBox).toBeEnabled({ timeout: 5000 });
         await this.customerNameTextBox.fill(data.customerName);
@@ -158,7 +157,7 @@ export class SalesEnquiryPage extends BasePage {
         await expect(this.enquiryBtn, "Create Enquiry button is not visible").toBeVisible();
         await this.enquiryBtn.click();
         await this.page.waitForLoadState('domcontentloaded');
-        await this.page.waitForTimeout(1000);
+        await expect(this.customerNameTextBox, 'Enquiry form did not open after clicking Create Enquiry').toBeVisible();
     }
     @step()
     async createSalesEnquiry(data: SalesEnquiryData) {
@@ -390,7 +389,6 @@ export class SalesEnquiryPage extends BasePage {
     async validateViewSalesEnquiryAPI(statusCode: number) {
         const responsePromise = this.page.waitForResponse('**/getEnquiryDetails**');
         await this.eyeIcon.click();
-        await this.page.waitForTimeout(2000);
         await this.page.waitForLoadState('domcontentloaded');
         const response = await responsePromise;
         expect(response.status(), `View sales enquiry API status code mismatch. Expected ${statusCode}, received ${response.status()}`).toBe(statusCode);
@@ -457,16 +455,23 @@ export class SalesEnquiryPage extends BasePage {
     @step()
     async clickCreateEnquiryButton() {
         await expect(this.createSalesEnquiryButton, "Create Sales Enquiry button is not visible").toBeVisible();
+        const formInitResponses = [
+            '**/salesEnquiry/getEnquiryExistingCustomerDropdown',
+            '**/paymentTerms/getPaymentTermDropdown',
+            '**/currency/getCurrencyDropdown',
+        ].map((pattern) => this.page.waitForResponse(pattern));
         await this.createSalesEnquiryButton.click();
         await this.page.waitForLoadState('domcontentloaded');
-        await this.page.waitForTimeout(1000);
+        await Promise.all(formInitResponses);
+        await expect(this.createSalesEnquiryTitle, 'Create Sales Enquiry form did not open').toBeVisible();
     }
     @step()
     async clickInternalRequestButton() {
         await expect(this.internalRequestBtn, "Internal Request button is not visible").toBeVisible();
+        const listUrl = this.page.url();
         await this.internalRequestBtn.click();
+        await this.page.waitForURL((url) => url.toString() !== listUrl, { timeout: 15000 });
         await this.page.waitForLoadState('domcontentloaded');
-        await this.page.waitForTimeout(1000);
     }
 
     @step()
@@ -653,7 +658,13 @@ export class SalesEnquiryPage extends BasePage {
             const rowText = await customerRow.innerText();
             if (expectedValues.every((value) => rowText.includes(value))) break;
             await this.page.keyboard.press('ArrowRight');
-            await this.page.waitForTimeout(SCROLL_DELAY_MS);
+            await expect.poll(
+                async () => {
+                    const rowText = await customerRow.innerText();
+                    return expectedValues.every((value) => rowText.includes(value));
+                },
+                { timeout: SCROLL_DELAY_MS }
+            ).toBe(true).catch(() => { /* expected values not revealed yet; keep scrolling */ });
         }
 
         for (const expectedValue of expectedValues) {
@@ -670,7 +681,6 @@ export class SalesEnquiryPage extends BasePage {
     @step()
     async validateSalesEnquiryDeleted(name: string) {
         await this.searchBox.fill(name);
-        await this.page.waitForTimeout(1000);
         await expect(this.createdSalesEnquiry(name), `Deleted sales enquiry is still visible for customer: ${name}`).not.toBeVisible();
     }
 
@@ -680,7 +690,7 @@ export class SalesEnquiryPage extends BasePage {
     // }
     @step()
     async searchToGetEnquiryId(customerName: string) {
-        await this.page.waitForTimeout(2000);
+        await expect(this.searchBox, 'Search box did not become editable').toBeEditable();
         await this.searchBox.fill(customerName);
         await expect(this.createdSalesEnquiry(customerName).first(), `Sales enquiry is not visible for customer: ${customerName}`).toBeVisible();
         const enquiryId = await this.enquiryIdCell.textContent();
@@ -690,4 +700,4 @@ export class SalesEnquiryPage extends BasePage {
     async getSalesOrderId(){
         return this.page.locator('//td[@data-app-table-col="3"]//div').first().textContent();
     }
-}
+                }
