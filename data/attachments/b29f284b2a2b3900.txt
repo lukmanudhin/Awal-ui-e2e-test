@@ -1,0 +1,20 @@
+Login successfull
+Verified sales enquiry creation API with status code: 201
+Sales enquiry created successfully for customer: Shelly Pacocha
+Embroidery and Tailoring created successfully
+Verified embroidery creation API with status code: 201
+ATM products created successfully
+Verified ATM products API with status code: 201
+Acrylic product created successfully
+Verified acrylic product creation API with status code: 201
+→ POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser
+← POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser 200 OK (845ms)
+→ DELETE https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiry/delete/6024d232-c6fa-40d5-b87a-98e6e25b2154
+← DELETE https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiry/delete/6024d232-c6fa-40d5-b87a-98e6e25b2154 200 OK (799ms)
+----------------------Delete Sales Enquiry API Response---------------------
+API Response: {
+  result: true,
+  statusCode: 200,
+  success: true,
+  message: 'Data deleted successfully'
+}

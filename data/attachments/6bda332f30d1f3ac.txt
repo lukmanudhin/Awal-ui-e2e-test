@@ -1,0 +1,12 @@
+→ POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser
+← POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser 200 OK (852ms)
+→ POST https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiry/upsertSalesEnquiry
+← POST https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiry/upsertSalesEnquiry 201 Created (885ms)
+→ POST https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiryForm/upsertAcrylicProducts
+← POST https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiryForm/upsertAcrylicProducts 201 Created (254ms)
+→ POST https://sales-api-dev.colanapps.in/api/transaction/v1/ppjo/createPpjo
+← POST https://sales-api-dev.colanapps.in/api/transaction/v1/ppjo/createPpjo 201 Created (697ms)
+→ POST https://sales-api-dev.colanapps.in/api/transaction/v1/ppjo/createPpjo
+← POST https://sales-api-dev.colanapps.in/api/transaction/v1/ppjo/createPpjo 201 Created (410ms)
+Sales enquiry with PPJO requests created through API for customer: Cortney Willms
+→ POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser

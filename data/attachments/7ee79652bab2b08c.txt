@@ -1,0 +1,8 @@
+→ POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser
+← POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser 200 OK (865ms)
+→ GET https://core-api-dev.colanapps.in/api/v1/employeeMaster/getAllEmployeeSearch?search=
+← GET https://core-api-dev.colanapps.in/api/v1/employeeMaster/getAllEmployeeSearch?search= 200 OK (1732ms)
+Site Visitor (fetched dynamically via API): EMP00347 - Sundar
+Login successfull
+Summary calculated successfully
+Verified Calculate Summary API with status code: 200

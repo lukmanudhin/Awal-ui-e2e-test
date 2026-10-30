@@ -1,0 +1,3 @@
+→ GET https://estimation-api-dev.colanapps.in/api/v1/boq/getAllBoq
+← GET https://estimation-api-dev.colanapps.in/api/v1/boq/getAllBoq?estimationVerOptExtId=70e22080-ea4c-4c30-80c5-c26f4858fce0 200 OK (308ms)
+Resolved estimationDetailExtId: 474baad9-6b52-4ea8-b951-1a1adfc8fd96

@@ -1,0 +1,41 @@
+→ POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser
+← POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser 200 OK (835ms)
+→ GET https://procurement-api-dev.colanapps.in/api/v1/stockView/getAllStockView?PageNumber=1&PageSize=10&subStore=RawMaterials&materialStatus=InStock
+← GET https://procurement-api-dev.colanapps.in/api/v1/stockView/getAllStockView?PageNumber=1&PageSize=10&subStore=RawMaterials&materialStatus=InStock 200 OK (839ms)
+{
+  result: {
+    data: [
+      [Object], [Object],
+      [Object], [Object],
+      [Object], [Object],
+      [Object], [Object],
+      [Object], [Object]
+    ],
+    totalRecords: 71,
+    pageNumber: 1,
+    pageSize: 10,
+    pageInfo: 'Showing 1 to 10 of 71 entries'
+  },
+  statusCode: 200,
+  success: true,
+  message: 'Data fetched successfully',
+  errors: null
+}
+====================================
+Highest Stock Material: DIGITAL PRINTING INK
+Quantity Available: 97,080
+====================================
+Login successfull
+Verified sales enquiry creation API with status code: 201
+Sales enquiry created successfully for customer: Frances West
+Acrylic product created successfully
+Verified acrylic product creation API with status code: 201
+→ DELETE https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiry/delete/91929de3-8d53-42c7-88dd-f06407a4b25d
+← DELETE https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiry/delete/91929de3-8d53-42c7-88dd-f06407a4b25d 200 OK (826ms)
+----------------------Delete Sales Enquiry API Response---------------------
+API Response: {
+  result: true,
+  statusCode: 200,
+  success: true,
+  message: 'Data deleted successfully'
+}

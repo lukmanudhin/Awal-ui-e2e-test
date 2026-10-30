@@ -1,0 +1,5 @@
+→ GET https://finance-api-dev.colanapps.in/api/InvoiceRequest/GetAllInvoiceRequest
+← GET https://finance-api-dev.colanapps.in/api/InvoiceRequest/GetAllInvoiceRequest?pageNumber=1&pageSize=10&Search=Clara+Hane 200 OK (1308ms)
+→ POST https://finance-api-dev.colanapps.in/api/InvoiceRequest/Create
+← POST https://finance-api-dev.colanapps.in/api/InvoiceRequest/Create 200 OK (576ms)
+Resolved invoiceExtId: 7b3b1a20-5372-4d05-ad95-c80e414fc592

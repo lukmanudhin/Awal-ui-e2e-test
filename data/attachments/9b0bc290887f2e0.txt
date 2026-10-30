@@ -1,0 +1,20 @@
+→ POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser
+← POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser 200 OK (269ms)
+→ POST https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiry/upsertSalesEnquiry
+← POST https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiry/upsertSalesEnquiry 201 Created (280ms)
+→ POST https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiryForm/upsertAcrylicProducts
+← POST https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiryForm/upsertAcrylicProducts 201 Created (253ms)
+Sales enquiry created through API for customer: Opal Effertz
+Login successfull
+Request Artwork API Verified with status code: 400
+→ POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser
+← POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser 200 OK (272ms)
+→ DELETE https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiry/delete/0eee5172-dfe5-40b5-bd70-2be790ab8e70
+← DELETE https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiry/delete/0eee5172-dfe5-40b5-bd70-2be790ab8e70 200 OK (273ms)
+----------------------Delete Sales Enquiry API Response---------------------
+API Response: {
+  result: true,
+  statusCode: 200,
+  success: true,
+  message: 'Data deleted successfully'
+}

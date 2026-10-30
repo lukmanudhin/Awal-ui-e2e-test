@@ -1,0 +1,85 @@
+Login successfull
+→ POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser
+← POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser 200 OK (846ms)
+→ POST https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiry/upsertSalesEnquiry
+← POST https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiry/upsertSalesEnquiry 201 Created (840ms)
+→ POST https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiryForm/upsertAcrylicProducts
+← POST https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiryForm/upsertAcrylicProducts 201 Created (255ms)
+→ POST https://sales-api-dev.colanapps.in/api/transaction/v1/ppjo/createPpjo
+← POST https://sales-api-dev.colanapps.in/api/transaction/v1/ppjo/createPpjo 201 Created (456ms)
+→ POST https://sales-api-dev.colanapps.in/api/transaction/v1/ppjo/createPpjo
+← POST https://sales-api-dev.colanapps.in/api/transaction/v1/ppjo/createPpjo 201 Created (398ms)
+→ GET https://sales-api-dev.colanapps.in/api/transaction/v1/ppjo/getPpjoByReferenceId
+← GET https://sales-api-dev.colanapps.in/api/transaction/v1/ppjo/getPpjoByReferenceId?referenceId=8f0dd9cb-0a93-4b0b-ae5a-5c0cec540424&referenceType=SalesEnquiry 200 OK (292ms)
+→ POST https://estimation-api-dev.colanapps.in/api/v1/boq/createBoq
+← POST https://estimation-api-dev.colanapps.in/api/v1/boq/createBoq 201 Created (929ms)
+→ GET https://estimation-api-dev.colanapps.in/api/v1/boq/getAllBoq
+← GET https://estimation-api-dev.colanapps.in/api/v1/boq/getAllBoq?estimationVerOptExtId=a5635f68-1444-41e9-b49e-3b891c22d6ca 200 OK (270ms)
+→ PUT https://estimation-api-dev.colanapps.in/api/v1/bom/updateConsumableByEstimationDetailId
+← PUT https://estimation-api-dev.colanapps.in/api/v1/bom/updateConsumableByEstimationDetailId 200 OK (328ms)
+→ POST https://estimation-api-dev.colanapps.in/api/v1/bom/createEstimationBom
+← POST https://estimation-api-dev.colanapps.in/api/v1/bom/createEstimationBom 201 Created (366ms)
+→ GET https://estimation-api-dev.colanapps.in/api/v1/bol/getAllBolById/b72955cb-cc80-4eff-a60e-39b023d7e5bf
+← GET https://estimation-api-dev.colanapps.in/api/v1/bol/getAllBolById/b72955cb-cc80-4eff-a60e-39b023d7e5bf?isPackage=false 200 OK (286ms)
+→ PUT https://estimation-api-dev.colanapps.in/api/v1/bol/updateEstimationBolById
+← PUT https://estimation-api-dev.colanapps.in/api/v1/bol/updateEstimationBolById 200 OK (308ms)
+→ PUT https://estimation-api-dev.colanapps.in/api/v1/bol/updateEstimationBolById
+← PUT https://estimation-api-dev.colanapps.in/api/v1/bol/updateEstimationBolById 200 OK (301ms)
+→ PUT https://estimation-api-dev.colanapps.in/api/v1/bol/updateEstimationBolById
+← PUT https://estimation-api-dev.colanapps.in/api/v1/bol/updateEstimationBolById 200 OK (307ms)
+→ PUT https://estimation-api-dev.colanapps.in/api/v1/bol/updateEstimationBolById
+← PUT https://estimation-api-dev.colanapps.in/api/v1/bol/updateEstimationBolById 200 OK (310ms)
+→ POST https://estimation-api-dev.colanapps.in/api/v1/summary/createSummary
+← POST https://estimation-api-dev.colanapps.in/api/v1/summary/createSummary 201 Created (296ms)
+→ POST https://estimation-api-dev.colanapps.in/api/v1/packing/createPacking
+← POST https://estimation-api-dev.colanapps.in/api/v1/packing/createPacking 201 Created (265ms)
+→ PUT https://estimation-api-dev.colanapps.in/api/v1/bom/updateConsumableByEstimationDetailId
+← PUT https://estimation-api-dev.colanapps.in/api/v1/bom/updateConsumableByEstimationDetailId 200 OK (372ms)
+→ POST https://estimation-api-dev.colanapps.in/api/v1/bom/createEstimationBom
+← POST https://estimation-api-dev.colanapps.in/api/v1/bom/createEstimationBom 201 Created (370ms)
+→ POST https://estimation-api-dev.colanapps.in/api/v1/bol/createEstimationBol
+← POST https://estimation-api-dev.colanapps.in/api/v1/bol/createEstimationBol 201 Created (349ms)
+→ POST https://estimation-api-dev.colanapps.in/api/v1/summary/createSummary
+← POST https://estimation-api-dev.colanapps.in/api/v1/summary/createSummary 201 Created (354ms)
+→ POST https://estimation-api-dev.colanapps.in/api/v1/otherCosting/updateOtherCostingStatus
+← POST https://estimation-api-dev.colanapps.in/api/v1/otherCosting/updateOtherCostingStatus 200 OK (271ms)
+→ POST https://estimation-api-dev.colanapps.in/api/v1/costDistribution/reCalculatingCostDistribution
+← POST https://estimation-api-dev.colanapps.in/api/v1/costDistribution/reCalculatingCostDistribution?estimationVerOptId=a5635f68-1444-41e9-b49e-3b891c22d6ca 200 OK (290ms)
+→ POST https://estimation-api-dev.colanapps.in/api/v1/otherCosting/createOtherCosting
+← POST https://estimation-api-dev.colanapps.in/api/v1/otherCosting/createOtherCosting 201 Created (315ms)
+→ POST https://estimation-api-dev.colanapps.in/api/v1/costDistribution/createCostDistribution
+← POST https://estimation-api-dev.colanapps.in/api/v1/costDistribution/createCostDistribution 201 Created (354ms)
+→ POST https://estimation-api-dev.colanapps.in/api/v1/summaryWithIncentive/CalculateSummaryWithIncentive
+← POST https://estimation-api-dev.colanapps.in/api/v1/summaryWithIncentive/CalculateSummaryWithIncentive 200 OK (347ms)
+→ POST https://sales-api-dev.colanapps.in/api/transaction/v1/Quotation/GenerateQuotation
+← POST https://sales-api-dev.colanapps.in/api/transaction/v1/Quotation/GenerateQuotation 201 Created (355ms)
+→ PUT https://sales-api-dev.colanapps.in/api/transaction/v1/Quotation/SubmitForApproval/045e9e79-b0f4-42c0-9ae9-11772f534559
+← PUT https://sales-api-dev.colanapps.in/api/transaction/v1/Quotation/SubmitForApproval/045e9e79-b0f4-42c0-9ae9-11772f534559 200 OK (273ms)
+→ POST https://sales-api-dev.colanapps.in/api/transaction/v1/Quotation/quotationManagerApprove
+← POST https://sales-api-dev.colanapps.in/api/transaction/v1/Quotation/quotationManagerApprove 200 OK (275ms)
+→ POST https://sales-api-dev.colanapps.in/api/transaction/v1/Quotation/sendToCustomer
+← POST https://sales-api-dev.colanapps.in/api/transaction/v1/Quotation/sendToCustomer 200 OK (285ms)
+→ POST https://sales-api-dev.colanapps.in/api/transaction/v1/Quotation/QuotationApproval
+← POST https://sales-api-dev.colanapps.in/api/transaction/v1/Quotation/QuotationApproval 201 Created (514ms)
+→ POST https://sales-api-dev.colanapps.in/api/transaction/v1/Quotation/sendAdvanceInvoice
+← POST https://sales-api-dev.colanapps.in/api/transaction/v1/Quotation/sendAdvanceInvoice 201 Created (291ms)
+→ GET https://finance-api-dev.colanapps.in/api/InvoiceRequest/GetAllInvoiceRequest
+← GET https://finance-api-dev.colanapps.in/api/InvoiceRequest/GetAllInvoiceRequest?pageNumber=1&pageSize=10&Search=Micheal+Johns 200 OK (882ms)
+→ POST https://finance-api-dev.colanapps.in/api/InvoiceRequest/Create
+← POST https://finance-api-dev.colanapps.in/api/InvoiceRequest/Create 200 OK (254ms)
+→ POST https://finance-api-dev.colanapps.in/api/invoiceRegister/updateManagerApproval
+← POST https://finance-api-dev.colanapps.in/api/invoiceRegister/updateManagerApproval 200 OK (290ms)
+→ POST https://finance-api-dev.colanapps.in/api/invoiceRegister/acknowledgeFileUpload
+← POST https://finance-api-dev.colanapps.in/api/invoiceRegister/acknowledgeFileUpload 200 OK (424ms)
+View advance invoice API validated successfully
+→ POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser
+← POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser 200 OK (270ms)
+→ DELETE https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiry/delete/8f0dd9cb-0a93-4b0b-ae5a-5c0cec540424
+← DELETE https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiry/delete/8f0dd9cb-0a93-4b0b-ae5a-5c0cec540424 200 OK (284ms)
+----------------------Delete Sales Enquiry API Response---------------------
+API Response: {
+  result: true,
+  statusCode: 200,
+  success: true,
+  message: 'Data deleted successfully'
+}

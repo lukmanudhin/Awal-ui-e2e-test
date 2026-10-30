@@ -1,0 +1,10 @@
+✓ Customer Name displayed: EQ13594
+✓ Customer Name displayed: Lionel Howell
+✓ Project Name displayed: Sales Enquiry Test
+✓ Country displayed: China
+✓ State displayed: Guangdong Province
+✓ City displayed: Guangdong
+✓ Payment Terms displayed: 100 % Advance Full Payment
+✓ Mobile Number displayed: 6254842884
+✓ Email displayed: Carole_Collier98@hotmail.com
+All validation checks passed for view cost estimation details

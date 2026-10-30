@@ -1,0 +1,26 @@
+Login successfull
+Verified sales enquiry creation API with status code: 201
+Sales enquiry created successfully for customer: Clay Bradtke
+Embroidery and Tailoring created successfully
+Verified embroidery creation API with status code: 201
+Acrylic product created successfully
+Verified acrylic product creation API with status code: 201
+Updating sales enquiry customer: Jane Rutherford
+Verified sales enquiry creation API with status code: 200
+Verified acrylic product details are prefilled
+Verified embroidery and tailoring details are prefilled
+Embroidery and Tailoring created successfully
+Verified embroidery creation API with status code: 201
+Acrylic product created successfully
+Verified acrylic product creation API with status code: 201
+→ POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser
+← POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser 200 OK (827ms)
+→ DELETE https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiry/delete/d0984114-08eb-41fe-99dd-3ad43a26513f
+← DELETE https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiry/delete/d0984114-08eb-41fe-99dd-3ad43a26513f 200 OK (815ms)
+----------------------Delete Sales Enquiry API Response---------------------
+API Response: {
+  result: true,
+  statusCode: 200,
+  success: true,
+  message: 'Data deleted successfully'
+}

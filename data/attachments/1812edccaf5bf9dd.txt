@@ -1,0 +1,20 @@
+→ POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser
+← POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser 200 OK (294ms)
+→ POST https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiry/upsertSalesEnquiry
+← POST https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiry/upsertSalesEnquiry 201 Created (287ms)
+→ POST https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiryForm/upsertAcrylicProducts
+← POST https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiryForm/upsertAcrylicProducts 201 Created (252ms)
+Sales enquiry created through API for customer: Rebecca Gerhold
+Login successfull
+Verified Request Artwork API was not triggered for invalid input
+→ POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser
+← POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser 200 OK (278ms)
+→ DELETE https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiry/delete/d46dc765-cb6c-4a31-a76d-da369beb5550
+← DELETE https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiry/delete/d46dc765-cb6c-4a31-a76d-da369beb5550 200 OK (274ms)
+----------------------Delete Sales Enquiry API Response---------------------
+API Response: {
+  result: true,
+  statusCode: 200,
+  success: true,
+  message: 'Data deleted successfully'
+}

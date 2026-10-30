@@ -1,0 +1,24 @@
+→ POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser
+← POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser 200 OK (268ms)
+→ POST https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiry/upsertSalesEnquiry
+← POST https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiry/upsertSalesEnquiry 201 Created (299ms)
+→ POST https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiryForm/upsertAcrylicProducts
+← POST https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiryForm/upsertAcrylicProducts 201 Created (253ms)
+→ POST https://sales-api-dev.colanapps.in/api/transaction/v1/ppjo/createPpjo
+← POST https://sales-api-dev.colanapps.in/api/transaction/v1/ppjo/createPpjo 201 Created (465ms)
+→ POST https://sales-api-dev.colanapps.in/api/transaction/v1/ppjo/createPpjo
+← POST https://sales-api-dev.colanapps.in/api/transaction/v1/ppjo/createPpjo 201 Created (415ms)
+Sales enquiry with PPJO requests created through API for customer: Nya Klocko
+Login successfull
+Verified Add BOQ API was not triggered for invalid input
+→ POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser
+← POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser 200 OK (272ms)
+→ DELETE https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiry/delete/4ddbe85a-01b0-477a-a4af-572cc2457104
+← DELETE https://sales-api-dev.colanapps.in/api/transaction/v1/salesEnquiry/delete/4ddbe85a-01b0-477a-a4af-572cc2457104 200 OK (280ms)
+----------------------Delete Sales Enquiry API Response---------------------
+API Response: {
+  result: true,
+  statusCode: 200,
+  success: true,
+  message: 'Data deleted successfully'
+}

@@ -1,0 +1,10 @@
+✓ Customer Name displayed: EQ13590
+✓ Customer Name displayed: Lelah Murray
+✓ Project Name displayed: Sales Enquiry Test
+✓ Country displayed: China
+✓ State displayed: Guangdong Province
+✓ City displayed: Guangdong
+✓ Payment Terms displayed: 100 % Advance Full Payment
+✓ Mobile Number displayed: 6449850295
+✓ Email displayed: Luz51@gmail.com
+All validation checks passed for view cost estimation details

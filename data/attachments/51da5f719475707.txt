@@ -1,0 +1,47 @@
+→ POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser
+← POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser 200 OK (852ms)
+→ GET https://procurement-api-dev.colanapps.in/api/v1/stockView/getAllStockView?PageNumber=1&PageSize=10&subStore=RawMaterials&materialStatus=InStock
+← GET https://procurement-api-dev.colanapps.in/api/v1/stockView/getAllStockView?PageNumber=1&PageSize=10&subStore=RawMaterials&materialStatus=InStock 200 OK (830ms)
+{
+  result: {
+    data: [
+      [Object], [Object],
+      [Object], [Object],
+      [Object], [Object],
+      [Object], [Object],
+      [Object], [Object]
+    ],
+    totalRecords: 71,
+    pageNumber: 1,
+    pageSize: 10,
+    pageInfo: 'Showing 1 to 10 of 71 entries'
+  },
+  statusCode: 200,
+  success: true,
+  message: 'Data fetched successfully',
+  errors: null
+}
+====================================
+Highest Stock Material: DIGITAL PRINTING INK
+Quantity Available: 97,080
+====================================
+→ POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser
+← POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser 200 OK (270ms)
+→ GET https://core-api-dev.colanapps.in/api/v1/employeeMaster/getAllEmployeeSearch?search=
+← GET https://core-api-dev.colanapps.in/api/v1/employeeMaster/getAllEmployeeSearch?search= 200 OK (1724ms)
+Site Visitor (fetched dynamically via API): EMP00457 - Akhtar
+Login successfull
+Lead created successfully
+Verified Create Lead API with status code: 201
+→ POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser
+← POST https://user-management-api-dev.colanapps.in/api/v1/auth/authenticateUser 200 OK (274ms)
+→ DELETE https://sales-api-dev.colanapps.in/api/transaction/v1/quickLeads/deleteLeadById/d72ecb58-4938-4a49-b3e5-f8f63deec364
+← DELETE https://sales-api-dev.colanapps.in/api/transaction/v1/quickLeads/deleteLeadById/d72ecb58-4938-4a49-b3e5-f8f63deec364 200 OK (800ms)
+----------------------Delete Lead API Response---------------------
+API Response: {
+  result: true,
+  statusCode: 200,
+  success: true,
+  message: 'Data deleted successfully'
+}
+Lead for Carmelo Daniel deleted successfully
