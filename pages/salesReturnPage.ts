@@ -70,13 +70,14 @@ export class SalesReturnPage extends BasePage {
 
     @step()
     async selectLeadNumber(leadNumber: string) {
+        const leadDetailsResponse = this.page.waitForResponse('**/salesReturn/getSalesReturnMaterials**');
         await this.selectOptionFromDropdown('Lead Number', leadNumber);
-        await this.page.waitForTimeout(1000);
+        await leadDetailsResponse;
     }
 
     @step()
     async searchByLeadNumber(leadNumber: string) {
-        await this.page.waitForTimeout(500);
+        await expect(this.searchBox, 'Search box did not become editable').toBeEditable();
         await this.searchBox.fill(leadNumber);
         await expect.poll(
             async () => await this.tableRow.count(),
