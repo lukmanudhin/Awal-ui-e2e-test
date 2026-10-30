@@ -117,7 +117,6 @@ export class MaterialIndentRequestPage extends BasePage {
     @step()
     async validateMaterialInformationTable(mirDetails: CreateMIRData) {
         await this.page.waitForLoadState('domcontentloaded');
-        await this.page.waitForTimeout(2000);
         await expect(this.page.locator('//tbody/tr'), `Table row does not contain material: ${mirDetails.material}`).toContainText(mirDetails.material);
         const tableRow = await this.page.locator('//tbody/tr').innerText();
         expect(tableRow, "Table row does not contain quantity").toContain(mirDetails.quantity);
@@ -194,7 +193,6 @@ export class MaterialIndentRequestPage extends BasePage {
     @step()
     async validateMIRDetails(detail1: string, detail2: string, detail3?: string, detail4?: string) {
         await this.page.waitForLoadState('domcontentloaded');
-        await this.page.waitForTimeout(2000);
         await expect(this.page.locator('//div[@class="p-[18px] undefined"]').first(), `Sample details do not contain enquiry id: ${detail1}`).toContainText(detail1);
         const sampleDetails = await this.page.locator('//div[@class="p-[18px] undefined"]').first().innerText();
         expect(sampleDetails, `Sample details do not contain document name: ${detail2}`).toContain(detail2);
