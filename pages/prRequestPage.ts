@@ -51,9 +51,9 @@ export class PRRequestPage extends BasePage {
 
     @step()
     async searchPR(name: string) {
-        await this.page.waitForTimeout(500);
+        await expect(this.searchBox, 'Search box did not become editable').toBeEditable();
         await this.searchBox.fill(name);
-        await this.page.waitForTimeout(2000);
+        await this.enquiryIdCell.waitFor({ state: 'visible' });
         const prId = await this.enquiryIdCell.textContent();
         return prId || "";
     }
