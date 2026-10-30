@@ -35,7 +35,7 @@ export class PipelinePage extends BasePage {
     this.fileRemarksTextbox = this.page.getByRole('textbox', { name: 'Remarks' });
     this.saveButton = this.page.getByRole('button', { name: 'Save' });
     this.timePickerPlaceholder = (index: number) => this.page.getByRole('button', { name: 'Choose time' }).nth(index);
-    this.timeOption = (name: string) => this.page.locator(`//li[@aria-label="${name}"]`);
+    this.timeOption = (name: string) => this.page.locator(`//li[@aria-label="${name}"]`).filter({ visible: true });
     this.attachedDocument = (fileName: string) => this.page.getByText(fileName, { exact: true }).first();
   }
 
@@ -80,15 +80,16 @@ export class PipelinePage extends BasePage {
   }
 
   private async selectTime(timePickerCount: number, hour: string, minutes: string, meridium: string) {
-    await this.page.waitForTimeout(250);
+        await expect(this.timePickerPlaceholder(timePickerCount), 'Time picker did not become visible').toBeVisible();
     await this.timePickerPlaceholder(timePickerCount).click();
-    await this.page.waitForTimeout(250);
+        await expect(this.timeOption(`${hour} hours`), 'Hour option did not appear').toBeVisible();
     await this.timeOption(`${hour} hours`).click();
-    await this.page.waitForTimeout(250);
+        await expect(this.timeOption(`${minutes} minutes`), 'Minute option did not appear').toBeVisible();
     await this.timeOption(`${minutes} minutes`).click();
-    await this.page.waitForTimeout(250);
+        await expect(this.timeOption(`${meridium}`), 'Meridiem option did not appear').toBeVisible();
     await this.timeOption(`${meridium}`).click();
     await this.saveAndCloseButton.click();
+    await expect(this.timeOption(`${meridium}`), 'Time picker popup did not close after saving').toBeHidden();
   }
 
   @step()
@@ -96,7 +97,7 @@ export class PipelinePage extends BasePage {
     await this.selectDate(new Date().getDate() + 5);
     await this.selectTime(0, '2', '10', 'AM');
     await this.selectTime(1, '3', '15', 'PM');
-    await this.page.waitForTimeout(500);
+        await expect(this.meetingDescriptionTextbox, 'Meeting description did not become editable').toBeEditable();
     await this.meetingDescriptionTextbox.fill(description);
     await expect(this.meetingDescriptionTextbox, 'Meeting description did not match').toHaveValue(description);
     const responsePromise = this.page.waitForResponse('**/pipeline/upsertPipelineMeeting');
@@ -145,7 +146,6 @@ export class PipelinePage extends BasePage {
   }
 
   async validateSalesEnquiryDetails(data: SalesEnquiryData) {
-    await this.page.waitForTimeout(3000);
     await expect(this.page.locator('//div[@class="grid grid-cols-2 pt-4 "]').or(this.page.locator('//div[@class="d-flex flex-column w-full bg-white gap-2 p-4 text-black-10"]')), `Details do not contain customer name: ${data.customerName}`).toContainText(data.customerName);
     const details = await this.page.locator('//div[@class="grid grid-cols-2 pt-4 "]').or(this.page.locator('//div[@class="d-flex flex-column w-full bg-white gap-2 p-4 text-black-10"]')).innerText();
     expect(details, "Details do not contain mobile number 1").toContain(data.mobileNumber1);
