@@ -164,15 +164,17 @@ export class ProcurementPage extends BasePage {
     }
 
     async getPONumber() {
-        await this.page.waitForTimeout(2000);
-        const poNumber = await this.page.locator('//td[@data-app-table-col="2"]//div').first().innerText();
+        const poCell = this.page.locator('//td[@data-app-table-col="2"]//div').first();
+        await poCell.waitFor({ state: 'visible' });
+        const poNumber = await poCell.innerText();
         return poNumber;
     }
 
     async searchPR(name: string) {
-        await this.page.waitForTimeout(500);
+        await expect(this.searchBox, 'Search box did not become editable').toBeEditable();
+        const searchResponse = this.page.waitForResponse('**/purchaseOrders/getAllPurchaseOrders**');
         await this.searchBox.fill(name);
-        await this.page.waitForTimeout(2000);
+        await searchResponse;
         if (await this.page.locator('//tr').count() > 1) {
             await expect(this.status('New Request'), 'Stock status does not match').toBeVisible();
             await this.enterRemarks('Purchase Order (Contract) Remarks');
@@ -183,8 +185,7 @@ export class ProcurementPage extends BasePage {
             await this.page.locator(`//span[text()="PR to PO"]`).nth(1).click();
             await this.page.waitForLoadState('domcontentloaded');
             await this.searchBox.fill(name);
-            await this.page.waitForTimeout(2000);
-            expect(await this.page.locator('//tr').count(), 'material not visible in PR to PO (Contract) and PR to PO').toBeGreaterThan(1);
+            await expect.poll(async () => this.page.locator('//tr').count(), 'material not visible in PR to PO (Contract) and PR to PO').toBeGreaterThan(1);
             console.log('Material not in Contract');
             return false;
         }
@@ -209,7 +210,7 @@ export class ProcurementPage extends BasePage {
         const dialogSearchBox = this.searchBox.last();
         await dialogSearchBox.clear();
         await dialogSearchBox.fill(vendorName);
-        await this.page.waitForTimeout(2000);
+        await expect(this.rowByText(vendorName).first(), `Vendor "${vendorName}" did not appear in search results`).toBeVisible();
     }
 
     private async selectVendorRow(vendorName: string) {
@@ -347,7 +348,7 @@ export class ProcurementPage extends BasePage {
         // await this.quoteRow(prId, vendorName).getByRole('checkbox').check();
         await this.quoteRow(prId).getByRole('checkbox').check();
         await this.awardVendorsBtn.click();
-        await this.page.waitForTimeout(2000);
+        await expect(this.page.getByRole('checkbox').nth(1), 'Award confirmation checkbox did not appear').toBeVisible();
         await this.page.getByRole('checkbox').nth(1).click();
         // await this.allMaterialsSummaryViewBtn.click();
         if (await this.yesButton.isVisible()) {
@@ -360,7 +361,7 @@ export class ProcurementPage extends BasePage {
         await this.goToTab('Quotes Received');
         await this.quoteRow(enquiryId, vendorName).getByRole('checkbox').check();
         await this.selectVendorBtn.click();
-        await this.page.waitForTimeout(2000);
+        await expect(this.checkBox.nth(0), 'Material checkbox did not appear after selecting vendor').toBeVisible();
         await this.checkBox.nth(0).click();
         await this.submitForEstimationBtn.click();
     }
