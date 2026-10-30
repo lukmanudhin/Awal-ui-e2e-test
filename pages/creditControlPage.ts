@@ -121,7 +121,7 @@ export class CreditControlPage extends BasePage {
         targetDate.setDate(targetDayNumber);
 
         await calenderBtnLocator.click({ force: true });
-        await this.page.waitForTimeout(500);
+        await expect(this.page.locator('//div[@class="MuiPickersFadeTransitionGroup-root css-1h73gvd"]'), 'Calendar popup did not open').toBeVisible();
 
         while (true) {
             const headerText = await this.page.locator('//div[@class="MuiPickersFadeTransitionGroup-root css-1h73gvd"]').innerText();
@@ -182,7 +182,6 @@ export class CreditControlPage extends BasePage {
     @step()
     async validateCreditControlDetails(data: CreditControlData) {
         await this.page.waitForLoadState('domcontentloaded');
-        await this.page.waitForTimeout(2000);
         await expect(this.page.locator('//div[@class="flex-grow p-6"]'), `Credit details do not contain customer: ${data.customer}`).toContainText(data.customer);
         const creditDetails = await this.page.locator('//div[@class="flex-grow p-6"]').innerText();
         expect(creditDetails, "Credit details do not contain customer acknowledgement name").toContain(data.customerAcknowledgementName);
@@ -266,7 +265,6 @@ export class CreditControlPage extends BasePage {
     @step()
     async validateFinanceAssesmentDetails(data: FinanceAssesmentData) {
         await this.page.waitForLoadState('domcontentloaded');
-        await this.page.waitForTimeout(2000);
         await expect(this.page.locator('//div[@class="p-[18px] !pb-0"]'), `Finance assesment details do not contain month outstanding: ${data.monthOutstanding}`).toContainText(data.monthOutstanding);
         const financeAssesmentDetails = await this.page.locator('//div[@class="p-[18px] !pb-0"]').innerText();
         // expect(financeAssesmentDetails, "Finance assesment details do not contain limit approved").toContain(data.limitApproved);
