@@ -67,7 +67,6 @@ export class InvoiceRequestPage extends BasePage {
     }
     @step()
     async selectInvoiceDate(date: number) {
-        await this.page.waitForTimeout(500);
         await this.selectDate(date + 2, 0);
     }
     @step()
@@ -84,9 +83,10 @@ export class InvoiceRequestPage extends BasePage {
     }
     @step()
     async goToInvoiceListPage() {
+        const urlBeforeBack = this.page.url();
         await this.backArrow.click();
-        // await this.page.waitForLoadState('domcontentloaded');
-        await this.page.waitForTimeout(1000);
+        await this.page.waitForURL((url) => url.toString() !== urlBeforeBack, { timeout: 15000 });
+        await this.page.waitForLoadState('domcontentloaded');
         await this.backArrow.click();
     }
     @step()
