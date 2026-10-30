@@ -187,7 +187,6 @@ export class PPJOPage extends BasePage {
         } else {
             await this.requestEstimationButton.last().click();
         }
-        await this.page.waitForTimeout(2000);
         await this.page.waitForLoadState('domcontentloaded');
         const response = await responsePromise;
         expect(response.status(), `${requestType} API failed with status code. Expected ${statusCode}, received ${response.status()}`).toBe(statusCode);
@@ -232,7 +231,7 @@ export class PPJOPage extends BasePage {
     }
     @step()
     async editDate(date: number) {
-        await this.page.waitForTimeout(500);
+        await expect(this.editDeliveryDateIcon, 'Edit delivery date icon did not become visible').toBeVisible();
         await this.editDeliveryDateIcon.click();
         await this.selectDate(date);
         await this.saveButton.click();
@@ -246,7 +245,7 @@ export class PPJOPage extends BasePage {
     }
     @step()
     async submitQuotationForApprovalAndValidateAPI(statusCode: number) {
-        await this.page.waitForTimeout(2000);
+        await expect(this.submitForApprovalButton, 'Submit for approval button did not become enabled').toBeEnabled();
         await this.submitForApprovalButton.click({ force: true });
         const responsePromise = this.page.waitForResponse('**/Quotation/SubmitForApproval/**');
         await this.confirmButton.click();
@@ -273,7 +272,6 @@ export class PPJOPage extends BasePage {
     @step()
     async validateSampleDetails(enquiryId: string, documentName: string, quantity: string, description: string) {
         await this.page.waitForLoadState('domcontentloaded');
-        await this.page.waitForTimeout(2000);
         await expect(this.page.locator('//div[@class="p-[18px] undefined"]').first(), `Sample details do not contain enquiry id: ${enquiryId}`).toContainText(enquiryId);
         const sampleDetails = await this.page.locator('//div[@class="p-[18px] undefined"]').first().innerText();
         expect(sampleDetails, `Sample details do not contain document name: ${documentName}`).toContain(documentName);
