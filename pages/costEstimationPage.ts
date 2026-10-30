@@ -271,7 +271,6 @@ export class CostEstimationPage extends BasePage {
     }
     @step()
     async validateCustomerDetails(data: SalesEnquiryData, enquiryId: string) {
-        await this.page.waitForTimeout(2000);
         await expect(this.page.locator('//div[@class="p-[18px] undefined"]').first(), `View cost estimation details do not contain enquiry id: ${enquiryId}`).toContainText(enquiryId);
         const detailsText = await this.page.locator('//div[@class="p-[18px] undefined"]').first().innerText();
         console.log(`✓ Customer Name displayed: ${enquiryId}`);
@@ -330,7 +329,7 @@ export class CostEstimationPage extends BasePage {
         //     await target.waitFor({ state: 'visible', timeout: 2_000 });
         // }, `View button at index ${count} was not visible after scrolling`).toPass({ timeout: 15_000 });
         await this.page.keyboard.press('End');
-        await this.page.waitForTimeout(350);
+        await this.viewIcon.nth(count).waitFor({ state: 'visible' });
         await this.viewIcon.nth(count).focus();
         await this.viewIcon.nth(count).click();
         // await this.page.waitForTimeout(500);
@@ -339,47 +338,41 @@ export class CostEstimationPage extends BasePage {
     async validateArtworkAttachmentDetails(documentName: string, quantity: string, description: string) {
         await this.clickViewButton(0);
         await expect(this.ppjoBanner('Artwork'), "Artwork PPJO banner text does not match").toContainText('Artwork');
-        await this.page.waitForTimeout(500);
         await this.validateViewAttachDetails(documentName, quantity, description);
         await this.closeButton.click();
-        await this.page.waitForTimeout(500);
+        await this.closeButton.waitFor({ state: 'hidden' });
     }
     @step()
     async validateSampleAttachmentDetails(documentName: string, quantity: string, description: string) {
         await this.clickViewButton(0);
         await expect(this.ppjoBanner('Sample'), "Sample PPJO banner text does not match").toContainText('Sample');
-        await this.page.waitForTimeout(500);
         await this.validateViewAttachDetails(documentName, quantity, description);
         await this.closeButton.click();
-        await this.page.waitForTimeout(500);
+        await this.closeButton.waitFor({ state: 'hidden' });
     }
     @step()
     async validateAutoCADAttachmentDetails(documentName: string, quantity: string, description: string) {
         await this.clickViewButton(1);
         await expect(this.ppjoBanner('AutoCAD'), "AutoCAD PPJO banner text does not match").toContainText('AutoCAD');
-        await this.page.waitForTimeout(500);
         await this.validateViewAttachDetails(documentName, quantity, description);
         await this.closeButton.click();
-        await this.page.waitForTimeout(500);
+        await this.closeButton.waitFor({ state: 'hidden' });
     }
     @step()
     async validateEstimationAttachmentDetails(documentName: string, quantity: string, description: string) {
         await this.clickViewButton(3);
         // await this.clickViewButton(2);
         await expect(this.ppjoBanner('Estimation'), "Estimation PPJO banner text does not match").toContainText('Estimation');
-        await this.page.waitForTimeout(500);
         await this.validateViewAttachDetails(documentName, quantity, description);
         await this.closeButton.click();
-        await this.page.waitForTimeout(500);
+        await this.closeButton.waitFor({ state: 'hidden' });
     }
     @step()
     async validateProcurementAttachmentDetails(documentName: string, quantity: string, description: string) {
         await this.clickViewButton(4);
         // await this.clickViewButton(3);
         await expect(this.ppjoBanner('Procurement'), "Procurement PPJO banner text does not match").toContainText('Procurement');
-        await this.page.waitForTimeout(500);
         await this.validateViewAttachDetails(documentName, quantity, description);
-        await this.page.waitForTimeout(500);
         await this.closeButton.click();
     }
     @step()
@@ -523,7 +516,7 @@ export class CostEstimationPage extends BasePage {
 
     private async labourAndCostingDetails(estimationHours: string, machineHours: string, otHours: string, warrantyValue: string) {
         await expect(this.banner, "Labour and costing banner text does not match").toContainText('(Labour - Time) & Cost');
-        await this.page.waitForTimeout(500);
+        await expect(this.otHours, 'OT hours field did not become editable').toBeEditable();
         await this.otHours.fill(otHours);
         await this.estimationHours.fill(estimationHours);
         await this.warrantyValueTxtBx.fill(warrantyValue);
@@ -540,6 +533,9 @@ export class CostEstimationPage extends BasePage {
         console.log('Verified Labour and Costing API with status code:', response.status());
         await expect(this.successMessage('BOL updated successfully'), "BOL updated success message does not match").toContainText('BOL updated successfully');
         await this.successMessage('BOL updated successfully').waitFor({ state: 'hidden' });
+        // TODO(unresolved): original fixed settle retained - this app's continuous polling makes
+        // networkidle never fire, and the estimation flow is too long to instrument for the exact
+        // post-update API call here. Replace with a response/element condition once captured.
         await this.page.waitForTimeout(4500);
     }
     @step()
@@ -617,7 +613,6 @@ export class CostEstimationPage extends BasePage {
         await expect(this.m3TxtBx, "M3 value should be 0.000 before packing dimensions are entered").toHaveValue('0.000');
         await expect(this.trailerTxtBx, "Trailer value should be 0.000 before packing dimensions are entered").toHaveValue('0.000');
         await expect(this.volumeTxtBx, "Volume value should be 0.000 before packing dimensions are entered").toHaveValue('0.000');
-        await this.page.waitForTimeout(7000);
         await expect
             .poll(async () => {
                 await this.packingLengthTxtBx.fill('3');
@@ -673,7 +668,7 @@ export class CostEstimationPage extends BasePage {
     }
     @step()
     async enterSampleCost(sampleCost: string) {
-        await this.page.waitForTimeout(4000);
+        await expect(this.sampleTxtBx, 'Sample cost field did not become editable').toBeEditable();
         await this.sampleTxtBx.fill(sampleCost);
         await expect(this.page.locator('//td[@data-app-table-col="31"]'), `Sample cost column value mismatch. Expected: ${sampleCost}.000`).toHaveText(`${sampleCost}.000`);
         await expect(this.page.locator('(//td)[63]'), `Sample cost summary value mismatch. Expected: ${sampleCost}.000`).toHaveText(`${sampleCost}.000`);
@@ -722,7 +717,6 @@ export class CostEstimationPage extends BasePage {
     @step()
     async addLabour(department: string, otHours: string, estimationHours: string, machineHours: string) {
         await this.addLabourBtn.click();
-        await this.page.waitForTimeout(500);
         await expect(this.banner, "Add labour banner text does not match").toContainText('(Labour - Time) & Cost');
         await expect(this.totalHoursTxtBx, "Total hours should be empty before labour hours are entered").toHaveValue('');
         await this.selectFromDropdown('Department*', department);
@@ -819,6 +813,8 @@ export class CostEstimationPage extends BasePage {
     @step()
     async savePriceIndicationSlipAndValidateAPI(statusCode: number) {
         await expect(this.saveButton, 'Save button on Price Indication Slip tab did not become enabled').toBeEnabled();
+        // TODO(unresolved): original fixed settle retained - see note above; the pre-save
+        // calculation signal was not instrumented. Replace with a deterministic condition once captured.
         await this.page.waitForTimeout(5000);
         const responsePromise = this.page.waitForResponse('**/estimation/updateOptionStatusByVerOptId');
         await this.saveButton.click({ force: true, timeout: 5000 });
@@ -889,9 +885,8 @@ export class CostEstimationPage extends BasePage {
     @step()
     async validateViewDiscountAttachments(documentName: string, reason: string) {
         await this.page.keyboard.press('End');
-        await this.page.waitForTimeout(250);
+        await this.viewIcon.last().waitFor({ state: 'visible' });
         await this.viewIcon.last().click();
-        await this.page.waitForTimeout(500);
         await expect(this.ppjoBanner('Attachments'), "Attachments banner not found").toBeVisible();
         await expect(this.page.locator('(//main)[2]'), `Attachment details do not contain document name: ${documentName}`).toContainText(documentName);
         const detailText = await this.page.locator('(//main)[2]').innerText();
@@ -917,7 +912,7 @@ export class CostEstimationPage extends BasePage {
 
     async addMaterialAndSendToProcurement() {
         await this.addMaterialBtn.click();
-        await this.page.waitForTimeout(500);
+        await expect(this.selectAllCheckbox, 'Material list did not load after opening Add Material').toBeVisible();
         // await expect(this.status('Out of Stock'), 'Added material is not showing as Out of Stock').toBeVisible();
         await this.selectAllCheckbox.check();
         await this.sendToProcurementBtn.click();
@@ -926,7 +921,6 @@ export class CostEstimationPage extends BasePage {
     @step()
     async addSubcontractorServiceAndSendToProcurement(serviceName: string) {
         await this.addServicesBtn.click();
-        await this.page.waitForTimeout(500);
         await expect(this.serviceRowCheckbox(serviceName), `Service "${serviceName}" is not listed in the Add Services / Subcontractor list`).toBeVisible();
         await this.serviceRowCheckbox(serviceName).check();
         await this.sendToProcurementBtn.click();
@@ -956,4 +950,4 @@ export class CostEstimationPage extends BasePage {
         await this.page.waitForLoadState('domcontentloaded');
         await this.goToTab('Cost Distribution');
     }
-}
+            }
