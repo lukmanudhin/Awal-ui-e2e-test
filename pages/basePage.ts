@@ -100,7 +100,7 @@ export class BasePage {
     // }
 
     async search(name: string) {
-        await this.page.waitForTimeout(500);
+        await expect(this.searchBox, 'Search box did not become editable').toBeEditable();
         await this.searchBox.fill(name);
         await expect.poll(
             async () => {
@@ -131,11 +131,11 @@ export class BasePage {
     }
 
     async clickViewIcon() {
-        await this.page.waitForTimeout(500);
+        await expect(this.eyeIcon, 'View icon did not become visible').toBeVisible();
         const urlBeforeClick = this.page.url();
         await expect(async () => {
             await this.eyeIcon.click({ force: true });
-            await this.page.waitForTimeout(300);
+            await this.page.waitForURL((url) => url.toString() !== urlBeforeClick, { timeout: 1000 }).catch(() => { /* navigation may not have started; the surrounding poll retries */ });
             expect(this.page.url(), 'Clicking the view icon did not navigate away from the current page').not.toBe(urlBeforeClick);
         }).toPass({ timeout: 20000, intervals: [500, 1000, 2000] });
         await this.page.waitForLoadState('domcontentloaded');
@@ -175,7 +175,7 @@ export class BasePage {
         targetDate.setDate(targetDayNumber);
 
         await this.calenderButton.nth(calenderBtnCount || 0).click();
-        await this.page.waitForTimeout(500);
+        await expect(this.page.locator('//div[@class="MuiPickersFadeTransitionGroup-root css-1h73gvd"]'), 'Calendar popup did not open').toBeVisible();
 
         while (true) {
             const headerText = await this.page.locator('//div[@class="MuiPickersFadeTransitionGroup-root css-1h73gvd"]').innerText();
@@ -200,7 +200,7 @@ export class BasePage {
         for (let i = 0; i < MAX_SCROLLS; i++) {
             if (await element.isVisible()) break;
             await this.page.keyboard.press('ArrowRight');
-            await this.page.waitForTimeout(SCROLL_DELAY_MS);
+        await element.waitFor({ state: 'visible', timeout: SCROLL_DELAY_MS }).catch(() => { /* keep scrolling */ });
         }
         await element.click();
         await this.page.waitForLoadState('domcontentloaded');
@@ -214,7 +214,7 @@ export class BasePage {
         for (let i = 0; i < MAX_SCROLLS; i++) {
             if (await element.isVisible()) break;
             await this.page.keyboard.press('ArrowRight');
-            await this.page.waitForTimeout(SCROLL_DELAY_MS);
+        await element.waitFor({ state: 'visible', timeout: SCROLL_DELAY_MS }).catch(() => { /* keep scrolling */ });
         }
     }
 
