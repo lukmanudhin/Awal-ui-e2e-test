@@ -4,6 +4,7 @@ export type BOQData = {
   signType: string;
   signName: string;
   description: string;
+  uom: string;
   size: string;
   quantity: string;
   deliveryType: string;
@@ -18,6 +19,7 @@ export const addBOQData: BOQData = {
   signType: 'Metal',
   signName: 'Customer',
   description: 'Add BOQ Test',
+  uom: 'Bundle',
   size: '5',
   quantity: '2',
   deliveryType: 'Day',

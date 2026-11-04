@@ -247,7 +247,7 @@ export class CostEstimationPage extends BasePage {
         this.deleteCostingIcon = (name: string) => this.page.locator(`//div[text()="${name}"]/parent::td/following-sibling::td[3]/child::div/child::div/child::span/child::img`);
         this.generateCostingBtn = (name: string) => this.page.locator(`//div[text()="${name}"]/parent::td/following-sibling::td[2]/child::div/child::button`);
         this.dropDown = (name: string) => this.page.getByRole('combobox', { name: `${name}` });
-        this.dropDownOption = (name: string) => this.page.getByRole('option', { name: `${name}` });
+        this.dropDownOption = (name: string) => this.page.getByRole('option', { name: `${name}`, exact: true });
         this.vendorCheckBx = (name: string) => this.page.locator(`//span[normalize-space(text())="${name}"]//following-sibling::div//input[@type="checkbox"]`)
         this.serviceRowCheckbox = (serviceName: string) => this.page.getByRole('row', { name: serviceName }).getByRole('checkbox');
         this.bolEditIcon = (department: string) => this.page.getByRole('row').filter({ hasText: department }).locator('img').first();
@@ -413,6 +413,7 @@ export class CostEstimationPage extends BasePage {
         await this.signTypeTxtBx.fill(boqData.signType);
         await this.signNameTxtBx.fill(boqData.signName);
         await this.descriptionTxtBx.fill(boqData.description);
+        await this.selectFromDropdown('UOM*', boqData.uom);
         await this.sizeTxtBx.fill(boqData.size);
         await this.page.mouse.wheel(0, 500);
         await this.quantityTxtBx.fill(boqData.quantity);
@@ -574,7 +575,7 @@ export class CostEstimationPage extends BasePage {
         await this.addBOMBtn.click();
         await this.selectFromDropdown('Material*', material);
         await this.quantityTxtBx.fill(quantity);
-        await this.selectFromDropdown('Warranty Type*', 'Percentage');
+        await this.selectFromDropdown('Warranty Type*', 'Percentage (%)');
         await this.warrantyValueTxtBx.fill(warrantyValue);
     }
     @step()
@@ -675,8 +676,8 @@ export class CostEstimationPage extends BasePage {
     async enterSampleCost(sampleCost: string) {
         await this.page.waitForTimeout(4000);
         await this.sampleTxtBx.fill(sampleCost);
-        await expect(this.page.locator('//td[@data-app-table-col="31"]'), `Sample cost column value mismatch. Expected: ${sampleCost}.000`).toHaveText(`${sampleCost}.000`);
-        await expect(this.page.locator('(//td)[63]'), `Sample cost summary value mismatch. Expected: ${sampleCost}.000`).toHaveText(`${sampleCost}.000`);
+        await expect(this.page.locator('//td[@data-app-table-col="32"]'), `Sample cost column value mismatch. Expected: ${sampleCost}.000`).toHaveText(`${sampleCost}.000`);
+        await expect(this.page.locator('(//td)[65]'), `Sample cost summary value mismatch. Expected: ${sampleCost}.000`).toHaveText(`${sampleCost}.000`);
     }
     @step()
     async editCostDistributionTable() {
