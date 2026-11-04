@@ -178,6 +178,7 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Normal) through 
                 signType: addBOQData.signType,
                 signName: addBOQData.signName,
                 description: addBOQData.description,
+                uomId: 329,
                 size: addBOQData.size,
                 quantity: Number(addBOQData.quantity),
                 deliveryTypeId: 1232,

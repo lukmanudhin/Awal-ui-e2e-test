@@ -96,6 +96,7 @@ test.describe.serial('Verify E2E flow of Sales Enquiry (Request Normal) through 
             signType: 'Metal',
             signName: 'Customer',
             description: 'Add BOQ Test',
+            uomId: 113,
             size: '5',
             quantity: 2,
             deliveryTypeId: 1232,

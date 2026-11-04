@@ -413,7 +413,7 @@ export class CostEstimationPage extends BasePage {
         await this.signTypeTxtBx.fill(boqData.signType);
         await this.signNameTxtBx.fill(boqData.signName);
         await this.descriptionTxtBx.fill(boqData.description);
-        await this.selectFromDropdown('UOM*', boqData.uom);
+        await this.selectFromDropdown('UOM*', boqData.uomId);
         await this.sizeTxtBx.fill(boqData.size);
         await this.page.mouse.wheel(0, 500);
         await this.quantityTxtBx.fill(boqData.quantity);
