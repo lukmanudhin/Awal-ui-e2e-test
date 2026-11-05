@@ -46,7 +46,7 @@
     "appium": "^3.8.0",
     "appium-uiautomator2-driver": "^8.7.0",
     "cross-env": "^10.1.0",
-    "playwright-colorful-logger": "^0.1.0",
+    "playwright-logger-pro": "^0.4.2",
     "webdriverio": "^10.0.2"
   },
   "dependencies": {

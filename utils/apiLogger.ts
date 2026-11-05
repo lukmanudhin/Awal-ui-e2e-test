@@ -1,5 +1,5 @@
 import { APIRequestContext } from "@playwright/test";
-import { wrapRequestContext, ApiLoggerConfig } from "playwright-colorful-logger";
+import { wrapRequestContext, ApiLoggerConfig } from "playwright-logger-pro";
 
 export const API_LOGGER_CONFIG: ApiLoggerConfig = {
     logHeaders: false,
