@@ -26,7 +26,6 @@ app/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-README.md
 
 # OS files
 .DS_Store
